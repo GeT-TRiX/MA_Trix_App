@@ -66,11 +66,22 @@
                              numericInput("normSd", "Std Dev", 1)
                     
                     ),
-                    conditionalPanel(
-                      'input.dataset === "seq"',
-                      helpText("Display 5 records by default.")),
-                    tabPanel("Display data", DT::dataTableOutput("mytable3"))
+
+                   
+                    tabPanel("Display data", 
+                             
+                             DT::dataTableOutput("mytable3"),
+                             
+                             fileInput("file2","Choose your csv file",accept = c(
+                               "text/csv",
+                               "text/comma-separated-values,text/plain",
+                               ".csv")
+                               , multiple = T), style=" font-size:100%; font-family:Arial;
+                    border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
+                             
+                            actionButton("second", "Print Data",style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
                   )),
+                  
                       # conditionalPanel(
                       # 'input.dataset === "atom"',
                       # helpText("Click the column header to sort a column."))),
@@ -87,10 +98,12 @@
                     # Output: Plot
                     #fluidRow(
                     plotOutput(outputId = "distPlot")
+                    
+                    #tabPanel("seq", DT::dataTableOutput("mytable3"))
                     #br(),br(),br(),br(),br()
                     #   tabsetPanel(
                     #     id = 'dataset',
-                    # tabPanel("atom", DT::dataTableOutput("mytable2"))
+                    
                       )
                   )
                     
@@ -190,14 +203,35 @@
     })
     
     observeEvent(input$second, {
-    output$mytable2 <- DT::renderDataTable({
-      DT::datatable(csvf()[[3]], options = list(orderClasses = TRUE))
-    })
+      
+      csvf1 <- reactive({
+
+        inFile <- input$file2
+        name <- inFile$name
+        for (i in 1:length(data)){
+
+          for (elem in input$file2[[i, 'datapath']]){
+
+            cat("loading file number" ,i, "\n")
+          }
+          csvtest[i] = elem
+        }
+        csv <- lapply(csvtest, read.csv2)
+
+      return (csv)
+      })
+      
+      
+    output$mytable3 <- DT::renderDataTable({
+      
+      DT::datatable(csvf1()[[3]], options = list(orderClasses = TRUE))
+      
+      })
+    
     })
   }
   
-  
-  
+
   shinyApp(ui = ui , server = server)
   
   

@@ -1,0 +1,179 @@
+#####################
+## Packages imported
+#####################
+library(png)
+library(BiocInstaller)
+library(limma)
+library(dplyr)
+library(shiny)
+library(foreach)
+library(gplots)
+library(Biobase)
+library(readr)
+
+#####################
+## Files importation 
+#####################
+
+
+list = c("TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv","All_topTableAll.csv")
+musmuscu <- read.csv2("TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
+pval <- read.csv2("All_topTableAll.csv")
+groupss <- read.csv2("TOXA_HEGU_MA0191 _AllChip_pData.csv", sep=";" , dec = ",",header= T)
+
+typeof(colnames(musmuscu))
+list = c("test")
+typeof(list)
+#####################
+## Working directories
+#####################
+
+wd_path="~/stage/data"
+#plot(musmuscu$X,musmuscu$LWT_Ctrl2)
+
+#####################
+## Source
+#####################
+
+#source("plotHeatmaps.r")
+source("compat.R")
+source("formating.R")
+
+#####################
+## Constants
+#####################
+
+cutoff = 0.05
+ngenes = nrow(pval)
+tresh2ways = list(c(0.01,0.05),2)
+tresh2ways[[1]][2]
+prefix = "Test"
+suffix = "Toast"
+
+#mycols = names(musmuscu[grep("^LWT_MCD|^LWT_Ctrl|X|^LKO",names(musmuscu))])
+
+mycols = names(musmuscu[grep("X",names(musmuscu))])
+
+#  palette(c("black", "blue", "cyan", "magenta",   "darkgray", "darkgoldenrod", "violet",  "orange", "lightgreen","lightblue", "darkorchid", "darkred","darkslateblue", "darkslategray", "maroon", "burlywood1" , "darkolivegreen"));
+palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442", "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray", "burlywood1","darkkhaki", "#CC0000" ));
+
+
+
+#####################
+## Data reshape
+#####################
+
+
+data = pval[,c("adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.","adj.P.Val_LKO_CTRL.LWT_CTRL")]
+adj = pval[,grep("^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X1|adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
+View(adj)
+
+formating = function( adj, musmuscu,pval){
+
+  passingval = adj %>%
+    apply(2,FUN = function(x){return(x < 0.05)}) %>%
+    apply(1,sum) 
+
+  passingval = which( passingval > 0)
+  cat("Il y a",length(passingval),"gène significatifs")
+  
+  row.names(musmuscu) = musmuscu$X
+  musmuscu <- data.matrix(musmuscu[,-1])
+  
+  newlist = list(passingval, musmuscu )
+  return(newlist)
+}
+
+treated = formating(adj,musmuscu,pval= 0.05)
+
+View(treated[[2]])
+
+#####################
+## Heatmap
+#####################
+
+#### method de corr = 1 - corr afin que des valeurs négatives ne soit pas autant corréler que pour des valeures proches de 1
+#### 1- (-1) --> 2
+#### 1-0.999 
+
+
+hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3)
+
+colnames(treated[[2]])
+View(treated[[1]])
+
+######################
+## function          #
+######################
+
+
+
+
+##################################################### bad function
+# signpval <- function (ngenes,data,pval){
+# 
+# rpval <- list()
+# index <- list()
+# for(i in 1:ngenes){
+#   if(data[i] < 0.05){
+#     
+#     index[i] <- i   
+#     }
+#   }
+#   index <- as.numeric(unlist(index))
+#   
+#   
+#   })
+#   return(X)
+# }
+
+# attestation <- signpval(ngenes,data,pval)
+# print(attestation)
+
+
+
+grp1 = adj[,c('adj.P.Val_LWT_MCD.LWT_CTRL' ,'adj.P.Val_LKO_MCD.LKO_CTRL')]
+
+
+testFunc = function(x,y){x<cutoff&y<cutoff}
+adj$adj.P.Val_LKO_CTRL.LWT_CTRL
+grp1 = adj[,c('adj.P.Val_LWT_MCD.LWT_CTRL','adj.P.Val_LKO_MCD.LKO_CTRL')] %>%
+  apply(1,function(y) testFunc(y[('adj.P.Val_LWT_MCD.LWT_CTRL')],y[('adj.P.Val_LKO_MCD.LKO_CTRL')])) %>%
+  data.frame(adj)
+
+View(grp1)
+
+significant = grp1 %>%
+  filter(. == T)
+
+View(significant)
+cat("nous obtenons",nrow(significant),"gènes significatifs contre",nrow(pval))
+
+View(significant)
+View(musmuscu)
+
+group = significant %>% 
+  merge(musmuscu, by=c("X")) %>%
+  filter(. == T) %>%
+  select(mycols) # trouver la méthode pour chercher avec un chiffre 
+  
+
+group = dplyr::as_tibble(group)
+group = data.matrix(group)
+
+
+########################
+# TEST
+########################
+
+filenames <- list.files(path=getwd(),
+                        pattern=".*csv")
+
+
+##Create list of data frame names without the ".csv" part 
+names <-substr(filenames,1,3)
+
+myList <- lapply(list, read.csv2)
+View(myList[[1]])
+View(myList)
+###Load all files
