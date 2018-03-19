@@ -7,11 +7,15 @@ require("marray")
 
 ##jpeg(".tmp"))
 #  palette(c("black", "blue", "cyan", "magenta",   "darkgray", "darkgoldenrod", "violet",  "orange", "lightgreen","lightblue", "darkorchid", "darkred","darkslateblue", "darkslategray", "maroon", "burlywood1" , "darkolivegreen"));
+
 palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442", "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray", "burlywood1","darkkhaki", "#CC0000" ));
+
 #dev.off()
 ###unlink(".tmp")(".tmp")(".tmp")
 
+
 num2cols=function(numVector,colp=palette()){
+  
   # gives a character vector of color names for a given numeric vector
   gpcol=as.data.frame(numVector)
   numCols=length(unique(gpcol[,1]))
@@ -29,7 +33,7 @@ num2cols=function(numVector,colp=palette()){
 
 plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,k=2,fileType="png",cexcol=0.4,cexrow=0.2,
                       colOrder=NULL,labrow=F,colid=NULL,na.color="black",scale="row",hclustGenes=T,meanGrp=F,plotRowSideColor=T,col.hm=greenred(75),
-                      RowSideColor=c("gray25","gray75"), Rowdistfun="cor",Coldistfun="cor", palette.col=NULL, margins=c(8,8), ...){
+                      RowSideColor=c("gray25","gray75"), Rowdistfun="cor",Coldistfun="cor", keysize = 0.5 ,palette.col=NULL, margins=c(8,8), ...){
   #RowSideColor: color palette to be used for rowSide cluster colors
   # can also be gray.colors(k, start = 0.2, end = 0.9) to get k colors of gray scale
   ##jpeg(".tmp"))
@@ -63,7 +67,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   #	rowv=TRUE;
   wdt=900;
   wdte=12;
-  kcex=0.9;
+  kcex=keysize;
   
   ##-----------------------##
   ## Row dendrogram
@@ -89,7 +93,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
     groups=factor(levels(groups),levels=levels(groups))
     wdt=600;
     wdte=8;
-    kcex=0.9;
+    kcex=keysize;
     colid=NA
   }
   
@@ -218,7 +222,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[2:(length(levels(groups))+1)],cex=1,line=-1)
   #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=1,line=-1)
   hmp02 = heatmap.2(exprData,na.rm=T, col=col.hm,dendrogram="both",labRow =rowIds,labCol=colid,scale=scale, ColSideColors=gpcol,RowSideColors=gpcolr, key=T,
-                    keysize=kcex, symkey=F, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
+                    keysize=keysize, symkey=F, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=useRasterTF, lhei = c(4,4), lwid = c(4,4),margins=margins)
   #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[2:(length(levels(groups))+1)],cex=1,line=-1)
   mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=0.9,line=-1)

@@ -16,10 +16,76 @@ library(readr)
 #####################
 
 
-list = c("TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv","All_topTableAll.csv")
-musmuscu <- read.csv2("TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
-pval <- read.csv2("All_topTableAll.csv")
-groupss <- read.csv2("TOXA_HEGU_MA0191 _AllChip_pData.csv", sep=";" , dec = ",",header= T)
+
+musmuscu <- read.csv2("data/1TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
+pval <- read.csv2("data/4All_topTableAll.csv")
+groupss <- read.csv2("data/2TOXA_HEGU_MA0191 _AllChip_pData.csv", sep=";" , dec = ",",header= T)
+View(musmuscu)
+View(pval)
+View(groupss)
+length(colnames(musmuscu))
+length(colnames(pval))
+length(colnames(groupss))
+listed = list(musmuscu,pval,groupss)
+
+
+length(listed(colnames(groupss)))
+
+print(colnames(listed[[3]][2]))
+View(listed)
+print(colnames(pval[10]))
+
+test = list()
+for (i in 1:length(listed)){
+  if( colnames(listed[[i]][2]) == "Grp")
+  {
+    test[[2]] = listed[[i]]
+  }
+  else if( colnames(listed[[i]][10]) == "Amean")
+  {
+    test[[3]] = listed[[i]]
+    
+  }
+  else{
+    test[[1]] = listed[[i]]
+  }
+}
+
+View(test[[3]])
+View(listed)
+
+
+for (i in 1:length(listed)){
+  # if (length(colnames(listed[[i])) < length(colnames(listed[[i+1]])))
+  # {
+  #   print("ok")
+  # }
+  print(length(colnames(listed[[i]])))
+}
+
+j=0
+while (j != 3){
+  print(j)
+  for(i in 1:length(listed))
+  {
+    final = listed[[i]] %>% 
+     ncol() %>%
+     append(test)
+    print(i)
+    
+  }
+  j = j+1
+  print(j)
+}
+
+
+pis =list()
+x <- 1:5
+test= append(x, pis)
+test[[4]]
+
+typeof(pis)
+
 
 typeof(colnames(musmuscu))
 list = c("test")

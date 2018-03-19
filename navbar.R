@@ -57,6 +57,7 @@ ui <- navbarPage("Navbar!",
                     verbatimTextOutput("summary")
            ),
            navbarMenu("More",
+                      
                       tabPanel("Table",
                                headerPanel("Pdb statistics"),
                                helpText(a("Bio3D is an R package containing utilities for the analysis of protein structure, sequence and trajectory data."

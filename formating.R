@@ -1,4 +1,19 @@
+
+#' Title
+#'
+#' @param adj
+#' @param musmuscu 
+#' @param pval 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' 
+#' 
+
 formating = function( adj, musmuscu, pval){
+  
   
   passingval = adj %>%
     apply(2,FUN = function(x){return(x < pval)}) %>%
@@ -12,4 +27,5 @@ formating = function( adj, musmuscu, pval){
   
   newlist = list(passingval, musmuscu )
   return(newlist)
+
 }
