@@ -1,6 +1,7 @@
 #####################
 ## Packages imported
 #####################
+
 library(png)
 library(BiocInstaller)
 library(limma)
@@ -28,6 +29,8 @@ length(colnames(pval))
 length(colnames(groupss))
 listed = list(musmuscu,pval,groupss)
 
+levels(colnames(musmuscu))
+levels(groupss$X)
 
 length(listed(colnames(groupss)))
 
