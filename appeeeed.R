@@ -1,4 +1,4 @@
-##################################
+###################################
 ##################################
 ##                              ##
 ##  Shiny application            ##
@@ -6,7 +6,7 @@
 ##                              ##
 ##  Author: Franck Soubès        ##
 ##################################
-##################################
+###################################
 
 
 #source("plotHeatmaps.r")
@@ -133,9 +133,6 @@ ui <- fluidPage(theme = shinytheme("united"),
                     )
                   ),
                   
-                  # conditionalPanel(
-                  # 'input.dataset === "atom"',
-                  # helpText("Click the column header to sort a column."))),
                   
                   # Main panel for displaying outputs ----
                   
@@ -159,7 +156,9 @@ ui <- fluidPage(theme = shinytheme("united"),
                 ))
 
 server <- function(input, output, session) {
-  observeEvent(input$first, {
+ # observeEvent(input$first, {
+  
+
     csvf <- reactive({
       inFile <- input$file1
       
@@ -169,8 +168,8 @@ server <- function(input, output, session) {
           session,
           "alert",
           "exampleAlert",
-          title = "Oops Error",
-          content = "You need to import 3 files in the browser widget",
+          title = "First Step",
+          content = "You need to import 3 csv files in the browser widget",
           append = FALSE
         )
         
@@ -254,18 +253,19 @@ server <- function(input, output, session) {
             csvord[[1]] = csv[[i]]
           }
         }
-        
-        
+    
       }
+
       return (csvord)
       
     })
+    
     
     output$individusel <- renderUI(
       checkboxGroupInput(
         inputId = "indiv" ,
         label =  "Choose Option:",
-        choices =  colnames(csvf()[[1]])
+        choices =  colnames(csvf()[[1]][,-1])
       )
     )
     
@@ -274,8 +274,8 @@ server <- function(input, output, session) {
         session,
         "indiv",
         label = "Choix des individus",
-        choices = colnames(csvf()[[1]]),
-        selected = colnames(csvf()[[1]])
+        choices = colnames(csvf()[[1]][[1]][,-1]),
+        selected = colnames(csvf()[[1]][[1]][,-1])
       )
     })
     
@@ -283,7 +283,7 @@ server <- function(input, output, session) {
       updateCheckboxGroupInput(session,
                                "indiv",
                                label = "Choix des individus",
-                               choices = colnames(csvf()[[1]]))
+                               choices = colnames(csvf()[[1]][2:length(musmuscu)]))
     })
     
     choix_individus <- reactive({
@@ -294,7 +294,14 @@ server <- function(input, output, session) {
       choix_individus()
     })
     
+    # print(typeof(choix_individus())) ## character 
+    # print(choix_individus()) ## "LKO_Ctrl3" "LKO_MCD1"  "LKO_MCD4"
+    # print(class(choix_individus())) ## "character"
+    # 
+    # test = list(choix_individus())
+    # print(test)
     
+  
     formated <- reactive({
       df <- csvf()
       if (is.null(df))
@@ -308,6 +315,8 @@ server <- function(input, output, session) {
       return(treated)
       
     })
+    
+    observeEvent(input$first, {
     
     myData <- reactive({
       df <- csvf()

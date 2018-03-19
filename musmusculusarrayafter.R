@@ -16,18 +16,24 @@ library(readr)
 ## Files importation 
 #####################
 
+length(musmuscu)
 
+musmuscu <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
+colnames(musmuscu)[2:length(musmuscu)]
 
-musmuscu <- read.csv2("data/1TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
-pval <- read.csv2("data/4All_topTableAll.csv")
-groupss <- read.csv2("data/2TOXA_HEGU_MA0191 _AllChip_pData.csv", sep=";" , dec = ",",header= T)
+pval <- read.csv2("data/All_topTableAll.csv")
+groupss <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec = ",",header= T)
 View(musmuscu)
 View(pval)
 View(groupss)
 length(colnames(musmuscu))
 length(colnames(pval))
 length(colnames(groupss))
-listed = list(musmuscu,pval,groupss)
+listed = list(musmuscu,pval,groupss,ncol(musmuscu))
+print(listed[[
+  4
+]])
+
 
 levels(colnames(musmuscu))
 levels(groupss$X)
