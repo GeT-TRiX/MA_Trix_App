@@ -21,6 +21,11 @@ length(musmuscu)
 musmuscu <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
 colnames(musmuscu)[2:length(musmuscu)]
 
+View(musmuscu)
+data  = subset(musmuscu ,is.na ,select = "LWT_Ctrl2")
+
+View(data)
+
 pval <- read.csv2("data/All_topTableAll.csv")
 groupss <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec = ",",header= T)
 View(musmuscu)
@@ -33,6 +38,7 @@ listed = list(musmuscu,pval,groupss,ncol(musmuscu))
 print(listed[[
   4
 ]])
+colnames(groupss)
 
 
 levels(colnames(musmuscu))
