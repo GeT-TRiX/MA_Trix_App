@@ -35,6 +35,7 @@ ui <- fluidPage(
         id = "tabset",
         tabPanel(
           "Heatmap",
+          hr(),
           
           fileInput(
             "file1",
@@ -76,6 +77,9 @@ ui <- fluidPage(
             "Choose your matrix distance",
             choices = c("cor", "euclidian")
           ),
+          
+          checkboxInput("somevalue", "Some value", FALSE),
+          verbatimTextOutput("value"),
           hr(),
           
           selectInput("form", "Choose your file format",
@@ -100,6 +104,7 @@ ui <- fluidPage(
               icon = icon("square-o")
             )
             ,
+
             p("Vous avez sélectionné les individus : "),
             hr(),
             verbatimTextOutput("indiv")
@@ -152,9 +157,7 @@ ui <- fluidPage(
       ### no more error messages
       
       bsAlert("alert"),
-      #tableOutput(ouputId= "mytable3"),
-      #tabPanel("seq", DT::dataTableOutput("mytable3")),
-      # Output: Plot
+
       
       plotOutput(outputId = "distPlot")
       
@@ -289,6 +292,19 @@ server <- function(input, output, session) {
       )
   ))
   
+  output$value <- renderText({ input$somevalue })
+  
+  mean_grp <- reactive({
+    print(input$somevalue)
+    print(output$value)
+    return(output$value)
+  })
+  
+  # observerEvent(input$mean ,{
+  #   
+  #   checkboxInput("mean", "Do you want to mean your genes ?", value = FALSE, width = NULL)
+  # })
+  
   observeEvent(input$allIndividus, {
     updateCheckboxGroupInput(
       session,
@@ -350,7 +366,8 @@ server <- function(input, output, session) {
         k = input$clusters,
         Rowdistfun = input$dist ,
         Coldistfun = input$dist,
-        keysize = input$key
+        keysize = input$key,
+        meanGrp = input$somevalue
       )
       
     }, width = 1200 , height = 800, res = 100)
