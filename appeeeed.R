@@ -15,7 +15,6 @@ source("formating.R")
 source("global.R")
 #source("PCA.R")
 
-
 options(shiny.maxRequestSize = 40 * 1024 ^ 2) # Defined the maximum size in Mb that R can load for one file
 
 
@@ -174,6 +173,18 @@ ui <- fluidPage(
       )
       ,
       dataTableOutput("new_data")
+    ),
+    column(
+      12,
+      
+      h3(
+        "Show the actual data frame with the columns selected"
+      ),
+      helpText(
+        "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+      )
+      ,
+      dataTableOutput("new_group")
     )
     
   )
@@ -295,8 +306,6 @@ server <- function(input, output, session) {
   output$value <- renderText({ input$somevalue })
   
   mean_grp <- reactive({
-    print(input$somevalue)
-    print(output$value)
     return(output$value)
   })
   
@@ -324,6 +333,10 @@ server <- function(input, output, session) {
   
   choix_individus <- reactive({
     return(input$indiv)
+  })
+  
+  list_ind <- reactive({
+    return(list(input$indiv))
   })
   
   output$indiv <-  renderText({
@@ -375,8 +388,13 @@ server <- function(input, output, session) {
     new_data <- reactive(subset(csvf()[[1]],
                                 select = choix_individus()))
     
+    new_group <- reactive( csvf()[[2]] %>%
+                             filter( X ==  list_ind()))
+    
+    
     output$new_data <- renderDataTable(new_data())
     
+    output$new_group <- renderDataTable(new_group())
     
     # nb_na <-
     #   reactive(#----- if data selected is not null (nrow(new_data())) stations(length(choix_stations)) and parametres(length(choix_parametres)) are selected
@@ -390,7 +408,7 @@ server <- function(input, output, session) {
     #       return(na)
     #     })
     
-    output$nb_na <- renderDataTable(nb_na())
+    #output$nb_na <- renderDataTable(nb_na())
     
     p = reactive(
       plotHeatmaps(

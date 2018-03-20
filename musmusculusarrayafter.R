@@ -160,6 +160,7 @@ formating = function( adj, musmuscu,pval){
   
   row.names(musmuscu) = musmuscu$X
   musmuscu <- data.matrix(musmuscu[,-1])
+  musmuscu <- data.matrix(musmuscu[,-2])
   
   newlist = list(passingval, musmuscu )
   return(newlist)
@@ -178,10 +179,35 @@ View(treated[[2]])
 #### 1-0.999 
 
 
-hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3)
+View(groupss)
+grouped <- groupss[,-2]
+ewdata <- groupss[-c(2), ] 
+View(ewdata)
+factor(groupss$Grp)
+labels(groupss$Grp)
+View(grouped)
 
-colnames(treated[[2]])
-View(treated[[1]])
+selection = list("LWT_Ctrl2","LWT_MCD5")
+
+
+test <- groupss %>%
+  filter (X ==  selection )
+
+
+
+
+View(test$Grp)
+View(groupss)
+
+data  = subset(groupss ,select = "LWT_Ctrl2")
+
+#hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3)
+
+#hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],test$Grp,workingPath=wd_path,prefix,suffix,k=3) ## how it should be on shiny app
+## Firt remove the columns that does not correspond to the selected columns
+## Then do the same but this times for the rows that are not equal to the right columns supress up there. !!!!!
+
+View(musmuscu)
 
 ######################
 ## function          #
