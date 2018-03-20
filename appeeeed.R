@@ -77,7 +77,7 @@ ui <- fluidPage(
             choices = c("cor", "euclidian")
           ),
           
-          checkboxInput("somevalue", "Some value", FALSE),
+          checkboxInput("somevalue", "Add Mean for the different", FALSE),
           verbatimTextOutput("value"),
           hr(),
           
@@ -388,10 +388,30 @@ server <- function(input, output, session) {
     new_data <- reactive(subset(csvf()[[1]],
                                 select = choix_individus()))
     
-    new_group <- reactive( csvf()[[2]] %>%
-                             filter( X ==  list_ind()))
+    # new_group <- reactive( csvf()[[2]] %>%
+    #                          filter( X ==  list_ind()))
+    
+    #selection = list("LWT_Ctrl2","LWT_MCD5")
+    
+    selection = reactive({
+      # test  = list()
+      # for (i in 1:length(choix_individus()))
+      # {
+      #   test[[i]] = choix_individus()
+      # }
+      # print(test)
+      test = list(choix_individus())
+      print(test)
+      as.character(test)
+      print(typeof(test[[1]]))
+      return (as.character(test))
+    })
     
     
+    new_group <- reactive( 
+      csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),]
+      )
+        
     output$new_data <- renderDataTable(new_data())
     
     output$new_group <- renderDataTable(new_group())

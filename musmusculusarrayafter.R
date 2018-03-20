@@ -187,19 +187,19 @@ factor(groupss$Grp)
 labels(groupss$Grp)
 View(grouped)
 
-selection = list("LWT_Ctrl2","LWT_MCD5")
+selection = list("LWT_Ctrl2","test")
+groupss
+
+print(selection)
+
+groupss[groupss$X %in% selection,]
 
 
-test <- groupss %>%
-  filter (X ==  selection )
 
+test <- as.character(groupss$Grp)
+as.factor(test)
 
-
-
-View(test$Grp)
-View(groupss)
-
-data  = subset(groupss ,select = "LWT_Ctrl2")
+data  = subset(groupss$ ,select = "LWT_Ctrl2")
 
 #hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3)
 
