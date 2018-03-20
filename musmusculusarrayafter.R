@@ -199,14 +199,15 @@ groupss[groupss$X %in% selection,]
 test <- as.character(groupss$Grp)
 as.factor(test)
 
-data  = subset(groupss$ ,select = "LWT_Ctrl2")
 
-#hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3)
+hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3)
+
 
 #hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],test$Grp,workingPath=wd_path,prefix,suffix,k=3) ## how it should be on shiny app
 ## Firt remove the columns that does not correspond to the selected columns
 ## Then do the same but this times for the rows that are not equal to the right columns supress up there. !!!!!
-
+View(treated[[1]])
+View(treated[[2]])
 View(musmuscu)
 
 ######################

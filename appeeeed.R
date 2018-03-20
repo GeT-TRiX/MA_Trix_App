@@ -193,7 +193,6 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   observeEvent(input$first, {
   
-  
   csvf <- reactive({
     inFile <- input$file1
     
@@ -287,7 +286,9 @@ server <- function(input, output, session) {
         }
       }
       
+      row.names(csvord[[1]]) = csvord[[1]]$X
     }
+
     
     return (csvord)
     
@@ -345,6 +346,7 @@ server <- function(input, output, session) {
   
   
   formated <- reactive({
+    
     df <- csvf()
     if (is.null(df))
       return(NULL)
@@ -353,6 +355,7 @@ server <- function(input, output, session) {
       names(csvf()[[3]]),
       value = TRUE
     )]
+    
     treated = formating(adj, csvf()[[1]], input$pval)
     return(treated)
     
@@ -369,10 +372,13 @@ server <- function(input, output, session) {
     
     
     output$distPlot <- renderPlot({
+
       plotHeatmaps(
-        formated()[[2]],
+        #formated()[[2]],
+        data.matrix(new_data()),
         formated()[[1]],
-        csvf()[[2]]$Grp,
+        #csvf()[[2]]$Grp,
+        new_group()$Grp,
         workingPath = wd_path,
         prefix,
         suffix,
@@ -394,22 +400,16 @@ server <- function(input, output, session) {
     #selection = list("LWT_Ctrl2","LWT_MCD5")
     
     selection = reactive({
-      # test  = list()
-      # for (i in 1:length(choix_individus()))
-      # {
-      #   test[[i]] = choix_individus()
-      # }
-      # print(test)
+
       test = list(choix_individus())
-      print(test)
-      as.character(test)
-      print(typeof(test[[1]]))
       return (as.character(test))
     })
     
     
     new_group <- reactive( 
+      
       csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),]
+      
       )
         
     output$new_data <- renderDataTable(new_data())
