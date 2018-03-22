@@ -471,8 +471,8 @@ server <- function(input, output, session) {
         names(csvf()[[3]]),
         value = TRUE
       )]
-      
-      treated = formating(adj, csvf()[[1]], input$pval)
+
+      treated = formating(adjusted(), csvf()[[1]], input$pval)
       return(treated)
       
     })
