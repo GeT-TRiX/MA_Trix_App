@@ -19,7 +19,8 @@ source("global.R")
 options(shiny.maxRequestSize = 40 * 1024 ^ 2) # defined the maximum size in Mb that R can load for one file
 
 
-ui <- fluidPage(theme = shinytheme("united"),
+shinyUI(
+ fluidPage(theme = shinytheme("united"),
                 
                 navbarPage(
                   'Test App',
@@ -229,3 +230,4 @@ ui <- fluidPage(theme = shinytheme("united"),
                   #
                   # )
                 ))
+)

@@ -145,9 +145,10 @@ palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC
 #####################
 
 
-data = pval[,c("adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.","adj.P.Val_LKO_CTRL.LWT_CTRL")]
-adj = pval[,grep("^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X1|adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
+#data = pval[,c("adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.","adj.P.Val_LKO_CTRL.LWT_CTRL")]
+adj = pval[,grep("^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X|adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
 View(adj)
+
 
 formating = function( adj, musmuscu,pval){
 
@@ -160,7 +161,6 @@ formating = function( adj, musmuscu,pval){
   
   row.names(musmuscu) = musmuscu$X
   musmuscu <- data.matrix(musmuscu[,-1])
-  musmuscu <- data.matrix(musmuscu[,-2])
   
   newlist = list(passingval, musmuscu )
   return(newlist)
@@ -168,7 +168,7 @@ formating = function( adj, musmuscu,pval){
 
 treated = formating(adj,musmuscu,pval= 0.05)
 
-View(treated[[2]])
+View(treated[[1]])
 
 #####################
 ## Heatmap
@@ -178,37 +178,15 @@ View(treated[[2]])
 #### 1- (-1) --> 2
 #### 1-0.999 
 
-
-View(groupss)
-grouped <- groupss[,-2]
-ewdata <- groupss[-c(2), ] 
-View(ewdata)
-factor(groupss$Grp)
-labels(groupss$Grp)
-View(grouped)
-
-selection = list("LWT_Ctrl2","test")
-groupss
-
-print(selection)
-
-groupss[groupss$X %in% selection,]
-
-
-
-test <- as.character(groupss$Grp)
-as.factor(test)
-
-
+source("compat.R")
+x11()
 hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3)
 
 
 #hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],test$Grp,workingPath=wd_path,prefix,suffix,k=3) ## how it should be on shiny app
 ## Firt remove the columns that does not correspond to the selected columns
 ## Then do the same but this times for the rows that are not equal to the right columns supress up there. !!!!!
-View(treated[[1]])
-View(treated[[2]])
-View(musmuscu)
+
 
 ######################
 ## function          #

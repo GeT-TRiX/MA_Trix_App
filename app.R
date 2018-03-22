@@ -5,7 +5,7 @@
 ##################################
 ##                              ##
 ##  Author: Franck Soubès        ##
-##################################
+##################################<
 ###################################
 
 
@@ -18,11 +18,12 @@ source("global.R")
 options(shiny.maxRequestSize = 40 * 1024 ^ 2) # Defined the maximum size in Mb that R can load for one file
 
 
-ui <- fluidPage(
-  theme = shinytheme("united"),
+ui <- navbarPage(  
   
-  navbarPage(
-    'Test App',
+  theme = shinytheme("united"),
+  ("MA_Trix"),
+  windowTitle = "MA_Trix",
+  fluid = TRUE,
     
     headerPanel("Import data files"),
     #sidebarLayout(
@@ -30,11 +31,14 @@ ui <- fluidPage(
     sidebarPanel(
       width = 3,
       
-      tabsetPanel(
-        id = "tabset",
+      # tabsetPanel(
+      #   id = "tabset",
         tabPanel(
           "Heatmap",
-          hr(),
+          sidebarPanel(
+            width = 3,
+          
+            br(),
           
           fileInput(
             "file1",
@@ -59,6 +63,7 @@ ui <- fluidPage(
           # numericInput('key', 'Cluster count', 1,
           #              min = 0, max = 2),
           
+
           
           sliderInput(
             "pval",
@@ -188,12 +193,15 @@ ui <- fluidPage(
     )
     
   )
-)
+
 
 server <- function(input, output, session) {
+  
   observeEvent(input$first, {
   
   csvf <- reactive({
+    
+    
     inFile <- input$file1
     
     if (is.null(inFile)) {
@@ -204,6 +212,7 @@ server <- function(input, output, session) {
         title = "First Step",
         content = "You need to import 3 csv files in the browser widget",
         append = FALSE
+        
       )
       
       return(NULL)
@@ -289,7 +298,6 @@ server <- function(input, output, session) {
       row.names(csvord[[1]]) = csvord[[1]]$X
     }
 
-    
     return (csvord)
     
   })
@@ -299,9 +307,9 @@ server <- function(input, output, session) {
     checkboxGroupInput(
       inputId = "indiv" ,
       label =  "Choose Option:",
-      choices =  colnames(csvf()[[1]][,-1]
-      # selected = colnames(csvf()[[1]][,-1])
-      )
+      choices =  colnames(csvf()[[1]][,-1]),
+      selected = colnames(csvf()[[1]][,-1])
+      
   ))
   
   output$value <- renderText({ input$somevalue })
@@ -374,10 +382,9 @@ server <- function(input, output, session) {
     output$distPlot <- renderPlot({
 
       plotHeatmaps(
-        #formated()[[2]],
+        
         data.matrix(new_data()),
         formated()[[1]],
-        #csvf()[[2]]$Grp,
         new_group()$Grp,
         workingPath = wd_path,
         prefix,
@@ -387,9 +394,10 @@ server <- function(input, output, session) {
         Coldistfun = input$dist,
         keysize = input$key,
         meanGrp = input$somevalue
+        
       )
       
-    }, width = 1200 , height = 800, res = 100)
+    }, width = 900 , height = 1200, res = 100)
     
     new_data <- reactive(subset(csvf()[[1]],
                                 select = choix_individus()))

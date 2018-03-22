@@ -2,6 +2,7 @@ source("compat.R")
 source("formating.R")
 source("global.R")
 
+shinyServer(
 server <- function(input, output, session) {
   observeEvent(input$first, {
     csvf <- reactive({
@@ -203,6 +204,5 @@ server <- function(input, output, session) {
     
   })
   
-}
-
-shinyApp(ui = ui , server = server)
+})
+#shinyApp(ui = ui , server = server)
