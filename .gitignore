@@ -13,6 +13,7 @@
 
 # Output files from R CMD check
 /*.Rcheck/
+Coursera-Developing-Data-Products
 
 # RStudio files
 .Rproj.user/
@@ -37,3 +38,5 @@ rsconnect/
 
 # pas de fichier temporaire
 *~
+
+
