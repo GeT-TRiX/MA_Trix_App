@@ -22,10 +22,10 @@ formating = function( adj, musmuscu, pval){
   passingval = which( passingval > 0)
   cat("Il y a",length(passingval),"gène significatifs")
   
-  row.names(musmuscu) = musmuscu$X
-  musmuscu <- data.matrix(musmuscu[,-1])
+  #row.names(musmuscu) = musmuscu$X
+  #musmuscu <- data.matrix(musmuscu[,-1])
   
-  newlist = list(passingval, musmuscu )
+  newlist = list(passingval, adj )
   return(newlist)
 
 }

@@ -109,6 +109,27 @@ ui <- navbarPage(
             )
             ,
 
+            p("You have selectionned the following individuals :"),
+            hr(),
+            verbatimTextOutput("indiv")
+            
+          ),
+          wellPanel(
+            uiOutput("test")
+            ,
+            actionButton(
+              inputId = "allTest",
+              label = "Select all",
+              icon = icon("check-square-o")
+            )
+            ,
+            actionButton(
+              inputId = "noTest",
+              label = "Clear selection",
+              icon = icon("square-o")
+            )
+            ,
+            
             p("Vous avez sélectionné les individus : "),
             hr(),
             verbatimTextOutput("indiv")
@@ -360,6 +381,7 @@ server <- function(input, output, session) {
       return(NULL)
     adj = csvf()[[3]][, grep(
       "^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X|adj.P.Val_LKO_CTRL.LWT_CTRL",
+      #"X|^adj.P.Val",
       names(csvf()[[3]]),
       value = TRUE
     )]

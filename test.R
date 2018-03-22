@@ -35,6 +35,7 @@ ui <- navbarPage(
   theme = shinytheme("united"),
   
   # multi-page user-interface that includes a navigation bar.
+  
   tabPanel(
     "Explore the Data",
     sidebarPanel(
@@ -64,7 +65,6 @@ ui <- navbarPage(
       
       # numericInput('key', 'Cluster count', 1,
       #              min = 0, max = 2),
-      
       
       
       sliderInput(
@@ -111,9 +111,30 @@ ui <- navbarPage(
         )
         ,
         
-        p("Vous avez sélectionné les individus : "),
+        p("You've selectionned the following individuals : "),
         hr(),
         verbatimTextOutput("indiv")
+        
+      ),
+      wellPanel(
+        uiOutput("testout")
+        ,
+        actionButton(
+          inputId = "allTests",
+          label = "Select all",
+          icon = icon("check-square-o")
+        )
+        ,
+        actionButton(
+          inputId = "noTests",
+          label = "Clear selection",
+          icon = icon("square-o")
+        )
+        ,
+        
+        p("You've selectionned the following test : "),
+        hr(),
+        verbatimTextOutput("test")
         
       )
     ),
@@ -126,9 +147,9 @@ ui <- navbarPage(
           ".shiny-output-error { visibility: hidden; }",
           ".shiny-output-error:before { visibility: hidden; }"
         ),
-        ### no more error messages
+   
         
-        bsAlert("alert"),
+        bsAlert("alert"), ### no more error messages
         
         
         plotOutput(outputId = "distPlot")
@@ -156,16 +177,27 @@ ui <- navbarPage(
           )
           ,
           dataTableOutput("new_group")
+        ),
+        column(
+          12,
+
+          h3("Show the actual data frame with the columns selected"),
+          helpText(
+
+            "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+          )
+          ,
+          dataTableOutput("new_test")
         )
       )
     ))
   ),
-  # end of "Explore Dataset" tab panel
-  
+
   tabPanel(
     p(icon("search"), "PCA"),
     
     sidebarPanel(
+      
       style = " font-size:100%; font-family:Arial;
       border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
       width = 3 ,
@@ -219,7 +251,9 @@ ui <- navbarPage(
   )
 
 server <- function(input, output, session) {
+  
   observeEvent(input$first, {
+    
     csvf <- reactive({
       inFile <- input$file1
       
@@ -262,9 +296,9 @@ server <- function(input, output, session) {
             "alert",
             "exampleAlert",
             title = "Oops Error",
-            content = "Are you sure it's the good number of files? you  have imported less than 3 files,
-            you need to import 3 files
-            Tips: Use ctrl+left click then choose your files with the good order",
+            content = "Are you sure it's the good number of files? you  have imported more than 3 files,
+            you need to import 3 csv files
+            Tips: Use ctrl+left click then choose your files ",
             append = FALSE
           )
           
@@ -278,8 +312,8 @@ server <- function(input, output, session) {
             "exampleAlert",
             title = "Oops Error",
             content = "Are you sure it's the good number of files? you have imported less than
-            3 files, you need to import 3 files
-            Tips: Use ctrl+left click then choose your files with the good order",
+            3 files, you need to import 3 csv files
+            Tips: Use ctrl+left click then choose your files ",
             append = FALSE
             
           )
@@ -288,6 +322,7 @@ server <- function(input, output, session) {
         }
         
         else{
+          
           for (i in 1:length(data)) {
             for (elem in input$file1[[i, 'datapath']]) {
               cat("loading file number" , i, "\n")
@@ -325,7 +360,7 @@ server <- function(input, output, session) {
     output$individusel <- renderUI(
       checkboxGroupInput(
         inputId = "indiv" ,
-        label =  "Choose Option:",
+        label =  "Choose your samples:",
         choices =  colnames(csvf()[[1]][, -1]),
         selected = colnames(csvf()[[1]][, -1])
         
@@ -340,6 +375,16 @@ server <- function(input, output, session) {
       return(output$value)
     })
     
+    output$testout <- renderUI(
+      checkboxGroupInput(
+        inputId = "test" ,
+        label =  "Choose Option:",
+        choices =  colnames(adjusted()[,-1]),
+        selected = colnames(adjusted()[, -1])
+
+      )
+    )
+    
     # observerEvent(input$mean ,{
     #
     #   checkboxInput("mean", "Do you want to mean your genes ?", value = FALSE, width = NULL)
@@ -350,8 +395,8 @@ server <- function(input, output, session) {
         session,
         "indiv",
         label = "Choix des individus",
-        choices = colnames(csvf()[[1]][,-1]),
-        selected = colnames(csvf()[[1]][,-1])
+        choices = colnames(csvf()[[1]][, -1]),
+        selected = colnames(csvf()[[1]][, -1])
       )
     })
     
@@ -374,6 +419,47 @@ server <- function(input, output, session) {
       choix_individus()
     })
     
+    choix_test <- reactive({
+      return(input$test)
+    })
+    
+    output$test <- renderText({
+      choix_test()
+    })
+    
+    adjusted <- reactive({
+      
+      df <- csvf()
+      if (is.null(df))
+        return(NULL)
+      adj = csvf()[[3]][, grep(
+        #"^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X|adj.P.Val_LKO_CTRL.LWT_CTRL",
+        "X|adj.P.Val",
+        names(csvf()[[3]]),
+        value = TRUE
+      )]
+      return(adj)
+      
+    })
+    
+    
+    observeEvent(input$allTests, {
+      updateCheckboxGroupInput(
+        session,
+        "test",
+        label = "Choix des individus",
+        choices = colnames(adjusted()[,-1]),
+        selected = colnames(adjusted()[,-1])
+      )
+    })
+    
+    observeEvent(input$noTests, {
+      updateCheckboxGroupInput(session,
+                               "test",
+                               label = "Choix des individus",
+                               choices = colnames(adjusted()[, -1]))
+    })
+    
     
     formated <- reactive({
       df <- csvf()
@@ -381,6 +467,7 @@ server <- function(input, output, session) {
         return(NULL)
       adj = csvf()[[3]][, grep(
         "^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X|adj.P.Val_LKO_CTRL.LWT_CTRL",
+        #"X|adj.P.Val",
         names(csvf()[[3]]),
         value = TRUE
       )]
@@ -421,6 +508,9 @@ server <- function(input, output, session) {
     new_data <- reactive(subset(csvf()[[1]],
                                 select = choix_individus()))
     
+    new_test <- reactive(subset(adjusted(),
+                                select = choix_test()))
+    
     # new_group <- reactive( csvf()[[2]] %>%
     #                          filter( X ==  list_ind()))
     
@@ -434,6 +524,8 @@ server <- function(input, output, session) {
     
     new_group <- reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(), ])
     
+    output$new_test <- renderDataTable(new_test())
+    
     output$new_data <- renderDataTable(new_data())
     
     output$new_group <- renderDataTable(new_group())
@@ -441,6 +533,7 @@ server <- function(input, output, session) {
 
     
     p = reactive({
+      View(new_test())
       plotHeatmaps(
         data.matrix(new_data()),
         formated()[[1]],

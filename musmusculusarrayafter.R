@@ -146,7 +146,7 @@ palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC
 
 
 #data = pval[,c("adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.","adj.P.Val_LKO_CTRL.LWT_CTRL")]
-adj = pval[,grep("^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X|adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
+adj = pval[,grep("X|^adj.P.Val", names(pval), value=TRUE)]
 View(adj)
 
 
