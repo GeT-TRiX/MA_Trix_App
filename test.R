@@ -359,7 +359,7 @@ server <- function(input, output, session) {
       
     })
     
-    
+
     ###############################
     ######## Adding mean by group #
     ###############################
@@ -469,7 +469,7 @@ server <- function(input, output, session) {
     #'
     #' @param input specific of the comparison data frame
     #'
-    #' @return string of the different comparisons selected
+    #' @return \string of the different comparisons selected ### à verifier
     #'
     #' @examples
     #' 
@@ -487,11 +487,11 @@ server <- function(input, output, session) {
     #################################
     
     
-    #' Reactive function that return a comparison data frame with the specific user's selection
+    #' Reactive function that return a data frame with the adj.P.val selected by the individuals
     #'
     #' @param csv Data frame corresponding to the Alltoptable
     #'
-    #' @return adj a new data frame with all the adj.P.Val
+    #' @return \adj a new data frame with all the adj.P.Val
     #'
     #' @examples
     #' 
@@ -511,33 +511,25 @@ server <- function(input, output, session) {
       
     })
     
-    #' Reactive function that return a comparison data frame with the specific user's selection
+    #' Reactive function that select specific individuals in the data frame
     #'
-    #' @param csv Data frame corresponding to the Alltoptable
+    #' @param csv Data frame corresponding to the pData table
     #'
-    #' @return adj a new data frame with all the adj.P.Val
+    #' @return \new_group a new factor with the corresponding individuals from the checkbox with the good levels
     #'
     #' @examples
     #' 
     
     new_group <- reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(), ])
     
-    #' Reactive function that return a comparison data frame with the specific user's selection
-    #'
-    #' @param csv Data frame corresponding to the Alltoptable
-    #'
-    #' @return adj a new data frame with all the adj.P.Val
-    #'
-    #' @examples
-    #' 
     
     observeEvent(input$first, { ## React event
       
-      #' Reactive function that return a comparison data frame with the specific user's selection
+      #' Reactive function that return a data frame with significant genes for a defined p-value
       #'
-      #' @param csv Data frame corresponding to the Alltoptable
+      #' @param csv  Data frame corresponding to the WorkingSet
       #'
-      #' @return adj a new data frame with all the adj.P.Val
+      #' @return \treated a data frame with the id for significant genes
       #'
       #' @examples
       #' 
@@ -547,9 +539,9 @@ server <- function(input, output, session) {
         return(treated)
       })
       
-      #' Reactive function that return a comparison data frame with the specific user's selection
+      #' Reactive function that  select specific individuals in the data frame
       #'
-      #' @param csv Data frame corresponding to the Alltoptable
+      #' @param \csv Data frame corresponding to the Workingset
       #'
       #' @return adj a new data frame with all the adj.P.Val
       #'
@@ -558,11 +550,12 @@ server <- function(input, output, session) {
 
       new_data <- reactive(subset(csvf()[[1]],
                                   select = choix_individus()))
+      
       #' Reactive function that return a comparison data frame with the specific user's selection
       #'
       #' @param csv Data frame corresponding to the Alltoptable
       #'
-      #' @return adj a new data frame with all the adj.P.Val
+      #' @return \new_data a  data frame with all the individuals selected
       #'
       #' @examples
       
@@ -624,6 +617,14 @@ server <- function(input, output, session) {
       #################################
       
       
+      #' Reactive function that return a heatmap plot
+      #'
+      #' @param csv Data frame corresponding to the Alltoptable
+      #'
+      #' @return \p heatmap.2 plot
+      #'
+      #' @examples
+      
       p = reactive({
         View(new_test())
         plotHeatmaps(
@@ -649,6 +650,14 @@ server <- function(input, output, session) {
         else{
           filename = "save.png"
         },
+        #' Title
+        #'
+        #' @param file 
+        #'
+#' @return
+#' @export
+#'
+#' @examples
         content = function(file) {
           ggsave(
             p(),
