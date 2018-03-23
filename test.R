@@ -264,12 +264,17 @@ server <- function(input, output, session) {
         createAlert(
           session,
           "alert",
-          "exampleAlert",
+          style="info",
+          "entryalert",
           title = "First Step",
           content = "You need to import 3 csv files in the browser widget",
-          append = FALSE
+          dismiss = FALSE
+          #append = TRUE
           
         )
+        Sys.sleep(2.5)
+        
+        closeAlert(session, "entryalert")
         
         return(NULL)
       }
@@ -284,6 +289,7 @@ server <- function(input, output, session) {
           session,
           "alert",
           "exampleAlert",
+          style="danger",
           title = "Oops Error",
           content = "Are you sure you're importing csv files ?",
           append = FALSE
@@ -298,6 +304,7 @@ server <- function(input, output, session) {
             session,
             "alert",
             "exampleAlert",
+            style="danger",
             title = "Oops Error",
             content = "Are you sure it's the good number of files? you  have imported more than 3 files,
             you need to import 3 csv files
@@ -313,6 +320,7 @@ server <- function(input, output, session) {
             session,
             "alert",
             "exampleAlert",
+            style="danger",
             title = "Oops Error",
             content = "Are you sure it's the good number of files? you have imported less than
             3 files, you need to import 3 csv files
@@ -354,6 +362,19 @@ server <- function(input, output, session) {
         
         row.names(csvord[[1]]) = csvord[[1]]$X
       }
+      
+      createAlert(
+        session,
+        "alert",
+        "succeeded",
+        style= "success",
+        title = "Sucess",
+        content = " Your files have been loaded, you can choose your data now",
+        append = FALSE
+
+      )
+      Sys.sleep(2)
+      closeAlert(session,succeeded)
       
       return (csvord)
       
@@ -650,14 +671,15 @@ server <- function(input, output, session) {
         else{
           filename = "save.png"
         },
-        #' Title
+        
+        #' Save Heatmap in the good format
         #'
         #' @param file 
         #'
-#' @return
-#' @export
-#'
-#' @examples
+        #' @return the image saved in eps or png
+        #' 
+
+        
         content = function(file) {
           ggsave(
             p(),
