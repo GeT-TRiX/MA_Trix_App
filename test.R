@@ -8,21 +8,10 @@
 ##################################<
 ###################################
 
-
-#source("plotHeatmaps.r")
 source("compat.R")
 source("formating.R")
 source("global.R")
-#source("PCA.R")
 
-
-# library(shiny)
-# library(BH)
-# library(rCharts)
-# require(markdown)
-# require(data.table)
-# library(dplyr)
-# library(DT)
 
 #shinyUI(
 
@@ -84,7 +73,7 @@ ui <- navbarPage(
         choices = c("cor", "euclidian")
       ),
       
-      checkboxInput("somevalue", "Add Mean for the different", FALSE),
+      checkboxInput("meangrp", "Add Mean for the different", FALSE),
       verbatimTextOutput("value"),
       br(),
       
@@ -252,8 +241,22 @@ ui <- navbarPage(
 
 server <- function(input, output, session) {
   
-  observeEvent(input$first, {
-    
+  #observeEvent(input$first, {
+  
+    ###############################
+    ######## Load the csv files   #
+    ###############################
+      
+  
+    #' Reactive function in the aim of loading csv files
+    #'
+    #' @param inFile 
+    #'
+    #' @return csvord a list of csv files 
+    #'
+    #' @examples
+    #' 
+  
     csvf <- reactive({
       inFile <- input$file1
       
@@ -357,6 +360,23 @@ server <- function(input, output, session) {
     })
     
     
+    ###############################
+    ######## Adding mean by group #
+    ###############################
+    
+    output$value <- renderText({
+      input$meangrp
+    })
+    
+    mean_grp <- reactive({
+      return(output$value)
+    })
+    
+    #################################
+    ######## Select the individuals #
+    #################################
+    
+    
     output$individusel <- renderUI(
       checkboxGroupInput(
         inputId = "indiv" ,
@@ -366,29 +386,6 @@ server <- function(input, output, session) {
         
       )
     )
-    
-    output$value <- renderText({
-      input$somevalue
-    })
-    
-    mean_grp <- reactive({
-      return(output$value)
-    })
-    
-    output$testout <- renderUI(
-      checkboxGroupInput(
-        inputId = "test" ,
-        label =  "Choose Option:",
-        choices =  colnames(adjusted()[,-1]),
-        selected = colnames(adjusted()[, -1])
-
-      )
-    )
-    
-    # observerEvent(input$mean ,{
-    #
-    #   checkboxInput("mean", "Do you want to mean your genes ?", value = FALSE, width = NULL)
-    # })
     
     observeEvent(input$allIndividus, {
       updateCheckboxGroupInput(
@@ -407,9 +404,27 @@ server <- function(input, output, session) {
                                choices = colnames(csvf()[[1]][, -1]))
     })
     
+    #' Reactive function in the aim of selecting individuals
+    #'
+    #' @param input specific of the individuals data frame
+    #'
+    #' @return string of the different individuals selected
+    #'
+    #' @examples
+    #' 
+    
     choix_individus <- reactive({
       return(input$indiv)
     })
+    
+    #' Reactive function in the aim of having selected individuals in a list
+    #'
+    #' @param input specific of the individuals data frame
+    #'
+    #' @return a list of the different individuals selected
+    #'
+    #' @examples
+    #' 
     
     list_ind <- reactive({
       return(list(input$indiv))
@@ -419,29 +434,19 @@ server <- function(input, output, session) {
       choix_individus()
     })
     
-    choix_test <- reactive({
-      return(input$test)
-    })
+    #################################
+    ######## Select the comparisons #
+    #################################
     
-    output$test <- renderText({
-      choix_test()
-    })
-    
-    adjusted <- reactive({
-      
-      df <- csvf()
-      if (is.null(df))
-        return(NULL)
-      adj = csvf()[[3]][, grep(
-        #"^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X|adj.P.Val_LKO_CTRL.LWT_CTRL",
-        "X|adj.P.Val",
-        names(csvf()[[3]]),
-        value = TRUE
-      )]
-      return(adj)
-      
-    })
-    
+    output$testout <- renderUI(
+      checkboxGroupInput(
+        inputId = "test" ,
+        label =  "Choose Option:",
+        choices =  colnames(adjusted()[,-1]),
+        selected = colnames(adjusted()[, -1])
+        
+      )
+    )
     
     observeEvent(input$allTests, {
       updateCheckboxGroupInput(
@@ -460,143 +465,233 @@ server <- function(input, output, session) {
                                choices = colnames(adjusted()[, -1]))
     })
     
+    #' Reactive function in the aim of selecting different comparison 
+    #'
+    #' @param input specific of the comparison data frame
+    #'
+    #' @return string of the different comparisons selected
+    #'
+    #' @examples
+    #' 
     
-    formated <- reactive({
+    choix_test <- reactive({
+      return(input$test)
+    })
+    
+    output$test <- renderText({
+      choix_test()
+    })
+    
+    #################################
+    ######## Format the data frame  #
+    #################################
+    
+    
+    #' Reactive function that return a comparison data frame with the specific user's selection
+    #'
+    #' @param csv Data frame corresponding to the Alltoptable
+    #'
+    #' @return adj a new data frame with all the adj.P.Val
+    #'
+    #' @examples
+    #' 
+    
+    adjusted <- reactive({
+      
       df <- csvf()
       if (is.null(df))
         return(NULL)
       adj = csvf()[[3]][, grep(
-        "^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X|adj.P.Val_LKO_CTRL.LWT_CTRL",
-        #"X|adj.P.Val",
+        #"^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X|adj.P.Val_LKO_CTRL.LWT_CTRL",
+        "X|adj.P.Val",
         names(csvf()[[3]]),
         value = TRUE
       )]
+      return(adj)
+      
+    })
+    
+    #' Reactive function that return a comparison data frame with the specific user's selection
+    #'
+    #' @param csv Data frame corresponding to the Alltoptable
+    #'
+    #' @return adj a new data frame with all the adj.P.Val
+    #'
+    #' @examples
+    #' 
+    
+    new_group <- reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(), ])
+    
+    #' Reactive function that return a comparison data frame with the specific user's selection
+    #'
+    #' @param csv Data frame corresponding to the Alltoptable
+    #'
+    #' @return adj a new data frame with all the adj.P.Val
+    #'
+    #' @examples
+    #' 
+    
+    observeEvent(input$first, { ## React event
+      
+      #' Reactive function that return a comparison data frame with the specific user's selection
+      #'
+      #' @param csv Data frame corresponding to the Alltoptable
+      #'
+      #' @return adj a new data frame with all the adj.P.Val
+      #'
+      #' @examples
+      #' 
+  
+      formated <- reactive({
+        treated = formating(new_test(), csvf()[[1]], input$pval)
+        return(treated)
+      })
+      
+      #' Reactive function that return a comparison data frame with the specific user's selection
+      #'
+      #' @param csv Data frame corresponding to the Alltoptable
+      #'
+      #' @return adj a new data frame with all the adj.P.Val
+      #'
+      #' @examples
+      #' 
 
-      treated = formating(adjusted(), csvf()[[1]], input$pval)
-      return(treated)
+      new_data <- reactive(subset(csvf()[[1]],
+                                  select = choix_individus()))
+      #' Reactive function that return a comparison data frame with the specific user's selection
+      #'
+      #' @param csv Data frame corresponding to the Alltoptable
+      #'
+      #' @return adj a new data frame with all the adj.P.Val
+      #'
+      #' @examples
       
-    })
-    
-    #observeEvent(input$first, {
-    myData <- reactive({
-      df <- csvf()
-      if (is.null(df))
-        return(NULL)
-      return(df[[1]])
-      
-    })
-    
-    
-    output$distPlot <- renderPlot({
-      plotHeatmaps(
-        data.matrix(new_data()),
-        formated()[[1]],
-        new_group()$Grp,
-        workingPath = wd_path,
-        prefix,
-        suffix,
-        k = input$clusters,
-        Rowdistfun = input$dist ,
-        Coldistfun = input$dist,
-        keysize = input$key,
-        meanGrp = input$somevalue
-        
-      )
-      
-    }, width = 900 , height = 1200, res = 100)
-    
-    new_data <- reactive(subset(csvf()[[1]],
-                                select = choix_individus()))
-    
-    new_test <- reactive(subset(adjusted(),
-                                select = choix_test()))
+      new_test <- reactive(subset(adjusted(),
+                                  select = choix_test()))
     
     # new_group <- reactive( csvf()[[2]] %>%
     #                          filter( X ==  list_ind()))
     
     #selection = list("LWT_Ctrl2","LWT_MCD5")
-    
-    selection = reactive({
-      test = list(choix_individus())
-      return (as.character(test))
-    })
-    
-    
-    new_group <- reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(), ])
-    
-    output$new_test <- renderDataTable(new_test())
-    
-    output$new_data <- renderDataTable(new_data())
-    
-    output$new_group <- renderDataTable(new_group())
-    
-
-    
-    p = reactive({
-      View(new_test())
-      plotHeatmaps(
-        data.matrix(new_data()),
-        formated()[[1]],
-        new_group()$Grp,
-        workingPath = wd_path,
-        prefix,
-        suffix,
-        k = input$clusters,
-        Rowdistfun = input$dist ,
-        Coldistfun = input$dist,
-        keysize = input$key,
-        meanGrp = input$somevalue
+      
+      
+    # myData <- reactive({
+    #   
+    #   df <- csvf()
+    #   if (is.null(df))
+    #     return(NULL)
+    #   return(df[[1]])
+    #   
+    # })
+      
+    #################################
+    ######## Plot in the renderView #
+    #################################
         
-      )
-    })
-    
-      output$save <- downloadHandler(
-      if (input$form == "eps") {
-        filename = "save.eps"
-      }
-      else{
-        filename = "save.png"
-      },
-      content = function(file) {
-        ggsave(
-          p(),
-          filename = filename,
-          width = 20,
-          height = 20,
-          limitsize = FALSE,
-          units = "cm"
-          ,dpi= 70
+  
+      output$distPlot <- renderPlot({
+        plotHeatmaps(
+          data.matrix(new_data()),
+          #adjusted()[[1]],
+          formated()[[1]],
+          new_group()$Grp,
+          workingPath = wd_path,
+          prefix,
+          suffix,
+          k = input$clusters,
+          Rowdistfun = input$dist ,
+          Coldistfun = input$dist,
+          keysize = input$key,
+          meanGrp = input$meangrp
+          
         )
         
-      }
-    )
-    
-  })
-  
-  observeEvent(input$second, {
-    csvf1 <- reactive({
-      csvtest = list()
+      }, width = 900 , height = 1200, res = 100)
       
-      inFile <- input$file2
-      name <- inFile$name
-      for (i in 1:length(data)) {
-        for (elem in input$file2[[i, 'datapath']]) {
-          cat("loading file number" , i, "\n")
+      #########################################
+      ######## Plot the data frame wiht input #
+      #########################################
+      
+      output$new_test <- renderDataTable(new_test())
+      
+      output$new_data <- renderDataTable(new_data())
+      
+      output$new_group <- renderDataTable(new_group())
+      
+      
+      #################################
+      ######## Save plots             #
+      #################################
+      
+      
+      p = reactive({
+        View(new_test())
+        plotHeatmaps(
+          data.matrix(new_data()),
+          adjusted()[[1]],
+          new_group()$Grp,
+          workingPath = wd_path,
+          prefix,
+          suffix,
+          k = input$clusters,
+          Rowdistfun = input$dist ,
+          Coldistfun = input$dist,
+          keysize = input$key,
+          meanGrp = input$meangrp
+          
+        )
+      })
+      
+      output$save <- downloadHandler(
+        if (input$form == "eps") {
+          filename = "save.eps"
         }
-        csvtest[i] = elem
-      }
-      csv <- lapply(csvtest, read.csv2)
+        else{
+          filename = "save.png"
+        },
+        content = function(file) {
+          ggsave(
+            p(),
+            filename = filename,
+            width = 20,
+            height = 20,
+            limitsize = FALSE,
+            units = "cm"
+            ,
+            dpi = 70
+          )
+          
+        }
+      )
       
-      return (csv)
     })
     
-    output$mytable2 <- DT::renderDataTable({
-      DT::datatable(csvf1(), options = list(orderClasses = TRUE))
+    #### This part aint actually used !!!
+    
+    observeEvent(input$second, {
+      csvf1 <- reactive({
+        csvtest = list()
+        
+        inFile <- input$file2
+        name <- inFile$name
+        for (i in 1:length(data)) {
+          for (elem in input$file2[[i, 'datapath']]) {
+            cat("loading file number" , i, "\n")
+          }
+          csvtest[i] = elem
+        }
+        csv <- lapply(csvtest, read.csv2)
+        
+        return (csv)
+      })
+      
+      output$mytable2 <- DT::renderDataTable({
+        DT::datatable(csvf1(), options = list(orderClasses = TRUE))
+        
+      })
       
     })
     
-  })
-  
-  }
+}
 
-shinyApp(ui = ui , server = server)
+shinyApp(ui = ui , server = server) ## Run the application
