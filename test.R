@@ -373,8 +373,10 @@ server <- function(input, output, session) {
         append = FALSE
 
       )
-      Sys.sleep(2)
-      closeAlert(session,succeeded)
+      Sys.sleep(1)
+      closeAlert(session,"succeeded")
+      names(csvord[[3]]) =  gsub(pattern = "^adj.P.Val|^adj.P.Val", replacement = "", x = names(csvord[[3]]),perl =  TRUE)
+      #sapply(strsplit(names(csvord[[3]]), "^adj.P.Val|^adj.P.Val"), `[[`, 1)
       
       return (csvord)
       
@@ -463,8 +465,8 @@ server <- function(input, output, session) {
       checkboxGroupInput(
         inputId = "test" ,
         label =  "Choose Option:",
-        choices =  colnames(adjusted()[,-1]),
-        selected = colnames(adjusted()[, -1])
+        choices =  colnames(adjusted()[,-1])
+        #,selected = colnames(adjusted()[, -1])
         
       )
     )
@@ -524,7 +526,8 @@ server <- function(input, output, session) {
         return(NULL)
       adj = csvf()[[3]][, grep(
         #"^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X|adj.P.Val_LKO_CTRL.LWT_CTRL",
-        "X|adj.P.Val",
+        "X|^_",
+        #"X|^comp:",
         names(csvf()[[3]]),
         value = TRUE
       )]
@@ -579,6 +582,7 @@ server <- function(input, output, session) {
       #' @return \new_data a  data frame with all the individuals selected
       #'
       #' @examples
+      
       
       new_test <- reactive(subset(adjusted(),
                                   select = choix_test()))
@@ -647,7 +651,6 @@ server <- function(input, output, session) {
       #' @examples
       
       p = reactive({
-        View(new_test())
         plotHeatmaps(
           data.matrix(new_data()),
           adjusted()[[1]],

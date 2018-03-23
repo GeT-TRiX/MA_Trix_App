@@ -19,13 +19,26 @@ library(readr)
 length(musmuscu)
 
 musmuscu <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
-colnames(musmuscu)[2:length(musmuscu)]
+colnames(musmuscu)[2:length(musmuscu)] = "test"
+names(musmuscu) = gsub(pattern = "^", replacement = "", x = names(your_data))
+
 
 View(musmuscu)
 data  = subset(musmuscu ,is.na ,select = "LWT_Ctrl2")
 
+test <- as_tibble(pval)
+View(test)
+
+names(pval) =  gsub(pattern = "^adj.P.Val|^adj.P.Val", replacement = "", x = names(pval),perl = T)
+View(pval)
+
 View(data)
 
+help("strsplit2")
+help("strsplit")
+
+
+names(pval) = sapply(strsplit(names(pval), "^adj.P.Val*|^adj.P.Val*"), `[[`, 1)
 pval <- read.csv2("data/All_topTableAll.csv")
 groupss <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec = ",",header= T)
 View(musmuscu)
