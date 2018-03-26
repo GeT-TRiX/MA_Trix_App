@@ -31,19 +31,17 @@ num2cols=function(numVector,colp=palette()){
 ##   plotHeatmaps() function
 ############################################################################ 
 
-plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,k=2,fileType="png",cexcol=1,cexrow=1,
+plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,k=2,fileType="png",cexcol=0.9,cexrow=0.4,
                       colOrder=NULL,labrow=F,colid=NULL,na.color="black",scale="row",hclustGenes=T,meanGrp=F,plotRowSideColor=T,col.hm=greenred(75),
-                      RowSideColor=c("gray25","gray75"), Rowdistfun="cor",Coldistfun="cor", keysize = 0.5 ,palette.col=NULL, margins=c(7,7), ...){
+                      RowSideColor=c("gray25","gray75"), Rowdistfun="cor",Coldistfun="cor" ,palette.col=NULL, margins=c(8,8), ...){
   #RowSideColor: color palette to be used for rowSide cluster colors
   # can also be gray.colors(k, start = 0.2, end = 0.9) to get k colors of gray scale
-  ##jpeg(".tmp"))
+
   if(!is.null(palette.col)){
     palette(palette.col);
     #		}else palette(c("black", "blue", "cyan", "magenta",   "darkgray", "darkgoldenrod", "violet",  "orange", "lightgreen","lightblue", "darkorchid", "darkred","darkslateblue", "darkslategray", "maroon", "burlywood1" , "darkolivegreen"));
   }else   palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442", "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray", "burlywood1","darkkhaki", "#CC0000" ));
-  
-  #	dev.off()
-  ##unlink(".tmp")(".tmp")
+
   
   if(fileType %in% c("emf","eps","svg") ) require("devEMF") 
   
@@ -54,10 +52,8 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   
   library(gplots)
   library(marray)
-  ##jpeg(".tmp"))         
   cl=palette();
-  #dev.off()         
-  ##unlink(".tmp")(".tmp")        
+    
   
   ftype=c("tiff","emf","png","eps","svg")
   if(!fileType%in%ftype) stop("Error: file type must be tiff, emf, png or eps");
@@ -67,7 +63,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   #	rowv=TRUE;
   wdt=900;
   wdte=12;
-  kcex=0.9;
+  kcex=0.4;
   
   ##-----------------------##
   ## Row dendrogram
@@ -93,7 +89,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
     groups=factor(levels(groups),levels=levels(groups))
     wdt=600;
     wdte=8;
-    kcex=0.9;
+    kcex=0.4;
     colid=NA
   }
   
@@ -136,7 +132,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   #	}else ColvOrd=T;
   
   #### heatmap  genes 
-  useRasterTF=T;
+  useRasterTF=F;
   
   ##-----------------------##
   ## plot Row dendrogram
@@ -148,13 +144,12 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
     #png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,"_hclustGenes.png",sep="")),width=800, height=400)
     plot(hc,hang=-1,labels=FALSE,sub=paste("hclust method: ward2\n", subdist),xlab="",main="")
     hcgp=rect.hclust(hc,k=k,border="red")
-    #dev.off() 
+
     
     #png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,"_hclustGenes_heights.png",sep="")),width=800, height=400)
     hts=rev( tail( hc$height,15))
     bp=barplot(hts,names.arg=1:length(hts))
     text(x=bp,y=hts,label= formatC(hts,1,format="f"),pos=3,cex=0.8) 
-    #dev.off()
     cat("    Done \n")
   }
   
@@ -208,10 +203,9 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   
   
   #	png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,".png",sep="")),width=wdt, height=900) 
-  #par(mar=par("mar")+c(0,0,-3,0))
-  #graphics.off()
+
   par("mar")
-  par(mar=c(4,3,1,1.10))
+  par(mar=c(5,5,1,1.10))
   
   #par("mar")
   #par(mar=c(1,1,1,1))
@@ -222,11 +216,14 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[2:(length(levels(groups))+1)],cex=1,line=-1)
   #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=1,line=-1)
   hmp02 = heatmap.2(exprData,na.rm=T, col=col.hm,dendrogram="both",labRow =rowIds,labCol=colid,scale=scale, ColSideColors=gpcol,RowSideColors=gpcolr, key=T,
-                    keysize=0.9, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
-                    Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=useRasterTF, lhei = c(1.5,4), lwid = c(1,4),margins=margins)
+                    keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
+                    Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=useRasterTF,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)))
   #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[2:(length(levels(groups))+1)],cex=1,line=-1)
-  mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=0.9,line=-1)
+  mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=0.8,line=-1)
   #dev.off()
-  
+  #key.par = list(cex=0.5),
+  #key.par=list(mar=c(4,4,4,10))
   #return(hmp02)
+  # lhei = c(0.5,5), lwid = c(1,5)
+  #key.par=list(mar=c(3,3,1,1),cex=0.5)
 }

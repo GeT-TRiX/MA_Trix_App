@@ -26,17 +26,6 @@ names(musmuscu) = gsub(pattern = "^", replacement = "", x = names(your_data))
 View(musmuscu)
 data  = subset(musmuscu ,is.na ,select = "LWT_Ctrl2")
 
-test <- as_tibble(pval)
-View(test)
-
-names(pval) =  gsub(pattern = "^adj.P.Val|^adj.P.Val", replacement = "", x = names(pval),perl = T)
-View(pval)
-
-View(data)
-
-help("strsplit2")
-help("strsplit")
-
 
 names(pval) = sapply(strsplit(names(pval), "^adj.P.Val*|^adj.P.Val*"), `[[`, 1)
 pval <- read.csv2("data/All_topTableAll.csv")
@@ -51,6 +40,7 @@ listed = list(musmuscu,pval,groupss,ncol(musmuscu))
 print(listed[[
   4
 ]])
+colnames(pval)
 colnames(groupss)
 
 
@@ -159,7 +149,7 @@ palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC
 
 
 #data = pval[,c("adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.","adj.P.Val_LKO_CTRL.LWT_CTRL")]
-adj = pval[,grep("X|^adj.P.Val", names(pval), value=TRUE)]
+adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|^adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
 View(adj)
 
 

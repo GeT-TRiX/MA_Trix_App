@@ -5,7 +5,7 @@
 ##################################
 ##                              ##
 ##  Author: Franck Soubès        ##
-##################################<
+##################################
 ###################################
 
 source("compat.R")
@@ -13,9 +13,10 @@ source("formating.R")
 source("global.R")
 
 
-#shinyUI(
 
 options(shiny.maxRequestSize = 40 * 1024 ^ 2) # Defined the maximum size in Mb that R can load for one file
+
+#shinyUI(
 
 ui <- navbarPage(
   
@@ -342,7 +343,9 @@ server <- function(input, output, session) {
           }
         }
         
-        csv <- lapply(csvtest, read.csv2)
+        #csv <- lapply(csvtest, read.csv2, check.names = F)
+        csv <- lapply(csvtest, FUN = function (x) read.table(x, sep = ";" ,dec = ",",header=T,check.names = F))
+        #csv <- lapply(csvtest, FUN = function (x) read_csv2(x))
         csvord = list()
         
         for (i in 1:length(csv)) {
@@ -360,8 +363,11 @@ server <- function(input, output, session) {
           }
         }
         
-        row.names(csvord[[1]]) = csvord[[1]]$X
+        row.names(csvord[[1]]) = csvord[[1]][,1]
+        colnames(csvord[[3]])[1] = "X"
+        colnames(csvord[[2]])[1] = "X"
       }
+      
       
       createAlert(
         session,
@@ -375,7 +381,7 @@ server <- function(input, output, session) {
       )
       Sys.sleep(1)
       closeAlert(session,"succeeded")
-      names(csvord[[3]]) =  gsub(pattern = "^adj.P.Val|^adj.P.Val", replacement = "", x = names(csvord[[3]]),perl =  TRUE)
+      
       #sapply(strsplit(names(csvord[[3]]), "^adj.P.Val|^adj.P.Val"), `[[`, 1)
       
       return (csvord)
@@ -524,13 +530,20 @@ server <- function(input, output, session) {
       df <- csvf()
       if (is.null(df))
         return(NULL)
+      
       adj = csvf()[[3]][, grep(
-        #"^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|X|adj.P.Val_LKO_CTRL.LWT_CTRL",
-        "X|^_",
-        #"X|^comp:",
+        "X|^adj.P.Val",
         names(csvf()[[3]]),
         value = TRUE
       )]
+
+      names(adj) =  gsub(
+        pattern = "^adj.P.Val_",
+        replacement = "",
+        x = names(adj),
+        perl =  TRUE
+      )
+      
       return(adj)
       
     })
@@ -610,7 +623,6 @@ server <- function(input, output, session) {
       output$distPlot <- renderPlot({
         plotHeatmaps(
           data.matrix(new_data()),
-          #adjusted()[[1]],
           formated()[[1]],
           new_group()$Grp,
           workingPath = wd_path,
@@ -653,7 +665,7 @@ server <- function(input, output, session) {
       p = reactive({
         plotHeatmaps(
           data.matrix(new_data()),
-          adjusted()[[1]],
+          formated()[[1]],
           new_group()$Grp,
           workingPath = wd_path,
           prefix,
@@ -687,12 +699,12 @@ server <- function(input, output, session) {
           ggsave(
             p(),
             filename = filename,
-            width = 20,
-            height = 20,
+            width = 12,
+            height = 16,
             limitsize = FALSE,
             units = "cm"
             ,
-            dpi = 70
+            dpi = 200
           )
           
         }

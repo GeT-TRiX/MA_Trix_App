@@ -63,7 +63,7 @@ RowSideColor=c("gray25","gray75"), Rowdistfun="cor",Coldistfun="cor", palette.co
 #	rowv=TRUE;
 	wdt=900;
 	wdte=12;
-	kcex=0.9;
+	kcex=0.5;
 	
 ##-----------------------##
 ## Row dendrogram
@@ -89,7 +89,7 @@ if(meanGrp){
 	groups=factor(levels(groups),levels=levels(groups))
 	wdt=600;
 	wdte=8;
-	kcex=0.9;
+	kcex=0.5;
 	colid=NA
 	}
 
