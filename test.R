@@ -27,8 +27,14 @@ ui <- navbarPage(
   # multi-page user-interface that includes a navigation bar.
   
   tabPanel(
-    "Explore the Data",
+    
+    p(icon("upload"),
+    "Data loading"),
+    
     sidebarPanel(
+      
+      style = " font-size:100%; font-family:Arial;
+      border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
       width = 3,
       
       br(),
@@ -41,7 +47,56 @@ ui <- navbarPage(
                    ".csv")
         ,
         multiple = T
+      )
       ),
+    mainPanel(
+      
+      bsAlert("alert"),
+      
+      
+        column(
+          12,
+
+          h3("Show the actual data frame with the columns selected"),
+          helpText(
+            "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+          )
+          ,
+          dataTableOutput("new_data")
+        ),
+        column(
+          12,
+
+          h3("Show the actual data frame with the columns selected"),
+          helpText(
+            "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+          )
+          ,
+          dataTableOutput("new_group")
+        ),
+        column(
+          12,
+
+          h3("Show the actual data frame with the columns selected"),
+          helpText(
+
+            "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+          )
+          ,
+          dataTableOutput("new_test")
+        )
+    )),
+  
+  
+  tabPanel(
+    p(icon("picture"),
+      "Heatmap "),
+    
+    #"Heatmap",
+    
+    sidebarPanel(
+      width = 3,
+    
       style = " font-size:100%; font-family:Arial;
       border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
       #tags$style("#myNumericInput {font-size:10px;height:10px;}"),
@@ -86,6 +141,7 @@ ui <- navbarPage(
                      "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
       
       wellPanel(
+        
         uiOutput("individusel")
         ,
         actionButton(
@@ -121,7 +177,12 @@ ui <- navbarPage(
           icon = icon("square-o")
         )
         ,
-        
+        actionButton(
+          inputId = "refresh",
+          label = "Update selection",
+          icon = icon("repeat")
+        )
+        ,
         p("You've selectionned the following test : "),
         hr(),
         verbatimTextOutput("test")
@@ -141,44 +202,12 @@ ui <- navbarPage(
         
         bsAlert("alert"), ### no more error messages
         
-        
         plotOutput(outputId = "distPlot")
         
       ),
       tabPanel(
-        p(icon("table"), "Dataset"),
+        p(icon("table"), "Dataset")
         
-        column(
-          12,
-          
-          h3("Show the actual data frame with the columns selected"),
-          helpText(
-            "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-          )
-          ,
-          dataTableOutput("new_data")
-        ),
-        column(
-          12,
-          
-          h3("Show the actual data frame with the columns selected"),
-          helpText(
-            "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-          )
-          ,
-          dataTableOutput("new_group")
-        ),
-        column(
-          12,
-
-          h3("Show the actual data frame with the columns selected"),
-          helpText(
-
-            "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-          )
-          ,
-          dataTableOutput("new_test")
-        )
       )
     ))
   ),
@@ -223,26 +252,28 @@ ui <- navbarPage(
       # )
       
       )
-    )
-  
-  , tabPanel("How to use?",
+    ),
+    tabPanel(
+      p(icon("question-circle"),
+      "How to use?"),
              mainPanel(
                
                includeMarkdown("help.md")
              )
   )
   
-  , tabPanel("About",
+  , tabPanel(
+    p(icon("info-circle"),
+    "About"),
            mainPanel(
              includeMarkdown("about.md")
            )
   ) 
   
-  )
+)
 
 server <- function(input, output, session) {
   
-  #observeEvent(input$first, {
   
     ###############################
     ######## Load the csv files   #
@@ -299,6 +330,7 @@ server <- function(input, output, session) {
       }
       
       else{
+        
         if (length(data) > 3)
         {
           createAlert(
@@ -317,6 +349,7 @@ server <- function(input, output, session) {
         }
         
         else if (length(data) < 3) {
+          
           createAlert(
             session,
             "alert",
@@ -420,7 +453,7 @@ server <- function(input, output, session) {
       updateCheckboxGroupInput(
         session,
         "indiv",
-        label = "Choix des individus",
+        label = "Choose your comparisons",
         choices = colnames(csvf()[[1]][, -1]),
         selected = colnames(csvf()[[1]][, -1])
       )
@@ -439,8 +472,7 @@ server <- function(input, output, session) {
     #'
     #' @return string of the different individuals selected
     #'
-    #' @examples
-    #' 
+
     
     choix_individus <- reactive({
       return(input$indiv)
@@ -452,8 +484,7 @@ server <- function(input, output, session) {
     #'
     #' @return a list of the different individuals selected
     #'
-    #' @examples
-    #' 
+
     
     list_ind <- reactive({
       return(list(input$indiv))
@@ -500,12 +531,16 @@ server <- function(input, output, session) {
     #'
     #' @return \string of the different comparisons selected ### à verifier
     #'
-    #' @examples
-    #' 
     
-    choix_test <- reactive({
+    
+    choix_test <- eventReactive(input$refresh,{
       return(input$test)
-    })
+      
+    }, ignoreNULL = F)
+    
+    # choix_test <- reactive({
+    #   return(input$test)
+    # })
     
     output$test <- renderText({
       choix_test()
@@ -522,8 +557,7 @@ server <- function(input, output, session) {
     #'
     #' @return \adj a new data frame with all the adj.P.Val
     #'
-    #' @examples
-    #' 
+
     
     adjusted <- reactive({
       
@@ -554,13 +588,12 @@ server <- function(input, output, session) {
     #'
     #' @return \new_group a new factor with the corresponding individuals from the checkbox with the good levels
     #'
-    #' @examples
-    #' 
+
     
     new_group <- reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(), ])
     
     
-    observeEvent(input$first, { ## React event
+    #observeEvent(input$first, { ## React event
       
       #' Reactive function that return a data frame with significant genes for a defined p-value
       #'
@@ -568,8 +601,7 @@ server <- function(input, output, session) {
       #'
       #' @return \treated a data frame with the id for significant genes
       #'
-      #' @examples
-      #' 
+
   
       formated <- reactive({
         treated = formating(new_test(), csvf()[[1]], input$pval)
@@ -582,11 +614,15 @@ server <- function(input, output, session) {
       #'
       #' @return adj a new data frame with all the adj.P.Val
       #'
-      #' @examples
-      #' 
 
-      new_data <- reactive(subset(csvf()[[1]],
-                                  select = choix_individus()))
+
+      new_data <- reactive({
+        inFile <- input$file1
+        if (is.null(inFile))
+          return(NULL)
+        subset(csvf()[[1]],
+               select = choix_individus())
+      })
       
       #' Reactive function that return a comparison data frame with the specific user's selection
       #'
@@ -594,11 +630,16 @@ server <- function(input, output, session) {
       #'
       #' @return \new_data a  data frame with all the individuals selected
       #'
-      #' @examples
+
       
       
-      new_test <- reactive(subset(adjusted(),
-                                  select = choix_test()))
+      new_test <- eventReactive(input$refresh, {
+        inFile <- input$file1
+        if (is.null(inFile))
+          return(NULL)
+        (subset(adjusted(),
+                select = choix_test()))
+      }, ignoreNULL = F)
     
     # new_group <- reactive( csvf()[[2]] %>%
     #                          filter( X ==  list_ind()))
@@ -615,11 +656,23 @@ server <- function(input, output, session) {
     #   
     # })
       
+    #########################################
+    ######## Plot the data frame wiht input #
+    #########################################
+      
+      output$new_test <- renderDataTable(new_test())
+      
+      output$new_data <- renderDataTable(new_data())
+      
+      output$new_group <- renderDataTable(new_group())
+      
+      
     #################################
     ######## Plot in the renderView #
     #################################
         
-  
+      observeEvent(input$first, {  
+      
       output$distPlot <- renderPlot({
         plotHeatmaps(
           data.matrix(new_data()),
@@ -638,17 +691,7 @@ server <- function(input, output, session) {
         
       }, width = 900 , height = 1200, res = 100)
       
-      #########################################
-      ######## Plot the data frame wiht input #
-      #########################################
-      
-      output$new_test <- renderDataTable(new_test())
-      
-      output$new_data <- renderDataTable(new_data())
-      
-      output$new_group <- renderDataTable(new_group())
-      
-      
+
       #################################
       ######## Save plots             #
       #################################
@@ -660,7 +703,7 @@ server <- function(input, output, session) {
       #'
       #' @return \p heatmap.2 plot
       #'
-      #' @examples
+
       
       p = reactive({
         plotHeatmaps(
@@ -741,3 +784,4 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui = ui , server = server) ## Run the application
+
