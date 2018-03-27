@@ -416,10 +416,12 @@ server <- function(input, output, session) {
   isok <- T
   makeReactiveBinding('click')
   
-  observeEvent(input$first, {
+  #observeEvent(input$first, {
+  tested <- eventReactive(input$first, {
     if (click > 0)
       {isok <<- F}
     click <<- click + 1
+    return (isok)
   })
 
   test = function(click){
@@ -428,6 +430,11 @@ server <- function(input, output, session) {
     isok <- T
   }
 
+  observeEvent(tested(),{
+  if(!tested())
+    print("ok")
+  })
+  
   ###############################
   ######## Adding mean by group #
   ###############################
@@ -700,8 +707,9 @@ server <- function(input, output, session) {
       
     }, width = 900 , height = 1200, res = 100)
     
-    print(isok)
-    print(click)
+    #print(isok)
+    #print(click)
+    print(tested())
 
     #################################
     ######## Save plots             #
