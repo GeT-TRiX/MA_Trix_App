@@ -20,6 +20,7 @@ options(shiny.maxRequestSize = 40 * 1024 ^ 2) # Defined the maximum size in Mb t
 
 ui <- navbarPage(
   "MA_Trix_App",
+
   
   theme = shinytheme("united"),
   
@@ -194,7 +195,7 @@ ui <- navbarPage(
         ".shiny-output-error:before { visibility: hidden; }"
       ),
       
-      
+      useShinyjs(),
       bsAlert("alert"),
       ### no more error messages
       
@@ -219,7 +220,8 @@ tabPanel(
     
   ),
   
-  mainPanel(# h4("The page popped-up is the LEGO set database on Brickset.com."),
+  mainPanel(
+    # h4("The page popped-up is the LEGO set database on Brickset.com."),
     # h4("Step 1. Please type the Set ID below and press the 'Go!' button:"),
     # textInput(inputId = "setid", label = "Input Set ID"),
     # #p('Output Set ID:'),
@@ -406,7 +408,26 @@ server <- function(input, output, session) {
     
   })
   
+  ###############################
+  ######## click increase       #
+  ###############################
   
+  click <- 0
+  isok <- T
+  makeReactiveBinding('click')
+  
+  observeEvent(input$first, {
+    if (click > 0)
+      {isok <<- F}
+    click <<- click + 1
+  })
+
+  test = function(click){
+    if (click > 0)
+      isok <- F
+    isok <- T
+  }
+
   ###############################
   ######## Adding mean by group #
   ###############################
@@ -478,7 +499,6 @@ server <- function(input, output, session) {
   output$indiv <-  renderText({
     choix_individus()
   })
-  
   #################################
   ######## Select the comparisons #
   #################################
@@ -507,6 +527,7 @@ server <- function(input, output, session) {
                              label = "Choix des individus",
                              choices = colnames(adjusted()[,-1]))
   })
+  print("ok")
   
   #' Reactive function in the aim of selecting different comparison
   #'
@@ -515,14 +536,21 @@ server <- function(input, output, session) {
   #' @return \string of the different comparisons selected ### à verifier
   #'
   
+  if(isok){
+    choix_test <- reactive({
+      return(input$test)
+    })
+  }
+  else{
+    choix_test <- eventReactive(input$refresh, {
+      return(input$test)
+    }, ignoreNULL = F)
+  }
   
-  choix_test <- eventReactive(input$refresh, {
-    return(input$test)
-    
-  }, ignoreNULL = F)
+  print("ok")
   
   # choix_test <- reactive({
-  #   return(input$test)
+  #   return(input$test)a
   # })
   
   output$test <- renderText({
@@ -570,8 +598,7 @@ server <- function(input, output, session) {
   #'
   
   
-  new_group <-
-    reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
+  new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
   
   
   #observeEvent(input$first, { ## React event
@@ -605,6 +632,7 @@ server <- function(input, output, session) {
            select = choix_individus())
   })
   
+  
   #' Reactive function that return a comparison data frame with the specific user's selection
   #'
   #' @param csv Data frame corresponding to the Alltoptable
@@ -613,14 +641,24 @@ server <- function(input, output, session) {
   #'
   
   
-  
+  if (isok){
+    print("ok")
+    new_test <- reactive({
+      inFile <- input$file1
+      if (is.null(inFile))
+        return(NULL)
+      (subset(adjusted(),
+              select = choix_test()))
+    })
+  }
+  else{
   new_test <- eventReactive(input$refresh, {
     inFile <- input$file1
     if (is.null(inFile))
       return(NULL)
     (subset(adjusted(),
             select = choix_test()))
-  }, ignoreNULL = F)
+  }, ignoreNULL = F)}
   
   # new_group <- reactive( csvf()[[2]] %>%
   #                          filter( X ==  list_ind()))
@@ -662,7 +700,9 @@ server <- function(input, output, session) {
       
     }, width = 900 , height = 1200, res = 100)
     
-    
+    print(isok)
+    print(click)
+
     #################################
     ######## Save plots             #
     #################################
@@ -716,8 +756,7 @@ server <- function(input, output, session) {
           width = 12,
           height = 16,
           limitsize = FALSE,
-          units = "cm"
-          ,
+          units = "cm",
           dpi = 200
         )
         
