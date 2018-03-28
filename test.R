@@ -270,6 +270,7 @@ server <- function(input, output, session) {
   #################################
   
   observeEvent(input$first, {
+    View(new_group())
    # print(isolated())
     #n <- reactiveValues(a=T)
     output$distPlot <- renderPlot({
@@ -594,8 +595,10 @@ server <- function(input, output, session) {
     checkboxGroupInput(
       inputId = "indiv" ,
       label =  "Choose your samples:",
-      choices =  colnames(csvf()[[1]][,-1]),
-      selected = colnames(csvf()[[1]][,-1])
+      # choices =  colnames(csvf()[[1]][,-1]),
+      # selected = colnames(csvf()[[1]][,-1])
+      choices =  levels(csvf()[[2]]$Grp),
+      selected = levels(csvf()[[2]]$Grp)
       
     )
   )
@@ -605,8 +608,10 @@ server <- function(input, output, session) {
       session,
       "indiv",
       label = "Choose your comparisons",
-      choices = colnames(csvf()[[1]][,-1]),
-      selected = colnames(csvf()[[1]][,-1])
+      #choices = colnames(csvf()[[1]][,-1]),
+      #selected = colnames(csvf()[[1]][,-1])
+      choices =  levels(csvf()[[2]]$Grp),
+      selected = levels(csvf()[[2]]$Grp)
     )
   })
   
@@ -614,7 +619,9 @@ server <- function(input, output, session) {
     updateCheckboxGroupInput(session,
                              "indiv",
                              label = "Choix des individus",
-                             choices = colnames(csvf()[[1]][,-1]))
+                             #choices = colnames(csvf()[[1]][,-1]))
+                             choices =  levels(csvf()[[2]]$Grp)
+    )
   })
   
   #' Reactive function in the aim of selecting individuals
@@ -625,7 +632,11 @@ server <- function(input, output, session) {
   #'
   
   
-  choix_individus <- reactive({
+  # choix_individus <- reactive({
+  #   return(input$indiv)
+  # })
+  
+  choix_grp <- reactive({
     return(input$indiv)
   })
   
@@ -641,8 +652,12 @@ server <- function(input, output, session) {
     return(list(input$indiv))
   })
   
+  # output$indiv <-  renderText({
+  #   choix_individus()
+  # })
+  
   output$indiv <-  renderText({
-    choix_individus()
+    choix_grp()
   })
   #################################
   ######## Select the comparisons #
@@ -719,7 +734,6 @@ server <- function(input, output, session) {
     df <- csvf()
     if (is.null(df))
       return(NULL)
-    
     adj = csvf()[[3]][, grep("X|^adj.P.Val",
                              names(csvf()[[3]]),
                              value = TRUE)]
@@ -743,8 +757,14 @@ server <- function(input, output, session) {
   #'
   
   
-  new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
+  #new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
   
+  new_group <- reactive({
+    inFile <- input$file1
+    if (is.null(inFile))
+      return(NULL)
+    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
+  })
   
   #observeEvent(input$first, { ## React event
   
@@ -773,8 +793,8 @@ server <- function(input, output, session) {
     inFile <- input$file1
     if (is.null(inFile))
       return(NULL)
-    subset(csvf()[[1]],
-           select = choix_individus())
+    #subset(csvf()[[1]],select = choix_individus())
+    select(csvf()[[1]], as.character(factor(new_group()$X)))
   })
   
   
@@ -810,7 +830,7 @@ server <- function(input, output, session) {
       }, ignoreNULL = F)
     }
 
-
+  
   
   # new_group <- reactive( csvf()[[2]] %>%
   #                          filter( X ==  list_ind()))

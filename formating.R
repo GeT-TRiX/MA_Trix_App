@@ -60,3 +60,17 @@ transform <- function(dataframe,toast){
   return(dyn_grp)
 }
 
+
+### ANother method faster and stronger
+### thisisit <- select(musmuscu, as.character(factor(mydata$X)))
+# selected = c("LKO_MCD ", "LKO_CTRL" )
+# selected = levels(groupss$Grp)
+# 
+# 
+#groupss[match(as.character(groupss$Grp), selected, nomatch = T), ]
+# test <- groupss[groupss$Grp %in% selected,]
+# 
+# 
+# uniquegrp = unique(test$Grp)
+# btestos <- droplevels(test)
+

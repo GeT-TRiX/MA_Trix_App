@@ -92,10 +92,22 @@ return(dyn_grp)
 toast <- levels(dataframe$Grp)[1:3]
 mydata <- transform(groupss,toast)
 thisisit <- select(musmuscu, as.character(factor(mydata$X)))
+View(mydata)
+View(test)
 
 
+selected = c("LKO_MCD ", "LKO_CTRL" )
+selected = levels(groupss$Grp)
 
 
+#groupss[match(as.character(groupss$Grp), selected, nomatch = T), ]
+test <- groupss[groupss$Grp %in% selected,]
+
+thisisit <- select(musmuscu, as.character(factor(mydata$X)))
+
+
+uniquegrp = unique(test$Grp)
+btestos <- droplevels(test)
 
 for(i in factor(mydata$X)){
   print(i)
