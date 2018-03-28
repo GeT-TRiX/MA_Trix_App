@@ -18,10 +18,12 @@ options(shiny.maxRequestSize = 40 * 1024 ^ 2) # Defined the maximum size in Mb t
 
 #shinyUI(
 
-ui <- navbarPage(
-  "MA_Trix_App",
-
+ui <- #fluidePage(
+  #useShinyjs(),
+  navbarPage(
+  "MaTrix_App", # MA for microarray and Trix for the name of the team
   
+  #useShinyjs(),
   theme = shinytheme("united"),
   
   # multi-page user-interface that includes a navigation bar.
@@ -91,8 +93,8 @@ ui <- navbarPage(
     
     
     sidebarPanel(
-      width = 3,
       
+      width = 3,
       style = " font-size:100%; font-family:Arial;
       border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
       #tags$style("#myNumericInput {font-size:10px;height:10px;}"),
@@ -146,678 +148,718 @@ ui <- navbarPage(
         verbatimTextOutput("test")
         
       ),
-    
-    sliderInput(
-      "pval",
-      "P-value:",
-      min = 0.01,
-      max = 0.05,
-      value = 0.05,
-      step = 0.01
-    ),
-    
-    numericInput('clusters', 'Cluster count', 3,
-                 min = 1, max = 15),
-    br(),
-    
-    
-    # numericInput('key', 'Cluster count', 1,
-    #              min = 0, max = 2),
-  
-    
-    selectInput(
-      "dist",
-      "Choose your matrix distance",
-      choices = c("cor", "euclidian")
-    ),
-    
-    checkboxInput("meangrp", "Add Mean for the different", FALSE),
-    verbatimTextOutput("value"),
-    br(),
-    
-    selectInput("form", "Choose your file format",
-                choices = c("png", "eps")),
-    br(),
-    downloadButton("save", "Save your plot" ,style =
-                     "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-    
-    br(),br(),
-    
-    #actionButton("first", "Print Heatmap", style =
-    #               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-    
-    shiny::actionButton("first", "Click me"),
-    
-    numericInput('num','',0),verbatimTextOutput("valuedd")
-),
-    
-  mainPanel(tabsetPanel(
-    tabPanel(
-      p(icon("line-chart"), "Visualize the Heatmap"),
-      tags$style(
-        type = "text/css",
-        ".shiny-output-error { visibility: hidden; }",
-        ".shiny-output-error:before { visibility: hidden; }"
+      
+      sliderInput(
+        "pval",
+        "P-value:",
+        min = 0.01,
+        max = 0.05,
+        value = 0.05,
+        step = 0.01
       ),
       
-      useShinyjs(),
-      bsAlert("alert"),
-      ### no more error messages
+      br(),
       
-      plotOutput(outputId = "distPlot")
+      shiny::actionButton( 
+        "toggleAdvanced", "Show Advanced Info", href = "#"),
       
+      br(),
+      
+      shinyjs::hidden(
+        div(id = "advanced",
+      wellPanel(
+      numericInput('clusters', 'Cluster count', 3,
+                   min = 1, max = 15),
+      
+      br(),
+      
+      
+      # numericInput('key', 'Cluster count', 1,
+      #              min = 0, max = 2),
+      
+      
+      selectInput(
+        "dist",
+        "Choose your matrix distance",
+        choices = c("cor", "euclidian")
+      ),
+      
+      checkboxInput("meangrp", "Add Mean for the different", FALSE),
+      verbatimTextOutput("value"))
+      
+      )),
+      
+      br(),
+      
+      selectInput("form", "Choose your file format",
+                  choices = c("png", "eps")),
+      br(),
+      downloadButton("save", "Save your plot" , style =
+                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      
+      br(),
+      br(),
+      
+      #actionButton("first", "Print Heatmap", style =
+      #               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      
+      shiny::actionButton("first", "Heatmap",style =
+             "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      
+      numericInput('num', '', 0),
+      verbatimTextOutput("valuedd")
     ),
-    tabPanel(p(icon("table"), "Dataset"))
-  ))
-),
-
-tabPanel(
-  p(icon("search"), "PCA"),
-  
-  sidebarPanel(
-    style = " font-size:100%; font-family:Arial;
-    border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
-    width = 3 ,
     
-    numericInput("normCount", "Count", 100),
-    numericInput("normMean", "Mean", 0),
-    numericInput("normSd", "Std Dev", 1)
-    
+    mainPanel(tabsetPanel(
+      tabPanel(
+        p(icon("line-chart"), "Visualize the Heatmap"),
+        tags$style(
+          type = "text/css",
+          ".shiny-output-error { visibility: hidden; }",
+          ".shiny-output-error:before { visibility: hidden; }"
+        ),
+        
+        useShinyjs(),
+        bsAlert("alert"),
+        ### no more error messages
+        
+        plotOutput(outputId = "distPlot")
+        
+      ),
+      tabPanel(p(icon("table"), "Dataset"))
+    ))
   ),
   
-  mainPanel(
-    # h4("The page popped-up is the LEGO set database on Brickset.com."),
-    # h4("Step 1. Please type the Set ID below and press the 'Go!' button:"),
-    # textInput(inputId = "setid", label = "Input Set ID"),
-    # #p('Output Set ID:'),
-    # #textOutput('setid'),
-    # actionButton("goButtonAdd", "Go!"),
-    # h5('Output Address:'),
-    # textOutput("address"),
-    # p(""),
-    # h4(
-    #   "Step 2. Please click the button below.
-    #   The link to the Set's page is being generated."
-    # ),
-    # p(""),
-    # actionButton("goButtonDirect", "Generate Link Below!"),
-    # p(""),
-    # htmlOutput("inc"),
-    # p(
-    #   "I was supposed to show you in an iframe below. However, it only
-    #   worked on localhost and has security issue after deployed to the cloud. Ooops..."
-    # ))
-  )),
-  tabPanel(p(icon("question-circle"),
-             "How to use?"),
-           mainPanel(includeMarkdown("help.md")))
-  
-  , tabPanel(p(icon("info-circle"),
+  tabPanel(
+    p(icon("search"), "PCA"),
+    
+    sidebarPanel(
+      style = " font-size:100%; font-family:Arial;
+      border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
+      width = 3 ,
+      
+      numericInput("normCount", "Count", 100),
+      numericInput("normMean", "Mean", 0),
+      numericInput("normSd", "Std Dev", 1)
+      
+    ),
+    
+    mainPanel(# h4("The page popped-up is the LEGO set database on Brickset.com."),
+      # h4("Step 1. Please type the Set ID below and press the 'Go!' button:"),
+      # textInput(inputId = "setid", label = "Input Set ID"),
+      # #p('Output Set ID:'),
+      # #textOutput('setid'),
+      # actionButton("goButtonAdd", "Go!"),
+      # h5('Output Address:'),
+      # textOutput("address"),
+      # p(""),
+      # h4(
+      #   "Step 2. Please click the button below.
+      #   The link to the Set's page is being generated."
+      # ),
+      # p(""),
+      # actionButton("goButtonDirect", "Generate Link Below!"),
+      # p(""),
+      # htmlOutput("inc"),
+      # p(
+      #   "I was supposed to show you in an iframe below. However, it only
+      #   worked on localhost and has security issue after deployed to the cloud. Ooops..."
+      # )))
+    )),
+    tabPanel(p(icon("question-circle"),
+               "How to use?"),
+             mainPanel(includeMarkdown("help.md")))
+    
+    ,
+    tabPanel(p(icon("info-circle"),
                "About"),
              mainPanel(includeMarkdown("about.md")))
+    
+  )#)
   
-)
-
-server <- function(input, output, session) {
-  
-
-  n <- reactiveValues(a=0)
-  #print(isolate(n$a))
-  #n=0
-  
-  #################################
-  ######## Plot in the renderView #
-  #################################
-  
-  observeEvent(input$first, {
-    View(new_group())
-   # print(isolated())
-    #n <- reactiveValues(a=T)
-    output$distPlot <- renderPlot({
-      plotHeatmaps(
-        data.matrix(new_data()),
-        formated()[[1]],
-        new_group()$Grp,
-        workingPath = wd_path,
-        prefix,
-        suffix,
-        k = input$clusters,
-        Rowdistfun = input$dist ,
-        Coldistfun = input$dist,
-        keysize = input$key,
-        meanGrp = input$meangrp
+  server <- function(input, output, session) {
+    n <- reactiveValues(a = 0)
+    
+    soso <- NULL
+    print(soso)
+    #print(isolate(n$a))
+    #n=0
+    
+    shinyjs::onclick("toggleAdvanced",
+                     shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event 
+    
+    #################################
+    ######## Plot in the renderView #
+    #################################
+    
+    observeEvent(input$first, {
+      View(new_group())
+      # print(isolated())
+      #n <- reactiveValues(a=T)
+      output$distPlot <- renderPlot({
+        plotHeatmaps(
+          data.matrix(new_data()),
+          formated()[[1]],
+          new_group()$Grp,
+          workingPath = wd_path,
+          prefix,
+          suffix,
+          k = input$clusters,
+          Rowdistfun = input$dist ,
+          Coldistfun = input$dist,
+          keysize = input$key,
+          meanGrp = input$meangrp
+          
+        )
+        
+      }, width = 900 , height = 1200, res = 100)
+      
+      #################################
+      ######## Save plots             #
+      #################################
+      
+      
+      #' Reactive function that return a heatmap plot
+      #'
+      #' @param csv Data frame corresponding to the Alltoptable
+      #'
+      #' @return \p heatmap.2 plot
+      #'
+      
+      
+      p = reactive({
+        plotHeatmaps(
+          data.matrix(new_data()),
+          formated()[[1]],
+          new_group()$Grp,
+          workingPath = wd_path,
+          prefix,
+          suffix,
+          k = input$clusters,
+          Rowdistfun = input$dist ,
+          Coldistfun = input$dist,
+          keysize = input$key,
+          meanGrp = input$meangrp
+          
+        )
+      })
+      
+      output$save <- downloadHandler(
+        if (input$form == "eps") {
+          filename = "save.eps"
+        }
+        else{
+          filename = "save.png"
+        },
+        
+        #' Save Heatmap in the good format
+        #'
+        #' @param file
+        #'
+        #' @return the image saved in eps or png
+        #'
+        
+        
+        content = function(file) {
+          ggsave(
+            p(),
+            filename = filename,
+            width = 12,
+            height = 16,
+            limitsize = FALSE,
+            units = "cm",
+            dpi = 200
+          )
+          
+        }
+      )
+      
+    })
+    
+    ###############################
+    ######## Load the csv files   #
+    ###############################
+    
+    
+    #' Reactive function in the aim of loading csv files
+    #'
+    #' @param inFile
+    #'
+    #' @return csvord a list of csv files
+    #'
+    #' @examples
+    #'
+    
+    csvf <- reactive({
+      inFile <- input$file1
+      
+      if (is.null(inFile)) {
+        createAlert(
+          session,
+          "alert",
+          style = "info",
+          "entryalert",
+          title = "First Step",
+          content = "You need to import 3 csv files in the browser widget",
+          dismiss = FALSE
+          #append = TRUE
+          
+        )
+        Sys.sleep(2.5)
+        
+        closeAlert(session, "entryalert")
+        
+        return(NULL)
+      }
+      
+      data <- as.list(inFile$datapath)
+      csvtest = list()
+      name = inFile$datapath
+      iscsv = grep(pattern = '.csv$', name, value = T)
+      
+      if (length(iscsv) == 0) {
+        createAlert(
+          session,
+          "alert",
+          "exampleAlert",
+          style = "danger",
+          title = "Oops Error",
+          content = "Are you sure you're importing csv files ?",
+          append = FALSE
+        )
+        return(NULL)
+      }
+      
+      else{
+        if (length(data) > 3)
+        {
+          createAlert(
+            session,
+            "alert",
+            "exampleAlert",
+            style = "danger",
+            title = "Oops Error",
+            content = "Are you sure it's the good number of files? you  have imported more than 3 files,
+            you need to import 3 csv files
+            Tips: Use ctrl+left click then choose your files ",
+            append = FALSE
+          )
+          
+          return (NULL)
+        }
+        
+        else if (length(data) < 3) {
+          createAlert(
+            session,
+            "alert",
+            "exampleAlert",
+            style = "danger",
+            title = "Oops Error",
+            content = "Are you sure it's the good number of files? you have imported less than
+            3 files, you need to import 3 csv files
+            Tips: Use ctrl+left click then choose your files ",
+            append = FALSE
+            
+          )
+          
+          return (NULL)
+        }
+        
+        else{
+          for (i in 1:length(data)) {
+            for (elem in input$file1[[i, 'datapath']]) {
+              cat("loading file number" , i, "\n")
+            }
+            csvtest[i] = elem
+          }
+        }
+        
+        #csv <- lapply(csvtest, read.csv2, check.names = F)
+        csv <-
+          lapply(
+            csvtest,
+            FUN = function (x)
+              read.table(
+                x,
+                sep = ";" ,
+                dec = ",",
+                header = T,
+                check.names = F # good col names
+              )
+          )
+        #csv <- lapply(csvtest, FUN = function (x) read_csv2(x))
+        csvord = list()
+        
+        for (i in 1:length(csv)) {
+          if (colnames(csv[[i]][2]) == "Grp")
+          {
+            csvord[[2]] = csv[[i]]
+          }
+          else if (colnames(csv[[i]][10]) == "Amean")
+          {
+            csvord[[3]] = csv[[i]]
+            
+          }
+          else{
+            csvord[[1]] = csv[[i]]
+          }
+        }
+        
+        row.names(csvord[[1]]) = csvord[[1]][, 1]
+        colnames(csvord[[3]])[1] = "X"
+        colnames(csvord[[2]])[1] = "X"
+      }
+      
+      
+      createAlert(
+        session,
+        "alert",
+        "succeeded",
+        style = "success",
+        title = "Sucess",
+        content = " Your files have been loaded, you can choose your data now",
+        append = FALSE
         
       )
       
-    }, width = 900 , height = 1200, res = 100)
-  
-    #################################
-    ######## Save plots             #
-    #################################
-    
-    
-    #' Reactive function that return a heatmap plot
-    #'
-    #' @param csv Data frame corresponding to the Alltoptable
-    #'
-    #' @return \p heatmap.2 plot
-    #'
-    
-    
-    p = reactive({
+      Sys.sleep(1)
+      closeAlert(session, "succeeded")
+      soso <<- T
       
+      #sapply(strsplit(names(csvord[[3]]), "^adj.P.Val|^adj.P.Val"), `[[`, 1)
       
-      plotHeatmaps(
-        data.matrix(new_data()),
-        formated()[[1]],
-        new_group()$Grp,
-        workingPath = wd_path,
-        prefix,
-        suffix,
-        k = input$clusters,
-        Rowdistfun = input$dist ,
-        Coldistfun = input$dist,
-        keysize = input$key,
-        meanGrp = input$meangrp
+      return (csvord)
+      
+    })
+    
+    print(soso)
+    
+    ###############################
+    ######## click increase       #
+    ###############################
+    
+    print(isolate(n$a))
+    #makeReactiveBinding('n')
+    
+    
+    observeEvent(input$first, {
+      n$a <<- n$a + 1
+      updateNumericInput(session, 'num', value = n$a)
+    })
+    
+    # isolated <- reactive({
+    #   observeEvent(input$first, {
+    #     n$a <- n$a+1
+    #     updateNumericInput(session,'num',value=n$a)
+    #   })
+    #   return(n+1)
+    # })
+    
+    #print(n)
+    
+    observe({
+      print(n$a)
+    })
+    
+    # observe({
+    #   if(input$num == 0 || input$num == 1)
+    #   {
+    #     print("ok")
+    #   }
+    # })
+    
+    output$valuedd <- renderText({
+      input$num
+    })
+    
+    click <- 0
+    isok <- T
+    
+    makeReactiveBinding('click')
+    
+    
+    observeEvent(input$first, {
+      #tested <- eventReactive(input$first, {
+      if (click > 0)
+      {
+        isok <<- F
+      }
+      click <<- click + 1
+      
+    })
+    
+    observe(print(click))
+    
+    observe(if (click > 5)
+      print("ok"))
+    
+    tested <- reactive(return(click))
+    
+    
+    ###############################
+    ######## Adding mean by group #
+    ###############################
+    
+    output$value <- renderText({
+      input$meangrp
+    })
+    
+    mean_grp <- reactive({
+      return(output$value)
+    })
+    
+    #################################
+    ######## Select the individuals #
+    #################################
+    
+    
+    output$individusel <- renderUI(
+      checkboxGroupInput(
+        inputId = "indiv" ,
+        label =  "Choose your samples:",
+        # choices =  colnames(csvf()[[1]][,-1]),
+        # selected = colnames(csvf()[[1]][,-1])
+        choices =  levels(csvf()[[2]]$Grp),
+        selected = levels(csvf()[[2]]$Grp)
         
+      )
+    )
+    
+    observeEvent(input$allIndividus, {
+      updateCheckboxGroupInput(
+        session,
+        "indiv",
+        label = "Choose your comparisons",
+        #choices = colnames(csvf()[[1]][,-1]),
+        #selected = colnames(csvf()[[1]][,-1])
+        choices =  levels(csvf()[[2]]$Grp),
+        selected = levels(csvf()[[2]]$Grp)
       )
     })
     
-    output$save <- downloadHandler(
-      if (input$form == "eps") {
-        filename = "save.eps"
-      }
-      else{
-        filename = "save.png"
-      },
-      
-      #' Save Heatmap in the good format
-      #'
-      #' @param file
-      #'
-      #' @return the image saved in eps or png
-      #'
-      
-      
-      content = function(file) {
-        ggsave(
-          p(),
-          filename = filename,
-          width = 12,
-          height = 16,
-          limitsize = FALSE,
-          units = "cm",
-          dpi = 200
-        )
-        
-      }
-    )
+    observeEvent(input$noIndividus, {
+      updateCheckboxGroupInput(session,
+                               "indiv",
+                               label = "Choix des individus",
+                               #choices = colnames(csvf()[[1]][,-1]))
+                               choices =  levels(csvf()[[2]]$Grp))
+    })
     
-  })
-  
-  ###############################
-  ######## Load the csv files   #
-  ###############################
-  
-  
-  #' Reactive function in the aim of loading csv files
-  #'
-  #' @param inFile
-  #'
-  #' @return csvord a list of csv files
-  #'
-  #' @examples
-  #'
-  
-  csvf <- reactive({
-    inFile <- input$file1
+    #' Reactive function in the aim of selecting individuals
+    #'
+    #' @param input specific of the individuals data frame
+    #'
+    #' @return string of the different individuals selected
+    #'
     
-    if (is.null(inFile)) {
-      createAlert(
+    
+    # choix_individus <- reactive({
+    #   return(input$indiv)
+    # })
+    
+    choix_grp <- eventReactive(input$refresh, {
+      inFile <- input$file1
+      if (is.null(inFile))
+        return(NULL)
+      return(input$indiv)
+    }, ignoreNULL = F)
+    
+    
+    # choix_grp <- reactive({
+    #   return(input$indiv)
+    # })
+    
+    #' Reactive function in the aim of having selected individuals in a list
+    #'
+    #' @param input specific of the individuals data frame
+    #'
+    #' @return a list of the different individuals selected
+    #'
+    
+    
+    list_ind <- reactive({
+      return(list(input$indiv))
+    })
+    
+    # output$indiv <-  renderText({
+    #   choix_individus()
+    # })
+    
+    output$indiv <-  renderText({
+      choix_grp()
+    })
+    #################################
+    ######## Select the comparisons #
+    #################################
+    
+    output$testout <- renderUI(checkboxGroupInput(
+      inputId = "test" ,
+      label =  "Choose Option:",
+      choices =  colnames(adjusted()[,-1])
+      #,selected = colnames(adjusted()[, -1])
+      
+    ))
+    
+    observeEvent(input$allTests, {
+      updateCheckboxGroupInput(
         session,
-        "alert",
-        style = "info",
-        "entryalert",
-        title = "First Step",
-        content = "You need to import 3 csv files in the browser widget",
-        dismiss = FALSE
-        #append = TRUE
-        
+        "test",
+        label = "Choix des individus",
+        choices = colnames(adjusted()[,-1]),
+        selected = colnames(adjusted()[,-1])
       )
-      Sys.sleep(2.5)
-      
-      closeAlert(session, "entryalert")
-      
-      return(NULL)
+    })
+    
+    observeEvent(input$noTests, {
+      updateCheckboxGroupInput(session,
+                               "test",
+                               label = "Choix des individus",
+                               choices = colnames(adjusted()[, -1]))
+    })
+    
+    
+    #' Reactive function in the aim of selecting different comparison
+    #'
+    #' @param input specific of the comparison data frame
+    #'
+    #' @return \string of the different comparisons selected ### à verifier
+    #'
+    
+    
+    
+    if (isolate(n$a != 0)) {
+      choix_test <- reactive({
+        return(input$test)
+      })
     }
-    
-    data <- as.list(inFile$datapath)
-    csvtest = list()
-    name = inFile$datapath
-    iscsv = grep(pattern = '.csv$', name, value = T)
-    
-    if (length(iscsv) == 0) {
-      createAlert(
-        session,
-        "alert",
-        "exampleAlert",
-        style = "danger",
-        title = "Oops Error",
-        content = "Are you sure you're importing csv files ?",
-        append = FALSE
-      )
-      return(NULL)
-    }
-    
     else{
-      if (length(data) > 3)
-      {
-        createAlert(
-          session,
-          "alert",
-          "exampleAlert",
-          style = "danger",
-          title = "Oops Error",
-          content = "Are you sure it's the good number of files? you  have imported more than 3 files,
-          you need to import 3 csv files
-          Tips: Use ctrl+left click then choose your files ",
-          append = FALSE
-        )
-        
-        return (NULL)
-      }
-      
-      else if (length(data) < 3) {
-        createAlert(
-          session,
-          "alert",
-          "exampleAlert",
-          style = "danger",
-          title = "Oops Error",
-          content = "Are you sure it's the good number of files? you have imported less than
-          3 files, you need to import 3 csv files
-          Tips: Use ctrl+left click then choose your files ",
-          append = FALSE
-          
-        )
-        
-        return (NULL)
-      }
-      
-      else{
-        for (i in 1:length(data)) {
-          for (elem in input$file1[[i, 'datapath']]) {
-            cat("loading file number" , i, "\n")
-          }
-          csvtest[i] = elem
-        }
-      }
-      
-      #csv <- lapply(csvtest, read.csv2, check.names = F)
-      csv <-
-        lapply(
-          csvtest,
-          FUN = function (x)
-            read.table(
-              x,
-              sep = ";" ,
-              dec = ",",
-              header = T,
-              check.names = F
-            )
-        )
-      #csv <- lapply(csvtest, FUN = function (x) read_csv2(x))
-      csvord = list()
-      
-      for (i in 1:length(csv)) {
-        if (colnames(csv[[i]][2]) == "Grp")
-        {
-          csvord[[2]] = csv[[i]]
-        }
-        else if (colnames(csv[[i]][10]) == "Amean")
-        {
-          csvord[[3]] = csv[[i]]
-          
-        }
-        else{
-          csvord[[1]] = csv[[i]]
-        }
-      }
-      
-      row.names(csvord[[1]]) = csvord[[1]][, 1]
-      colnames(csvord[[3]])[1] = "X"
-      colnames(csvord[[2]])[1] = "X"
+      choix_test <- eventReactive(input$refresh, {
+        return(input$test)
+      }, ignoreNULL = F)
     }
     
+    # choix_test <- reactive({
+    #   return(input$test)
+    # })
     
-    createAlert(
-      session,
-      "alert",
-      "succeeded",
-      style = "success",
-      title = "Sucess",
-      content = " Your files have been loaded, you can choose your data now",
-      append = FALSE
+    output$test <- renderText({
+      choix_test()
+    })
+    
+    #################################
+    ######## Format the data frame  #
+    #################################
+    
+    
+    #' Reactive function that return a data frame with the adj.P.val selected by the individuals
+    #'
+    #' @param csv Data frame corresponding to the Alltoptable
+    #'
+    #' @return \adj a new data frame with all the adj.P.Val
+    #'
+    
+    
+    adjusted <- reactive({
+      df <- csvf()
+      if (is.null(df))
+        return(NULL)
+      adj = csvf()[[3]][, grep("X|^adj.P.Val",
+                               names(csvf()[[3]]),
+                               value = TRUE)]
       
-    )
-    Sys.sleep(1)
-    closeAlert(session, "succeeded")
-    
-    #sapply(strsplit(names(csvord[[3]]), "^adj.P.Val|^adj.P.Val"), `[[`, 1)
-    
-    return (csvord)
-    
-  })
-  
-  ###############################
-  ######## click increase       #
-  ###############################
-  
-  print(isolate(n$a))
-  #makeReactiveBinding('n')
-  
-  
-  observeEvent(input$first, {
-      n$a <<- n$a+1
-      updateNumericInput(session,'num',value=n$a)
-  })
-  
-  # isolated <- reactive({
-  #   observeEvent(input$first, {
-  #     n$a <- n$a+1
-  #     updateNumericInput(session,'num',value=n$a)
-  #   })
-  #   return(n+1)
-  # })
-  
-  #print(n)
-  
-  observe({
-  print(n$a)
-  })
-  
-  # observe({
-  #   if(input$num == 0 || input$num == 1)
-  #   {
-  #     print("ok")
-  #   }
-  # })
-  
-  output$valuedd <- renderText({ input$num })
-  
-  click <- 0
-  isok <- T
- 
-  makeReactiveBinding('click')
-  
-  
-  observeEvent(input$first, {
-  
-  #tested <- eventReactive(input$first, {
-     if (click > 0)
-     {isok <<- F}
-     click <<- click + 1
-
-   })
-
-  observe(
-    print(click)
-  )
-  
-  observe(
-    if (click > 5)
-  print("ok")
-  )
- 
-  tested <- reactive(
-    return(click)
-  )
-  
-  
-  ###############################
-  ######## Adding mean by group #
-  ###############################
-  
-  output$value <- renderText({
-    input$meangrp
-  })
-  
-  mean_grp <- reactive({
-    return(output$value)
-  })
-  
-  #################################
-  ######## Select the individuals #
-  #################################
-  
-  
-  output$individusel <- renderUI(
-    checkboxGroupInput(
-      inputId = "indiv" ,
-      label =  "Choose your samples:",
-      # choices =  colnames(csvf()[[1]][,-1]),
-      # selected = colnames(csvf()[[1]][,-1])
-      choices =  levels(csvf()[[2]]$Grp),
-      selected = levels(csvf()[[2]]$Grp)
+      names(adj) =  gsub(
+        pattern = "^adj.P.Val_",
+        replacement = "",
+        x = names(adj),
+        perl =  TRUE
+      )
       
-    )
-  )
-  
-  observeEvent(input$allIndividus, {
-    updateCheckboxGroupInput(
-      session,
-      "indiv",
-      label = "Choose your comparisons",
-      #choices = colnames(csvf()[[1]][,-1]),
-      #selected = colnames(csvf()[[1]][,-1])
-      choices =  levels(csvf()[[2]]$Grp),
-      selected = levels(csvf()[[2]]$Grp)
-    )
-  })
-  
-  observeEvent(input$noIndividus, {
-    updateCheckboxGroupInput(session,
-                             "indiv",
-                             label = "Choix des individus",
-                             #choices = colnames(csvf()[[1]][,-1]))
-                             choices =  levels(csvf()[[2]]$Grp)
-    )
-  })
-  
-  #' Reactive function in the aim of selecting individuals
-  #'
-  #' @param input specific of the individuals data frame
-  #'
-  #' @return string of the different individuals selected
-  #'
-  
-  
-  # choix_individus <- reactive({
-  #   return(input$indiv)
-  # })
-  
-  choix_grp <- reactive({
-    return(input$indiv)
-  })
-  
-  #' Reactive function in the aim of having selected individuals in a list
-  #'
-  #' @param input specific of the individuals data frame
-  #'
-  #' @return a list of the different individuals selected
-  #'
-  
-  
-  list_ind <- reactive({
-    return(list(input$indiv))
-  })
-  
-  # output$indiv <-  renderText({
-  #   choix_individus()
-  # })
-  
-  output$indiv <-  renderText({
-    choix_grp()
-  })
-  #################################
-  ######## Select the comparisons #
-  #################################
-  
-  output$testout <- renderUI(checkboxGroupInput(
-    inputId = "test" ,
-    label =  "Choose Option:",
-    choices =  colnames(adjusted()[, -1])
-    #,selected = colnames(adjusted()[, -1])
+      return(adj)
+      
+    })
     
-  ))
-  
-  observeEvent(input$allTests, {
-    updateCheckboxGroupInput(
-      session,
-      "test",
-      label = "Choix des individus",
-      choices = colnames(adjusted()[, -1]),
-      selected = colnames(adjusted()[, -1])
-    )
-  })
-  
-  observeEvent(input$noTests, {
-    updateCheckboxGroupInput(session,
-                             "test",
-                             label = "Choix des individus",
-                             choices = colnames(adjusted()[,-1]))
-  })
-  
-  
-  #' Reactive function in the aim of selecting different comparison
-  #'
-  #' @param input specific of the comparison data frame
-  #'
-  #' @return \string of the different comparisons selected ### à verifier
-  #'
-  
-  
-  
-  if(isolate(n$a != 0)){
-  choix_test <- reactive({
-     return(input$test)
-     })
-   }
-   else{
-     choix_test <- eventReactive(input$refresh, {
-    return(input$test)
-     }, ignoreNULL = F)
-   }
-
-  # choix_test <- reactive({
-  #   return(input$test)
-  # })
-  
-  output$test <- renderText({
-    choix_test()
-  })
-  
-  #################################
-  ######## Format the data frame  #
-  #################################
-  
-  
-  #' Reactive function that return a data frame with the adj.P.val selected by the individuals
-  #'
-  #' @param csv Data frame corresponding to the Alltoptable
-  #'
-  #' @return \adj a new data frame with all the adj.P.Val
-  #'
-  
-  
-  adjusted <- reactive({
-    df <- csvf()
-    if (is.null(df))
-      return(NULL)
-    adj = csvf()[[3]][, grep("X|^adj.P.Val",
-                             names(csvf()[[3]]),
-                             value = TRUE)]
+    #' Reactive function that select specific individuals in the data frame
+    #'
+    #' @param csv Data frame corresponding to the pData table
+    #'
+    #' @return \new_group a new factor with the corresponding individuals from the checkbox with the good levels
+    #'
     
-    names(adj) =  gsub(
-      pattern = "^adj.P.Val_",
-      replacement = "",
-      x = names(adj),
-      perl =  TRUE
-    )
     
-    return(adj)
+    #new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
     
-  })
-  
-  #' Reactive function that select specific individuals in the data frame
-  #'
-  #' @param csv Data frame corresponding to the pData table
-  #'
-  #' @return \new_group a new factor with the corresponding individuals from the checkbox with the good levels
-  #'
-  
-  
-  #new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
-  
-  new_group <- reactive({
-    inFile <- input$file1
-    if (is.null(inFile))
-      return(NULL)
-    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
-  })
-  
-  #observeEvent(input$first, { ## React event
-  
-  #' Reactive function that return a data frame with significant genes for a defined p-value
-  #'
-  #' @param csv  Data frame corresponding to the WorkingSet
-  #'
-  #' @return \treated a data frame with the id for significant genes
-  #'
-  
-  
-  formated <- reactive({
-    treated = formating(new_test(), csvf()[[1]], input$pval)
-    return(treated)
-  })
-  
-  #' Reactive function that  select specific individuals in the data frame
-  #'
-  #' @param \csv Data frame corresponding to the Workingset
-  #'
-  #' @return adj a new data frame with all the adj.P.Val
-  #'
-  
-  
-  new_data <- reactive({
-    inFile <- input$file1
-    if (is.null(inFile))
-      return(NULL)
-    #subset(csvf()[[1]],select = choix_individus())
-    select(csvf()[[1]], as.character(factor(new_group()$X)))
-  })
-  
-  
-  #' Reactive function that return a comparison data frame with the specific user's selection
-  #'
-  #' @param csv Data frame corresponding to the Alltoptable
-  #'
-  #' @return \new_data a  data frame with all the individuals selected
-  #'
-  
-  
-  print(n)
-  #if(isolate(!n$a)){
-  
-  if(isolate(n$a)!=0){
-  #observe(if(click>0){
+    
+    new_group <- eventReactive(input$refresh, {
+      inFile <- input$file1
+      if (is.null(inFile))
+        return(NULL)
+      csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
+    }
+    , ignoreNULL = F)
+    
+    
+    
+    
+    # new_group <- reactive({
+    #   inFile <- input$file1
+    #   if (is.null(inFile))
+    #     return(NULL)
+    #   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
+    # })
+    
+    #observeEvent(input$first, { ## React event
+    
+    #' Reactive function that return a data frame with significant genes for a defined p-value
+    #'
+    #' @param csv  Data frame corresponding to the WorkingSet
+    #'
+    #' @return \treated a data frame with the id for significant genes
+    #'
+    
+    
+    formated <- reactive({
+      treated = formating(new_test(), csvf()[[1]], input$pval)
+      return(treated)
+    })
+    
+    #' Reactive function that  select specific individuals in the data frame
+    #'
+    #' @param \csv Data frame corresponding to the Workingset
+    #'
+    #' @return adj a new data frame with all the adj.P.Val
+    #'
+    
+    
+    new_data <- reactive({
+      inFile <- input$file1
+      if (is.null(inFile))
+        return(NULL)
+      #subset(csvf()[[1]],select = choix_individus())
+      select(csvf()[[1]], as.character(factor(new_group()$X)))
+    })
+    
+    
+    #' Reactive function that return a comparison data frame with the specific user's selection
+    #'
+    #' @param csv Data frame corresponding to the Alltoptable
+    #'
+    #' @return \new_data a  data frame with all the individuals selected
+    #'
+    
+    
+    n <- n
+    print(n)
+    #if(isolate(!n$a)){
+    
+    if (isolate(n$a) != 0) {
+      #observe(if(click>0){
       new_test <- reactive({
         inFile <- input$file1
         if (is.null(inFile))
           return(NULL)
-          (subset(adjusted(),
+        (subset(adjusted(),
                 select = choix_test()))
-
+        
       })
     }
     else{
@@ -829,25 +871,24 @@ server <- function(input, output, session) {
                 select = choix_test()))
       }, ignoreNULL = F)
     }
-
+    
+    
+    
+    # new_group <- reactive( csvf()[[2]] %>%
+    #                          filter( X ==  list_ind()))
+    
+    
+    #########################################
+    ######## Plot the data frame wiht input #
+    #########################################
+    
+    output$new_test <- renderDataTable(new_test())
+    
+    output$new_data <- renderDataTable(new_data())
+    
+    output$new_group <- renderDataTable(new_group())
+    
+  }
   
+  shinyApp(ui = ui , server = server) ## Run the application
   
-  # new_group <- reactive( csvf()[[2]] %>%
-  #                          filter( X ==  list_ind()))
-  
-  #selection = list("LWT_Ctrl2","LWT_MCD5")
-  
-  
-  #########################################
-  ######## Plot the data frame wiht input #
-  #########################################
-  
-  output$new_test <- renderDataTable(new_test())
-  
-  output$new_data <- renderDataTable(new_data())
-  
-  output$new_group <- renderDataTable(new_group())
-  
-}
-
-shinyApp(ui = ui , server = server) ## Run the application
