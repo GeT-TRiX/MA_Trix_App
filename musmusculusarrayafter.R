@@ -44,8 +44,101 @@ colnames(pval)
 colnames(groupss)
 
 
+
+View(groupss)
+toast<- levels(groupss$Grp)
+typeof(toast)
+class(levels(groupss$Grp))
+mytoast <- as.list(levels(groupss$Grp))
+levels(groupss$Grp)
+new <- as.data.frame(groupss)
+test <- filter(as.data.frame(new), Grp == c("LKO_MCD ", "LKO_CTRL" ))
+
+test <- subset(new$Grp, rownames == c("LKO_MCD " ))
+
+
+new %>% filter(row.names(new) %in% c("LKO_CTRL"))
+
+
+
+
+#' transform a dataframe containing factor for different levels function is not optimal right now
+#'
+#' @param dataframe 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' 
+
+transform <- function(dataframe,toast){
+  
+myl = list()
+cpt = 1
+for (i in toast) {
+  command <- paste0(i, "<-subset(dataframe, Grp=='", i, "')")
+  test = eval(parse(text=command))
+  X = test$X
+  Grp = test$Grp
+  myl[[cpt]] = data.frame(X ,Grp)
+  cpt = cpt+1
+  dyn_grp <- Reduce(function(x, y) merge(x, y, all=TRUE), myl, accumulate=FALSE)
+}
+
+return(dyn_grp)
+}
+
+toast <- levels(dataframe$Grp)[1:3]
+mydata <- transform(groupss,toast)
+thisisit <- select(musmuscu, as.character(factor(mydata$X)))
+
+
+
+
+
+for(i in factor(mydata$X)){
+  print(i)
+}
+
+
+typeof(levels(mydata$X))
+typeof(factor(mydata$X))
+
+
+
+print(as.character(factor(mydata$X)))
+
+View(thisisit)
+ncol(thisisit)
+
+
+
+test <- fct_c(myl[[1]],myl[[2]])
+print(test)
+View(test)
+
+df_list <- myl
+
+test <- Reduce(function(x, y) merge(x, y, all=TRUE), myl, accumulate=FALSE)
+View(test)
+
+View(test)
+print(as.integer(factor(test$X)))
+
+toast <- select(musmuscu ,as.integer(factor(test$X)))
+
+
+factor(groupss$X)
+levels(groupss$Grp)
+View(groupss)
+
 levels(colnames(musmuscu))
 levels(groupss$X)
+levels(groupss$Grp)
+factor(groupss$Grp)
+
+
 
 length(listed(colnames(groupss)))
 

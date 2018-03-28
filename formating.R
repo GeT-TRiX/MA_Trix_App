@@ -29,3 +29,34 @@ formating = function( adj, musmuscu, pval){
   return(newlist)
 
 }
+
+
+#' transform a dataframe containing factor for different levels function is not optimal right now
+#'
+#' @param dataframe 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' toto <- levels(dataframe$Grp)[1:3]
+#' mydata <- transform(groupss,toto)
+
+
+transform <- function(dataframe,toast){
+  
+  myl = list()
+  cpt = 1
+  for (i in toast) {
+    command <- paste0(i, "<-subset(dataframe, Grp=='", i, "')")
+    test = eval(parse(text=command))
+    X = test$X
+    Grp = test$Grp
+    myl[[cpt]] = data.frame(X ,Grp)
+    cpt = cpt+1
+    dyn_grp <- Reduce(function(x, y) merge(x, y, all=TRUE), myl, accumulate=FALSE)
+  }
+  
+  return(dyn_grp)
+}
+

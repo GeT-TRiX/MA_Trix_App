@@ -160,6 +160,7 @@ ui <- navbarPage(
                  min = 1, max = 15),
     br(),
     
+    
     # numericInput('key', 'Cluster count', 1,
     #              min = 0, max = 2),
   
@@ -182,10 +183,14 @@ ui <- navbarPage(
     
     br(),br(),
     
-    actionButton("first", "Print Heatmap", style =
-                   "color: #fff; background-color: #337ab7; border-color: #2e6da4")
+    #actionButton("first", "Print Heatmap", style =
+    #               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
     
-    ),
+    shiny::actionButton("first", "Click me"),
+    
+    numericInput('num','',0),verbatimTextOutput("valuedd")
+),
+    
   mainPanel(tabsetPanel(
     tabPanel(
       p(icon("line-chart"), "Visualize the Heatmap"),
@@ -254,6 +259,101 @@ tabPanel(
 )
 
 server <- function(input, output, session) {
+  
+
+  n <- reactiveValues(a=0)
+  #print(isolate(n$a))
+  #n=0
+  
+  #################################
+  ######## Plot in the renderView #
+  #################################
+  
+  observeEvent(input$first, {
+   # print(isolated())
+    #n <- reactiveValues(a=T)
+    output$distPlot <- renderPlot({
+      plotHeatmaps(
+        data.matrix(new_data()),
+        formated()[[1]],
+        new_group()$Grp,
+        workingPath = wd_path,
+        prefix,
+        suffix,
+        k = input$clusters,
+        Rowdistfun = input$dist ,
+        Coldistfun = input$dist,
+        keysize = input$key,
+        meanGrp = input$meangrp
+        
+      )
+      
+    }, width = 900 , height = 1200, res = 100)
+  
+    #################################
+    ######## Save plots             #
+    #################################
+    
+    
+    #' Reactive function that return a heatmap plot
+    #'
+    #' @param csv Data frame corresponding to the Alltoptable
+    #'
+    #' @return \p heatmap.2 plot
+    #'
+    
+    
+    p = reactive({
+      
+      
+      plotHeatmaps(
+        data.matrix(new_data()),
+        formated()[[1]],
+        new_group()$Grp,
+        workingPath = wd_path,
+        prefix,
+        suffix,
+        k = input$clusters,
+        Rowdistfun = input$dist ,
+        Coldistfun = input$dist,
+        keysize = input$key,
+        meanGrp = input$meangrp
+        
+      )
+    })
+    
+    output$save <- downloadHandler(
+      if (input$form == "eps") {
+        filename = "save.eps"
+      }
+      else{
+        filename = "save.png"
+      },
+      
+      #' Save Heatmap in the good format
+      #'
+      #' @param file
+      #'
+      #' @return the image saved in eps or png
+      #'
+      
+      
+      content = function(file) {
+        ggsave(
+          p(),
+          filename = filename,
+          width = 12,
+          height = 16,
+          limitsize = FALSE,
+          units = "cm",
+          dpi = 200
+        )
+        
+      }
+    )
+    
+  })
+  
   ###############################
   ######## Load the csv files   #
   ###############################
@@ -412,28 +512,66 @@ server <- function(input, output, session) {
   ######## click increase       #
   ###############################
   
+  print(isolate(n$a))
+  #makeReactiveBinding('n')
+  
+  
+  observeEvent(input$first, {
+      n$a <<- n$a+1
+      updateNumericInput(session,'num',value=n$a)
+  })
+  
+  # isolated <- reactive({
+  #   observeEvent(input$first, {
+  #     n$a <- n$a+1
+  #     updateNumericInput(session,'num',value=n$a)
+  #   })
+  #   return(n+1)
+  # })
+  
+  #print(n)
+  
+  observe({
+  print(n$a)
+  })
+  
+  # observe({
+  #   if(input$num == 0 || input$num == 1)
+  #   {
+  #     print("ok")
+  #   }
+  # })
+  
+  output$valuedd <- renderText({ input$num })
+  
   click <- 0
   isok <- T
+ 
   makeReactiveBinding('click')
   
-  #observeEvent(input$first, {
-  tested <- eventReactive(input$first, {
-    if (click > 0)
-      {isok <<- F}
-    click <<- click + 1
-    return (isok)
-  })
+  
+  observeEvent(input$first, {
+  
+  #tested <- eventReactive(input$first, {
+     if (click > 0)
+     {isok <<- F}
+     click <<- click + 1
 
-  test = function(click){
-    if (click > 0)
-      isok <- F
-    isok <- T
-  }
+   })
 
-  observeEvent(tested(),{
-  if(!tested())
-    print("ok")
-  })
+  observe(
+    print(click)
+  )
+  
+  observe(
+    if (click > 5)
+  print("ok")
+  )
+ 
+  tested <- reactive(
+    return(click)
+  )
+  
   
   ###############################
   ######## Adding mean by group #
@@ -534,7 +672,7 @@ server <- function(input, output, session) {
                              label = "Choix des individus",
                              choices = colnames(adjusted()[,-1]))
   })
-  print("ok")
+  
   
   #' Reactive function in the aim of selecting different comparison
   #'
@@ -543,21 +681,21 @@ server <- function(input, output, session) {
   #' @return \string of the different comparisons selected ### à verifier
   #'
   
-  if(isok){
-    choix_test <- reactive({
-      return(input$test)
-    })
-  }
-  else{
-    choix_test <- eventReactive(input$refresh, {
-      return(input$test)
-    }, ignoreNULL = F)
-  }
   
-  print("ok")
   
+  if(isolate(n$a != 0)){
+  choix_test <- reactive({
+     return(input$test)
+     })
+   }
+   else{
+     choix_test <- eventReactive(input$refresh, {
+    return(input$test)
+     }, ignoreNULL = F)
+   }
+
   # choix_test <- reactive({
-  #   return(input$test)a
+  #   return(input$test)
   # })
   
   output$test <- renderText({
@@ -648,24 +786,31 @@ server <- function(input, output, session) {
   #'
   
   
-  if (isok){
-    print("ok")
-    new_test <- reactive({
-      inFile <- input$file1
-      if (is.null(inFile))
-        return(NULL)
-      (subset(adjusted(),
-              select = choix_test()))
-    })
-  }
-  else{
-  new_test <- eventReactive(input$refresh, {
-    inFile <- input$file1
-    if (is.null(inFile))
-      return(NULL)
-    (subset(adjusted(),
-            select = choix_test()))
-  }, ignoreNULL = F)}
+  print(n)
+  #if(isolate(!n$a)){
+  
+  if(isolate(n$a)!=0){
+  #observe(if(click>0){
+      new_test <- reactive({
+        inFile <- input$file1
+        if (is.null(inFile))
+          return(NULL)
+          (subset(adjusted(),
+                select = choix_test()))
+
+      })
+    }
+    else{
+      new_test <- eventReactive(input$refresh, {
+        inFile <- input$file1
+        if (is.null(inFile))
+          return(NULL)
+        (subset(adjusted(),
+                select = choix_test()))
+      }, ignoreNULL = F)
+    }
+
+
   
   # new_group <- reactive( csvf()[[2]] %>%
   #                          filter( X ==  list_ind()))
@@ -682,122 +827,6 @@ server <- function(input, output, session) {
   output$new_data <- renderDataTable(new_data())
   
   output$new_group <- renderDataTable(new_group())
-  
-  
-  #################################
-  ######## Plot in the renderView #
-  #################################
-  
-  observeEvent(input$first, {
-    output$distPlot <- renderPlot({
-      plotHeatmaps(
-        data.matrix(new_data()),
-        formated()[[1]],
-        new_group()$Grp,
-        workingPath = wd_path,
-        prefix,
-        suffix,
-        k = input$clusters,
-        Rowdistfun = input$dist ,
-        Coldistfun = input$dist,
-        keysize = input$key,
-        meanGrp = input$meangrp
-        
-      )
-      
-    }, width = 900 , height = 1200, res = 100)
-    
-    #print(isok)
-    #print(click)
-    print(tested())
-
-    #################################
-    ######## Save plots             #
-    #################################
-    
-    
-    #' Reactive function that return a heatmap plot
-    #'
-    #' @param csv Data frame corresponding to the Alltoptable
-    #'
-    #' @return \p heatmap.2 plot
-    #'
-    
-    
-    p = reactive({
-      plotHeatmaps(
-        data.matrix(new_data()),
-        formated()[[1]],
-        new_group()$Grp,
-        workingPath = wd_path,
-        prefix,
-        suffix,
-        k = input$clusters,
-        Rowdistfun = input$dist ,
-        Coldistfun = input$dist,
-        keysize = input$key,
-        meanGrp = input$meangrp
-        
-      )
-    })
-    
-    output$save <- downloadHandler(
-      if (input$form == "eps") {
-        filename = "save.eps"
-      }
-      else{
-        filename = "save.png"
-      },
-      
-      #' Save Heatmap in the good format
-      #'
-      #' @param file
-      #'
-      #' @return the image saved in eps or png
-      #'
-      
-      
-      content = function(file) {
-        ggsave(
-          p(),
-          filename = filename,
-          width = 12,
-          height = 16,
-          limitsize = FALSE,
-          units = "cm",
-          dpi = 200
-        )
-        
-      }
-    )
-    
-  })
-  
-  #### This part aint actually used !!!
-  
-  observeEvent(input$second, {
-    csvf1 <- reactive({
-      csvtest = list()
-      
-      inFile <- input$file2
-      name <- inFile$name
-      for (i in 1:length(data)) {
-        for (elem in input$file2[[i, 'datapath']]) {
-          cat("loading file number" , i, "\n")
-        }
-        csvtest[i] = elem
-      }
-      csv <- lapply(csvtest, read.csv2)
-      
-      return (csv)
-    })
-    
-    output$mytable2 <- DT::renderDataTable({
-      DT::datatable(csvf1(), options = list(orderClasses = TRUE))
-      
-    })
-    
-  })
   
 }
 
