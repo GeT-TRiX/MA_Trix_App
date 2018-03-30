@@ -18,7 +18,8 @@ options(shiny.maxRequestSize = 40 * 1024 ^ 2) # Defined the maximum size in Mb t
 
 #shinyUI(
 
-ui <- navbarPage(
+ui <- bootstrapPage( 
+  navbarPage(
   "MaTrix_App", # MA for microarray and Trix for the name of the team
   
   #useShinyjs(),
@@ -86,7 +87,7 @@ ui <- navbarPage(
   
   
   tabPanel(
-    p(icon("picture"),
+    p(icon("line-chart"),
       "Heatmap "),
     
     
@@ -134,12 +135,12 @@ ui <- navbarPage(
           label = "Clear selection",
           icon = icon("square-o")
         )
-        ,
-        actionButton(
-          inputId = "refresh",
-          label = "Update selection",
-          icon = icon("repeat")
-        )
+        # ,
+        # actionButton(
+        #   inputId = "refresh",
+        #   label = "Update selection",
+        #   icon = icon("repeat")
+        # )
         ,
         p("You've selectionned the following test : "),
         hr(),
@@ -159,7 +160,7 @@ ui <- navbarPage(
       br(),
       
       shiny::actionButton( 
-        "toggleAdvanced", "Show Advanced Info", href = "#"),
+        "toggleAdvanced", "Show Advanced Options", href = "#"),
       
       br(),
       
@@ -198,11 +199,12 @@ ui <- navbarPage(
       br(),
       br(),
       
-      #actionButton("first", "Print Heatmap", style =
+      #actionButton("heatm", "Print Heatmap", style =
       #               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
       
-      shiny::actionButton("first", "Heatmap",style =
+      shiny::actionButton("heatm", "Print Heatmap",style =
              "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      uiOutput('Button'),
       
       numericInput('num', '', 0),
       verbatimTextOutput("valuedd")
@@ -218,9 +220,8 @@ ui <- navbarPage(
         ),
         
         useShinyjs(),
-        bsAlert("alert"),
         ### no more error messages
-        
+        bsAlert("alert"),
         plotOutput(outputId = "distPlot")
         
       ),
@@ -229,7 +230,7 @@ ui <- navbarPage(
   ),
   
   tabPanel(
-    p(icon("search"), "PCA"),
+    p(icon("line-chart"), "PCA"),
     
     sidebarPanel(
       style = " font-size:100%; font-family:Arial;
@@ -242,7 +243,8 @@ ui <- navbarPage(
       
     ),
     
-    mainPanel(# h4("The page popped-up is the LEGO set database on Brickset.com."),
+    mainPanel(
+      # h4("The page popped-up is the LEGO set database on Brickset.com."),
       # h4("Step 1. Please type the Set ID below and press the 'Go!' button:"),
       # textInput(inputId = "setid", label = "Input Set ID"),
       # #p('Output Set ID:'),
@@ -273,9 +275,11 @@ ui <- navbarPage(
                "About"),
              mainPanel(includeMarkdown("about.md")))
     
-  )
+  ))
   
   server <- function(input, output, session) {
+    
+    
     n <- reactiveValues(a = 0)
     #print(isolate(n$a))
     #n=0
@@ -287,13 +291,17 @@ ui <- navbarPage(
     ######## Plot in the renderView #
     #################################
     
-    observeEvent(input$first, {
+    observeEvent(input$heatm, {
+      
+      updateActionButton(session, "heatm",
+                         label = "Update Heatmap", 
+                         icon = icon("repeat"))
 
       output$distPlot <- renderPlot({
         plotHeatmaps(
           data.matrix(new_data()),
           formated()[[1]],
-          new_group()$Grp,
+          droplevels(new_group()$Grp),
           workingPath = wd_path,
           prefix,
           suffix,
@@ -529,7 +537,7 @@ ui <- navbarPage(
     ######## click increase       #
     ###############################
   
-    observeEvent(input$first, {
+    observeEvent(input$heatm, {
       n$a <<- n$a + 1
       updateNumericInput(session, 'num', value = n$a)
     })
@@ -548,14 +556,12 @@ ui <- navbarPage(
     makeReactiveBinding('click')
     
     
-    observeEvent(input$first, {
-      
+    observeEvent(input$heatm, {
       if (click > 0)
       {
         isok <<- F
       }
       click <<- click + 1
-      
     })
     
     observe(print(click))
@@ -586,7 +592,7 @@ ui <- navbarPage(
     output$individusel <- renderUI(
       checkboxGroupInput(
         inputId = "indiv" ,
-        label =  "Choose your samples:",
+        label =  "Choose your group to visualize",
         # choices =  colnames(csvf()[[1]][,-1]),
         # selected = colnames(csvf()[[1]][,-1])
         choices =  levels(csvf()[[2]]$Grp),
@@ -599,7 +605,7 @@ ui <- navbarPage(
       updateCheckboxGroupInput(
         session,
         "indiv",
-        label = "Choose your comparisons",
+        label = "Choose your group to visualize",
         #choices = colnames(csvf()[[1]][,-1]),
         #selected = colnames(csvf()[[1]][,-1])
         choices =  levels(csvf()[[2]]$Grp),
@@ -610,7 +616,7 @@ ui <- navbarPage(
     observeEvent(input$noIndividus, {
       updateCheckboxGroupInput(session,
                                "indiv",
-                               label = "Choix des individus",
+                               label = "Choose your group to visualize",
                                #choices = colnames(csvf()[[1]][,-1]))
                                choices =  levels(csvf()[[2]]$Grp))
     })
@@ -627,7 +633,7 @@ ui <- navbarPage(
     #   return(input$indiv)
     # })
     
-    choix_grp <- eventReactive(input$first, {
+    choix_grp <- eventReactive(input$heatm, {
       inFile <- input$file1
       if (is.null(inFile))
         return(NULL)
@@ -664,7 +670,7 @@ ui <- navbarPage(
     
     output$testout <- renderUI(checkboxGroupInput(
       inputId = "test" ,
-      label =  "Choose Option:",
+      label =  "Choose your interaction",
       choices =  colnames(adjusted()[,-1])
       #,selected = colnames(adjusted()[, -1])
       
@@ -674,7 +680,7 @@ ui <- navbarPage(
       updateCheckboxGroupInput(
         session,
         "test",
-        label = "Choix des individus",
+        label = "Choose your interaction",
         choices = colnames(adjusted()[,-1]),
         selected = colnames(adjusted()[,-1])
       )
@@ -683,7 +689,7 @@ ui <- navbarPage(
     observeEvent(input$noTests, {
       updateCheckboxGroupInput(session,
                                "test",
-                               label = "Choix des individus",
+                               label = "Choose your interaction",
                                choices = colnames(adjusted()[, -1]))
     })
     
@@ -696,7 +702,7 @@ ui <- navbarPage(
     #'
     
     
-      choix_test <- eventReactive(input$first, {
+      choix_test <- eventReactive(input$heatm, {
         return(input$test)
       }, ignoreNULL = F)
     
@@ -751,7 +757,7 @@ ui <- navbarPage(
     #new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
     
     
-    new_group <- eventReactive(input$first, {
+    new_group <- eventReactive(input$heatm, {
       inFile <- input$file1
       if (is.null(inFile))
         return(NULL)
@@ -769,7 +775,7 @@ ui <- navbarPage(
     #   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
     # })
     
-    #observeEvent(input$first, { ## React event
+    #observeEvent(input$heatm, { ## React event
     
     #' Reactive function that return a data frame with significant genes for a defined p-value
     #'
@@ -808,7 +814,7 @@ ui <- navbarPage(
     #' @return \new_data a  data frame with all the individuals selected
     #'
     
-      new_test <- eventReactive(input$first, {
+      new_test <- eventReactive(input$heatm, {
         inFile <- input$file1
         if (is.null(inFile))
           return(NULL)

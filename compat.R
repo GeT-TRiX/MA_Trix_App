@@ -111,7 +111,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   ##-----------------------##
   
   gpcol=num2cols(as.numeric(groups))
-  print(gpcol)
+
   
   ##**********
   ## RowDendrogram
@@ -189,6 +189,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   ## plot Heatmap
   ##-----------------------##
   cat("\n -> Plotting HeatMap... \n")
+  
   # if(fileType=="tiff")
   # 	tiff(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,".tiff",sep="")),width=wdt, height=900,compression="jpeg")
   # if(fileType=="png")

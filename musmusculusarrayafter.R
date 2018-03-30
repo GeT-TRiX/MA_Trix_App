@@ -119,12 +119,15 @@ selected = levels(groupss$Grp)
 
 #groupss[match(as.character(groupss$Grp), selected, nomatch = T), ]
 test <- groupss[groupss$Grp %in% selected,]
-
+print(test)
 thisisit <- select(musmuscu, as.character(factor(test$X)))
 View(thisisit)
 
+
+levels(test$Grp)
 uniquegrp = unique(test$Grp)
 btestos <- droplevels(test)
+print(levels(btestos$Grp))
 
 for(i in factor(mydata$X)){
   print(i)
