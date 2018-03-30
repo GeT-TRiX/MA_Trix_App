@@ -2,3 +2,9 @@ When launching Heatmap it can be important to feedback the user about the time l
 
 It can be interesting to add some feature allowing user to cancell a heatmap run anytime he wants. This process can be realized however this is not possible in Windows.
 
+Add dataframe which represent the number of significant genes for given parameters with interactions represented by rows and columns are represented by pval (5% or 1%) and log-fold change(1,2,3..)
+This can be added in the Heatmap option or loading page ?
+
+Use factoextra for representating PCA choose of the axes, showing the ebouli rupture can be usefull
+With parameters to hide individuals ?
+
