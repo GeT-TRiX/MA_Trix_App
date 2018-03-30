@@ -29,7 +29,24 @@ data  = subset(musmuscu ,is.na ,select = "LWT_Ctrl2")
 
 names(pval) = sapply(strsplit(names(pval), "^adj.P.Val*|^adj.P.Val*"), `[[`, 1)
 pval <- read.csv2("data/All_topTableAll.csv")
-groupss <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec = ",",header= T)
+groups <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec = ",",header= T)
+
+
+palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442", "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray", "burlywood1","darkkhaki", "#CC0000" ));
+
+
+
+
+
+
+gpcol=num2cols(as.numeric(groupss$Grp))
+
+print(gpcol)
+num2cols(as.numeric(groupss$Grp))
+print(as.numeric(groups$Grp))
+
+
+
 View(musmuscu)
 View(pval)
 View(groupss)

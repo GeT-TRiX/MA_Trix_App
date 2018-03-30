@@ -6,7 +6,7 @@
 ##                              ##
 ##  Author: Franck Soubès        ##
 ##################################
-###################################
+##################################q#
 
 source("compat.R")
 source("formating.R")
@@ -281,7 +281,7 @@ ui <- #fluidePage(
     n <- reactiveValues(a = 0)
     
     soso <- NULL
-    print(soso)
+
     #print(isolate(n$a))
     #n=0
     
@@ -293,7 +293,8 @@ ui <- #fluidePage(
     #################################
     
     observeEvent(input$first, {
-      View(new_group())
+
+  
       # print(isolated())
       #n <- reactiveValues(a=T)
       output$distPlot <- renderPlot({
@@ -532,13 +533,10 @@ ui <- #fluidePage(
       
     })
     
-    print(soso)
-    
     ###############################
     ######## click increase       #
     ###############################
     
-    print(isolate(n$a))
     #makeReactiveBinding('n')
     
     

@@ -13,19 +13,25 @@ palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC
 #dev.off()
 ###unlink(".tmp")(".tmp")(".tmp")
 
-
 num2cols=function(numVector,colp=palette()){
   
   # gives a character vector of color names for a given numeric vector
+  
   gpcol=as.data.frame(numVector)
+  
   numCols=length(unique(gpcol[,1]))
+  mycol <- sort(unique(gpcol$numVector))
   if(length(colp)-1<numCols) warning("number of color names < number of levels! Give a color palette with at least ",numCols," terms to 'col' argument")
-  cols=as.data.frame(matrix(c(1:numCols,colp[2:(numCols+1)]),nrow=numCols));
+  cols=as.data.frame(matrix(c(mycol,colp[2:(numCols+1)]),nrow=numCols))
+  
   myColFun=function(x){
     as.character(cols[cols[,1]==x[1],2])
+    
   }
   apply(gpcol,1,FUN=myColFun)
+  
 }
+
 
 ############################################################################
 ##   plotHeatmaps() function
@@ -105,6 +111,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   ##-----------------------##
   
   gpcol=num2cols(as.numeric(groups))
+  print(gpcol)
   
   ##**********
   ## RowDendrogram
@@ -215,12 +222,13 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   # 	Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=useRasterTF,margins=margins)
   #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[2:(length(levels(groups))+1)],cex=1,line=-1)
   #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=1,line=-1)
-  hmp02 = heatmap.2(exprData,na.rm=T, col=col.hm,dendrogram="both",labRow =rowIds,labCol=colid,scale=scale, ColSideColors=gpcol,RowSideColors=gpcolr, key=T,
+  hmp02 = heatmap.2(exprData,na.rm=T, col=col.hm,dendrogram="both",labRow =rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=useRasterTF,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)))
   #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[2:(length(levels(groups))+1)],cex=1,line=-1)
   mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=0.8,line=-1)
   #dev.off()
+  # ColSideColors=gpcol,
   #key.par = list(cex=0.5),
   #key.par=list(mar=c(4,4,4,10))
   #return(hmp02)

@@ -1,0 +1,4 @@
+When launching Heatmap it can be important to feedback the user about the time laps between the moment where the user is clicking and the plot output.
+
+It can be interesting to add some feature allowing user to cancell a heatmap run anytime he wants. This process can be realized however this is not possible in Windows.
+
