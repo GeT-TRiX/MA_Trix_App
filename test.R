@@ -18,9 +18,7 @@ options(shiny.maxRequestSize = 40 * 1024 ^ 2) # Defined the maximum size in Mb t
 
 #shinyUI(
 
-ui <- #fluidePage(
-  #useShinyjs(),
-  navbarPage(
+ui <- navbarPage(
   "MaTrix_App", # MA for microarray and Trix for the name of the team
   
   #useShinyjs(),
@@ -275,13 +273,10 @@ ui <- #fluidePage(
                "About"),
              mainPanel(includeMarkdown("about.md")))
     
-  )#)
+  )
   
   server <- function(input, output, session) {
     n <- reactiveValues(a = 0)
-    
-    soso <- NULL
-
     #print(isolate(n$a))
     #n=0
     
@@ -294,9 +289,6 @@ ui <- #fluidePage(
     
     observeEvent(input$first, {
 
-  
-      # print(isolated())
-      #n <- reactiveValues(a=T)
       output$distPlot <- renderPlot({
         plotHeatmaps(
           data.matrix(new_data()),
@@ -536,35 +528,15 @@ ui <- #fluidePage(
     ###############################
     ######## click increase       #
     ###############################
-    
-    #makeReactiveBinding('n')
-    
-    
+  
     observeEvent(input$first, {
       n$a <<- n$a + 1
       updateNumericInput(session, 'num', value = n$a)
     })
-    
-    # isolated <- reactive({
-    #   observeEvent(input$first, {
-    #     n$a <- n$a+1
-    #     updateNumericInput(session,'num',value=n$a)
-    #   })
-    #   return(n+1)
-    # })
-    
-    #print(n)
-    
+
     observe({
       print(n$a)
     })
-    
-    # observe({
-    #   if(input$num == 0 || input$num == 1)
-    #   {
-    #     print("ok")
-    #   }
-    # })
     
     output$valuedd <- renderText({
       input$num
@@ -577,7 +549,7 @@ ui <- #fluidePage(
     
     
     observeEvent(input$first, {
-      #tested <- eventReactive(input$first, {
+      
       if (click > 0)
       {
         isok <<- F
@@ -655,7 +627,7 @@ ui <- #fluidePage(
     #   return(input$indiv)
     # })
     
-    choix_grp <- eventReactive(input$refresh, {
+    choix_grp <- eventReactive(input$first, {
       inFile <- input$file1
       if (is.null(inFile))
         return(NULL)
@@ -724,17 +696,9 @@ ui <- #fluidePage(
     #'
     
     
-    
-    if (isolate(n$a != 0)) {
-      choix_test <- reactive({
-        return(input$test)
-      })
-    }
-    else{
-      choix_test <- eventReactive(input$refresh, {
+      choix_test <- eventReactive(input$first, {
         return(input$test)
       }, ignoreNULL = F)
-    }
     
     # choix_test <- reactive({
     #   return(input$test)
@@ -787,7 +751,7 @@ ui <- #fluidePage(
     #new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
     
     
-    new_group <- eventReactive(input$refresh, {
+    new_group <- eventReactive(input$first, {
       inFile <- input$file1
       if (is.null(inFile))
         return(NULL)
@@ -844,34 +808,15 @@ ui <- #fluidePage(
     #' @return \new_data a  data frame with all the individuals selected
     #'
     
-    
-    n <- n
-    print(n)
-    #if(isolate(!n$a)){
-    
-    if (isolate(n$a) != 0) {
-      #observe(if(click>0){
-      new_test <- reactive({
-        inFile <- input$file1
-        if (is.null(inFile))
-          return(NULL)
-        (subset(adjusted(),
-                select = choix_test()))
-        
-      })
-    }
-    else{
-      new_test <- eventReactive(input$refresh, {
+      new_test <- eventReactive(input$first, {
         inFile <- input$file1
         if (is.null(inFile))
           return(NULL)
         (subset(adjusted(),
                 select = choix_test()))
       }, ignoreNULL = F)
-    }
-    
-    
-    
+
+   
     # new_group <- reactive( csvf()[[2]] %>%
     #                          filter( X ==  list_ind()))
     
