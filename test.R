@@ -270,27 +270,19 @@ ui <- bootstrapPage(
         
       ),
       
-      mainPanel(# h4("The page popped-up is the LEGO set database on Brickset.com."),
-        # h4("Step 1. Please type the Set ID below and press the 'Go!' button:"),
-        # textInput(inputId = "setid", label = "Input Set ID"),
-        # #p('Output Set ID:'),
-        # #textOutput('setid'),
-        # actionButton("goButtonAdd", "Go!"),
-        # h5('Output Address:'),
-        # textOutput("address"),
-        # p(""),
-        # h4(
-        #   "Step 2. Please click the button below.
-        #   The link to the Set's page is being generated."
-        # ),
-        # p(""),
-        # actionButton("goButtonDirect", "Generate Link Below!"),
-        # p(""),
-        # htmlOutput("inc"),
-        # p(
-        #   "I was supposed to show you in an iframe below. However, it only
-        #   worked on localhost and has security issue after deployed to the cloud. Ooops..."
-        # ))))
+      mainPanel(
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
       )),
       tabPanel(p(icon("question-circle"),
                  "How to use?"),
@@ -870,18 +862,18 @@ ui <- bootstrapPage(
       createdfsign(adjusted())
     })
     
-    
+
     #########################################
     ######## Plot the data frame wiht input #
     #########################################
     
-    output$new_test <- renderDataTable(new_test())
+    output$new_test <- DT::renderDataTable({DT::datatable(new_test(),options = list(orderClasses = TRUE))})
     
-    output$new_data <- renderDataTable(new_data())
+    output$new_data <- DT::renderDataTable({DT::datatable(new_data(),options = list(orderClasses = TRUE))})
     
-    output$new_group <- renderDataTable(new_group())
+    output$new_group <- DT::renderDataTable({DT::datatable(new_group(),options = list(orderClasses = TRUE))})
     
-    output$data_sign <- renderDataTable(data_sign())
+    output$data_sign <- DT::renderDataTable({DT::datatable(data_sign(),options = list(orderClasses = TRUE))})
     
   }
   

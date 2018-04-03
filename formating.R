@@ -121,6 +121,8 @@ evaluatesignpar = function(adj,elem,pv) { ### for benchmarking
 
 createdfsign = function(adj) {
 
+  
+  constmod <- (length(colnames(adj[,-1]))+1)
   dtsign = data.frame(matrix(ncol = 2, nrow = length(adj[, -1])))
   y <- c("pvalue(0.01)", "pvalue(0.05)")
   colnames(dtsign) <- y
@@ -131,7 +133,7 @@ createdfsign = function(adj) {
   for (pv in pvalue) {
     for (elem in colnames(adj[, -1])) {
       
-      if (i %% const == 0) {
+      if (i %% constmod == 0) {
         i = 1
       }
       if (pv == 0.05)
