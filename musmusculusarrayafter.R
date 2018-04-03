@@ -385,7 +385,7 @@ pv = 0.05
 
 
 
-evaluatesign = function(adj,elem){
+evaluatesign = function(adj,elem,pv){
 
   grp1 = adj[,c(elem)] %>%
   sapply( FUN = function(x){return(x < pv)}) %>%
@@ -396,18 +396,73 @@ evaluatesign = function(adj,elem){
   return(grp1)
 }
 
-
+View(pval)
 adj = pval[,grep("X|^adj.P.Val", names(pval), value=TRUE)]
+
 View(adj)
 
 evaluatesign(adj,'adj.P.Val_LKO_CTRL.LWT_CTRL')
 
-for(elem in colnames(adj[,-1])){
-  print(evaluatesign(adj,elem))
+pvalue = c(0.01,0.05)
+
+#benchmark(
+
+
+dtsign = data.frame(matrix(ncol=2,nrow = length(adj[,-1])))
+y <- c("pvalue(0.01)","pvalue(0.05)")
+colnames(dtsign) <- y
+
+const <- (length(colnames(adj[,-1]))+1)
+print(const)
+i <- 1
+for (pv in pvalue){
+  for(elem in colnames(adj[,-1])){
+    
+    if(i %% const ==0 ){
+      i = 1
+    }
+    if(pv == 0.05)
+    {
+      print(i)
+      print( evaluatesign(adj,elem,pv))
+      print("ok")
+      dtsign$`pvalue(0.05)`[i] = evaluatesign(adj,elem,pv)
+      i = i+1
+    }
+    else{
+      print(i)
+      print("ko")
+      dtsign$`pvalue(0.01)`[i] = evaluatesign(adj,elem,pv)
+       print(evaluatesign(adj,elem,pv))
+       i = i+1
+    }
+  }
+}
+View(dtsign)
+
+
+i <- 1
+for (pv in pvalue){
+  for(elem in colnames(adj[,-1])){
+    if(i %% const == 0 ){
+      i = 1
+    }
+    if(pv == 0.05)
+    {
+      dtsign$`pvalue(0.05)`[i] = evaluatesignpar(adj,elem,pv)
+      i = i+1
+    }
+    else{
+      dtsign$`pvalue(0.01)`[i] = evaluatesignpar(adj,elem,pv)
+      i = i+1
+    }
+  }
+  View(dtsign)
 }
 
 
 
+library(doParallel)
 
 significant = grp1 %>%
   filter(. == T)

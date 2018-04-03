@@ -75,13 +75,28 @@ transform <- function(dataframe,toast){
 # btestos <- droplevels(test)
 
 
-evaluatesign = function(adj,elem){
+evaluatesign = function(adj,elem,pv){
   
   grp1 = adj[,c(elem)] %>%
-    sapply( FUN = function(x){return(x < pval)}) %>%
+    sapply( FUN = function(x){return(x < pv)}) %>%
     data.frame() %>%
     filter(. == T) %>%
     nrow()
   
   return(grp1)
 }
+
+
+evaluatesignpar = function(adj,elem,pv) { ### for benchmarking 
+  
+  grp1 = foreach(i = iter(adj[elem], by = "col"), .combine = c) %dopar%  
+    (sign= {i < pv}) %>%
+    as.data.frame() %>%
+    filter(. == T) %>%
+    nrow()
+  
+ return(grp1) 
+  
+}
+
+
