@@ -299,7 +299,7 @@ ui <- bootstrapPage(
       ,
       tabPanel(p(icon("info-circle"),
                  "About"),
-               mainPanel(includeMarkdown("about.md")))
+               mainPanel(includeMarkdown("markdown/about.md")))
       
     )
 )
