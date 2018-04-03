@@ -291,10 +291,10 @@ ui <- bootstrapPage(
         #   "I was supposed to show you in an iframe below. However, it only
         #   worked on localhost and has security issue after deployed to the cloud. Ooops..."
         # ))))
-      ),
+      )),
       tabPanel(p(icon("question-circle"),
                  "How to use?"),
-               mainPanel(includeMarkdown("help.md")))
+               mainPanel(includeMarkdown("markdown/help.md")))
       
       ,
       tabPanel(p(icon("info-circle"),
@@ -302,7 +302,6 @@ ui <- bootstrapPage(
                mainPanel(includeMarkdown("about.md")))
       
     )
-  )
 )
   
   
