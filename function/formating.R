@@ -123,7 +123,7 @@ createdfsign = function(adj) {
 
   
   constmod <- (length(colnames(adj[,-1]))+1)
-  dtsign = data.frame(matrix(ncol = 2, nrow = length(adj[, -1])))
+  dtsign = data.frame(matrix(ncol <- 2, nrow <- length(adj[, -1])))
   y <- c("pvalue(0.01)", "pvalue(0.05)")
   colnames(dtsign) <- y
   rownames(dtsign) <- colnames(adj[, -1])
@@ -134,16 +134,16 @@ createdfsign = function(adj) {
     for (elem in colnames(adj[, -1])) {
       
       if (i %% constmod == 0) {
-        i = 1
+        i <- 1
       }
       if (pv == 0.05)
       {
         dtsign$`pvalue(0.05)`[i] = evaluatesignpar(adj, elem, pv)
-        i = i + 1
+        i <- i + 1
       }
       else{
         dtsign$`pvalue(0.01)`[i] = evaluatesignpar(adj, elem, pv)
-        i = i + 1
+        i <- i + 1
       }
     }
   }
