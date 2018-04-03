@@ -294,6 +294,16 @@ formating = function( adj, musmuscu,pval){
   return(newlist)
 }
 
+
+View(adj[,-1])
+colnames(adj[,-1])
+
+for (elem in colnames(adj[,-1])){
+  print(elem)
+  print(formating(elem,musmuscu ,pval = 0.05))
+}
+
+
 treated = formating(adj,musmuscu,pval= 0.05)
 
 View(treated[[1]])
@@ -307,6 +317,7 @@ View(treated[[1]])
 #### 1-0.999 
 
 source("compat.R")
+source("global.R")
 x11()
 hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3)
 
@@ -347,15 +358,56 @@ hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_pat
 
 
 grp1 = adj[,c('adj.P.Val_LWT_MCD.LWT_CTRL' ,'adj.P.Val_LKO_MCD.LKO_CTRL')]
+adj[,c('adj.P.Val_LKO_CTRL.LWT_CTRL','adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.')]
+View(adj)
+colnames(adj)
 
-
-testFunc = function(x,y){x<cutoff&y<cutoff}
+cutoff = 0.9
+testFunc = function(x){x<cutoff}
 adj$adj.P.Val_LKO_CTRL.LWT_CTRL
-grp1 = adj[,c('adj.P.Val_LWT_MCD.LWT_CTRL','adj.P.Val_LKO_MCD.LKO_CTRL')] %>%
-  apply(1,function(y) testFunc(y[('adj.P.Val_LWT_MCD.LWT_CTRL')],y[('adj.P.Val_LKO_MCD.LKO_CTRL')])) %>%
-  data.frame(adj)
+grp1 = adj[,c('adj.P.Val_LKO_CTRL.LWT_CTRL')] %>%
+  apply(1,FUN = function(x){return(x < pval)}) %>%
+  data.frame()
 
-View(grp1)
+
+grp1 = adj[,c('adj.P.Val_LKO_CTRL.LWT_CTRL')]
+
+
+grp1 = adj[,c('adj.P.Val_LKO_CTRL.LWT_CTRL')]
+
+
+toast = lapply(adj, function(y) testFunc(y[('adj.P.Val_LKO_CTRL.LWT_CTRL')]))
+colnames(adj)
+
+View(toast)
+
+pv = 0.05
+
+
+
+evaluatesign = function(adj,elem){
+
+  grp1 = adj[,c(elem)] %>%
+  sapply( FUN = function(x){return(x < pv)}) %>%
+  data.frame() %>%
+  filter(. == T) %>%
+  nrow()
+  
+  return(grp1)
+}
+
+
+adj = pval[,grep("X|^adj.P.Val", names(pval), value=TRUE)]
+View(adj)
+
+evaluatesign(adj,'adj.P.Val_LKO_CTRL.LWT_CTRL')
+
+for(elem in colnames(adj[,-1])){
+  print(evaluatesign(adj,elem))
+}
+
+
+
 
 significant = grp1 %>%
   filter(. == T)

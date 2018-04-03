@@ -106,13 +106,17 @@ ui <- bootstrapPage(
         actionButton(
           inputId = "allIndividus",
           label = "Select all",
-          icon = icon("check-square-o")
+          icon = icon("check-square-o"),
+          style =
+            "color: #fff; background-color: #337ab7; border-color: #2e6da4"
         )
         ,
         actionButton(
           inputId = "noIndividus",
           label = "Clear selection",
-          icon = icon("square-o")
+          icon = icon("square-o"),
+          style =
+            "color: #fff; background-color: #337ab7; border-color: #2e6da4"
         )
         ,
         
@@ -127,13 +131,17 @@ ui <- bootstrapPage(
         actionButton(
           inputId = "allTests",
           label = "Select all",
-          icon = icon("check-square-o")
+          icon = icon("check-square-o"),
+          style =
+            "color: #fff; background-color: #337ab7; border-color: #2e6da4"
         )
         ,
         actionButton(
           inputId = "noTests",
           label = "Clear selection",
-          icon = icon("square-o")
+          icon = icon("square-o"),
+          style =
+            "color: #fff; background-color: #337ab7; border-color: #2e6da4"
         )
         # ,
         # actionButton(
@@ -160,7 +168,8 @@ ui <- bootstrapPage(
       br(),
       
       shiny::actionButton( 
-        "toggleAdvanced", "Show Advanced Options", href = "#"),
+        "toggleAdvanced", "Show Advanced Options", href = "#",
+        style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
       
       br(),
       

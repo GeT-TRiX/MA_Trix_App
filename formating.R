@@ -74,3 +74,14 @@ transform <- function(dataframe,toast){
 # uniquegrp = unique(test$Grp)
 # btestos <- droplevels(test)
 
+
+evaluatesign = function(adj,elem){
+  
+  grp1 = adj[,c(elem)] %>%
+    sapply( FUN = function(x){return(x < pval)}) %>%
+    data.frame() %>%
+    filter(. == T) %>%
+    nrow()
+  
+  return(grp1)
+}
