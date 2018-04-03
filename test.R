@@ -315,6 +315,7 @@ ui <- bootstrapPage(
                          icon = icon("repeat"))
       
       output$distPlot <- renderPlot({
+        
         plotHeatmaps(
           data.matrix(new_data()),
           formated()[[1]],
@@ -346,10 +347,11 @@ ui <- bootstrapPage(
       
       
       p = reactive({
+        
         plotHeatmaps(
           data.matrix(new_data()),
           formated()[[1]],
-          new_group()$Grp,
+          droplevels(new_group()$Grp),
           workingPath = wd_path,
           prefix,
           suffix,
@@ -866,13 +868,14 @@ ui <- bootstrapPage(
     ######## Plot the data frame wiht input #
     #########################################
     
-    output$new_test <- DT::renderDataTable({DT::datatable(new_test(),options = list(orderClasses = TRUE))})
+    output$new_test <- renderDataTable(new_test())
     
-    output$new_data <- DT::renderDataTable({DT::datatable(new_data(),options = list(orderClasses = TRUE))})
+    output$new_data <- renderDataTable(new_data())
     
-    output$new_group <- DT::renderDataTable({DT::datatable(new_group(),options = list(orderClasses = TRUE))})
+    output$new_group <- renderDataTable(new_group())
     
-    output$data_sign <- DT::renderDataTable({DT::datatable(data_sign(),options = list(orderClasses = TRUE))})
+    output$data_sign <- renderDataTable(data_sign())
+    
     
   }
   

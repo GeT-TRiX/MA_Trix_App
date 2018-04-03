@@ -114,6 +114,8 @@ shinyServer(
     #' @examples
     #'
     
+    source("server/csvFile.R")
+    
     csvf <- reactive({
       inFile <- input$file1
       
@@ -578,7 +580,7 @@ shinyServer(
     
     output$new_group <- renderDataTable(new_group())
     
-    output$data_sign <- DT::renderDataTable({DT::datatable(data_sign(),options = list(orderClasses = TRUE))})
+    output$data_sign <- renderDataTable(data_sign())
     
   })
 #shinyApp(ui = ui , server = server)

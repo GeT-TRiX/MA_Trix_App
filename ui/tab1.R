@@ -22,7 +22,6 @@ tabPanel(
   mainPanel(
     bsAlert("alert"),
     
-    
     column(
       12,
       
