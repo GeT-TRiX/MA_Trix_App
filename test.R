@@ -18,294 +18,312 @@ options(shiny.maxRequestSize = 40 * 1024 ^ 2) # Defined the maximum size in Mb t
 
 #shinyUI(
 
-ui <- bootstrapPage( 
+ui <- bootstrapPage(
   navbarPage(
-  "MaTrix_App", # MA for microarray and Trix for the name of the team
-  
-  #useShinyjs(),
-  theme = shinytheme("united"),
-  
-  # multi-page user-interface that includes a navigation bar.
-  
-  tabPanel(
-    p(icon("upload"),
-      "Data loading"),
+    "MaTrix_App",
+    # MA for microarray and Trix for the name of the team
     
-    sidebarPanel(
-      style = " font-size:100%; font-family:Arial;
-      border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
-      width = 3,
+    #useShinyjs(),
+    theme = shinytheme("united"),
+    
+    # multi-page user-interface that includes a navigation bar.
+    
+    tabPanel(
+      p(icon("upload"),
+        "Data loading"),
       
-      br(),
-      
-      fileInput(
-        "file1",
-        "Choose your csv file",
-        accept = c("text/csv",
-                   "text/comma-separated-values,text/plain",
-                   ".csv")
-        ,
-        multiple = T
+      sidebarPanel(
+        style = " font-size:100%; font-family:Arial;
+        border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
+        width = 3,
+        
+        br(),
+        
+        fileInput(
+          "file1",
+          "Choose your csv file",
+          accept = c("text/csv",
+                     "text/comma-separated-values,text/plain",
+                     ".csv")
+          ,
+          multiple = T
+        )
+      ),
+      mainPanel(
+        bsAlert("alert"),
+        
+        
+        column(
+          12,
+          
+          h3("Show the actual data frame with the columns selected"),
+          helpText(
+            "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+          )
+          ,
+          dataTableOutput("new_data")
+        ),
+        column(
+          12,
+          
+          h3("Show the actual data frame with the columns selected"),
+          helpText(
+            "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+          )
+          ,
+          dataTableOutput("new_group")
+        ),
+        column(
+          12,
+          
+          h3("Show the actual data frame with the columns selected"),
+          helpText(
+            "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+          )
+          ,
+          dataTableOutput("new_test")
+        )
       )
     ),
-    mainPanel(
-      bsAlert("alert"),
-      
-      
-      column(
-        12,
-        
-        h3("Show the actual data frame with the columns selected"),
-        helpText(
-          "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-        )
-        ,
-        dataTableOutput("new_data")
-      ),
-      column(
-        12,
-        
-        h3("Show the actual data frame with the columns selected"),
-        helpText(
-          "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-        )
-        ,
-        dataTableOutput("new_group")
-      ),
-      column(
-        12,
-        
-        h3("Show the actual data frame with the columns selected"),
-        helpText(
-          "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-        )
-        ,
-        dataTableOutput("new_test")
-      )
-    )
-  ),
-  
-  
-  tabPanel(
-    p(icon("line-chart"),
-      "Heatmap "),
     
     
-    sidebarPanel(
+    tabPanel(
+      p(icon("line-chart"),
+        "Heatmap "),
       
-      width = 3,
-      style = " font-size:100%; font-family:Arial;
-      border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
-      #tags$style("#myNumericInput {font-size:10px;height:10px;}"),
       
-      br(),
-      
-      wellPanel(
-        uiOutput("individusel")
-        ,
-        actionButton(
-          inputId = "allIndividus",
-          label = "Select all",
-          icon = icon("check-square-o"),
-          style =
-            "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-        )
-        ,
-        actionButton(
-          inputId = "noIndividus",
-          label = "Clear selection",
-          icon = icon("square-o"),
-          style =
-            "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-        )
-        ,
+      sidebarPanel(
+        width = 3,
+        style = " font-size:100%; font-family:Arial;
+        border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
+        #tags$style("#myNumericInput {font-size:10px;height:10px;}"),
         
-        p("You've selectionned the following individuals : "),
-        hr(),
-        verbatimTextOutput("indiv")
+        br(),
         
-      ),
-      wellPanel(
-        uiOutput("testout")
-        ,
-        actionButton(
-          inputId = "allTests",
-          label = "Select all",
-          icon = icon("check-square-o"),
-          style =
-            "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-        )
-        ,
-        actionButton(
-          inputId = "noTests",
-          label = "Clear selection",
-          icon = icon("square-o"),
-          style =
-            "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-        )
-        # ,
-        # actionButton(
-        #   inputId = "refresh",
-        #   label = "Update selection",
-        #   icon = icon("repeat")
-        # )
-        ,
-        p("You've selectionned the following test : "),
-        hr(),
-        verbatimTextOutput("test")
-        
-      ),
-      
-      sliderInput(
-        "pval",
-        "P-value:",
-        min = 0.01,
-        max = 0.05,
-        value = 0.05,
-        step = 0.01
-      ),
-      
-      br(),
-      
-      shiny::actionButton( 
-        "toggleAdvanced", "Show Advanced Options", href = "#",
-        style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-      
-      br(),
-      
-      shinyjs::hidden(
-        div(id = "advanced",
-      wellPanel(
-      numericInput('clusters', 'Cluster count', 3,
-                   min = 1, max = 15),
-      
-      br(),
-      
-      
-      # numericInput('key', 'Cluster count', 1,
-      #              min = 0, max = 2),
-      
-      
-      selectInput(
-        "dist",
-        "Choose your matrix distance",
-        choices = c("cor", "euclidian")
-      ),
-      
-      checkboxInput("meangrp", "Add Mean for the different", FALSE),
-      verbatimTextOutput("value"))
-      
-      )),
-      
-      br(),
-      
-      selectInput("form", "Choose your file format",
-                  choices = c("png", "eps")),
-      br(),
-      downloadButton("save", "Save your plot" , style =
-                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-      
-      br(),
-      br(),
-      
-      #actionButton("heatm", "Print Heatmap", style =
-      #               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-      
-      shiny::actionButton("heatm", "Print Heatmap",style =
-             "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-      uiOutput('Button'),
-      
-      numericInput('num', '', 0),
-      verbatimTextOutput("valuedd")
-    ),
-    
-    mainPanel(tabsetPanel(
-      tabPanel(
-        p(icon("line-chart"), "Visualize the Heatmap"),
-        tags$style(
-          type = "text/css",
-          ".shiny-output-error { visibility: hidden; }",
-          ".shiny-output-error:before { visibility: hidden; }"
+        wellPanel(
+          uiOutput("individusel")
+          ,
+          actionButton(
+            inputId = "allIndividus",
+            label = "Select all",
+            icon = icon("check-square-o"),
+            style =
+              "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+          )
+          ,
+          actionButton(
+            inputId = "noIndividus",
+            label = "Clear selection",
+            icon = icon("square-o"),
+            style =
+              "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+          )
+          ,
+          
+          p("You've selectionned the following individuals : "),
+          hr(),
+          verbatimTextOutput("indiv")
+          
+        ),
+        wellPanel(
+          uiOutput("testout")
+          ,
+          actionButton(
+            inputId = "allTests",
+            label = "Select all",
+            icon = icon("check-square-o"),
+            style =
+              "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+          )
+          ,
+          actionButton(
+            inputId = "noTests",
+            label = "Clear selection",
+            icon = icon("square-o"),
+            style =
+              "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+          )
+          # ,
+          # actionButton(
+          #   inputId = "refresh",
+          #   label = "Update selection",
+          #   icon = icon("repeat")
+          # )
+          ,
+          p("You've selectionned the following test : "),
+          hr(),
+          verbatimTextOutput("test")
+          
         ),
         
-        useShinyjs(),
-        ### no more error messages
-        bsAlert("alert"),
-        plotOutput(outputId = "distPlot")
+        sliderInput(
+          "pval",
+          "P-value:",
+          min = 0.01,
+          max = 0.05,
+          value = 0.05,
+          step = 0.01
+        ),
         
+        br(),
+        
+        shiny::actionButton(
+          "toggleAdvanced",
+          "Show Advanced Options",
+          href = "#",
+          style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+        ),
+        
+        br(),
+        
+        shinyjs::hidden(div(
+          id = "advanced",
+          wellPanel(
+            numericInput('clusters', 'Cluster count', 3,
+                         min = 1, max = 15),
+            
+            br(),
+            
+            
+            # numericInput('key', 'Cluster count', 1,
+            #              min = 0, max = 2),
+            
+            
+            selectInput(
+              "dist",
+              "Choose your matrix distance",
+              choices = c("cor", "euclidian")
+            ),
+            
+            checkboxInput("meangrp", "Add Mean for the different", FALSE),
+            verbatimTextOutput("value")
+          )
+          
+        )),
+        
+        br(),
+        
+        selectInput("form", "Choose your file format",
+                    choices = c("png", "eps")),
+        br(),
+        downloadButton("save", "Save your plot" , style =
+                         "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+        
+        br(),
+        br(),
+        
+        #actionButton("heatm", "Print Heatmap", style =
+        #               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+        
+        shiny::actionButton("heatm", "Print Heatmap", style =
+                              "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+        uiOutput('Button'),
+        
+        numericInput('num', '', 0),
+        verbatimTextOutput("valuedd")
       ),
-      tabPanel(p(icon("table"), "Dataset"))
-    ))
-  ),
-  
-  tabPanel(
-    p(icon("line-chart"), "PCA"),
-    
-    sidebarPanel(
-      style = " font-size:100%; font-family:Arial;
-      border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
-      width = 3 ,
       
-      numericInput("normCount", "Count", 100),
-      numericInput("normMean", "Mean", 0),
-      numericInput("normSd", "Std Dev", 1)
-      
+      mainPanel(tabsetPanel(
+        tabPanel(
+          p(icon("line-chart"), "Visualize the Heatmap"),
+          tags$style(
+            type = "text/css",
+            ".shiny-output-error { visibility: hidden; }",
+            ".shiny-output-error:before { visibility: hidden; }"
+          ),
+          
+          useShinyjs(),
+          ### no more error messages
+          bsAlert("alert"),
+          plotOutput(outputId = "distPlot")
+          
+        ),
+        tabPanel
+        (
+          p(icon("table"), "Dataset"),
+          column(
+            12,
+            
+            h3("This table represent the significant genes for different condition"),
+            helpText(
+              "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+            )
+            ,
+            dataTableOutput("data_sign")
+          )
+          
+        )
+      ))
     ),
     
-    mainPanel(
-      # h4("The page popped-up is the LEGO set database on Brickset.com."),
-      # h4("Step 1. Please type the Set ID below and press the 'Go!' button:"),
-      # textInput(inputId = "setid", label = "Input Set ID"),
-      # #p('Output Set ID:'),
-      # #textOutput('setid'),
-      # actionButton("goButtonAdd", "Go!"),
-      # h5('Output Address:'),
-      # textOutput("address"),
-      # p(""),
-      # h4(
-      #   "Step 2. Please click the button below.
-      #   The link to the Set's page is being generated."
-      # ),
-      # p(""),
-      # actionButton("goButtonDirect", "Generate Link Below!"),
-      # p(""),
-      # htmlOutput("inc"),
-      # p(
-      #   "I was supposed to show you in an iframe below. However, it only
-      #   worked on localhost and has security issue after deployed to the cloud. Ooops..."
-      # )))
-    )),
-    tabPanel(p(icon("question-circle"),
-               "How to use?"),
-             mainPanel(includeMarkdown("help.md")))
-    
-    ,
-    tabPanel(p(icon("info-circle"),
-               "About"),
-             mainPanel(includeMarkdown("about.md")))
-    
-  ))
+    tabPanel(
+      p(icon("line-chart"), "PCA"),
+      
+      sidebarPanel(
+        style = " font-size:100%; font-family:Arial;
+        border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
+        width = 3 ,
+        
+        numericInput("normCount", "Count", 100),
+        numericInput("normMean", "Mean", 0),
+        numericInput("normSd", "Std Dev", 1)
+        
+      ),
+      
+      mainPanel(# h4("The page popped-up is the LEGO set database on Brickset.com."),
+        # h4("Step 1. Please type the Set ID below and press the 'Go!' button:"),
+        # textInput(inputId = "setid", label = "Input Set ID"),
+        # #p('Output Set ID:'),
+        # #textOutput('setid'),
+        # actionButton("goButtonAdd", "Go!"),
+        # h5('Output Address:'),
+        # textOutput("address"),
+        # p(""),
+        # h4(
+        #   "Step 2. Please click the button below.
+        #   The link to the Set's page is being generated."
+        # ),
+        # p(""),
+        # actionButton("goButtonDirect", "Generate Link Below!"),
+        # p(""),
+        # htmlOutput("inc"),
+        # p(
+        #   "I was supposed to show you in an iframe below. However, it only
+        #   worked on localhost and has security issue after deployed to the cloud. Ooops..."
+        # ))))
+      ),
+      tabPanel(p(icon("question-circle"),
+                 "How to use?"),
+               mainPanel(includeMarkdown("help.md")))
+      
+      ,
+      tabPanel(p(icon("info-circle"),
+                 "About"),
+               mainPanel(includeMarkdown("about.md")))
+      
+    )
+  )
+)
+  
   
   server <- function(input, output, session) {
-    
-    
     n <- reactiveValues(a = 0)
     #print(isolate(n$a))
     #n=0
     
     shinyjs::onclick("toggleAdvanced",
-                     shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event 
+                     shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event
     
     #################################
     ######## Plot in the renderView #
     #################################
     
     observeEvent(input$heatm, {
-      
-      updateActionButton(session, "heatm",
-                         label = "Update Heatmap", 
+      updateActionButton(session,
+                         "heatm",
+                         label = "Update Heatmap",
                          icon = icon("repeat"))
-
+      
       output$distPlot <- renderPlot({
         plotHeatmaps(
           data.matrix(new_data()),
@@ -545,12 +563,12 @@ ui <- bootstrapPage(
     ###############################
     ######## click increase       #
     ###############################
-  
+    
     observeEvent(input$heatm, {
       n$a <<- n$a + 1
       updateNumericInput(session, 'num', value = n$a)
     })
-
+    
     observe({
       print(n$a)
     })
@@ -677,21 +695,23 @@ ui <- bootstrapPage(
     ######## Select the comparisons #
     #################################
     
-    output$testout <- renderUI(checkboxGroupInput(
-      inputId = "test" ,
-      label =  "Choose your interaction",
-      choices =  colnames(adjusted()[,-1])
-      #,selected = colnames(adjusted()[, -1])
-      
-    ))
+    output$testout <- renderUI(
+      checkboxGroupInput(
+        inputId = "test" ,
+        label =  "Choose your interaction",
+        choices =  colnames(adjusted()[, -1])
+        #,selected = colnames(adjusted()[, -1])
+        
+      )
+    )
     
     observeEvent(input$allTests, {
       updateCheckboxGroupInput(
         session,
         "test",
         label = "Choose your interaction",
-        choices = colnames(adjusted()[,-1]),
-        selected = colnames(adjusted()[,-1])
+        choices = colnames(adjusted()[, -1]),
+        selected = colnames(adjusted()[, -1])
       )
     })
     
@@ -699,7 +719,7 @@ ui <- bootstrapPage(
       updateCheckboxGroupInput(session,
                                "test",
                                label = "Choose your interaction",
-                               choices = colnames(adjusted()[, -1]))
+                               choices = colnames(adjusted()[,-1]))
     })
     
     
@@ -711,9 +731,9 @@ ui <- bootstrapPage(
     #'
     
     
-      choix_test <- eventReactive(input$heatm, {
-        return(input$test)
-      }, ignoreNULL = F)
+    choix_test <- eventReactive(input$heatm, {
+      return(input$test)
+    }, ignoreNULL = F)
     
     # choix_test <- reactive({
     #   return(input$test)
@@ -755,6 +775,7 @@ ui <- bootstrapPage(
       
     })
     
+    
     #' Reactive function that select specific individuals in the data frame
     #'
     #' @param csv Data frame corresponding to the pData table
@@ -770,7 +791,7 @@ ui <- bootstrapPage(
       inFile <- input$file1
       if (is.null(inFile))
         return(NULL)
-      csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
+      csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
     }
     , ignoreNULL = F)
     
@@ -795,7 +816,8 @@ ui <- bootstrapPage(
     
     
     formated <- reactive({
-      treated = formating(new_test(), csvf()[[1]], input$pval)
+      #treated = formating(new_test(), csvf()[[1]], input$pval)
+      treated = formating(new_test(), input$pval)
       return(treated)
     })
     
@@ -823,17 +845,31 @@ ui <- bootstrapPage(
     #' @return \new_data a  data frame with all the individuals selected
     #'
     
-      new_test <- eventReactive(input$heatm, {
-        inFile <- input$file1
-        if (is.null(inFile))
-          return(NULL)
-        (subset(adjusted(),
-                select = choix_test()))
-      }, ignoreNULL = F)
-
-   
+    new_test <- eventReactive(input$heatm, {
+      inFile <- input$file1
+      if (is.null(inFile))
+        return(NULL)
+      (subset(adjusted(),
+              select = choix_test()))
+    }, ignoreNULL = F)
+    
+    
     # new_group <- reactive( csvf()[[2]] %>%
     #                          filter( X ==  list_ind()))
+    
+    #' Reactive function that return a comparison data frame with the specific user's selection
+    #'
+    #' @param csv Data frame corresponding to the Alltoptable
+    #'
+    #' @return \new_data a  data frame with all the individuals selected
+    #'
+    
+    data_sign <- reactive({
+      inFile <- input$file1
+      if (is.null(inFile))
+        return(NULL)
+      createdfsign(adjusted())
+    })
     
     
     #########################################
@@ -845,6 +881,8 @@ ui <- bootstrapPage(
     output$new_data <- renderDataTable(new_data())
     
     output$new_group <- renderDataTable(new_group())
+    
+    output$data_sign <- renderDataTable(data_sign())
     
   }
   

@@ -1,8 +1,10 @@
+##### Formating function for microarray data #### 
+##### Franck Soubès
 
-#' Title
+
+#' Can be upgraded
 #'
 #' @param adj
-#' @param musmuscu 
 #' @param pval 
 #'
 #' @return
@@ -10,9 +12,8 @@
 #'
 #' @examples
 #' 
-#' 
 
-formating = function( adj, musmuscu, pval){
+formating = function( adj, pval){
   
   
   passingval = adj %>%
@@ -22,8 +23,6 @@ formating = function( adj, musmuscu, pval){
   passingval = which( passingval > 0)
   cat("Il y a",length(passingval),"gène significatifs")
   
-  #row.names(musmuscu) = musmuscu$X
-  #musmuscu <- data.matrix(musmuscu[,-1])
   
   newlist = list(passingval, adj )
   return(newlist)
@@ -31,16 +30,11 @@ formating = function( adj, musmuscu, pval){
 }
 
 
-#' transform a dataframe containing factor for different levels function is not optimal right now
+#' transform a dataframe containing factor for different levels not optimal tho
 #'
 #' @param dataframe 
 #'
 #' @return
-#' @export
-#'
-#' @examples
-#' toto <- levels(dataframe$Grp)[1:3]
-#' mydata <- transform(groupss,toto)
 
 
 transform <- function(dataframe,toast){
@@ -75,8 +69,17 @@ transform <- function(dataframe,toast){
 # btestos <- droplevels(test)
 
 
+#' This function return an integer for the number of significant genes
+#'
+#' @param adj a data frame
+#' @param elem a list
+#' @param pv a list
+#'
+#' @return \grp1 of class data frame
+
 evaluatesign = function(adj,elem,pv){
   
+
   grp1 = adj[,c(elem)] %>%
     sapply( FUN = function(x){return(x < pv)}) %>%
     data.frame() %>%
@@ -87,7 +90,17 @@ evaluatesign = function(adj,elem,pv){
 }
 
 
+#' This function return an integer for the number of significant genes using parallelism
+#' 
+#' @param adj 
+#' @param elem 
+#' @param pv 
+#'
+#' @return \grp1 of class data.frame
+
+
 evaluatesignpar = function(adj,elem,pv) { ### for benchmarking 
+  
   
   grp1 = foreach(i = iter(adj[elem], by = "col"), .combine = c) %dopar%  
     (sign= {i < pv}) %>%
@@ -100,16 +113,24 @@ evaluatesignpar = function(adj,elem,pv) { ### for benchmarking
 }
 
 
+#' Create a data frame containing the number of signficant genes for different conditions pval and log fc
+#'
+#' @param adj a data frame containing the adjusted p-value
+#'
+#' @return \dtsign a data frame 
+
 createdfsign = function(adj) {
-  
+
   dtsign = data.frame(matrix(ncol = 2, nrow = length(adj[, -1])))
   y <- c("pvalue(0.01)", "pvalue(0.05)")
   colnames(dtsign) <- y
   rownames(dtsign) <- colnames(adj[, -1])
   pvalue = c(0.01, 0.05)
+  
   i <- 1
   for (pv in pvalue) {
     for (elem in colnames(adj[, -1])) {
+      
       if (i %% const == 0) {
         i = 1
       }
