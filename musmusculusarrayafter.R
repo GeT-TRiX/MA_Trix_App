@@ -418,7 +418,7 @@ i <- 1
 for (pv in pvalue){
   for(elem in colnames(adj[,-1])){
     
-    if(i %% const ==0 ){
+    if(i %% const == 0 ){
       i = 1
     }
     if(pv == 0.05)
@@ -441,25 +441,38 @@ for (pv in pvalue){
 View(dtsign)
 
 
-i <- 1
-for (pv in pvalue){
-  for(elem in colnames(adj[,-1])){
-    if(i %% const == 0 ){
-      i = 1
-    }
-    if(pv == 0.05)
-    {
-      dtsign$`pvalue(0.05)`[i] = evaluatesignpar(adj,elem,pv)
-      i = i+1
-    }
-    else{
-      dtsign$`pvalue(0.01)`[i] = evaluatesignpar(adj,elem,pv)
-      i = i+1
+
+createdfsign = function(adj) {
+  
+  dtsign = data.frame(matrix(ncol = 2, nrow = length(adj[, -1])))
+  y <- c("pvalue(0.01)", "pvalue(0.05)")
+  colnames(dtsign) <- y
+  rownames(dtsign) <- colnames(adj[, -1])
+  pvalue = c(0.01, 0.05)
+  i <- 1
+  for (pv in pvalue) {
+    for (elem in colnames(adj[, -1])) {
+      if (i %% const == 0) {
+        i = 1
+      }
+      if (pv == 0.05)
+      {
+        dtsign$`pvalue(0.05)`[i] = evaluatesignpar(adj, elem, pv)
+        i = i + 1
+      }
+      else{
+        dtsign$`pvalue(0.01)`[i] = evaluatesignpar(adj, elem, pv)
+        i = i + 1
+      }
     }
   }
-  View(dtsign)
+  return(dtsign)
 }
 
+toasted = createdfsign(adj)
+View(toasted)
+
+sapply(adj[,-1] ,FUN = function(x){return(x)})
 
 
 library(doParallel)
