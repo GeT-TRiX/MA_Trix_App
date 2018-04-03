@@ -1,13 +1,12 @@
-source("compat.R")
-source("formating.R")
-source("global.R")
+source("function/compat.R")
+source("function/formating.R")
+source("environnement/global.R")
 
 shinyServer(
+  
   server <- function(input, output, session) {
     n <- reactiveValues(a = 0)
-    #print(isolate(n$a))
-    #n=0
-    
+  
     shinyjs::onclick("toggleAdvanced",
                      shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event
     

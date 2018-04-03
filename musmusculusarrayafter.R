@@ -2,6 +2,8 @@
 ## Packages imported
 #####################
 
+source("environnement/global.R")
+
 library(png)
 library(BiocInstaller)
 library(limma)
@@ -245,8 +247,9 @@ wd_path="~/stage/data"
 #####################
 
 #source("plotHeatmaps.r")
-source("compat.R")
-source("formating.R")
+source("function/compat.R")
+source("function/formating.R")
+source("environnement/global.R")
 
 #####################
 ## Constants
@@ -316,8 +319,8 @@ View(treated[[1]])
 #### 1- (-1) --> 2
 #### 1-0.999 
 
-source("compat.R")
-source("global.R")
+source("function/compat.R")
+source("environnement/global.R")
 x11()
 hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3)
 

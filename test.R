@@ -8,10 +8,9 @@
 ##################################
 ##################################q#
 
-source("compat.R")
-source("formating.R")
-source("global.R")
-
+source("function/compat.R")
+source("function/formating.R")
+source("environnement/global.R")
 
 
 options(shiny.maxRequestSize = 40 * 1024 ^ 2) # Defined the maximum size in Mb that R can load for one file
