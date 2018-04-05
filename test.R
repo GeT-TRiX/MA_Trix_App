@@ -381,17 +381,17 @@ ui <- bootstrapPage(
         
         
         content = function(file) {
-          ggsave(
-            p(),
-            filename = filename,
-            width = 12,
-            height = 16,
-            limitsize = FALSE,
-            units = "cm",
-            dpi = 200
-          )
+          # ggsave(
+          #   p(),
+          #   filename = filename,
+          #   width = 6,
+          #   height = 8,
+          #   limitsize = FALSE,
+          #   units = "in",
+          #   dpi = 200
+          # )
           
-        }
+       }
       )
       
     })

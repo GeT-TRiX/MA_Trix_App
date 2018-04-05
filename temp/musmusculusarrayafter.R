@@ -31,6 +31,9 @@ data  = subset(musmuscu ,is.na ,select = "LWT_Ctrl2")
 
 names(pval) = sapply(strsplit(names(pval), "^adj.P.Val*|^adj.P.Val*"), `[[`, 1)
 pval <- read.csv2("data/All_topTableAll.csv")
+View(pval)
+
+
 groups <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec = ",",header= T)
 
 
@@ -471,8 +474,99 @@ createdfsign = function(adj) {
   }
   return(dtsign)
 }
-
+benchmark(
 toasted = createdfsign(adj)
+)
+
+print(toasted)
+
+benchmark(
+cbind.data.frame("FDR<1%"=colSums(pval[,26:30]<ptv[1]),"FDR<5%"=colSums(pval[,26:30]<ptv[2]))
+)
+
+
+adj = pval[,grep("X|^adj.P.Val", names(pval), value=TRUE)]
+logfc = pval[,grep("X|^logFC", names(pval), value=TRUE)]
+logfc = apply(logfc[,-1],2, FUN= function(x) return(2**abs(x)))
+
+dplyr::select(pval, grep('X',names(pval)))
+
+
+View(adj)
+adjusted = formating(adj,0.05)
+typeof(adjusted)
+View(adjusted)
+View(pval)
+print(as.list(adjusted))
+
+
+
+View(pval)
+adjusteeed = formatingbis(adj,0.05,pval)
+myfc = c(1.2,2,4,6,10)
+test = pval %>%
+  select(grep('^logFC',names(pval))) %>%
+  apply(2,FUN= function(x) return(2**abs(x))) %>%
+  as.data.frame()%>%
+  cbind("X"= pval[,1],.)
+
+
+adju <- as.data.frame(adjusteeed)
+
+
+newdf <- test[test$X %in% row.names(adju),]
+View(newdf)
+
+j=1
+for (fc in myfc){
+  print(colSums((newdf[,-1]>fc)))
+  #test[j]= cbind.data.frame(colSums(newdf[,-1]>fc))
+  j= j+1
+}
+
+cbind.data.frame(colSums(adj[, -1] < pval & 2 ** abs(logfc[, -1]) > fc))
+
+
+pval <- read.csv2("data/All_topTableAll.csv")
+
+itsok = myfinalfc(pval,0.05)
+View(itsok)
+
+View(test)
+View(pval)
+
+cbind.data.frame(colSums(adj[,-1]<0.05 &  2**abs(logfc[,-1])>1.2))
+
+
+apply(test,2 , FUN=function(x) return(names(x)))
+
+isis = colnames(test)
+lapply(isis,function(x){
+  return(test[x])
+})
+View(test)
+colnames(test)
+
+print(tt)
+
+View(titst)
+nrow(titst)
+toust = colSums(test<1| test>10)
+print(toust)
+
+pval <- read.csv2("data/All_topTableAll.csv")
+
+
+ptv=c(.01,.05)
+toast = cbind.data.frame("FDR<1%"=colSums(adj[,-1]<ptv[1]),"FDR<5%"=colSums(adj[,-1]<ptv[2]))
+print(toast)
+
+help("colSums")
+
+3.898/0.208
+
+
+
 View(toasted)
 
 sapply(adj[,-1] ,FUN = function(x){return(x)})

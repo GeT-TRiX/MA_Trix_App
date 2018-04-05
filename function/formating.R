@@ -19,13 +19,12 @@ formating = function( adj, pval){
   passingval = adj %>%
     apply(2,FUN = function(x){return(x < pval)}) %>%
     apply(1,sum) 
-
+  
   passingval = which( passingval > 0)
+  
   cat("Il y a",length(passingval),"gène significatifs")
-  
-  
-  newlist = list(passingval, adj )
-  return(newlist)
+
+  return(passingval)
 
 }
 
@@ -124,7 +123,7 @@ createdfsign = function(adj) {
   
   constmod <- (length(colnames(adj[,-1]))+1)
   dtsign = data.frame(matrix(ncol = 2, nrow = length(adj[, -1])))
-  y <- c("pvalue(0.01)", "pvalue(0.05)")
+  y <- c("FDR < 0.01", "FDR < 0.05")
   colnames(dtsign) <- y
   rownames(dtsign) <- colnames(adj[, -1])
   pvalue = c(0.01, 0.05)
@@ -138,11 +137,11 @@ createdfsign = function(adj) {
       }
       if (pv == 0.05)
       {
-        dtsign$`pvalue(0.05)`[i] = evaluatesignpar(adj, elem, pv)
+        dtsign$`FDR < 0.05`[i] = evaluatesignpar(adj, elem, pv)
         i = i + 1
       }
       else{
-        dtsign$`pvalue(0.01)`[i] = evaluatesignpar(adj, elem, pv)
+        dtsign$`FDR < 0.01`[i] = evaluatesignpar(adj, elem, pv)
         i = i + 1
       }
     }
@@ -151,3 +150,36 @@ createdfsign = function(adj) {
 }
 
 
+
+#' This function return a data frame of the element which are superior to a defined FC and pvalue
+#'
+#' @param alltop 
+#' @param pval 
+#'
+#' @return \fcpval 
+
+myfinalfc = function(alltop, pval) {
+  j = 1
+  adj = alltop[, grep("X|^adj.P.Val", names(alltop), value = TRUE)]
+  logfc = alltop[, grep("X|^logFC", names(alltop), value = TRUE)]
+  myfc = c(1.2, 2, 4, 6, 10)
+  fcpval = data.frame(matrix(ncol = length(myfc), nrow = length(adj[, -1])))
+  mycolnames = c("FC >1.2" , "FC >2", "FC >4", "FC >6", "FC >10")
+  for (fc in myfc) {
+    fcpval[j] = cbind.data.frame(colSums(adj[,-1] < pval &
+                                           2 ** abs(logfc[,-1]) > fc))
+    j = j + 1
+  }
+  
+  names(logfc) =  gsub(
+    pattern = "^logFC_",
+    replacement = "",
+    x = names(logfc),
+    perl =  TRUE
+  )
+  
+  colnames(fcpval) = mycolnames
+  rownames(fcpval) = colnames(logfc[, -1])
+  
+  return(fcpval)
+}

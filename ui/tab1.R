@@ -17,6 +17,14 @@ tabPanel(
                  ".csv")
       ,
       multiple = T
+    ),
+    sliderInput(
+      "pval1",
+      "P-value:",
+      min = 0.01,
+      max = 0.05,
+      value = 0.05,
+      step = 0.01
     )
   ),
   mainPanel(
@@ -51,6 +59,19 @@ tabPanel(
       )
       ,
       dataTableOutput("new_test")
+    ),
+    column(
+      12,
+      
+      h3(
+        "This table represent the significant genes for different condition"
+      ),
+      helpText(
+        "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+      )
+      ,
+      dataTableOutput("data_summary")
     )
+    
   )
 )
