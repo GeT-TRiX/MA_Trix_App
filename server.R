@@ -9,6 +9,9 @@ shinyServer(server <- function(input, output, session) {
   shinyjs::onclick("toggleAdvanced",
                    shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event
   
+  shinyjs::onclick("toggleAdvancedPCA",
+                   shinyjs::toggle(id = "advancedPCA", anim = TRUE)) ## hide and show event
+  
   #################################
   ######## Plot in the renderView #
   #################################
@@ -619,9 +622,9 @@ shinyServer(server <- function(input, output, session) {
   ######## Plot the data frame wiht input #
   #########################################
   
-  output$new_test <- renderDataTable(new_test())
+  output$new_test <- renderDataTable(csvf()[[2]])
   
-  output$new_data <- renderDataTable(new_data())
+  output$new_data <- renderDataTable(head(csvf()[[1]][2:6]))
   
   output$new_group <- renderDataTable(new_group())
   

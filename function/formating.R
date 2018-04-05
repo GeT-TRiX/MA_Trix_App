@@ -120,10 +120,13 @@ evaluatesignpar = function(adj,elem,pv) { ### for benchmarking
 
 createdfsign = function(adj) {
 
-  
-  constmod <- (length(colnames(adj[,-1]))+1)
+
   dtsign = data.frame(matrix(ncol = 2, nrow = length(adj[, -1])))
   y <- c("FDR < 0.01", "FDR < 0.05")
+
+  dtsign = data.frame(matrix(ncol <- 2, nrow <- length(adj[, -1])))
+  y <- c("pvalue(0.01)", "pvalue(0.05)")
+
   colnames(dtsign) <- y
   rownames(dtsign) <- colnames(adj[, -1])
   pvalue = c(0.01, 0.05)
@@ -133,16 +136,19 @@ createdfsign = function(adj) {
     for (elem in colnames(adj[, -1])) {
       
       if (i %% constmod == 0) {
-        i = 1
+        i <- 1
       }
       if (pv == 0.05)
       {
+
         dtsign$`FDR < 0.05`[i] = evaluatesignpar(adj, elem, pv)
         i = i + 1
       }
       else{
-        dtsign$`FDR < 0.01`[i] = evaluatesignpar(adj, elem, pv)
-        i = i + 1
+        
+        dtsign$`pvalue(0.01)`[i] = evaluatesignpar(adj, elem, pv)
+        i <- i + 1
+
       }
     }
   }
@@ -159,6 +165,7 @@ createdfsign = function(adj) {
 #' @return \fcpval 
 
 myfinalfc = function(alltop, pval) {
+  
   j = 1
   adj = alltop[, grep("X|^adj.P.Val", names(alltop), value = TRUE)]
   logfc = alltop[, grep("X|^logFC", names(alltop), value = TRUE)]

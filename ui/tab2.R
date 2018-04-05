@@ -69,7 +69,7 @@ tabPanel(
     
     sliderInput(
       "pval",
-      "P-value:",
+      "P-value treshold",
       min = 0.01,
       max = 0.05,
       value = 0.05,
@@ -103,10 +103,10 @@ tabPanel(
         selectInput(
           "dist",
           "Choose your matrix distance",
-          choices = c("cor", "euclidian")
+          choices = c("correlation", "euclidian")
         ),
         
-        checkboxInput("meangrp", "Add Mean for the different", FALSE),
+        checkboxInput("meangrp", "Compute the mean for the different groups", FALSE),
         verbatimTextOutput("value")
       )
       
