@@ -80,7 +80,7 @@ tabPanel(
     
     shiny::actionButton(
       "toggleAdvanced",
-      "Show Advanced Options",
+      "Advanced Computational Options",
       href = "#",
       style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
     ),
@@ -103,14 +103,45 @@ tabPanel(
         selectInput(
           "dist",
           "Choose your matrix distance",
-          choices = c("correlation", "euclidian")
+          choices = c("cor", "euclidian")
         ),
         
-        checkboxInput("meangrp", "Compute the mean for the different groups", FALSE),
+        checkboxInput(
+          "meangrp",
+          "Compute the mean for the different groups",
+          FALSE
+        ),
         verbatimTextOutput("value")
       )
       
     )),
+    br(),
+    
+    shiny::actionButton(
+      "toggleAdvancedcolors",
+      "Advanced Color Settings",
+      href = "#",
+      style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+    ),
+    
+    br(),
+    
+    shinyjs::hidden(div(
+      id = "advancedcol",
+      wellPanel(
+        
+        colourpicker::colourInput("col", "Select colour"),
+        
+        br()
+        
+        
+        # numericInput('key', 'Cluster count', 1,
+        #              min = 0, max = 2),
+        
+      )
+      
+    )),
+    
     
     br(),
     

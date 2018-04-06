@@ -217,7 +217,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
 
   par("mar")
   par(mar=c(5,5,1,1.10))
-  my_palette <- colorRampPalette(c("green", "black", "red"))(n = 75)
+  my_palette <- colorRampPalette(c("blue", "black", "red"))(n = 75)
   
   #par("mar")
   #par(mar=c(1,1,1,1))

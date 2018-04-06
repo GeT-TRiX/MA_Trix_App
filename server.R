@@ -10,7 +10,10 @@ shinyServer(server <- function(input, output, session) {
                    shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event
   
   shinyjs::onclick("toggleAdvancedPCA",
-                   shinyjs::toggle(id = "advancedPCA", anim = TRUE)) ## hide and show event
+                   shinyjs::toggle(id = "advancedPCA", anim = TRUE))
+  
+  shinyjs::onclick("toggleAdvancedcolors",
+                   shinyjs::toggle(id = "advancedcol", anim = TRUE))
   
   #################################
   ######## Plot in the renderView #
@@ -37,7 +40,6 @@ shinyServer(server <- function(input, output, session) {
         meanGrp = input$meangrp
         
       )
-      
     }, width = 900 , height = 1200, res = 100)
     
     #################################
@@ -398,7 +400,7 @@ shinyServer(server <- function(input, output, session) {
     checkboxGroupInput(
       inputId = "test" ,
       label =  "Choose your comparison",
-      choices =  colnames(adjusted()[,-1])
+      choices =  colnames(adjusted()[, -1])
       #,selected = colnames(adjusted()[, -1])
       
     )
@@ -409,8 +411,8 @@ shinyServer(server <- function(input, output, session) {
       session,
       "test",
       label = "Choose your comparison",
-      choices = colnames(adjusted()[,-1]),
-      selected = colnames(adjusted()[,-1])
+      choices = colnames(adjusted()[, -1]),
+      selected = colnames(adjusted()[, -1])
     )
   })
   
@@ -418,7 +420,7 @@ shinyServer(server <- function(input, output, session) {
     updateCheckboxGroupInput(session,
                              "test",
                              label = "Choose your comparison",
-                             choices = colnames(adjusted()[, -1]))
+                             choices = colnames(adjusted()[,-1]))
   })
   
   
@@ -474,7 +476,7 @@ shinyServer(server <- function(input, output, session) {
     
   })
   
-  #' Reactive function that return a data frame with the logFC 
+  #' Reactive function that return a data frame with the logFC
   #'
   #' @param csv Data frame corresponding to the Alltoptable
   #'
@@ -517,7 +519,7 @@ shinyServer(server <- function(input, output, session) {
     inFile <- input$file1
     if (is.null(inFile))
       return(NULL)
-    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
+    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
   }
   , ignoreNULL = F)
   
@@ -568,9 +570,9 @@ shinyServer(server <- function(input, output, session) {
     inFile <- input$file1
     if (is.null(inFile))
       return(NULL)
-    myfinalfc(csvf()[[3]],input$pval1)
+    myfinalfc(csvf()[[3]], input$pval1)
   })
-
+  
   
   
   #' Reactive function that return a comparison data frame with the specific user's selection
@@ -610,14 +612,22 @@ shinyServer(server <- function(input, output, session) {
     inFile <- input$file1
     if (is.null(inFile))
       return(NULL)
-    ptv <- c(.01,.05)
-    cbind.data.frame("FDR<1%" = colSums(adjusted()[, -1] < ptv[1]),
-                     "FDR<5%" = colSums(adjusted()[, -1] < ptv[2]))
+    ptv <- c(.01, .05)
+    cbind.data.frame("FDR<1%" = colSums(adjusted()[,-1] < ptv[1]),
+                     "FDR<5%" = colSums(adjusted()[,-1] < ptv[2]))
     
   })
   
-
-
+  #########################################
+  ######## Updating a colourInput         #
+  #########################################
+  
+  
+  colourpicker::updateColourInput(session, "col", label = "COLOUR:", value = "orange",
+                    showColour = "background", allowTransparent = TRUE)
+  
+  
+  
   #########################################
   ######## Plot the data frame wiht input #
   #########################################

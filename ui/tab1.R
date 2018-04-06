@@ -33,7 +33,11 @@ tabPanel(
     "method",
     "Choose your matrix distance",
     choices = c("FDR", "none")
-  )),
+  )
+  #colourInput("col", "Select colour"),
+  #colourpicker::colourInput("col", "Select colour")
+  
+  ),
   
   mainPanel(
     bsAlert("alert"),
