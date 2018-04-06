@@ -194,6 +194,9 @@ tabPanel(
                         
             )
           )),
+          
+          uiOutput('myPanel'),
+          
           br()
           ))), 
       

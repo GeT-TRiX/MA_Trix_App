@@ -17,6 +17,7 @@ shinyServer(server <- function(input, output, session) {
   shinyjs::onclick("toggleAdvancedcolors",
                    shinyjs::toggle(id = "advancedcol", anim = TRUE))
   
+  
   #################################
   ######## Plot in the renderView #
   #################################
@@ -672,6 +673,35 @@ shinyServer(server <- function(input, output, session) {
     return(inter)
     
   })
+  
+  
+  #########################################
+  ######## Colors for the  groups         #
+  #########################################
+  
+  mycolgrp <- reactive  ({
+    mygrpcol <-unique(sort(csvf()[[2]]$Grp))
+    
+    return(mygrpcol)
+  })
+  
+  
+  cols <- reactive({
+    lapply(seq_along(mycolgrp()), function(i) {
+      colourInput(paste("col", i, sep="_"), levels(mycolgrp())[i], palette[i],
+                  allowedCols = palette, palette = "limited", returnName = T)        
+    })
+  })
+  
+  output$myPanel <- renderUI({cols()})
+
+
+  colors <- reactive({
+    lapply(seq_along(csvf()[[2]]), function(i) {
+      input[[paste("col", i, sep="_")]]
+    })
+  })
+  
   
   #########################################
   ######## Plot the data frame wiht input #
