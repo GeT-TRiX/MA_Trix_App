@@ -22,7 +22,8 @@ num2cols=function(numVector,colp=palette()){
   numCols=length(unique(gpcol[,1]))
   mycol <- sort(unique(gpcol$numVector))
   if(length(colp)-1<numCols) warning("number of color names < number of levels! Give a color palette with at least ",numCols," terms to 'col' argument")
-  cols=as.data.frame(matrix(c(mycol,colp[2:(numCols+1)]),nrow=numCols))
+  cols=as.data.frame(matrix(c(mycol,colp[2:(numCols+1)]),nrow=numCols)) ## couleurs pour les groupes
+  print(cols)
   
   myColFun=function(x){
     as.character(cols[cols[,1]==x[1],2])
@@ -32,7 +33,6 @@ num2cols=function(numVector,colp=palette()){
   
 }
 
-help("gplots")
 
 
 
@@ -43,7 +43,7 @@ help("gplots")
 plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,k=2,fileType="png",cexcol=0.7,cexrow=0.4,
                       colOrder=NULL,labrow=F,colid=NULL,na.color="black",scale="row",hclustGenes=T,meanGrp=F,plotRowSideColor=T,#col.hm=greenred(75),
                       RowSideColor=c("gray25","gray75"), Rowdistfun="correlation",Coldistfun="correlation" ,palette.col=NULL, 
-                      margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75),...){
+                      margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75),mycex = 0.6,...){
   #RowSideColor: color palette to be used for rowSide cluster colors
   # can also be gray.colors(k, start = 0.2, end = 0.9) to get k colors of gray scale
 
@@ -143,6 +143,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   #	}else ColvOrd=T;
   
   #### heatmap  genes 
+  
   useRasterTF=F;
   
   ##-----------------------##
@@ -157,7 +158,6 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
     hcgp=rect.hclust(hc,k=k,border="red")
 
     
-    #png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,"_hclustGenes_heights.png",sep="")),width=800, height=400)
     hts=rev( tail( hc$height,15))
     bp=barplot(hts,names.arg=1:length(hts))
     text(x=bp,y=hts,label= formatC(hts,1,format="f"),pos=3,cex=0.8) 
@@ -218,21 +218,13 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
 
   par("mar")
   par(mar=c(5,5,1,1.10))
-  #my_palette <- colorRampPalette(c("green", "black", "red"))(n = 75)
+
   
-  #par("mar")
-  #par(mar=c(1,1,1,1))
-  #par(mfrow=c(4,2))
-  # hmp02=heatmap.2(exprData,na.rm=T, col=col.hm,dendrogram="both",labRow =rowIds,labCol=colid,scale=scale, ColSideColors=gpcol,RowSideColors=gpcolr, key=TRUE,
-  # 	keysize=kcex, symkey=FALSE, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
-  # 	Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=useRasterTF,margins=margins)
-  #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[2:(length(levels(groups))+1)],cex=1,line=-1)
-  #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=1,line=-1)
-  hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow =rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
+  hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=useRasterTF,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),col=my_palette)
   #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[2:(length(levels(groups))+1)],cex=1,line=-1)
-  mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=0.6,line=-1)
+  mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=mycex,line=-1)
   #dev.off()
   # ColSideColors=gpcol,
   #key.par = list(cex=0.5),

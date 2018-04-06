@@ -106,12 +106,7 @@ tabPanel(
                      min = 1, max = 15),
         
         br(),
-        
-        
-        # numericInput('key', 'Cluster count', 1,
-        #              min = 0, max = 2),
-        
-        
+      
         selectInput(
           "dist",
           "Choose your matrix distance",
@@ -136,22 +131,73 @@ tabPanel(
     
     br(),
     
-    shinyjs::hidden(div(
-      id = "advancedcol",
-      wellPanel(colourpicker::colourInput("col1", "Select colour for downregulated genes",firstcol, palette = "limited"),
-                #colourpicker::colourInput("col2", "Select colour for intermediate genes"),
-                colourpicker::colourInput("col3", "Select colour for upregulated genes", lastcol, palette ="limited"),
-                
-                
-                br()
-                
-                
-                # numericInput('key', 'Cluster count', 1,
-                #              min = 0, max = 2),)
-                
-      ))),
+    shinyjs::hidden(
+      div(id = "advancedcol",
+          wellPanel(fluidRow(
+            column(5,
+              colourpicker::colourInput(
+                "col1",
+                "Select colour for downregulated genes",
+                firstcol,
+                palette = "limited"
+              )
+            ),
+            column(5,
+              colourpicker::colourInput("col3", "Select colour for upregulated genes", lastcol,
+                                        palette = "limited")
+            )
+          ), 
+          fluidRow(
+            column(5,
+              numericInput('rowsize','Row size',0.6,
+                min = 0.2,
+                max = 1,
+                step = 0.1
+              )
+            ),
+            column(5,
+              numericInput('colsize','Col size',0.6,
+                min = 0.2,
+                max = 1,
+                step = 0.1
+              )
+            )
+          ),
+
+          numericInput('legsize','Legende size',0.6,
+            min = 0.2,
+            max = 1,
+            step = 0.1
+          ),
+          
+          fluidRow(column(
+            5,
+            radioButtons(
+              "rowname",
+              "show/hide rowname",
+              choiceNames = list("hide",
+                                 "show"),
+              choiceValues = list(NA, NULL),
+              selected= "hide"
+            )
+            
+          ),
+          column(
+            5,
+            radioButtons(
+              "colname",
+              "show/hide colnames",
+              choiceNames = list("hide",
+                                 "show"),
+              choiceValues = list(NA, NULL),
+              selected =  "show"
+                        
+            )
+          )),
+          br()
+          ))), 
       
-      
+  
       br(),
       
       selectInput("form", "Choose your file format",

@@ -12,13 +12,14 @@
 source("function/compat.R")
 source("function/formating.R")
 source("environnement/global.R")
-#source("PCA.R")
+source("function/PCA.R")
+
 
 
 options(shiny.maxRequestSize = 40 * 1024 ^ 2) # defined the maximum size in Mb that R can load for one file
 shinyUI(ui <- bootstrapPage(
   navbarPage(
-    "MaTrix_App",
+    "MaTrix App",
     # MA for microarray and Trix for the name of the team
     
     #useShinyjs(),

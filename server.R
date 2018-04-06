@@ -1,9 +1,11 @@
 source("function/compat.R")
 source("function/formating.R")
+source("function/PCA.R")
 source("environnement/global.R")
 
 
 shinyServer(server <- function(input, output, session) {
+  
   n <- reactiveValues(a = 0)
   
   shinyjs::onclick("toggleAdvanced",
@@ -38,7 +40,12 @@ shinyServer(server <- function(input, output, session) {
         Rowdistfun = input$dist ,
         Coldistfun = input$dist,
         keysize = input$key,
-        meanGrp = input$meangrp
+        mycex = input$legsize ,
+        cexrow = input$rowsize ,
+        cexcol = input$colsize ,
+        meanGrp = input$meangrp,
+        labColu = input$colname ,
+        labRowu = input$rowname
         
       )
     }, width = 900 , height = 1200, res = 100)
@@ -93,7 +100,7 @@ shinyServer(server <- function(input, output, session) {
         ggsave(
           p(),
           filename = filename,
-          width = 12,
+          width = 10,
           height = 16,
           limitsize = FALSE,
           units = "cm",
@@ -641,8 +648,6 @@ shinyServer(server <- function(input, output, session) {
     return(input$col1)
   })
   
-
-  
   choix_col3 <- reactive({
     return(input$col3)
   })
@@ -651,18 +656,18 @@ shinyServer(server <- function(input, output, session) {
   my_intermediate <- reactive({
     
     
-    if(choix_col1() == "green" & choix_col3() == "red"){
-      
+    if(choix_col1() == "green" & choix_col3() == "red")
       inter = "black"
-    }
-    else if(choix_col1() == "orange" & choix_col3() == "red"){
-      
+    
+    else if(choix_col1() == "orange" & choix_col3() == "red")
       inter = "yellow"
-    }
-    else if(choix_col1() == "blue" & choix_col3() == "red"){
+    
+    else if(choix_col1() == "blue" & choix_col3() == "red")
+      inter = "white"
+    
+    else if (choix_col1() == "blue" & choix_col3() == "yellow")
+      inter = "green"
       
-      inter = "purple"
-    }
     
     return(inter)
     
