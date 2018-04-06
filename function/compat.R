@@ -42,7 +42,8 @@ help("gplots")
  
 plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,k=2,fileType="png",cexcol=0.7,cexrow=0.4,
                       colOrder=NULL,labrow=F,colid=NULL,na.color="black",scale="row",hclustGenes=T,meanGrp=F,plotRowSideColor=T,#col.hm=greenred(75),
-                      RowSideColor=c("gray25","gray75"), Rowdistfun="cor",Coldistfun="cor" ,palette.col=NULL, margins=c(8,8), ...){
+                      RowSideColor=c("gray25","gray75"), Rowdistfun="correlation",Coldistfun="correlation" ,palette.col=NULL, 
+                      margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75),...){
   #RowSideColor: color palette to be used for rowSide cluster colors
   # can also be gray.colors(k, start = 0.2, end = 0.9) to get k colors of gray scale
 
@@ -56,8 +57,8 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   
   if( any(rownames(exprData) != rownames(exprData)[order(as.numeric(rownames(exprData)))])) stop("Error: 'exprData' must have rownames in numerical ascending order!");
   if(length(RowSideColor)==1) RowSideColor=gray.colors(k, start = 0.2, end = 0.9)
-  if(!Rowdistfun %in% c("cor","euclidian")) stop("Rowdistfun must be one of 'cor' or 'euclidian'!")
-  if(!Coldistfun %in% c("cor","euclidian")) stop("Coldistfun must be one of 'cor' or 'euclidian'!")
+  if(!Rowdistfun %in% c("correlation","euclidian")) stop("Rowdistfun must be one of 'cor' or 'euclidian'!")
+  if(!Coldistfun %in% c("correlation","euclidian")) stop("Coldistfun must be one of 'cor' or 'euclidian'!")
   
   library(gplots)
   library(marray)
@@ -78,7 +79,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   ## Row dendrogram
   ##-----------------------##
   cat("\n -> Hierarchical clustering on genes... \n")
-  if(Rowdistfun=="cor"){	
+  if(Rowdistfun=="correlation"){	
     hc=hclustfun(distcor(exprData))
     subdist="dist method: 1-cor";
     distfunTRIX= distcor;
@@ -120,7 +121,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   ## RowDendrogram
   
   # build dendrogram
-  if(Coldistfun=="cor") ColvOrd=as.dendrogram(hclustfun(distcor(t(exprData))))
+  if(Coldistfun=="correlation") ColvOrd=as.dendrogram(hclustfun(distcor(t(exprData))))
   if(Coldistfun=="euclidian") ColvOrd=as.dendrogram(hclustfun(disteucl(t(exprData))))
   
   # re-order dendrogram
@@ -217,7 +218,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
 
   par("mar")
   par(mar=c(5,5,1,1.10))
-  my_palette <- colorRampPalette(c("blue", "black", "red"))(n = 75)
+  #my_palette <- colorRampPalette(c("green", "black", "red"))(n = 75)
   
   #par("mar")
   #par(mar=c(1,1,1,1))

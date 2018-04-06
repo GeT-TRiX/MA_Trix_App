@@ -78,6 +78,18 @@ tabPanel(
     
     br(),
     
+    
+    sliderInput(
+      "fc",
+      "FC treshold",
+      min = 1,
+      max = 10,
+      value = 1,
+      step = 1
+    ),
+    
+    br(),
+    
     shiny::actionButton(
       "toggleAdvanced",
       "Advanced Computational Options",
@@ -103,14 +115,12 @@ tabPanel(
         selectInput(
           "dist",
           "Choose your matrix distance",
-          choices = c("cor", "euclidian")
+          choices = c("correlation", "euclidian")
         ),
         
-        checkboxInput(
-          "meangrp",
-          "Compute the mean for the different groups",
-          FALSE
-        ),
+        checkboxInput("meangrp",
+                      "Compute the mean for the different groups",
+                      FALSE),
         verbatimTextOutput("value")
       )
       
@@ -128,74 +138,73 @@ tabPanel(
     
     shinyjs::hidden(div(
       id = "advancedcol",
-      wellPanel(
-        
-        colourpicker::colourInput("col", "Select colour"),
-        
-        br()
-        
-        
-        # numericInput('key', 'Cluster count', 1,
-        #              min = 0, max = 2),
-        
-      )
+      wellPanel(colourpicker::colourInput("col1", "Select colour for downregulated genes",firstcol, palette = "limited"),
+                #colourpicker::colourInput("col2", "Select colour for intermediate genes"),
+                colourpicker::colourInput("col3", "Select colour for upregulated genes", lastcol, palette ="limited"),
+                
+                
+                br()
+                
+                
+                # numericInput('key', 'Cluster count', 1,
+                #              min = 0, max = 2),)
+                
+      ))),
       
-    )),
-    
-    
-    br(),
-    
-    selectInput("form", "Choose your file format",
-                choices = c("png", "eps")),
-    br(),
-    downloadButton("save", "Save your plot" , style =
-                     "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-    
-    br(),
-    br(),
-    
-    #actionButton("heatm", "Print Heatmap", style =
-    #               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-    
-    shiny::actionButton("heatm", "Print Heatmap", style =
-                          "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-    uiOutput('Button'),
-    
-    numericInput('num', '', 0),
-    verbatimTextOutput("valuedd")
-  ),
-  
-  mainPanel(tabsetPanel(
-    tabPanel(
-      p(icon("line-chart"), "Visualize the Heatmap"),
-      tags$style(
-        type = "text/css",
-        ".shiny-output-error { visibility: hidden; }",
-        ".shiny-output-error:before { visibility: hidden; }"
-      ),
       
-      useShinyjs(),
-      ### no more error messages
-      bsAlert("alert"),
-      plotOutput(outputId = "distPlot")
+      br(),
       
+      selectInput("form", "Choose your file format",
+                  choices = c("png", "eps")),
+      br(),
+      downloadButton("save", "Save your plot" , style =
+                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      
+      br(),
+      br(),
+      
+      #actionButton("heatm", "Print Heatmap", style =
+      #               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      
+      shiny::actionButton("heatm", "Print Heatmap", style =
+                            "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      uiOutput('Button'),
+      
+      numericInput('num', '', 0),
+      verbatimTextOutput("valuedd")
     ),
-    tabPanel
-    (
-      p(icon("table"), "Dataset"),
-      column(
-        12,
-        
-        h3(
-          "This table represent the significant genes for different condition"
+    
+    mainPanel(tabsetPanel(
+      tabPanel(
+        p(icon("line-chart"), "Visualize the Heatmap"),
+        tags$style(
+          type = "text/css",
+          ".shiny-output-error { visibility: hidden; }",
+          ".shiny-output-error:before { visibility: hidden; }"
         ),
-        helpText(
-          "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+        
+        useShinyjs(),
+        ### no more error messages
+        bsAlert("alert"),
+        plotOutput(outputId = "distPlot")
+        
+      ),
+      tabPanel
+      (
+        p(icon("table"), "cutheatmap"),
+        column(
+          12,
+          
+          h3(
+            "This table represent the significant genes for different condition"
+          ),
+          helpText(
+            "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+          )
+          ,
+          dataTableOutput("data_sign")
         )
-        ,
-        dataTableOutput("data_sign")
+        
       )
-      
-    )
-  ))
+    ))
 )

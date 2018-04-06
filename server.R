@@ -33,6 +33,7 @@ shinyServer(server <- function(input, output, session) {
         workingPath = wd_path,
         prefix,
         suffix,
+        my_palette= colorRampPalette(c(choix_col1(), my_intermediate() ,choix_col3() ))(n=75),
         k = input$clusters,
         Rowdistfun = input$dist ,
         Coldistfun = input$dist,
@@ -623,10 +624,49 @@ shinyServer(server <- function(input, output, session) {
   #########################################
   
   
-  colourpicker::updateColourInput(session, "col", label = "COLOUR:", value = "orange",
-                    showColour = "background", allowTransparent = TRUE)
+  colourpicker::updateColourInput(session, "col1", label = "downregulated genes:", value = firstcol,
+                    showColour = NULL, allowTransparent = FALSE, allowedCols = c("green","orange","blue"), returnName = T )
+  
+  # reactive({
+  # colourpicker::updateColourInput(session, "col2", label = "downregulated genes:", value = my_intermediate(),
+  #                                 showColour = "background", allowTransparent = FALSE, returnName= T)
+  # })
+  
+  colourpicker::updateColourInput(session, "col3", label = "upregulated genes:", value = lastcol ,
+                                  showColour = NULL, allowTransparent = FALSE, allowedCols = c("red","yellow"), returnName= T)
   
   
+  
+  choix_col1 <- reactive({
+    return(input$col1)
+  })
+  
+
+  
+  choix_col3 <- reactive({
+    return(input$col3)
+  })
+  
+  
+  my_intermediate <- reactive({
+    
+    
+    if(choix_col1() == "green" & choix_col3() == "red"){
+      
+      inter = "black"
+    }
+    else if(choix_col1() == "orange" & choix_col3() == "red"){
+      
+      inter = "yellow"
+    }
+    else if(choix_col1() == "blue" & choix_col3() == "red"){
+      
+      inter = "purple"
+    }
+    
+    return(inter)
+    
+  })
   
   #########################################
   ######## Plot the data frame wiht input #
