@@ -37,10 +37,16 @@ View(pval)
 groupss <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec = ",",header= T)
 
 
+sort(levels(groupss$Grp))
+
 palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442", "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray", "burlywood1","darkkhaki", "#CC0000" ));
 
 
+cl=palette(mypal)
 
+print(cl)
+col=cl[(1:length(sort(levels(groupss$Grp))))]
+print(col)
 
 
 
@@ -322,11 +328,14 @@ View(treated[[1]])
 #### 1- (-1) --> 2
 #### 1-0.999 
 
+
 source("function/compat.R")
 source("environnement/global.R")
 source("function/compat.R")
+
+testos = c("green","red","orange","blue")
 x11()
-hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3)
+hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3, mypal = testos)
 
 
 #hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],test$Grp,workingPath=wd_path,prefix,suffix,k=3) ## how it should be on shiny app

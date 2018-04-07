@@ -46,7 +46,8 @@ shinyServer(server <- function(input, output, session) {
         cexcol = input$colsize ,
         meanGrp = input$meangrp,
         labColu = input$colname ,
-        labRowu = input$rowname
+        labRowu = input$rowname,
+        mypal= unlist(colors())
         
       )
     }, width = 900 , height = 1200, res = 100)
@@ -76,7 +77,8 @@ shinyServer(server <- function(input, output, session) {
         Rowdistfun = input$dist ,
         Coldistfun = input$dist,
         keysize = input$key,
-        meanGrp = input$meangrp
+        meanGrp = input$meangrp,
+        mypal= unlist(colors())
         
       )
     })
@@ -617,6 +619,8 @@ shinyServer(server <- function(input, output, session) {
   #   createdfsign(adjusted())
   # })
   
+  ###  SVG file thinks to add it !!!!!
+  
   data_sign <- reactive({
     inFile <- input$file1
     if (is.null(inFile))
@@ -680,8 +684,7 @@ shinyServer(server <- function(input, output, session) {
   #########################################
   
   mycolgrp <- reactive  ({
-    mygrpcol <-unique(sort(csvf()[[2]]$Grp))
-    
+    mygrpcol <-droplevels(unique(sort(new_group()$Grp)))
     return(mygrpcol)
   })
   
@@ -693,11 +696,12 @@ shinyServer(server <- function(input, output, session) {
     })
   })
   
+  
   output$myPanel <- renderUI({cols()})
 
 
   colors <- reactive({
-    lapply(seq_along(csvf()[[2]]), function(i) {
+    lapply(seq_along(mycolgrp()), function(i) {
       input[[paste("col", i, sep="_")]]
     })
   })

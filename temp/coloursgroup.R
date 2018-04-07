@@ -24,7 +24,7 @@ runApp(shinyApp(
     
     cols <- reactive({
       lapply(seq_along(test), function(i) {
-        colourInput(paste("col", i, sep="_"), levels(test)[i], palette[i])        
+        colourpicker::colourInput(paste("col", i, sep="_"), levels(test)[i], palette[i])        
       })
     })
     
@@ -32,7 +32,7 @@ runApp(shinyApp(
     
     # Put all the input in a vector
     colors <- reactive({
-      lapply(seq_along(groupss), function(i) {
+      lapply(seq_along(test), function(i) {
         input[[paste("col", i, sep="_")]]
       })
     })
@@ -45,6 +45,7 @@ runApp(shinyApp(
       } else {
         cols <- unlist(colors())
       }
+      print(cols)
       plot(dat[,1], col = cols[1])
       for(i in 2:ncol(dat)) lines(dat[,i], col = cols[i])
     })
