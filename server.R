@@ -5,7 +5,6 @@ source("environnement/global.R")
 
 
 shinyServer(server <- function(input, output, session) {
-  
   n <- reactiveValues(a = 0)
   
   shinyjs::onclick("toggleAdvanced",
@@ -36,7 +35,9 @@ shinyServer(server <- function(input, output, session) {
         workingPath = wd_path,
         prefix,
         suffix,
-        my_palette= colorRampPalette(c(choix_col1(), my_intermediate() ,choix_col3() ))(n=75),
+        my_palette = colorRampPalette(c(
+          choix_col1(), my_intermediate() , choix_col3()
+        ))(n = 75),
         k = input$clusters,
         Rowdistfun = input$dist ,
         Coldistfun = input$dist,
@@ -47,7 +48,7 @@ shinyServer(server <- function(input, output, session) {
         meanGrp = input$meangrp,
         labColu = input$colname ,
         labRowu = input$rowname,
-        mypal= unlist(colors())
+        mypal = unlist(colors())
         
       )
     }, width = 900 , height = 1200, res = 100)
@@ -78,7 +79,7 @@ shinyServer(server <- function(input, output, session) {
         Coldistfun = input$dist,
         keysize = input$key,
         meanGrp = input$meangrp,
-        mypal= unlist(colors())
+        mypal = unlist(colors())
         
       )
     })
@@ -411,7 +412,7 @@ shinyServer(server <- function(input, output, session) {
     checkboxGroupInput(
       inputId = "test" ,
       label =  "Choose your comparison",
-      choices =  colnames(adjusted()[, -1])
+      choices =  colnames(adjusted()[,-1])
       #,selected = colnames(adjusted()[, -1])
       
     )
@@ -422,8 +423,8 @@ shinyServer(server <- function(input, output, session) {
       session,
       "test",
       label = "Choose your comparison",
-      choices = colnames(adjusted()[, -1]),
-      selected = colnames(adjusted()[, -1])
+      choices = colnames(adjusted()[,-1]),
+      selected = colnames(adjusted()[,-1])
     )
   })
   
@@ -431,7 +432,7 @@ shinyServer(server <- function(input, output, session) {
     updateCheckboxGroupInput(session,
                              "test",
                              label = "Choose your comparison",
-                             choices = colnames(adjusted()[,-1]))
+                             choices = colnames(adjusted()[, -1]))
   })
   
   
@@ -530,7 +531,7 @@ shinyServer(server <- function(input, output, session) {
     inFile <- input$file1
     if (is.null(inFile))
       return(NULL)
-    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
+    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
   }
   , ignoreNULL = F)
   
@@ -626,8 +627,8 @@ shinyServer(server <- function(input, output, session) {
     if (is.null(inFile))
       return(NULL)
     ptv <- c(.01, .05)
-    cbind.data.frame("FDR<1%" = colSums(adjusted()[,-1] < ptv[1]),
-                     "FDR<5%" = colSums(adjusted()[,-1] < ptv[2]))
+    cbind.data.frame("FDR<1%" = colSums(adjusted()[, -1] < ptv[1]),
+                     "FDR<5%" = colSums(adjusted()[, -1] < ptv[2]))
     
   })
   
@@ -636,16 +637,32 @@ shinyServer(server <- function(input, output, session) {
   #########################################
   
   
-  colourpicker::updateColourInput(session, "col1", label = "downregulated genes:", value = firstcol,
-                    showColour = NULL, allowTransparent = FALSE, allowedCols = c("green","orange","blue"), returnName = T )
+  colourpicker::updateColourInput(
+    session,
+    "col1",
+    label = "downregulated genes:",
+    value = firstcol,
+    showColour = NULL,
+    allowTransparent = FALSE,
+    allowedCols = c("green", "orange", "blue"),
+    returnName = T
+  )
   
   # reactive({
   # colourpicker::updateColourInput(session, "col2", label = "downregulated genes:", value = my_intermediate(),
   #                                 showColour = "background", allowTransparent = FALSE, returnName= T)
   # })
   
-  colourpicker::updateColourInput(session, "col3", label = "upregulated genes:", value = lastcol ,
-                                  showColour = NULL, allowTransparent = FALSE, allowedCols = c("red","yellow"), returnName= T)
+  colourpicker::updateColourInput(
+    session,
+    "col3",
+    label = "upregulated genes:",
+    value = lastcol ,
+    showColour = NULL,
+    allowTransparent = FALSE,
+    allowedCols = c("red", "yellow"),
+    returnName = T
+  )
   
   
   
@@ -659,20 +676,18 @@ shinyServer(server <- function(input, output, session) {
   
   
   my_intermediate <- reactive({
-    
-    
-    if(choix_col1() == "green" & choix_col3() == "red")
+    if (choix_col1() == "green" & choix_col3() == "red")
       inter = "black"
     
-    else if(choix_col1() == "orange" & choix_col3() == "red")
+    else if (choix_col1() == "orange" & choix_col3() == "red")
       inter = "yellow"
     
-    else if(choix_col1() == "blue" & choix_col3() == "red")
+    else if (choix_col1() == "blue" & choix_col3() == "red")
       inter = "white"
     
     else if (choix_col1() == "blue" & choix_col3() == "yellow")
       inter = "green"
-      
+    
     
     return(inter)
     
@@ -684,25 +699,37 @@ shinyServer(server <- function(input, output, session) {
   #########################################
   
   mycolgrp <- reactive  ({
-    mygrpcol <-droplevels(unique(sort(new_group()$Grp)))
+    mygrpcol <- new_group()$Grp %>%
+      sort() %>%
+      unique() %>%
+      droplevels()
+    
     return(mygrpcol)
   })
   
   
   cols <- reactive({
     lapply(seq_along(mycolgrp()), function(i) {
-      colourInput(paste("col", i, sep="_"), levels(mycolgrp())[i], palette[i],
-                  allowedCols = palette, palette = "limited", returnName = T)        
+      colourInput(
+        paste("col", i, sep = "_"),
+        levels(mycolgrp())[i],
+        palette[i],
+        allowedCols = palette,
+        palette = "limited",
+        returnName = T
+      )
     })
   })
   
   
-  output$myPanel <- renderUI({cols()})
-
-
+  output$myPanel <- renderUI({
+    cols()
+  })
+  
+  
   colors <- reactive({
     lapply(seq_along(mycolgrp()), function(i) {
-      input[[paste("col", i, sep="_")]]
+      input[[paste("col", i, sep = "_")]]
     })
   })
   
