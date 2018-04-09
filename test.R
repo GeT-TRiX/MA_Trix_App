@@ -8,8 +8,8 @@
 ##################################
 ##################################q#
 
-source("function/compat.R")
-source("function/formating.R")
+source("function/compat2.R")
+source("function/formating2.R")
 source("environnement/global.R")
 
 
@@ -318,7 +318,7 @@ ui <- bootstrapPage(
         
         plotHeatmaps(
           data.matrix(new_data()),
-          formated()[[1]],
+          formated(),
           droplevels(new_group()$Grp),
           workingPath = wd_path,
           prefix,

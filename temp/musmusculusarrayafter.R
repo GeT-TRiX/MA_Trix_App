@@ -335,7 +335,7 @@ source("function/compat.R")
 
 testos = c("green","red","orange","blue")
 x11()
-hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=3, mypal = testos)
+hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=11, mypal = testos)
 
 
 #hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],test$Grp,workingPath=wd_path,prefix,suffix,k=3) ## how it should be on shiny app
@@ -618,3 +618,164 @@ myList <- lapply(list, read.csv2)
 View(myList[[1]])
 View(myList)
 ###Load all files
+
+View(pval)
+myval = decTestTRiX(pval)
+
+colnames(logfc)
+adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|^adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
+logfc = pval[,grep("X|^", names(pval), value=TRUE)]
+View(logfc)
+finaled = cbind.data.frame(adj[,-1] < 0.05 & 2 ** abs(logfc[,-1]) > 1)
+
+
+library(dplyr)
+logfc = pval[,grep("X|^logFC_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|^logFC_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
+logfc = apply(logfc,2, FUN = function(x){return(2 ** abs(x))})
+logfc = apply(logfc,2,FUN = function(x){return(x >= 1)})
+logfc = apply(logfc,1,sum) 
+test = as.data.frame(which(logfc>0))
+
+colnames(test)= '.'
+
+
+
+final = decTestTRiX(adj[,-1],logfc[,-1], DEGcutoff = 0.05, FC=1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+passingval = adj %>%
+  apply(2,FUN = function(x){return(x < 0.05)}) %>%
+  apply(1,sum)
+
+finish = which(passingval>0)
+View(finish)
+
+
+library(dplyr)
+
+
+adj = pval[,grep("X|^adj.P.Val", names(pval), value=TRUE)]
+passingval = adj %>%
+  apply(2,FUN = function(x){return(x < 0.05)}) %>%
+  apply(1,sum)
+
+passingval = which(passingval > 0)
+
+
+View(logfc)
+logfc = pval[,grep("X|^logFC", names(pval), value=TRUE)]
+logfc = logfc[,-1] %>%
+  apply(2, FUN = function(x){return(2 ** abs(x))}) %>%
+  apply(2,FUN = function(x){return(x > 1)}) %>%
+  apply(1,sum)
+
+logfc = which(logfc >0)
+nrow(adj)
+View(logfc)
+View(adj)
+final = decTestTRiX(adj,logfc, DEGcutoff = 0.05, FC=4)
+length(final)
+
+contrast = 1:ncol(adj)
+print(contrast)
+pList = adj[, contrast]
+View(pList)
+
+DEp = pList <= 0.05
+View(DEp)
+
+DEFC = 2 ^ abs(logfc[, contrast]) >= 1
+View(DEFC)
+
+toast = as.data.frame(which(passingval >0))
+
+colnames(toast) ="."
+
+final = dplyr::inner_join(test,toast,by=".")
+
+
+final = subset(test %in% toast)
+
+passingval = adj %>%
+  apply(2,FUN = function(x){return(x < pval)}) %>%
+  apply(1,sum)
+
+
+
+ptv=c(1.2,10)
+ptv=c(0.01,0.05)
+cbind.data.frame("logfc>1.2"=colSums(logfc>ptv[1]),"logfc>10"=colSums(logfc>ptv[2]))
+
+cbind.data.frame("adj"=colSums(adj<ptv[1]),"adj"=colSums(adj<ptv[2]))
+
+logfc = apply(logfc,2,FUN = function(x){return(x > 10)})
+logfc= as.data.frame(logfc)
+
+View(pval)
+
+
+passingval = which( passingval > 0) 
+
+
+passingfc = logfc[,-1] %>%
+  apply(2, FUN = function(x){return(2 ** abs(x))}) %>%
+  apply(2,FUN = function(x){return(x > 10)}) %>%
+  apply(1,sum) 
+
+passingfc = which( passingfc > 0) 
+length(passingfc)
+
+
+formating = function( adj,logfc, pval,fc){
+  
+  
+  passingval = adj %>%
+    apply(2,FUN = function(x){return(x < pval)}) %>%
+    apply(1,sum) 
+  
+  passingval = which( passingval > 0) 
+  
+  View(passingval)
+  View(logfc)
+  
+  logfc = logfc[,-1] %>%
+    mutate( 2 ** abs(logfc[,-1]))%>%
+    View()
+  
+  
+  View(logfc)
+  
+  passingfc = logfc %>%
+    apply(2, FUN = function(x){return(2 ** abs(x))})
+    apply(2,FUN = function(x){return(x > fc)}) %>%
+    apply(1,sum) 
+  
+  View(passingfc)
+  
+  passingfc = which( passingfc > 0) 
+  
+  View(passingfc)
+  
+  final =dplyr::inner_join(passingfc,passingval, by =".")
+
+  
+  cat("Il y a",length(passingval),"gène significatifs")
+  
+  return(passingval)
+  
+}
+
+formating(adj,logfc,0.05,1000)

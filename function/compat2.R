@@ -5,6 +5,13 @@ hclustfun=function(d) {hclust(d,method="ward.D2")}
 require("Biobase")  
 require("marray") 
 
+##jpeg(".tmp"))
+#  palette(c("black", "blue", "cyan", "magenta",   "darkgray", "darkgoldenrod", "violet",  "orange", "lightgreen","lightblue", "darkorchid", "darkred","darkslateblue", "darkslategray", "maroon", "burlywood1" , "darkolivegreen"));
+
+palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442", "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray", "burlywood1","darkkhaki", "#CC0000" ));
+
+#dev.off()
+###unlink(".tmp")(".tmp")(".tmp")
 
 num2cols=function(numVector,colp=palette()){
   
@@ -14,8 +21,8 @@ num2cols=function(numVector,colp=palette()){
   
   numCols=length(unique(gpcol[,1]))
   mycol <- sort(unique(gpcol$numVector))
-  if(length(colp) <numCols) warning("number of color names < number of levels! Give a color palette with at least ",numCols," terms to 'col' argument")
-  cols=as.data.frame(matrix(c(mycol,colp[1:(numCols)]),nrow=numCols)) ## couleurs pour les groupes
+  if(length(colp)-1<numCols) warning("number of color names < number of levels! Give a color palette with at least ",numCols," terms to 'col' argument")
+  cols=as.data.frame(matrix(c(mycol,colp[2:(numCols+1)]),nrow=numCols))
   
   myColFun=function(x){
     as.character(cols[cols[,1]==x[1],2])
@@ -25,48 +32,37 @@ num2cols=function(numVector,colp=palette()){
   
 }
 
+help("gplots")
 
 
 
 ############################################################################
 ##   plotHeatmaps() function                                              
 ############################################################################ 
-
-#typeof(palette(c("#000000", "red", "blue", "yellow", "red", "#E69F00", "#CC79A7","lightblue", "#F0E442", "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray", "burlywood1","darkkhaki", "#CC0000" )));
-
-
+ 
 plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,k=2,fileType="png",cexcol=0.7,cexrow=0.4,
                       colOrder=NULL,labrow=F,colid=NULL,na.color="black",scale="row",hclustGenes=T,meanGrp=F,plotRowSideColor=T,#col.hm=greenred(75),
-                      RowSideColor=c("gray25","gray75"), Rowdistfun="correlation",Coldistfun="correlation" ,palette.col=NULL, 
-                      margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75),mycex = 0.6,...,mypal=test){
+                      RowSideColor=c("gray25","gray75"), Rowdistfun="cor",Coldistfun="cor" ,palette.col=NULL, margins=c(8,8), ...){
   #RowSideColor: color palette to be used for rowSide cluster colors
   # can also be gray.colors(k, start = 0.2, end = 0.9) to get k colors of gray scale
-  
-  if(is.null(mypal))
-    mypal =c ("#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442",
-             "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray",
-             "burlywood1","darkkhaki", "#CC0000" )
-  
-  
+
   if(!is.null(palette.col)){
     palette(palette.col);
     #		}else palette(c("black", "blue", "cyan", "magenta",   "darkgray", "darkgoldenrod", "violet",  "orange", "lightgreen","lightblue", "darkorchid", "darkred","darkslateblue", "darkslategray", "maroon", "burlywood1" , "darkolivegreen"));
-  }else  palette(mypal)
-  
+  }else   palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442", "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray", "burlywood1","darkkhaki", "#CC0000" ));
 
-  
   
   if(fileType %in% c("emf","eps","svg") ) require("devEMF") 
   
   if( any(rownames(exprData) != rownames(exprData)[order(as.numeric(rownames(exprData)))])) stop("Error: 'exprData' must have rownames in numerical ascending order!");
   if(length(RowSideColor)==1) RowSideColor=gray.colors(k, start = 0.2, end = 0.9)
-  if(!Rowdistfun %in% c("correlation","euclidian")) stop("Rowdistfun must be one of 'cor' or 'euclidian'!")
-  if(!Coldistfun %in% c("correlation","euclidian")) stop("Coldistfun must be one of 'cor' or 'euclidian'!")
+  if(!Rowdistfun %in% c("cor","euclidian")) stop("Rowdistfun must be one of 'cor' or 'euclidian'!")
+  if(!Coldistfun %in% c("cor","euclidian")) stop("Coldistfun must be one of 'cor' or 'euclidian'!")
   
   library(gplots)
   library(marray)
-  cl=palette(mypal);
-  
+  cl=palette();
+    
   
   ftype=c("tiff","emf","png","eps","svg")
   if(!fileType%in%ftype) stop("Error: file type must be tiff, emf, png or eps");
@@ -82,7 +78,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   ## Row dendrogram
   ##-----------------------##
   cat("\n -> Hierarchical clustering on genes... \n")
-  if(Rowdistfun=="correlation"){	
+  if(Rowdistfun=="cor"){	
     hc=hclustfun(distcor(exprData))
     subdist="dist method: 1-cor";
     distfunTRIX= distcor;
@@ -118,13 +114,13 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   ##-----------------------##
   
   gpcol=num2cols(as.numeric(groups))
-  
+
   
   ##**********
   ## RowDendrogram
   
   # build dendrogram
-  if(Coldistfun=="correlation") ColvOrd=as.dendrogram(hclustfun(distcor(t(exprData))))
+  if(Coldistfun=="cor") ColvOrd=as.dendrogram(hclustfun(distcor(t(exprData))))
   if(Coldistfun=="euclidian") ColvOrd=as.dendrogram(hclustfun(disteucl(t(exprData))))
   
   # re-order dendrogram
@@ -146,7 +142,6 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   #	}else ColvOrd=T;
   
   #### heatmap  genes 
-  
   useRasterTF=F;
   
   ##-----------------------##
@@ -159,8 +154,9 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
     #png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,"_hclustGenes.png",sep="")),width=800, height=400)
     plot(hc,hang=-1,labels=FALSE,sub=paste("hclust method: ward2\n", subdist),xlab="",main="")
     hcgp=rect.hclust(hc,k=k,border="red")
+
     
-    
+    #png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,"_hclustGenes_heights.png",sep="")),width=800, height=400)
     hts=rev( tail( hc$height,15))
     bp=barplot(hts,names.arg=1:length(hts))
     text(x=bp,y=hts,label= formatC(hts,1,format="f"),pos=3,cex=0.8) 
@@ -218,16 +214,25 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   
   
   #	png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,".png",sep="")),width=wdt, height=900) 
-  
+
   par("mar")
   par(mar=c(5,5,1,1.10))
+  my_palette <- colorRampPalette(c("green", "black", "red"))(n = 75)
   
-  
-  hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
+  #par("mar")
+  #par(mar=c(1,1,1,1))
+  #par(mfrow=c(4,2))
+  # hmp02=heatmap.2(exprData,na.rm=T, col=col.hm,dendrogram="both",labRow =rowIds,labCol=colid,scale=scale, ColSideColors=gpcol,RowSideColors=gpcolr, key=TRUE,
+  # 	keysize=kcex, symkey=FALSE, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
+  # 	Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=useRasterTF,margins=margins)
+  #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[2:(length(levels(groups))+1)],cex=1,line=-1)
+  #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=1,line=-1)
+  hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow =rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=useRasterTF,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),col=my_palette)
-
-  mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
+  #	mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[2:(length(levels(groups))+1)],cex=1,line=-1)
+  mtext(side=3,levels(groups),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))+1],cex=0.6,line=-1)
+  #dev.off()
   # ColSideColors=gpcol,
   #key.par = list(cex=0.5),
   #key.par=list(mar=c(4,4,4,10))

@@ -2,7 +2,7 @@ source("function/compat.R")
 source("function/formating.R")
 source("function/PCA.R")
 source("environnement/global.R")
-
+source("function/decideTestTrix.R")
 
 shinyServer(server <- function(input, output, session) {
   n <- reactiveValues(a = 0)
@@ -48,7 +48,7 @@ shinyServer(server <- function(input, output, session) {
         meanGrp = input$meangrp,
         labColu = input$colname ,
         labRowu = input$rowname,
-        mypal = unlist(colors())
+        mypal =  unlist(colors())
         
       )
     }, width = 900 , height = 1200, res = 100)
@@ -496,22 +496,22 @@ shinyServer(server <- function(input, output, session) {
   #'
   
   
-  adjusted <- reactive({
+  adjustedfc <- reactive({
     df <- csvf()
     if (is.null(df))
       return(NULL)
-    adj = csvf()[[3]][, grep("X|^adj.P.Val",
+    logfc = csvf()[[3]][, grep("X|^logFC",
                              names(csvf()[[3]]),
                              value = TRUE)]
     
-    names(adj) =  gsub(
-      pattern = "^adj.P.Val_",
+    names(logfc) =  gsub(
+      pattern = "^logFC_",
       replacement = "",
-      x = names(adj),
+      x = names(logfc),
       perl =  TRUE
     )
     
-    return(adj)
+    return(logfc)
     
   })
   
@@ -557,7 +557,7 @@ shinyServer(server <- function(input, output, session) {
   
   formated <- reactive({
     #treated = formating(new_test(), csvf()[[1]], input$pval)
-    treated = formating(new_test(), input$pval)
+    treated = decTestTRiX(new_test(),new_fc(), DEGcutoff = input$pval, FC = input$fc)
     return(treated)
   })
   
@@ -601,6 +601,17 @@ shinyServer(server <- function(input, output, session) {
     (subset(adjusted(),
             select = choix_test()))
   }, ignoreNULL = F)
+  
+  
+  new_fc <- eventReactive(input$heatm, {
+    inFile <- input$file1
+    if (is.null(inFile))
+      return(NULL)
+    (subset(adjustedfc(),
+            select = choix_test()))
+  }, ignoreNULL = F)
+  
+  
   
   
   # new_group <- reactive( csvf()[[2]] %>%
@@ -720,6 +731,16 @@ shinyServer(server <- function(input, output, session) {
       )
     })
   })
+  
+  mypal = unlist(colors())
+  
+  # colfin <- reactive({
+  #   
+  #   colors()[[1]] == "#000000"
+  #   
+  #   return(unlist(colors()))
+  #   
+  # })
   
   
   output$myPanel <- renderUI({
