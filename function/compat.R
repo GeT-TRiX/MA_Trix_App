@@ -32,8 +32,6 @@ num2cols=function(numVector,colp=palette()){
 ##   plotHeatmaps() function                                              
 ############################################################################ 
 
-#typeof(palette(c("#000000", "red", "blue", "yellow", "red", "#E69F00", "#CC79A7","lightblue", "#F0E442", "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray", "burlywood1","darkkhaki", "#CC0000" )));
-
 
 plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,k=2,fileType="png",cexcol=1.5,cexrow=1.5,
                       colOrder=NULL,labrow=F,na.color="black",scale="row",hclustGenes=T,meanGrp=F,plotRowSideColor=T,#col.hm=greenred(75),
@@ -124,8 +122,9 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   
   ##**********
   ## Rownames
-  #rowIds=NA;
   
+  #rowIds=NA;
+  ## A travailler
   # if(length(labrow)>1){
   #   rowIds=labrow[geneSet]
   # }else if(labrow) rowIds=NULL;

@@ -45,8 +45,31 @@ benchmark(
 test2 = fread("data/All_topTableAll.csv"),
 test2= as.data.frame(test2)
 )
-benchmark(
-testons = fread("data/All_topTableAll.csv",data.table = F))
+
+
+testons = fread("data/TOXA_HEGU_MA0191 _AllChip_pData.csv",data.table = F)
+levels(str(testons$Grp))
+
+
+chartofa = function(testons){
+  
+testons[] <- lapply( testons, factor)
+col_names <- names(testons)
+testons[col_names] <- lapply(testons[col_names] , factor)
+return(testons)
+}
+
+
+
+levels(testons$Grp)
+
+levels(gr$Grp)
+
+
+gr = read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv")
+
+class(gr$X)
+typeof(testons$V1)
 
 
 benchmark(
@@ -433,7 +456,8 @@ print(treated[[1]])
 
 testos = c("green","red","orange","blue")
 x11()
-hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix, mypal = testos, showcol = F, showrow = T,genename=pval$GeneName,k=2)
+hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix, mypal = testos,
+                        showcol = F, showrow = T,genename=pval$GeneName)
 
 
 #hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],test$Grp,workingPath=wd_path,prefix,suffix,k=3) ## how it should be on shiny app

@@ -224,16 +224,16 @@ shinyServer(server <- function(input, output, session) {
       csv <- lapply(
           csvtest,
           FUN = function (x)
-            read.table(
-              x,
-              sep = ";" ,
-              dec = ",",
-              header = T,
-              check.names = F # good col names
-            )
+            # read.table(
+            #   x,
+            #   sep = ";" ,
+            #   dec = ",",
+            #   header = T,
+            #   check.names = F # good col names
+            # )
           
-            # fread(x, data.table = F,
-            #       check.names = F, header=T)
+            fread(x, data.table = F,
+                  check.names = F, header=T, sep =";", dec= ",")
         )
     
       csvord = list()
@@ -241,6 +241,7 @@ shinyServer(server <- function(input, output, session) {
       for (i in 1:length(csv)) {
         if (colnames(csv[[i]][2]) == "Grp") {
           csvord[[2]] = csv[[i]]
+          
         }
         else if (any(grepl("adj.P.Val" , colnames(csv[[i]]))))
         {
@@ -251,9 +252,14 @@ shinyServer(server <- function(input, output, session) {
           csvord[[1]] = csv[[i]]
       }
       
+      csvord[[2]] = chartofa(csvord[[2]])
       row.names(csvord[[1]]) = csvord[[1]][, 1]
       colnames(csvord[[3]])[1] = "X"
       colnames(csvord[[2]])[1] = "X"
+      print(class(csvord[[3]]))
+      print(typeof(csvord[[3]]))
+      print(colnames(csvord[[3]]))
+      
     }
     
     

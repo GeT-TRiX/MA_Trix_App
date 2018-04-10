@@ -172,9 +172,13 @@ myfinalfc = function(alltop, pval) {
   myfc = c(1.2, 2, 4, 6, 10)
   fcpval = data.frame(matrix(ncol = length(myfc), nrow = length(adj[, -1])))
   mycolnames = c("FC >1.2" , "FC >2", "FC >4", "FC >6", "FC >10")
+
+  
   for (fc in myfc) {
+
     fcpval[j] = cbind.data.frame(colSums(adj[,-1] < pval &
                                            2 ** abs(logfc[,-1]) > fc))
+
     j = j + 1
   }
   
@@ -189,4 +193,11 @@ myfinalfc = function(alltop, pval) {
   rownames(fcpval) = colnames(logfc[, -1])
   
   return(fcpval)
+}
+
+chartofa = function(datach){
+  datach[] <- lapply( datach, factor)
+  col_names <- names(datach)
+  datach[col_names] <- lapply(datach[col_names] , factor)
+  return(datach)
 }
