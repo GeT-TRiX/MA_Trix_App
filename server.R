@@ -256,9 +256,6 @@ shinyServer(server <- function(input, output, session) {
       row.names(csvord[[1]]) = csvord[[1]][, 1]
       colnames(csvord[[3]])[1] = "X"
       colnames(csvord[[2]])[1] = "X"
-      print(class(csvord[[3]]))
-      print(typeof(csvord[[3]]))
-      print(colnames(csvord[[3]]))
       
     }
     
