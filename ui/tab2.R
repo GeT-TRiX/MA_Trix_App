@@ -177,7 +177,7 @@ tabPanel(
               "show/hide rowname",
               choiceNames = list("hide",
                                  "show"),
-              choiceValues = list(NA, NULL),
+              choiceValues = list(F, T),
               selected= "hide"
             )
             
@@ -189,11 +189,12 @@ tabPanel(
               "show/hide colnames",
               choiceNames = list("hide",
                                  "show"),
-              choiceValues = list(NA, NULL),
+              choiceValues = list(T, F),
               selected =  "show"
-                        
             )
-          )),
+          )
+          
+          ),
           
           uiOutput('myPanel'),
           

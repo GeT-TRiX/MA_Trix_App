@@ -24,14 +24,93 @@ musmuscu <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
 colnames(musmuscu)[2:length(musmuscu)] = "test"
 names(musmuscu) = gsub(pattern = "^", replacement = "", x = names(your_data))
 
+colnames(testons[[2]])
+
+colnames(test5 == "V1")
+class(test5)
+
+colnames(musmuscu[1])
+
+header <- read.table("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv",header = T , nrow =1)
+indata = fread("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv", check.names = F, sep =';', header=T, dec=",")
+setnames(indata, colnames(header))
+colnames(indata[1])
+
+View(pval)
+benchmark(
+)
+
+
+benchmark(
+test2 = fread("data/All_topTableAll.csv"),
+test2= as.data.frame(test2)
+)
+benchmark(
+testons = fread("data/All_topTableAll.csv",data.table = F))
+
+
+benchmark(
+  testons= read.csv2("data/All_topTableAll.csv")
+)
+
+factor(testons$Grp)
+colnames(testons[2])
+
+
+
+benchmark(
+pval <- read.csv2("data/All_topTableAll.csv"))
+
+benchmark(
+read.table(
+  "data/All_topTableAll.csv",
+  sep = ";" ,
+  dec = ",",
+  header = T,
+  check.names = F # good col names
+))
+
+View(test)
+
+
+
+dt1 <- fread("V1 V2 V3
+             x b;c;d 1
+             y d;ef  2
+             z d;ef  3")
+
+splitcol2rows_mget <- function(dtInput, col2split, sep){
+  dtInput <- dtInput[, .(tmp.add.col = unlist(strsplit(get(col2split),sep,T))), by=names(dtInput)]
+  
+  dtInput[, c(col2split):=NULL];
+  setnames(dtInput, 'tmp.add.col', col2split); 
+  return(dtInput);
+}
+
+split = splitcol2rows_mget(dt1, col2split = 'V2' , sep= ";")
+split = as.data.frame(split)
+colnames(split[1])
+
+files <- list.files("data/", "\\.csv$", full.names = TRUE)
+
+data <- lapply(files, fread)
+data <- rbindlist(data, fill = T)
+
+
+colnames <- strsplit(readLines(textConnection("data/All_topTableAll.csv"), n=1), ";")[[1]]
+colnames[1] <- "rownames"
+setnames(DT <- fread("data/All_topTableAll.csv", skip=1, header=FALSE), colnames)
+
 
 View(musmuscu)
 data  = subset(musmuscu ,is.na ,select = "LWT_Ctrl2")
 
+test3 = fread("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
+View(test3)
 
 names(pval) = sapply(strsplit(names(pval), "^adj.P.Val*|^adj.P.Val*"), `[[`, 1)
 pval <- read.csv2("data/All_topTableAll.csv")
-View(pval)
+View(test)
 
 
 groupss <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec = ",",header= T)
@@ -264,6 +343,8 @@ source("environnement/global.R")
 ## Constants
 #####################
 
+
+
 cutoff = 0.05
 ngenes = nrow(pval)
 tresh2ways = list(c(0.01,0.05),2)
@@ -315,7 +396,7 @@ for (elem in colnames(adj[,-1])){
   print(formating(elem,musmuscu ,pval = 0.05))
 }
 
-
+adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.", names(pval), value=TRUE)]
 treated = formating(adj,musmuscu,pval= 0.05)
 
 View(treated[[1]])
@@ -332,10 +413,27 @@ View(treated[[1]])
 source("function/compat.R")
 source("environnement/global.R")
 source("function/compat.R")
+groupss = read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv")
+
+
+treatedd = treated[[2]]
+rownames(treated[[2]])
+row.names(treatedd) = pval$GeneName
+View(treatedd)
+print(row.names(treated[[2]]))
+genename = row.names(treatedd)
+print(genename[num])
+
+
+View(pval)
+View(musmuscu)
+num = treated[[1]]
+print(treated[[1]])
+print(treated[[1]])
 
 testos = c("green","red","orange","blue")
 x11()
-hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix,k=11, mypal = testos)
+hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix, mypal = testos, showcol = F, showrow = T,genename=pval$GeneName,k=2)
 
 
 #hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],test$Grp,workingPath=wd_path,prefix,suffix,k=3) ## how it should be on shiny app
@@ -456,8 +554,10 @@ for (pv in pvalue){
 }
 View(dtsign)
 
-
-
+library(data.table)
+test = fread("data/All_topTableAll.csv") ## faster ????
+View(test)
+View(pval)
 createdfsign = function(adj) {
   
   dtsign = data.frame(matrix(ncol = 2, nrow = length(adj[, -1])))

@@ -22,6 +22,7 @@ shinyServer(server <- function(input, output, session) {
   #################################
   
   observeEvent(input$heatm, {
+    
     updateActionButton(session,
                        "heatm",
                        label = "Update Heatmap",
@@ -48,7 +49,10 @@ shinyServer(server <- function(input, output, session) {
         meanGrp = input$meangrp,
         labColu = input$colname ,
         labRowu = input$rowname,
-        mypal =  unlist(colors())
+        mypal =  unlist(colors()),
+        showcol = input$colname,
+        showrow = input$rowname,
+        genename = csvf()[[3]]$GeneName
         
       )
     }, width = 900 , height = 1200, res = 100)
@@ -217,8 +221,7 @@ shinyServer(server <- function(input, output, session) {
       }
       
       #csv <- lapply(csvtest, read.csv2, check.names = F)
-      csv <-
-        lapply(
+      csv <- lapply(
           csvtest,
           FUN = function (x)
             read.table(
@@ -228,15 +231,17 @@ shinyServer(server <- function(input, output, session) {
               header = T,
               check.names = F # good col names
             )
+          
+            # fread(x, data.table = F,
+            #       check.names = F, header=T)
         )
-      #csv <- lapply(csvtest, FUN = function (x) read_csv2(x))
+    
       csvord = list()
       
       for (i in 1:length(csv)) {
         if (colnames(csv[[i]][2]) == "Grp") {
           csvord[[2]] = csv[[i]]
         }
-        #else if (colnames(csv[[i]][10]) == "Amean")
         else if (any(grepl("adj.P.Val" , colnames(csv[[i]]))))
         {
           csvord[[3]] = csv[[i]]
@@ -412,7 +417,7 @@ shinyServer(server <- function(input, output, session) {
     checkboxGroupInput(
       inputId = "test" ,
       label =  "Choose your comparison",
-      choices =  colnames(adjusted()[,-1])
+      choices =  colnames(adjusted()[, -1])
       #,selected = colnames(adjusted()[, -1])
       
     )
@@ -423,8 +428,8 @@ shinyServer(server <- function(input, output, session) {
       session,
       "test",
       label = "Choose your comparison",
-      choices = colnames(adjusted()[,-1]),
-      selected = colnames(adjusted()[,-1])
+      choices = colnames(adjusted()[, -1]),
+      selected = colnames(adjusted()[, -1])
     )
   })
   
@@ -432,7 +437,7 @@ shinyServer(server <- function(input, output, session) {
     updateCheckboxGroupInput(session,
                              "test",
                              label = "Choose your comparison",
-                             choices = colnames(adjusted()[, -1]))
+                             choices = colnames(adjusted()[,-1]))
   })
   
   
@@ -501,8 +506,8 @@ shinyServer(server <- function(input, output, session) {
     if (is.null(df))
       return(NULL)
     logfc = csvf()[[3]][, grep("X|^logFC",
-                             names(csvf()[[3]]),
-                             value = TRUE)]
+                               names(csvf()[[3]]),
+                               value = TRUE)]
     
     names(logfc) =  gsub(
       pattern = "^logFC_",
@@ -531,11 +536,9 @@ shinyServer(server <- function(input, output, session) {
     inFile <- input$file1
     if (is.null(inFile))
       return(NULL)
-    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
+    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
   }
   , ignoreNULL = F)
-  
-  
   
   
   # new_group <- reactive({
@@ -557,7 +560,10 @@ shinyServer(server <- function(input, output, session) {
   
   formated <- reactive({
     #treated = formating(new_test(), csvf()[[1]], input$pval)
-    treated = decTestTRiX(new_test(),new_fc(), DEGcutoff = input$pval, FC = input$fc)
+    treated = decTestTRiX(new_test(),
+                          new_fc(),
+                          DEGcutoff = input$pval,
+                          FC = input$fc)
     return(treated)
   })
   
@@ -638,8 +644,8 @@ shinyServer(server <- function(input, output, session) {
     if (is.null(inFile))
       return(NULL)
     ptv <- c(.01, .05)
-    cbind.data.frame("FDR<1%" = colSums(adjusted()[, -1] < ptv[1]),
-                     "FDR<5%" = colSums(adjusted()[, -1] < ptv[2]))
+    cbind.data.frame("FDR<1%" = colSums(adjusted()[,-1] < ptv[1]),
+                     "FDR<5%" = colSums(adjusted()[,-1] < ptv[2]))
     
   })
   
@@ -735,11 +741,11 @@ shinyServer(server <- function(input, output, session) {
   mypal = unlist(colors())
   
   # colfin <- reactive({
-  #   
+  #
   #   colors()[[1]] == "#000000"
-  #   
+  #
   #   return(unlist(colors()))
-  #   
+  #
   # })
   
   
