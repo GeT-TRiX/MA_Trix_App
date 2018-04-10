@@ -178,7 +178,6 @@ myfinalfc = function(alltop, pval) {
 
     fcpval[j] = cbind.data.frame(colSums(adj[,-1] < pval &
                                            2 ** abs(logfc[,-1]) > fc))
-
     j = j + 1
   }
   
@@ -188,7 +187,7 @@ myfinalfc = function(alltop, pval) {
     x = names(logfc),
     perl =  TRUE
   )
-  
+
   colnames(fcpval) = mycolnames
   rownames(fcpval) = colnames(logfc[, -1])
   
@@ -196,8 +195,10 @@ myfinalfc = function(alltop, pval) {
 }
 
 chartofa = function(datach){
+  
   datach[] <- lapply( datach, factor)
   col_names <- names(datach)
   datach[col_names] <- lapply(datach[col_names] , factor)
+  
   return(datach)
 }

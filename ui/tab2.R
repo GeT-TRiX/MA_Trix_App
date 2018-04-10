@@ -90,6 +90,14 @@ tabPanel(
     
     br(),
     
+    selectInput(
+      "method2",
+      "Choose your matrix distance",
+      choices = c("FDR", "None")
+    ),
+    
+    br(),
+    
     shiny::actionButton(
       "toggleAdvanced",
       "Advanced Computational Options",
@@ -158,7 +166,7 @@ tabPanel(
             column(5,
               numericInput('colsize','Col size',0.6,
                 min = 0.2,
-                max = 1,
+                max = 1.5,
                 step = 0.1
               )
             )
@@ -166,7 +174,7 @@ tabPanel(
 
           numericInput('legsize','Legende size',0.6,
             min = 0.2,
-            max = 1,
+            max = 1.5,
             step = 0.1
           ),
           

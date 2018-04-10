@@ -903,3 +903,6 @@ formating = function( adj,logfc, pval,fc){
 }
 
 formating(adj,logfc,0.05,1000)
+
+
+colnames(pval)

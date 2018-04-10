@@ -69,7 +69,6 @@ shinyServer(server <- function(input, output, session) {
     #' @return \p heatmap.2 plot
     #'
     
-    
     p = reactive({
       plotHeatmaps(
         data.matrix(new_data()),
@@ -220,11 +219,13 @@ shinyServer(server <- function(input, output, session) {
         }
       }
       
-      #csv <- lapply(csvtest, read.csv2, check.names = F)
+      #csv <- lapply(csvtest, read.csv2, check.names = F) # benchmark read.csv wrapper
+      
       csv <- lapply(
           csvtest,
           FUN = function (x)
-            # read.table(
+            
+            # read.table( # benchmark read.table 
             #   x,
             #   sep = ";" ,
             #   dec = ",",
@@ -233,7 +234,7 @@ shinyServer(server <- function(input, output, session) {
             # )
           
             fread(x, data.table = F,
-                  check.names = F, header=T, sep =";", dec= ",")
+                  check.names = F, header=T, sep =";", dec= ",") #benchmark fread memory speed
         )
     
       csvord = list()
@@ -478,12 +479,25 @@ shinyServer(server <- function(input, output, session) {
   
   
   adjusted <- reactive({
+    
     df <- csvf()
     if (is.null(df))
       return(NULL)
     adj = csvf()[[3]][, grep("X|^adj.P.Val",
                              names(csvf()[[3]]),
                              value = TRUE)]
+    
+    # myrpl = c("^adj.P.Val_","^logFC_","^P.value_")
+    # mygrep = list(adj,logfc,pval)
+    # 
+    # for(i in 1:length(mygrep))
+    #   names(mygrep[i]) = gsub(
+    #     pattern = myrpl[i],
+    #     replacement = "",
+    #     x = names(mygrep[i]),
+    #     perl = T
+    #   )
+    
     
     names(adj) =  gsub(
       pattern = "^adj.P.Val_",
@@ -492,6 +506,7 @@ shinyServer(server <- function(input, output, session) {
       perl =  TRUE
     )
     
+    #return(mygrep)
     return(adj)
     
   })
@@ -520,6 +535,25 @@ shinyServer(server <- function(input, output, session) {
     )
     
     return(logfc)
+    
+  })
+  
+  adjustedpval <- reactive({
+    df <- csvf()
+    if (is.null(df))
+      return(NULL)
+    pval = csvf()[[3]][, grep("X|^P.value",
+                               names(csvf()[[3]]),
+                               value = TRUE)]
+    
+    names(pval) =  gsub(
+      pattern = "^P.value_",
+      replacement = "",
+      x = names(pval),
+      perl =  TRUE
+    )
+    
+    return(pval)
     
   })
   
@@ -565,8 +599,10 @@ shinyServer(server <- function(input, output, session) {
     #treated = formating(new_test(), csvf()[[1]], input$pval)
     treated = decTestTRiX(new_test(),
                           new_fc(),
+                          new_pv(),
                           DEGcutoff = input$pval,
-                          FC = input$fc)
+                          FC = input$fc,
+                          cutoff_meth = input$method2)
     return(treated)
   })
   
@@ -619,6 +655,17 @@ shinyServer(server <- function(input, output, session) {
     (subset(adjustedfc(),
             select = choix_test()))
   }, ignoreNULL = F)
+  
+  
+  new_pv <- eventReactive(input$heatm, {
+    inFile <- input$file1
+    if (is.null(inFile))
+      return(NULL)
+    (subset(adjustedpval(),
+            select = choix_test()))
+  }, ignoreNULL = F)
+  
+  
   
   
   
