@@ -23,14 +23,11 @@ shinyServer(server <- function(input, output, session) {
   ######## Plot in the renderView #
   #################################
   
-  observeEvent(input$heatm, {
+  
+  
+  heatmapfinal <- function(){
     
-    updateActionButton(session,
-                       "heatm",
-                       label = "Update Heatmap",
-                       icon = icon("repeat"))
-    
-    output$distPlot <- renderPlot({
+    isolate({
       plotHeatmaps(
         data.matrix(new_data()),
         formated(),
@@ -39,7 +36,7 @@ shinyServer(server <- function(input, output, session) {
         prefix,
         suffix,
         my_palette = colorRampPalette(c(
-          choix_col1(), my_intermediate() , choix_col3()
+          choix_col1(), my_intermediate(), choix_col3()
         ))(n = 75),
         k = input$clusters,
         Rowdistfun = input$dist ,
@@ -55,67 +52,50 @@ shinyServer(server <- function(input, output, session) {
         showcol = input$colname,
         showrow = input$rowname,
         genename = csvf()[[3]]$GeneName
-        
-      )
+      )})
+  }
+  
+  
+  observeEvent(input$heatm, {
+    
+    updateActionButton(session,
+                       "heatm",
+                       label = "Update Heatmap",
+                       icon = icon("repeat"))
+    
+    output$distPlot <- renderPlot({
+      
+      heatmapfinal()
+      
     }, width = 900 , height = 1200, res = 100)
-    
-    #################################
-    ######## Save plots             #
-    #################################
-    
-    
-    #' Reactive function that return a heatmap plot
-    #'
-    #' @param csv Data frame corresponding to the Alltoptable
-    #'
-    #' @return \p heatmap.2 plot
-    #'
-    
-    p = reactive({
-      plotHeatmaps(
-        data.matrix(new_data()),
-        formated(),
-        new_group()$Grp,
-        workingPath = wd_path,
-        prefix,
-        suffix,
-        k = input$clusters,
-        Rowdistfun = input$dist ,
-        Coldistfun = input$dist,
-        keysize = input$key,
-        meanGrp = input$meangrp,
-        mypal = unlist(colors())
-        
-      )
-    })
+
     
     output$save <- downloadHandler(
-      if (input$form == "eps") {
-        filename = "save.eps"
-      }
-      else{
-        filename = "save.png"
+      
+      filename <- function() {
+        paste0(basename(file_path_sans_ext("myfile")), '_heatmap', input$form, sep='')
       },
-      
-      #' Save Heatmap in the good format
-      #'
-      #' @param file
-      #'
-      #' @return the image saved in eps or png
-      #'
-      
-      
-      content = function(file) {
-        ggsave(
-          p(),
-          filename = filename,
-          width = 10,
-          height = 16,
-          limitsize = FALSE,
-          units = "cm",
-          dpi = 200
+      content <- function(file) {
+      if(input$form == "emf")  
+        emf(file,
+          width = 7,
+          height = 7,
+          pointsize = 12,
+          coordDPI = 300
         )
+      else if(input$form == "png")
+        png(file,
+            width =800,
+            height = 1200,
+            units = "px",
+            pointsize= 12
+        )
+      else(input$form == "eps")
+        toEPS(
+          file)
         
+        heatmapfinal()
+        dev.off()
       }
     )
     
@@ -664,27 +644,32 @@ shinyServer(server <- function(input, output, session) {
   
   
   cols <- reactive({
+    if(is.null(mypaletA()))
+      mypaletA()= palette
+    
     lapply(seq_along(mycolgrp()), function(i) {
       colourInput(
         paste("col", i, sep = "_"),
         levels(mycolgrp())[i],
-        palette[i],
-        allowedCols = palette,
+        mypaletA()[i],
+        allowedCols =  palette,
         palette = "limited",
         returnName = T
       )
     })
   })
   
-  mypal = unlist(colors())
-  
-  # colfin <- reactive({
-  #
-  #   colors()[[1]] == "#000000"
-  #
-  #   return(unlist(colors()))
-  #
-  # })
+  mypaletA <-reactive  ({
+    
+    if (is.null(mypal))
+      return(NULL)
+    else
+      mypal = (colors())
+
+    return(mypal)
+  })
+
+  mypal <- reactive({ unlist(colors()) })
   
   
   output$myPanel <- renderUI({

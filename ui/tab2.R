@@ -213,7 +213,7 @@ tabPanel(
       br(),
       
       selectInput("form", "Choose your file format",
-                  choices = c("png", "eps")),
+                  choices = c("png", "eps","emf")),
       br(),
       downloadButton("save", "Save your plot" , style =
                        "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
