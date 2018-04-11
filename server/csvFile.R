@@ -1,8 +1,5 @@
-csvFile <- function(input,output,session){
-
-
 csvf <- reactive({
-  inFile <- input$file1
+  inFile <- input$file
   
   if (is.null(inFile)) {
     createAlert(
@@ -13,11 +10,9 @@ csvf <- reactive({
       title = "First Step",
       content = "You need to import 3 csv files in the browser widget",
       dismiss = FALSE
-      #append = TRUE
-      
+  
     )
     Sys.sleep(2.5)
-    
     closeAlert(session, "entryalert")
     
     return(NULL)
@@ -78,47 +73,58 @@ csvf <- reactive({
     
     else{
       for (i in 1:length(data)) {
-        for (elem in input$file1[[i, 'datapath']]) {
+        for (elem in input$file[[i, 'datapath']]) {
           cat("loading file number" , i, "\n")
         }
         csvtest[i] = elem
       }
     }
     
-    #csv <- lapply(csvtest, read.csv2, check.names = F)
-    csv <-
-      lapply(
-        csvtest,
-        FUN = function (x)
-          read.table(
-            x,
-            sep = ";" ,
-            dec = ",",
-            header = T,
-            check.names = F # good col names
-          )
-      )
-    #csv <- lapply(csvtest, FUN = function (x) read_csv2(x))
+    #csv <- lapply(csvtest, read.csv2, check.names = F) # benchmark read.csv wrapper
+    
+    csv <- lapply(
+      csvtest,
+      FUN = function (x)
+        
+        # read.table( # benchmark read.table
+        #   x,
+        #   sep = ";" ,
+        #   dec = ",",
+        #   header = T,
+        #   check.names = F # good col names
+        # )
+        
+        fread(
+          x,
+          data.table = F,
+          check.names = F,
+          header = T,
+          sep = ";",
+          dec = ","
+        ) #benchmark fread memory speed
+    )
+    
     csvord = list()
     
     for (i in 1:length(csv)) {
-      if (colnames(csv[[i]][2]) == "Grp")
-      {
+      if (colnames(csv[[i]][2]) == "Grp") {
         csvord[[2]] = csv[[i]]
+        
       }
-      else if (colnames(csv[[i]][10]) == "Amean")
+      else if (any(grepl("adj.P.Val" , colnames(csv[[i]]))))
       {
         csvord[[3]] = csv[[i]]
         
       }
-      else{
+      else
         csvord[[1]] = csv[[i]]
-      }
     }
     
+    csvord[[2]] = chartofa(csvord[[2]])
     row.names(csvord[[1]]) = csvord[[1]][, 1]
     colnames(csvord[[3]])[1] = "X"
     colnames(csvord[[2]])[1] = "X"
+    
   }
   
   
@@ -135,13 +141,6 @@ csvf <- reactive({
   
   Sys.sleep(1)
   closeAlert(session, "succeeded")
-  soso <<- T
-  
-  #sapply(strsplit(names(csvord[[3]]), "^adj.P.Val|^adj.P.Val"), `[[`, 1)
-  
-  return (csvord)
-  
-})
 
-return(csvf)
-}
+  return (csvord)
+})

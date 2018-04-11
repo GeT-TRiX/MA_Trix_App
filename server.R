@@ -3,8 +3,10 @@ source("function/formating.R")
 source("function/PCA.R")
 source("environnement/global.R")
 source("function/decideTestTrix.R")
+source("server/csvFile.R")
 
 shinyServer(server <- function(input, output, session) {
+  
   n <- reactiveValues(a = 0)
   
   shinyjs::onclick("toggleAdvanced",
@@ -133,154 +135,13 @@ shinyServer(server <- function(input, output, session) {
   #' @examples
   #'
   
-  source("server/csvFile.R")
+  # csvf <- reactive({  csvf <- callModule(csvFile, "datafile",
+  #                        stringsAsFactors = FALSE)
+  #   return(csvf())
+  # })
+
+  source(file.path("server", "csvFile.R"), local = TRUE)$value
   
-  csvf <- reactive({
-    inFile <- input$file1
-    
-    if (is.null(inFile)) {
-      createAlert(
-        session,
-        "alert",
-        style = "info",
-        "entryalert",
-        title = "First Step",
-        content = "You need to import 3 csv files in the browser widget",
-        dismiss = FALSE
-        #append = TRUE
-        
-      )
-      Sys.sleep(2.5)
-      
-      closeAlert(session, "entryalert")
-      
-      return(NULL)
-    }
-    
-    data <- as.list(inFile$datapath)
-    csvtest = list()
-    name = inFile$datapath
-    iscsv = grep(pattern = '.csv$', name, value = T)
-    
-    if (length(iscsv) == 0) {
-      createAlert(
-        session,
-        "alert",
-        "exampleAlert",
-        style = "danger",
-        title = "Oops Error",
-        content = "Are you sure you're importing csv files ?",
-        append = FALSE
-      )
-      return(NULL)
-    }
-    
-    else{
-      if (length(data) > 3)
-      {
-        createAlert(
-          session,
-          "alert",
-          "exampleAlert",
-          style = "danger",
-          title = "Oops Error",
-          content = "Are you sure it's the good number of files? you  have imported more than 3 files,
-          you need to import 3 csv files
-          Tips: Use ctrl+left click then choose your files ",
-          append = FALSE
-        )
-        
-        return (NULL)
-      }
-      
-      else if (length(data) < 3) {
-        createAlert(
-          session,
-          "alert",
-          "exampleAlert",
-          style = "danger",
-          title = "Oops Error",
-          content = "Are you sure it's the good number of files? you have imported less than
-          3 files, you need to import 3 csv files
-          Tips: Use ctrl+left click then choose your files ",
-          append = FALSE
-          
-        )
-        
-        return (NULL)
-      }
-      
-      else{
-        for (i in 1:length(data)) {
-          for (elem in input$file1[[i, 'datapath']]) {
-            cat("loading file number" , i, "\n")
-          }
-          csvtest[i] = elem
-        }
-      }
-      
-      #csv <- lapply(csvtest, read.csv2, check.names = F) # benchmark read.csv wrapper
-      
-      csv <- lapply(
-          csvtest,
-          FUN = function (x)
-            
-            # read.table( # benchmark read.table 
-            #   x,
-            #   sep = ";" ,
-            #   dec = ",",
-            #   header = T,
-            #   check.names = F # good col names
-            # )
-          
-            fread(x, data.table = F,
-                  check.names = F, header=T, sep =";", dec= ",") #benchmark fread memory speed
-        )
-    
-      csvord = list()
-      
-      for (i in 1:length(csv)) {
-        if (colnames(csv[[i]][2]) == "Grp") {
-          csvord[[2]] = csv[[i]]
-          
-        }
-        else if (any(grepl("adj.P.Val" , colnames(csv[[i]]))))
-        {
-          csvord[[3]] = csv[[i]]
-          
-        }
-        else
-          csvord[[1]] = csv[[i]]
-      }
-      
-      csvord[[2]] = chartofa(csvord[[2]])
-      row.names(csvord[[1]]) = csvord[[1]][, 1]
-      colnames(csvord[[3]])[1] = "X"
-      colnames(csvord[[2]])[1] = "X"
-      
-    }
-    
-    
-    createAlert(
-      session,
-      "alert",
-      "succeeded",
-      style = "success",
-      title = "Sucess",
-      content = " Your files have been loaded, you can choose your data now",
-      append = FALSE
-      
-    )
-    
-    Sys.sleep(1)
-    closeAlert(session, "succeeded")
-    soso <<- T
-    
-    #sapply(strsplit(names(csvord[[3]]), "^adj.P.Val|^adj.P.Val"), `[[`, 1)
-    
-    return (csvord)
-    
-  })
   
   ###############################
   ######## click increase       #
@@ -383,7 +244,7 @@ shinyServer(server <- function(input, output, session) {
   # })
   
   choix_grp <- eventReactive(input$heatm, {
-    inFile <- input$file1
+    inFile <- input$file
     if (is.null(inFile))
       return(NULL)
     return(input$indiv)
@@ -421,7 +282,7 @@ shinyServer(server <- function(input, output, session) {
     checkboxGroupInput(
       inputId = "test" ,
       label =  "Choose your comparison",
-      choices =  colnames(adjusted()[, -1])
+      choices =  colnames(adjusted()[[1]][, -1])
       #,selected = colnames(adjusted()[, -1])
       
     )
@@ -432,8 +293,8 @@ shinyServer(server <- function(input, output, session) {
       session,
       "test",
       label = "Choose your comparison",
-      choices = colnames(adjusted()[, -1]),
-      selected = colnames(adjusted()[, -1])
+      choices = colnames(adjusted()[[1]][, -1]),
+      selected = colnames(adjusted()[[1]][, -1])
     )
   })
   
@@ -441,7 +302,7 @@ shinyServer(server <- function(input, output, session) {
     updateCheckboxGroupInput(session,
                              "test",
                              label = "Choose your comparison",
-                             choices = colnames(adjusted()[,-1]))
+                             choices = colnames(adjusted()[[1]][,-1]))
   })
   
   
@@ -487,6 +348,29 @@ shinyServer(server <- function(input, output, session) {
                              names(csvf()[[3]]),
                              value = TRUE)]
     
+    logfc = csvf()[[3]][, grep("X|^logFC",
+                               names(csvf()[[3]]),
+                               value = TRUE)]
+    
+    names(logfc) =  gsub(
+      pattern = "^logFC_",
+      replacement = "",
+      x = names(logfc),
+      perl =  TRUE
+    )
+    
+    pval = csvf()[[3]][, grep("X|^P.value",
+                              names(csvf()[[3]]),
+                              value = TRUE)]
+    
+    names(pval) =  gsub(
+      pattern = "^P.value_",
+      replacement = "",
+      x = names(pval),
+      perl =  TRUE
+    )
+    
+    
     # myrpl = c("^adj.P.Val_","^logFC_","^P.value_")
     # mygrep = list(adj,logfc,pval)
     # 
@@ -498,16 +382,15 @@ shinyServer(server <- function(input, output, session) {
     #     perl = T
     #   )
     
-    
     names(adj) =  gsub(
       pattern = "^adj.P.Val_",
       replacement = "",
       x = names(adj),
       perl =  TRUE
     )
-    
-    #return(mygrep)
-    return(adj)
+    mygrep = list(adj,logfc,pval)
+    return(mygrep)
+    #return(adj)
     
   })
   
@@ -570,7 +453,8 @@ shinyServer(server <- function(input, output, session) {
   
   
   new_group <- eventReactive(input$heatm, {
-    inFile <- input$file1
+    
+    inFile <- input$file
     if (is.null(inFile))
       return(NULL)
     csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
@@ -579,7 +463,7 @@ shinyServer(server <- function(input, output, session) {
   
   
   # new_group <- reactive({
-  #   inFile <- input$file1
+  #   inFile <- input$file
   #   if (is.null(inFile))
   #     return(NULL)
   #   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
@@ -615,7 +499,7 @@ shinyServer(server <- function(input, output, session) {
   
   
   new_data <- reactive({
-    inFile <- input$file1
+    inFile <- input$file
     if (is.null(inFile))
       return(NULL)
     #subset(csvf()[[1]],select = choix_individus())
@@ -624,7 +508,7 @@ shinyServer(server <- function(input, output, session) {
   
   
   data_summary <- reactive({
-    inFile <- input$file1
+    inFile <- input$file
     if (is.null(inFile))
       return(NULL)
     myfinalfc(csvf()[[3]], input$pval1)
@@ -640,28 +524,31 @@ shinyServer(server <- function(input, output, session) {
   #'
   
   new_test <- eventReactive(input$heatm, {
-    inFile <- input$file1
+    inFile <- input$file
     if (is.null(inFile))
       return(NULL)
-    (subset(adjusted(),
+    #(subset(adjusted(),
+    (subset(adjusted()[[1]],
             select = choix_test()))
   }, ignoreNULL = F)
   
   
   new_fc <- eventReactive(input$heatm, {
-    inFile <- input$file1
+    inFile <- input$file
     if (is.null(inFile))
       return(NULL)
-    (subset(adjustedfc(),
+    #(subset(adjustedfc(),
+            (subset(adjusted()[[2]],
             select = choix_test()))
   }, ignoreNULL = F)
   
   
   new_pv <- eventReactive(input$heatm, {
-    inFile <- input$file1
+    inFile <- input$file
     if (is.null(inFile))
       return(NULL)
-    (subset(adjustedpval(),
+    (subset(adjusted()[[3]],
+    #(subset(adjustedpval(),
             select = choix_test()))
   }, ignoreNULL = F)
   
@@ -681,7 +568,7 @@ shinyServer(server <- function(input, output, session) {
   #'
   
   # data_sign <- reactive({
-  #   inFile <- input$file1
+  #   inFile <- input$file
   #   if (is.null(inFile))
   #     return(NULL)
   #   createdfsign(adjusted())
@@ -690,7 +577,7 @@ shinyServer(server <- function(input, output, session) {
   ###  SVG file thinks to add it !!!!!
   
   data_sign <- reactive({
-    inFile <- input$file1
+    inFile <- input$file
     if (is.null(inFile))
       return(NULL)
     ptv <- c(.01, .05)
@@ -766,6 +653,7 @@ shinyServer(server <- function(input, output, session) {
   #########################################
   
   mycolgrp <- reactive  ({
+    
     mygrpcol <- new_group()$Grp %>%
       sort() %>%
       unique() %>%
@@ -815,6 +703,9 @@ shinyServer(server <- function(input, output, session) {
   ######## Plot the data frame wiht input #
   #########################################
   
+  #output$table <- renderDataTable({
+
+  
   output$new_test <- renderDataTable(csvf()[[2]])
   
   output$new_data <- renderDataTable(head(csvf()[[1]][2:6]))
@@ -824,6 +715,7 @@ shinyServer(server <- function(input, output, session) {
   output$data_sign <- renderDataTable(data_sign())
   
   output$data_summary <- renderDataTable(data_summary())
+  #})
   
 })
 #shinyApp(ui = ui , server = server)

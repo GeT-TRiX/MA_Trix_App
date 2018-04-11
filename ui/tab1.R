@@ -1,3 +1,5 @@
+source("ui/uiport.R")
+
 tabPanel(
   p(icon("upload"),
     "Data loading"),
@@ -9,14 +11,17 @@ tabPanel(
     
     br(),
     
+    
+    #csvFileInput("file", "Choose your csv files"),
     fileInput(
-      "file1",
+      "file",
       "Choose your csv file",
       accept = c("text/csv",
                  "text/comma-separated-values,text/plain",
                  ".csv"),
       multiple = T
     ),
+    
     br(),
     
   #   sliderInput(

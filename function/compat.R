@@ -37,6 +37,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
                       colOrder=NULL,labrow=F,na.color="black",scale="row",hclustGenes=T,meanGrp=F,plotRowSideColor=T,#col.hm=greenred(75),
                       RowSideColor=c("gray25","gray75"), Rowdistfun="correlation",Coldistfun="correlation" ,palette.col=NULL, 
                       margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75),mycex = 0.6,...,mypal=test,colid = NULL, showcol = T ,showrow =F, genename=NULL){
+  
   #RowSideColor: color palette to be used for rowSide cluster colors
   # can also be gray.colors(k, start = 0.2, end = 0.9) to get k colors of gray scale
   
@@ -68,8 +69,6 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   }else  palette(mypal)
 
 
-  
-  
   if(fileType %in% c("emf","eps","svg") ) require("devEMF") 
   
   if( any(rownames(exprData) != rownames(exprData)[order(as.numeric(rownames(exprData)))])) stop("Error: 'exprData' must have rownames in numerical ascending order!");
@@ -151,15 +150,6 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
     ColvOrd=reorder(ColvOrd,ord,agglo.FUN = mean) # reorder by mean values
   }else {ColvOrd=ColvOrd} # no reordering
   
-  #	if(!is.null(colOrder)){ # reorder col dendrogram
-  #	  if(length(colOrder)==ncol(exprData)){
-  #	   ord=colOrder
-  #	  } else ord=1:ncol(exprData);
-  #		if(Coldistfun=="cor"){	
-  #		  ColvOrd=reorder(as.dendrogram(hclustfun(distcor(t(exprData)))),ord,agglo.FUN = mean)
-  #		} else ColvOrd=reorder(as.dendrogram(hclustfun(dist(t(exprData), method=distfun))),ord,agglo.FUN = mean)
-  
-  #	}else ColvOrd=T;
   
   #### heatmap  genes 
   
@@ -213,27 +203,8 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   ##-----------------------##
   cat("\n -> Plotting HeatMap... \n")
   
-  # if(fileType=="tiff")
-  # 	tiff(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,".tiff",sep="")),width=wdt, height=900,compression="jpeg")
-  # if(fileType=="png")
-  # 	png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,".png",sep="")),width=wdt, height=900)
-  # if(fileType=="emf"){
-  # 	emf(file = file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,".emf",sep="")), width = wdte, height = 12,
-  # 	bg = "transparent", fg = "black", pointsize = 12, custom.lty = FALSE)
-  # 	useRasterTF=F;
-  # }
-  # if(fileType=="eps"){
-  # 	postscript(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,".eps",sep="")),  width = wdte, height = 12, horizontal=F,
-  # 	bg = "transparent", pointsize = 12)
-  # }
-  # if(fileType=="svg"){
-  # 	svg(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,".svg",sep="")),  width = wdte, height = 12,
-  # 	bg = "transparent", pointsize = 12)
-  # }
   
-  
-  
-  #	png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,".png",sep="")),width=wdt, height=900) 
+  #View(exprData)
   
   par("mar")
   par(mar=c(5,5,1,1.10))

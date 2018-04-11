@@ -768,18 +768,6 @@ final = decTestTRiX(adj[,-1],logfc[,-1], DEGcutoff = 0.05, FC=1)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 passingval = adj %>%
   apply(2,FUN = function(x){return(x < 0.05)}) %>%
   apply(1,sum)
