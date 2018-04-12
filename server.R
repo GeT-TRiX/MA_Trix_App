@@ -21,8 +21,6 @@ shinyServer(server <- function(input, output, session) {
   ######## Plot in the renderView #
   #################################
   
-  
-  
   heatmapfinal <- function() {
     isolate({
       plotHeatmaps(
