@@ -6,8 +6,10 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
   if (length(contrast) == 1)
     contrast = c(contrast, contrast)
   
-  if (is.null(maxDE))
+  if (is.na(maxDE))
     maxDE = nrow(adj)
+  
+  print(maxDE)
   
   if (cutoff_meth == "FDR") 
     pList = adj[, contrast]
@@ -43,31 +45,24 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
         maxDEi = maxDE
       
       ord = order(DEmax[, i])
-      print(ord)
-      
       msi = max(DEmax[ord, i][DEFC[ord, i]][1:maxDEi])
-      print(msi)
-      
+
       DEmax[, i] = DEmax[, i] <= msi
-      print(DEmax)
-      
+
     }
     
     DEsel = DEp & DEFC & DEmax
-    
     print(colSums(DEsel, na.rm = T))
-    
   }
+  
   else{
     DEsel = DEp & DEFC
-    
     print(colSums(DEsel, na.rm = T))
-    
+  
   }
-  
 
-  DEsel = which(rowSums(DEsel, na.rm = T) > 0)
   
+  DEsel = which(rowSums(DEsel, na.rm = T) > 0)
   cat("Il y a",length(DEsel),"gène significatifs")
   
   return(DEsel)

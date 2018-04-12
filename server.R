@@ -20,7 +20,6 @@ shinyServer(server <- function(input, output, session) {
   #################################
   ######## Plot in the renderView #
   #################################
-  
   heatmapfinal <- function() {
     isolate({
       plotHeatmaps(
@@ -253,6 +252,8 @@ shinyServer(server <- function(input, output, session) {
   
   
   formated <- reactive({
+    
+    print(input$maxgen)
     #treated = formating(new_test(), csvf()[[1]], input$pval)
     treated = decTestTRiX(
       user_group()[[1]],
@@ -261,6 +262,9 @@ shinyServer(server <- function(input, output, session) {
       DEGcutoff = input$pval,
       FC = input$fc,
       cutoff_meth = input$method2
+      
+    ,maxDE = input$maxgen
+      
     )
     return(treated)
   })

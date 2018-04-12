@@ -65,6 +65,19 @@ tabPanel(
       verbatimTextOutput("test")
       
     ),
+    br(),
+    # sliderInput(
+    #   "maxgen",
+    #   "Maximal number of genes by groups",
+    #   min = 100,
+    #   max = 1500,
+    #   value = NULL,
+    #   step = 100
+    # ),
+    
+    numericInput('maxgen', 'Maximal number of genes by groups', NULL,
+                 min = 100, max = 1500),
+    br(),
     
     sliderInput(
       "pval",
@@ -220,15 +233,11 @@ tabPanel(
       br(),
       br(),
       
-      #actionButton("heatm", "Print Heatmap", style =
-      #               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
       
       shiny::actionButton("heatm", "Print Heatmap", style =
                             "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-      uiOutput('Button'),
+      uiOutput('Button')
       
-      numericInput('num', '', 0),
-      verbatimTextOutput("valuedd")
     ),
     
     mainPanel(tabsetPanel(
