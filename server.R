@@ -78,37 +78,7 @@ shinyServer(server <- function(input, output, session) {
   #################################
   
   
-  output$individusel <- renderUI(
-    checkboxGroupInput(
-      inputId = "indiv" ,
-      label =  "Choose your group to visualize",
-      # choices =  colnames(csvf()[[1]][,-1]),
-      # selected = colnames(csvf()[[1]][,-1])
-      choices =  levels(csvf()[[2]]$Grp),
-      selected = levels(csvf()[[2]]$Grp)
-      
-    )
-  )
-  
-  observeEvent(input$allIndividus, {
-    updateCheckboxGroupInput(
-      session,
-      "indiv",
-      label = "Choose your group to visualize",
-      #choices = colnames(csvf()[[1]][,-1]),
-      #selected = colnames(csvf()[[1]][,-1])
-      choices =  levels(csvf()[[2]]$Grp),
-      selected = levels(csvf()[[2]]$Grp)
-    )
-  })
-  
-  observeEvent(input$noIndividus, {
-    updateCheckboxGroupInput(session,
-                             "indiv",
-                             label = "Choose your group to visualize",
-                             #choices = colnames(csvf()[[1]][,-1]))
-                             choices =  levels(csvf()[[2]]$Grp))
-  })
+  source(file.path("server", "checkboxgrp.R"), local = TRUE)$value
   
   #' Reactive function in the aim of selecting individuals
   #'
@@ -157,32 +127,8 @@ shinyServer(server <- function(input, output, session) {
   ######## Select the comparisons #
   #################################
   
-  output$testout <- renderUI(
-    checkboxGroupInput(
-      inputId = "test" ,
-      label =  "Choose your comparison",
-      choices =  colnames(adjusted()[[1]][,-1])
-      #,selected = colnames(adjusted()[, -1])
-      
-    )
-  )
   
-  observeEvent(input$allTests, {
-    updateCheckboxGroupInput(
-      session,
-      "test",
-      label = "Choose your comparison",
-      choices = colnames(adjusted()[[1]][,-1]),
-      selected = colnames(adjusted()[[1]][,-1])
-    )
-  })
-  
-  observeEvent(input$noTests, {
-    updateCheckboxGroupInput(session,
-                             "test",
-                             label = "Choose your comparison",
-                             choices = colnames(adjusted()[[1]][, -1]))
-  })
+  source(file.path("server", "checkboxcontrast.R"), local = TRUE)$value
   
   
   #' Reactive function in the aim of selecting different comparison
