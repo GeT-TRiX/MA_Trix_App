@@ -3,11 +3,9 @@ source("function/formating.R")
 source("function/PCA.R")
 source("environnement/global.R")
 source("function/decideTestTrix.R")
-source("server/csvFile.R")
+
 
 shinyServer(server <- function(input, output, session) {
-  
-  n <- reactiveValues(a = 0)
   
   shinyjs::onclick("toggleAdvanced",
                    shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event
@@ -25,8 +23,7 @@ shinyServer(server <- function(input, output, session) {
   
   
   
-  heatmapfinal <- function(){
-    
+  heatmapfinal <- function() {
     isolate({
       plotHeatmaps(
         data.matrix(new_data()),
@@ -52,115 +49,20 @@ shinyServer(server <- function(input, output, session) {
         showcol = input$colname,
         showrow = input$rowname,
         genename = csvf()[[3]]$GeneName
-      )})
+      )
+    })
   }
   
-  
-  observeEvent(input$heatm, {
-    
-    updateActionButton(session,
-                       "heatm",
-                       label = "Update Heatmap",
-                       icon = icon("repeat"))
-    
-    output$distPlot <- renderPlot({
-      
-      heatmapfinal()
-      
-    }, width = 900 , height = 1200, res = 100)
 
-    
-    output$save <- downloadHandler(
-      
-      filename <- function() {
-        paste0(basename(file_path_sans_ext("myfile")), '_heatmap', input$form, sep='')
-      },
-      content <- function(file) {
-      if(input$form == "emf")  
-        emf(file,
-          width = 7,
-          height = 7,
-          pointsize = 12,
-          coordDPI = 300
-        )
-      else if(input$form == "png")
-        png(file,
-            width =800,
-            height = 1200,
-            units = "px",
-            pointsize= 12
-        )
-      else(input$form == "eps")
-        toEPS(
-          file)
-        
-        heatmapfinal()
-        dev.off()
-      }
-    )
-    
-  })
+  source(file.path("server", "plotandsave.R"), local = TRUE)$value
+  
   
   ###############################
   ######## Load the csv files   #
   ###############################
   
-  
-  #' Reactive function in the aim of loading csv files
-  #'
-  #' @param inFile
-  #'
-  #' @return csvord a list of csv files
-  #'
-  #' @examples
-  #'
-  
-  # csvf <- reactive({  csvf <- callModule(csvFile, "datafile",
-  #                        stringsAsFactors = FALSE)
-  #   return(csvf())
-  # })
-
   source(file.path("server", "csvFile.R"), local = TRUE)$value
-  
-  
-  ###############################
-  ######## click increase       #
-  ###############################
-  
-  observeEvent(input$heatm, {
-    n$a <<- n$a + 1
-    updateNumericInput(session, 'num', value = n$a)
-  })
-  
-  observe({
-    print(n$a)
-  })
-  
-  output$valuedd <- renderText({
-    input$num
-  })
-  
-  click <- 0
-  isok <- T
-  
-  makeReactiveBinding('click')
-  
-  
-  observeEvent(input$heatm, {
-    if (click > 0)
-    {
-      isok <<- F
-    }
-    click <<- click + 1
-  })
-  
-  observe(print(click))
-  
-  observe(if (click > 5)
-    print("ok"))
-  
-  tested <- reactive(return(click))
-  
+
   
   ###############################
   ######## Adding mean by group #
@@ -262,7 +164,7 @@ shinyServer(server <- function(input, output, session) {
     checkboxGroupInput(
       inputId = "test" ,
       label =  "Choose your comparison",
-      choices =  colnames(adjusted()[[1]][, -1])
+      choices =  colnames(adjusted()[[1]][,-1])
       #,selected = colnames(adjusted()[, -1])
       
     )
@@ -273,8 +175,8 @@ shinyServer(server <- function(input, output, session) {
       session,
       "test",
       label = "Choose your comparison",
-      choices = colnames(adjusted()[[1]][, -1]),
-      selected = colnames(adjusted()[[1]][, -1])
+      choices = colnames(adjusted()[[1]][,-1]),
+      selected = colnames(adjusted()[[1]][,-1])
     )
   })
   
@@ -282,7 +184,7 @@ shinyServer(server <- function(input, output, session) {
     updateCheckboxGroupInput(session,
                              "test",
                              label = "Choose your comparison",
-                             choices = colnames(adjusted()[[1]][,-1]))
+                             choices = colnames(adjusted()[[1]][, -1]))
   })
   
   
@@ -311,114 +213,8 @@ shinyServer(server <- function(input, output, session) {
   #################################
   
   
-  #' Reactive function that return a data frame with the adj.P.val selected by the individuals
-  #'
-  #' @param csv Data frame corresponding to the Alltoptable
-  #'
-  #' @return \adj a new data frame with all the adj.P.Val
-  #'
+  source(file.path("server", "grepcol.R"), local = TRUE)$value
   
-  
-  adjusted <- reactive({
-    
-    df <- csvf()
-    if (is.null(df))
-      return(NULL)
-    adj = csvf()[[3]][, grep("X|^adj.P.Val",
-                             names(csvf()[[3]]),
-                             value = TRUE)]
-    
-    logfc = csvf()[[3]][, grep("X|^logFC",
-                               names(csvf()[[3]]),
-                               value = TRUE)]
-    
-    names(logfc) =  gsub(
-      pattern = "^logFC_",
-      replacement = "",
-      x = names(logfc),
-      perl =  TRUE
-    )
-    
-    pval = csvf()[[3]][, grep("X|^P.value",
-                              names(csvf()[[3]]),
-                              value = TRUE)]
-    
-    names(pval) =  gsub(
-      pattern = "^P.value_",
-      replacement = "",
-      x = names(pval),
-      perl =  TRUE
-    )
-    
-    
-    # myrpl = c("^adj.P.Val_","^logFC_","^P.value_")
-    # mygrep = list(adj,logfc,pval)
-    # 
-    # for(i in 1:length(mygrep))
-    #   names(mygrep[i]) = gsub(
-    #     pattern = myrpl[i],
-    #     replacement = "",
-    #     x = names(mygrep[i]),
-    #     perl = T
-    #   )
-    
-    names(adj) =  gsub(
-      pattern = "^adj.P.Val_",
-      replacement = "",
-      x = names(adj),
-      perl =  TRUE
-    )
-    mygrep = list(adj,logfc,pval)
-    return(mygrep)
-    #return(adj)
-    
-  })
-  
-  #' Reactive function that return a data frame with the logFC
-  #'
-  #' @param csv Data frame corresponding to the Alltoptable
-  #'
-  #' @return \adj a new data frame with all the adj.P.Val
-  #'
-  
-  
-  adjustedfc <- reactive({
-    df <- csvf()
-    if (is.null(df))
-      return(NULL)
-    logfc = csvf()[[3]][, grep("X|^logFC",
-                               names(csvf()[[3]]),
-                               value = TRUE)]
-    
-    names(logfc) =  gsub(
-      pattern = "^logFC_",
-      replacement = "",
-      x = names(logfc),
-      perl =  TRUE
-    )
-    
-    return(logfc)
-    
-  })
-  
-  adjustedpval <- reactive({
-    df <- csvf()
-    if (is.null(df))
-      return(NULL)
-    pval = csvf()[[3]][, grep("X|^P.value",
-                               names(csvf()[[3]]),
-                               value = TRUE)]
-    
-    names(pval) =  gsub(
-      pattern = "^P.value_",
-      replacement = "",
-      x = names(pval),
-      perl =  TRUE
-    )
-    
-    return(pval)
-    
-  })
   
   
   #' Reactive function that select specific individuals in the data frame
@@ -433,11 +229,10 @@ shinyServer(server <- function(input, output, session) {
   
   
   new_group <- eventReactive(input$heatm, {
-    
     inFile <- input$file
     if (is.null(inFile))
       return(NULL)
-    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
+    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
   }
   , ignoreNULL = F)
   
@@ -461,12 +256,14 @@ shinyServer(server <- function(input, output, session) {
   
   formated <- reactive({
     #treated = formating(new_test(), csvf()[[1]], input$pval)
-    treated = decTestTRiX(new_test(),
-                          new_fc(),
-                          new_pv(),
-                          DEGcutoff = input$pval,
-                          FC = input$fc,
-                          cutoff_meth = input$method2)
+    treated = decTestTRiX(
+      user_group()[[1]],
+      user_group()[[2]],
+      user_group()[[3]],
+      DEGcutoff = input$pval,
+      FC = input$fc,
+      cutoff_meth = input$method2
+    )
     return(treated)
   })
   
@@ -494,51 +291,15 @@ shinyServer(server <- function(input, output, session) {
     myfinalfc(csvf()[[3]], input$pval1)
   })
   
+  ######
+  ### Selected group
+  #####
   
-  
-  #' Reactive function that return a comparison data frame with the specific user's selection
-  #'
-  #' @param csv Data frame corresponding to the Alltoptable
-  #'
-  #' @return \new_data a  data frame with all the individuals selected
-  #'
-  
-  new_test <- eventReactive(input$heatm, {
-    inFile <- input$file
-    if (is.null(inFile))
-      return(NULL)
-    #(subset(adjusted(),
-    (subset(adjusted()[[1]],
-            select = choix_test()))
-  }, ignoreNULL = F)
-  
-  
-  new_fc <- eventReactive(input$heatm, {
-    inFile <- input$file
-    if (is.null(inFile))
-      return(NULL)
-    #(subset(adjustedfc(),
-            (subset(adjusted()[[2]],
-            select = choix_test()))
-  }, ignoreNULL = F)
-  
-  
-  new_pv <- eventReactive(input$heatm, {
-    inFile <- input$file
-    if (is.null(inFile))
-      return(NULL)
-    (subset(adjusted()[[3]],
-    #(subset(adjustedpval(),
-            select = choix_test()))
-  }, ignoreNULL = F)
-  
-  
-  
-  
-  
+  source(file.path("server", "selectedgroup.R"), local = TRUE)$value
   
   # new_group <- reactive( csvf()[[2]] %>%
   #                          filter( X ==  list_ind()))
+  
   
   #' Reactive function that return a comparison data frame with the specific user's selection
   #'
@@ -554,15 +315,14 @@ shinyServer(server <- function(input, output, session) {
   #   createdfsign(adjusted())
   # })
   
-  ###  SVG file thinks to add it !!!!!
   
   data_sign <- reactive({
     inFile <- input$file
     if (is.null(inFile))
       return(NULL)
     ptv <- c(.01, .05)
-    cbind.data.frame("FDR<1%" = colSums(adjusted()[,-1] < ptv[1]),
-                     "FDR<5%" = colSums(adjusted()[,-1] < ptv[2]))
+    cbind.data.frame("FDR<1%" = colSums(adjusted()[, -1] < ptv[1]),
+                     "FDR<5%" = colSums(adjusted()[, -1] < ptv[2]))
     
   })
   
@@ -582,10 +342,6 @@ shinyServer(server <- function(input, output, session) {
     returnName = T
   )
   
-  # reactive({
-  # colourpicker::updateColourInput(session, "col2", label = "downregulated genes:", value = my_intermediate(),
-  #                                 showColour = "background", allowTransparent = FALSE, returnName= T)
-  # })
   
   colourpicker::updateColourInput(
     session,
@@ -633,7 +389,6 @@ shinyServer(server <- function(input, output, session) {
   #########################################
   
   mycolgrp <- reactive  ({
-    
     mygrpcol <- new_group()$Grp %>%
       sort() %>%
       unique() %>%
@@ -644,8 +399,8 @@ shinyServer(server <- function(input, output, session) {
   
   
   cols <- reactive({
-    if(is.null(mypaletA()))
-      mypaletA()= palette
+    if (is.null(mypaletA()))
+      mypaletA() = palette
     
     lapply(seq_along(mycolgrp()), function(i) {
       colourInput(
@@ -659,17 +414,18 @@ shinyServer(server <- function(input, output, session) {
     })
   })
   
-  mypaletA <-reactive  ({
-    
+  mypaletA <- reactive  ({
     if (is.null(mypal))
       return(NULL)
     else
       mypal = (colors())
-
+    
     return(mypal)
   })
-
-  mypal <- reactive({ unlist(colors()) })
+  
+  mypal <- reactive({
+    unlist(colors())
+  })
   
   
   output$myPanel <- renderUI({
@@ -688,9 +444,6 @@ shinyServer(server <- function(input, output, session) {
   ######## Plot the data frame wiht input #
   #########################################
   
-  #output$table <- renderDataTable({
-
-  
   output$new_test <- renderDataTable(csvf()[[2]])
   
   output$new_data <- renderDataTable(head(csvf()[[1]][2:6]))
@@ -700,7 +453,7 @@ shinyServer(server <- function(input, output, session) {
   output$data_sign <- renderDataTable(data_sign())
   
   output$data_summary <- renderDataTable(data_summary())
-  #})
   
 })
+
 #shinyApp(ui = ui , server = server)

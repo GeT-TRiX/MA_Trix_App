@@ -28,8 +28,7 @@ tabPanel(
         icon = icon("square-o"),
         style =
           "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-      )
-      ,
+      ),
       
       p("You've selectionned the following individuals : "),
       hr(),
@@ -159,7 +158,7 @@ tabPanel(
             column(5,
               numericInput('rowsize','Row size',0.6,
                 min = 0.2,
-                max = 1,
+                max = 1.5,
                 step = 0.1
               )
             ),

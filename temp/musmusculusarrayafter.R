@@ -21,6 +21,13 @@ library(readr)
 length(musmuscu)
 
 musmuscu <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
+colnames(musmuscu)
+mygrep = list(musmuscu, musmuscu , musmuscu)
+
+for (i in 1:length(musmuscu))
+  print(colnames(mygrep[[i]]))
+
+
 colnames(musmuscu)[2:length(musmuscu)] = "test"
 names(musmuscu) = gsub(pattern = "^", replacement = "", x = names(your_data))
 

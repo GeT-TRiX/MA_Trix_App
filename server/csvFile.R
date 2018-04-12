@@ -1,3 +1,18 @@
+#' Reactive function in the aim of loading csv files
+#'
+#' @param inFile
+#'
+#' @return csvord a list of csv files
+#'
+#' @examples
+#'
+
+# csvf <- reactive({  csvf <- callModule(csvFile, "datafile",
+#                        stringsAsFactors = FALSE)
+#   return(csvf())
+# })
+
+
 csvf <- reactive({
   inFile <- input$file
   
