@@ -29,3 +29,24 @@ observeEvent(input$noTests, {
                            label = "Choose your comparison",
                            choices = colnames(adjusted()[[1]][, -1]))
 })
+
+#' Reactive function in the aim of selecting different comparison
+#'
+#' @param input specific of the comparison data frame
+#'
+#' @return \string of the different comparisons selected ### à verifier
+#'
+
+
+choix_test <- eventReactive(input$heatm, {
+  return(input$test)
+}, ignoreNULL = F)
+
+# choix_test <- reactive({
+#   return(input$test)
+# })
+
+output$test <- renderText({
+  choix_test()
+})
+
