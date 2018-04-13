@@ -66,14 +66,6 @@ tabPanel(
       
     ),
     br(),
-    # sliderInput(
-    #   "maxgen",
-    #   "Maximal number of genes by groups",
-    #   min = 100,
-    #   max = 1500,
-    #   value = NULL,
-    #   step = 100
-    # ),
     
     numericInput('maxgen', 'Maximal number of genes by groups', NULL,
                  min = 100, max = 1500),

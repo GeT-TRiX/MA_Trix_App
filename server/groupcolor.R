@@ -14,7 +14,7 @@ mycolgrp <- reactive  ({
 
 cols <- reactive({
 
-  if (is.null(mypal())){
+  if (is.null(mypal()))
     lapply(seq_along(mycolgrp()), function(i) {
       colourInput(
         paste("col", i, sep = "_"),
@@ -24,8 +24,7 @@ cols <- reactive({
         palette = "limited",
         returnName = T)
     })
-  }
-  else {
+  else 
   lapply(seq_along(mycolgrp()), function(i) {
     colourInput(
       paste("col", i, sep = "_"),
@@ -35,7 +34,6 @@ cols <- reactive({
       palette = "limited",
       returnName = T
     )})
-  }
 })
 
 mypaletA <- reactive  ({

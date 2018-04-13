@@ -22,7 +22,6 @@ shinyServer(server <- function(input, output, session) {
   #################################
   
   heatmapfinal <- function() {
-    isolate({
       plotHeatmaps(
         data.matrix(new_data()),
         formated(),
@@ -48,7 +47,6 @@ shinyServer(server <- function(input, output, session) {
         showrow = input$rowname,
         genename = csvf()[[3]]$GeneName
       )
-    })
   }
   
 

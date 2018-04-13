@@ -6,19 +6,29 @@ observeEvent(input$heatm, {
                      icon = icon("repeat"))
   
   output$distPlot <- renderPlot({
-    
-    heatmapfinal()
-    
-  }, width = 900 , height = 1200, res = 100)
+    isolate({
+    if(!is.null(formated()))
+      withProgress(
+        message = 'Plotting heatmap:',
+        value = 0,
+        {
+          n <- NROW(formated())
+          
+          for (i in 1:n) {
+            incProgress(1 / n, detail = "Please wait...")
+          }
+          heatmapfinal() })
+        })
+    }, width = 900 , height = 1200, res = 100)
   
   
   output$save <- downloadHandler(
-    
     filename <- function() {
-      paste0(basename(file_path_sans_ext("myfile")), '_heatmap.', input$form, sep='')
+      isolate({
+      paste0(basename(file_path_sans_ext("myfile")), '_heatmap.', input$form, sep='')})
     },
     content <- function(file) {
-      
+      isolate({
       if(input$form == "emf")  
         
         emf(file,
@@ -42,10 +52,11 @@ observeEvent(input$heatm, {
           width = 7,
           height = 7
         )
-      
-      heatmapfinal()
+      })
+      isolate({
+      heatmapfinal()})
       dev.off()
     }
+    
   )
-  
 })
