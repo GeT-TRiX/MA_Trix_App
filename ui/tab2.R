@@ -169,14 +169,14 @@ tabPanel(
           ), 
           fluidRow(
             column(5,
-              numericInput('rowsize','Row size',0.6,
+              numericInput('rowsize','Row size',0.9,
                 min = 0.2,
                 max = 1.5,
                 step = 0.1
               )
             ),
             column(5,
-              numericInput('colsize','Col size',0.6,
+              numericInput('colsize','Col size',0.9,
                 min = 0.2,
                 max = 1.5,
                 step = 0.1
@@ -184,7 +184,7 @@ tabPanel(
             )
           ),
 
-          numericInput('legsize','Legende size',0.6,
+          numericInput('legsize','Legende size',0.8,
             min = 0.2,
             max = 1.5,
             step = 0.1

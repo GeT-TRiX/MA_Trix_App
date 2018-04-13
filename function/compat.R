@@ -153,7 +153,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   
   #### heatmap  genes 
   
-  useRasterTF=F;
+  #useRasterTF=F;
   
   ##-----------------------##
   ## plot Row dendrogram
@@ -192,7 +192,9 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
         colnames(gphcc)=c("probe","cluster")
         gphccOrd=gphcc[order(as.numeric(gphcc[,1])),]
         hcgp=factor(paste("c",gphccOrd[,2],sep=""),levels=paste("c",rep(1:k),sep=""))
-        gpcolr=num2cols(as.numeric(hcgp),c("black",rep(RowSideColor,20)[1:(k)]))			
+        #gpcolr=num2cols(as.numeric(hcgp),c("black",rep(RowSideColor,20)[1:(k)]))
+        gpcolr=num2cols(as.numeric(hcgp),c(rep(RowSideColor,20)[1:(k)]))
+        print(RowSideColor)
       }else gpcolr=NULL
     }
   }else gpcolr=rep("white",nrow(exprData))
@@ -212,7 +214,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   
   hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
-                    Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=useRasterTF,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),col=my_palette)
+                    Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=T,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),col=my_palette,key.par = list(cex=0.6))
 
   mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
   # ColSideColors=gpcol,

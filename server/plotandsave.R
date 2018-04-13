@@ -30,10 +30,11 @@ observeEvent(input$heatm, {
       
       else if(input$form == "png")
         png(file,
-            width =800,
+            width =900,
             height = 1200,
             units = "px",
-            pointsize= 12
+            pointsize= 12,
+            res= 100
         )
       else 
         eps(
