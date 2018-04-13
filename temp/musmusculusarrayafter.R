@@ -922,10 +922,6 @@ biocLite("impute")
 library(impute)
 
 
-library(FactoMineR)
-impute.knn(my_res)
-PCAdata = as.data.frame(impute.knn(as.matrix(musmuscu)))
-PCAres=PCA(t(PCAdata),scale.unit=scaleU,graph=F)
 
 
 PCAres=PCA(t(musmuscu[,-1]),scale.unit=F,graph=F)
