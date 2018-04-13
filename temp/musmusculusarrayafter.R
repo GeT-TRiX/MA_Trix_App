@@ -904,3 +904,47 @@ formating(adj,logfc,0.05,1000)
 
 
 colnames(pval)
+
+
+musmuscu = read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
+View(musmuscu)
+library(FactoMineR)
+library(factoextra)
+musmuscu <- musmuscu[,-1]
+musmuscu <- scale(musmuscu)
+View(musmuscu)
+x11()
+par(mfrow = c(1,2))
+my_res = PCA(musmuscu, graph = T)
+x11()
+plot(my_res)
+biocLite("impute")
+library(impute)
+
+
+library(FactoMineR)
+impute.knn(my_res)
+PCAdata = as.data.frame(impute.knn(as.matrix(musmuscu)))
+PCAres=PCA(t(PCAdata),scale.unit=scaleU,graph=F)
+
+
+PCAres=PCA(t(musmuscu[,-1]),scale.unit=F,graph=F)
+    colgrp=NULL;
+    hab="ind";
+    colhab=NULL
+
+print(PCAres)
+x11()
+PCAres
+names.arg=1:nrow(PCA$eig)
+PCAres$var$cos2
+
+test = barplot(names.arg=1:nrow(PCAres$eig),PCAres$eig[,2],main="ACP sur les individus",ylab="% variance", xlab="axes")
+
+plot(PCAres,title="ACP sur les individus",new.plot=F,habillage=hab,col.hab=colhab)
+
+PCA = prcomp(musmuscu[,-1],scale = T)
+x11()
+biplot(PCA,scale=0)
+       mtext("Biplot", line = 3, col = "black", font = 2, cex = 1.2)
+
