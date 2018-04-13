@@ -9,3 +9,5 @@ output$value <- renderText({
 mean_grp <- reactive({
   return(output$value)
 })
+
+

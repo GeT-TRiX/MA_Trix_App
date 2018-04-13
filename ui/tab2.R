@@ -222,8 +222,7 @@ tabPanel(
       downloadButton("save", "Save your plot" , style =
                        "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
       
-      br(),
-      br(),
+      br(),br(),
       
       
       shiny::actionButton("heatm", "Print Heatmap", style =
@@ -252,7 +251,6 @@ tabPanel(
         p(icon("table"), "cutheatmap"),
         column(
           12,
-          
           h3(
             "This table represent the significant genes for different condition"
           ),

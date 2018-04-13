@@ -444,7 +444,7 @@ source("function/compat.R")
 source("environnement/global.R")
 source("function/compat.R")
 groupss = read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv")
-
+source("function/plotHeatmaps.r")
 
 treatedd = treated[[2]]
 rownames(treated[[2]])
@@ -465,6 +465,9 @@ testos = c("green","red","orange","blue")
 x11()
 hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix, mypal = testos,
                         showcol = F, showrow = T,genename=pval$GeneName)
+
+cutHeatmaps(hmp01_All)
+
 
 
 #hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],test$Grp,workingPath=wd_path,prefix,suffix,k=3) ## how it should be on shiny app

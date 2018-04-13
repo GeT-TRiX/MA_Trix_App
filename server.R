@@ -48,7 +48,6 @@ shinyServer(server <- function(input, output, session) {
         genename = csvf()[[3]]$GeneName
       )
   }
-  
 
   source(file.path("server", "plotandsave.R"), local = TRUE)$value
   
