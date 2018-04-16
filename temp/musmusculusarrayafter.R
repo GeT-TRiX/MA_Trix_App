@@ -907,6 +907,11 @@ colnames(pval)
 
 
 musmuscu = read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
+groups = read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv")
+View(groups$Grp)
+unique(groups$Grp)
+
+
 View(musmuscu)
 library(FactoMineR)
 library(factoextra)
@@ -920,15 +925,32 @@ x11()
 plot(my_res)
 biocLite("impute")
 library(impute)
+library(factoextra)
 
+myt = transpose(musmuscu)
+row.names(myt)
 
-
-
+help(PCA)
 PCAres=PCA(t(musmuscu[,-1]),scale.unit=F,graph=F)
 PCAres
 
-mypca = res.pca(musmuscu)
+mypca$call
 
+View(musmuscu)
+mypca = res.pca(musmuscu)
+myplot = PCAplot(mypca,rep = F)
+
+myl = list(colnames(musmuscu))
+
+
+p <- fviz_pca_ind(mypca, label= "all", habillage = groups$Grp, addEllipses=TRUE, ellipse.level=0.8, repel = T, axes = c(1, 2))
+  p + scale_color_brewer(palette="Dark2")
+  p + theme_minimal()
+  p + labs(title = "Variances - PCA")
+
+print(p)
+
+help(fviz_pca)
 
     colgrp=NULL;
     hab="ind";
@@ -939,6 +961,7 @@ x11()
 PCAres
 names.arg=1:nrow(PCA$eig)
 PCAres$var$cos2
+
 
 
 x11()
@@ -952,6 +975,12 @@ p <- fviz_eig(PCAres, addlabels=TRUE, hjust = -0.3, barfill="white", barcolor ="
 
 
 print(eboulis(mypca))
+
+
+plot(PCAres,title="ACP sur les individus",new.plot=F,habillage=hab,col.hab=colhab)
+
+
+plotIndiv(PCAres,comp=1:2,ind.names=T,group=Y, style="graphics", legend=T, scale=F)
 
 
 PCA = prcomp(musmuscu[,-1],scale = T)

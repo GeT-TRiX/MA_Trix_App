@@ -4,7 +4,10 @@ require(factoextra)
 
 res.pca <- function(workingset, scale = F) {
   
-  PCAres = PCA(transpose(workingset),
+  myt = transpose(workingset)
+  row.names(myt) = colnames(workingset)
+  
+  PCAres = PCA(myt,
                scale.unit = F,
                graph = F)
   
@@ -13,6 +16,7 @@ res.pca <- function(workingset, scale = F) {
 
 
 eboulis <- function(PCAres){
+  
   p <- fviz_eig(PCAres, addlabels=TRUE, hjust = -0.3, barfill="white", barcolor ="darkblue", linecolor ="red")
   p + theme(panel.grid.major = element_blank(),  panel.grid.minor = element_blank(),panel.border = element_blank(),
             panel.background = element_blank())
@@ -21,25 +25,20 @@ eboulis <- function(PCAres){
   return(p)
 }
 
-PCAplot <- function(PCAres){
-  firef
+PCAplot <- function(PCAres, myax = c(1,2), elips = T , rep = T , mylevel = groups$Grp){
   
+
+  p <- fviz_pca_ind(PCAres, label= "all", habillage = mylevel, addEllipses=elips , ellipse.level=0.8, repel = rep, axes = myax)
+  p + scale_color_brewer(palette="Dark2")
+  p + theme_minimal()
+  p + labs(title = "Variances - PCA")
+  
+  return(p)
 }
 
 
-# require(impute)
-# 
-# PCAdata = as.data.frame(impute.knn(as.matrix(X))$data)
-# 
 
-# pca_res=pca(PCAdata,ncomp=2, scale=F)
-# 
-# png("sPLSDA/All_pca_dim12.png")
-# 
-# plotIndiv(pca_res,comp=1:2,ind.names=T,group=Y, style="graphics", legend=T, scale=F)
-# 
-# dev.off()
-# 
+
 # Xname=fData(MAtreated_AllChip$WorkingSet)$GeneName
 # 
 # plotVar(res_splsda_n5,comp=1:2, legend=T,var.names=list(name=Xname),cutoff=0.7,comp.select=1:2)

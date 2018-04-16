@@ -129,12 +129,21 @@ shinyServer(server <- function(input, output, session) {
     return(mybar)
   })
   
+  PCA_plot <- reactive({
+    
+    myrend = PCAplot(PCAres(), mylevel =  csvf()[[2]]$Grp)
+    return(myrend)
+  })
+  
   output$eigpca <- renderPlot({
     plot(Scree_plot())
     
   }, width = 600 , height = 480, res = 100)
   
-  
+  output$PCA <- renderPlot({
+    plot(PCA_plot())
+    
+  }, width = 800 , height = 800, res = 100)
   
   
 })
