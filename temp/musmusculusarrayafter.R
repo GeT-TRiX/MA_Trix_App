@@ -937,18 +937,37 @@ PCAres
 mypca$call
 
 View(musmuscu)
-mypca = res.pca(musmuscu)
+mypca = res.pca(musmuscu[,-1])
 myplot = PCAplot(mypca,rep = F)
+plot(myplot)
 
 myl = list(colnames(musmuscu))
 
+mypca
 
 p <- fviz_pca_ind(mypca, label= "all", habillage = groups$Grp, addEllipses=TRUE, ellipse.level=0.8, repel = T, axes = c(1, 2))
-  p + scale_color_brewer(palette="Dark2")
-  p + theme_minimal()
   p + labs(title = "Variances - PCA")
+  p + scale_color_manual(values=unlist(mylt))
+  
+  
 
-print(p)
+values= c("#999999", "#E69F00", "#56B4E9","red")
+typeof(values)  
+
+#p + theme_minimal()
+  #p + labs(title = "Variances - PCA")
+
+plot(p)
+typeof(palette)
+
+
+
+mylt = list("red","orange","green","purple")
+typeof(mylt)
+typeof(unlist(mylt))
+
+levels(groups$Grp)
+brewer.pal(8, "Dark2")
 
 help(fviz_pca)
 

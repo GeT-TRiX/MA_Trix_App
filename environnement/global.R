@@ -12,7 +12,8 @@ lastcol = "red"
 suffix = "test"
 prefix = "toast"
 list.of.packages <- c("shiny","dplyr","shinythemes","shinyjs","ggplot2","shinyBS","markdown"
-                      ,"BH","rCharts","data.table","DT","readr","rbenchmark","colourpicker","tools","devEMF","R.devices","FactoMineR","factoextra")
+                      ,"BH","rCharts","data.table","DT","readr","rbenchmark","colourpicker",
+                      "tools","devEMF","R.devices","FactoMineR","factoextra", "RColorBrewer")
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)

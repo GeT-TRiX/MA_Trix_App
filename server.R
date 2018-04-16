@@ -22,6 +22,7 @@ shinyServer(server <- function(input, output, session) {
   #################################
   
   heatmapfinal <- function() {
+    isolate({
       plotHeatmaps(
         data.matrix(new_data()),
         formated(),
@@ -47,7 +48,40 @@ shinyServer(server <- function(input, output, session) {
         showrow = input$rowname,
         genename = csvf()[[3]]$GeneName
       )
+    })
   }
+  
+  
+  PCAplot <- function() {
+    
+    p <-fviz_mca_ind(
+      PCAres(),
+      label = labeled(),
+      habillage = csvf()[[2]]$Grp,
+      addEllipses = input$ellipse ,
+      ellipse.level = 0.8,
+      repel = input$jitter,
+      axes = c(as.integer(input$dim1), as.integer(input$dim2)),
+      labelsize = input$labelsiize
+    )
+    #p + scale_color_manual(values=unlist(colorspca()))
+    #p + theme_minimal()
+    #p + labs(title = "Variances - PCA")
+
+    print(colorspca())
+    if (is.null(colorspca()[1])){
+      palette = brewer.pal(8, "Dark2")
+      print("ok")
+    }
+    else
+      palette = unlist(colorspca())
+    
+    print(palette)
+
+    return(p + scale_color_manual(values=palette))
+      
+  }
+  
 
   source(file.path("server", "plotandsave.R"), local = TRUE)$value
   
@@ -116,35 +150,33 @@ shinyServer(server <- function(input, output, session) {
   ######## PCA part                       #
   #########################################
   
-  PCAres <- reactive({
-    if (is.null(csvf()[[1]]))
-      return(NULL)
+  source(file.path("server", "PCAsandp.R"), local = TRUE)$value
+  
+  
 
-    mypca = res.pca(csvf()[[1]][,-1], scale =F)
-    return(mypca)
+  colspca <- reactive({
+    
+      lapply(seq_along(unique(csvf()[[2]]$Grp)), function(i) {
+        colourInput(
+          paste("col", i, sep = "_"),
+          levels(csvf()[[2]]$Grp)[i],
+          brewer.pal(8, "Dark2")[i],
+          allowedCols =  brewer.pal(8, "Dark2"),
+          palette = "limited",
+          returnName = T)
+      })
   })
   
-  Scree_plot <- reactive({
-    mybar = eboulis(PCAres())
-    return(mybar)
+
+  output$myPanelpca <- renderUI({
+    colspca()
   })
   
-  PCA_plot <- reactive({
-    
-    myrend = PCAplot(PCAres(), mylevel =  csvf()[[2]]$Grp)
-    return(myrend)
-  })
-  
-  output$eigpca <- renderPlot({
-    plot(Scree_plot())
-    
-  }, width = 600 , height = 480, res = 100)
-  
-  output$PCA <- renderPlot({
-    plot(PCA_plot())
-    
-  }, width = 800 , height = 800, res = 100)
-  
+    colorspca <- reactive({
+      lapply(seq_along(unique(csvf()[[2]]$Grp)), function(i) {
+        input[[paste("col", i, sep = "_")]]
+      })
+    })
   
 })
 

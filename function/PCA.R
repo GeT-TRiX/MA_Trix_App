@@ -25,18 +25,17 @@ eboulis <- function(PCAres){
   return(p)
 }
 
-PCAplot <- function(PCAres, myax = c(1,2), elips = T , rep = T , mylevel = groups$Grp){
+PCAplot <- function(PCAres, myax = myax, elips = T , rep = T , mylevel = groups$Grp){
   
 
-  p <- fviz_pca_ind(PCAres, label= "all", habillage = mylevel, addEllipses=elips , ellipse.level=0.8, repel = rep, axes = myax)
+  p <- fviz_mca_ind(PCAres, label= "all", habillage = mylevel, addEllipses= elips ,
+                    ellipse.level= 0.8, repel = T, axes = myax, pointsize = 2 )
   p + scale_color_brewer(palette="Dark2")
   p + theme_minimal()
   p + labs(title = "Variances - PCA")
   
   return(p)
 }
-
-
 
 
 # Xname=fData(MAtreated_AllChip$WorkingSet)$GeneName
