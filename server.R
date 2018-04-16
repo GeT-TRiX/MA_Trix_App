@@ -112,6 +112,31 @@ shinyServer(server <- function(input, output, session) {
   
   source(file.path("server", "renderertable.R"), local = TRUE)$value
   
+  #########################################
+  ######## PCA part                       #
+  #########################################
+  
+  PCAres <- reactive({
+    if (is.null(csvf()[[1]]))
+      return(NULL)
+
+    mypca = res.pca(csvf()[[1]][,-1], scale =F)
+    return(mypca)
+  })
+  
+  Scree_plot <- reactive({
+    mybar = eboulis(PCAres())
+    return(mybar)
+  })
+  
+  output$eigpca <- renderPlot({
+    plot(Scree_plot())
+    
+  }, width = 600 , height = 480, res = 100)
+  
+  
+  
+  
 })
 
 #shinyApp(ui = ui , server = server)

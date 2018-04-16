@@ -67,7 +67,11 @@ tabPanel(p(icon("line-chart"), "PCA"),
                type = "text/css",
                ".shiny-output-error { visibility: hidden; }",
                ".shiny-output-error:before { visibility: hidden; }"
-             )
+             ),
+        
+             plotOutput(outputId = "eigpca")
+             
+             
            ),
            
            tabPanel(
@@ -76,7 +80,9 @@ tabPanel(p(icon("line-chart"), "PCA"),
                type = "text/css",
                ".shiny-output-error { visibility: hidden; }",
                ".shiny-output-error:before { visibility: hidden; }"
-             )
+             ),
+             
+             plotOutput(outputId = "PCA")
            )
          ))
          

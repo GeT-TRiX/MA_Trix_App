@@ -929,6 +929,11 @@ PCAres=PCA(t(PCAdata),scale.unit=scaleU,graph=F)
 
 
 PCAres=PCA(t(musmuscu[,-1]),scale.unit=F,graph=F)
+PCAres
+
+mypca = res.pca(musmuscu)
+
+
     colgrp=NULL;
     hab="ind";
     colhab=NULL
@@ -939,9 +944,19 @@ PCAres
 names.arg=1:nrow(PCA$eig)
 PCAres$var$cos2
 
+
+x11()
 test = barplot(names.arg=1:nrow(PCAres$eig),PCAres$eig[,2],main="ACP sur les individus",ylab="% variance", xlab="axes")
 
 plot(PCAres,title="ACP sur les individus",new.plot=F,habillage=hab,col.hab=colhab)
+
+p <- fviz_eig(PCAres, addlabels=TRUE, hjust = -0.3, barfill="white", barcolor ="darkblue", linecolor ="red")
+      +theme_minimal()
+      + labs(title = "Variances - PCA", x = "Principal Components", y = "% of variances")
+
+
+print(eboulis(mypca))
+
 
 PCA = prcomp(musmuscu[,-1],scale = T)
 x11()
