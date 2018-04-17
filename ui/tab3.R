@@ -71,8 +71,8 @@ tabPanel(p(icon("line-chart"), "PCA"),
                )
              ),
          br(),
-         shiny::actionButton("pcam", "Print Heatmap", style =
-                               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+         # shiny::actionButton("pcam", "Run PCA", style =
+         #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
          
           downloadButton("savepca", "Save your plot" , style =
                            "color: #fff; background-color: #337ab7; border-color: #2e6da4")

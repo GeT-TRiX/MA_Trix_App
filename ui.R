@@ -8,7 +8,6 @@
 ##################################
 ##################################
 
-
 source("function/compat.R")
 source("function/formating.R")
 source("environnement/global.R")
@@ -16,7 +15,7 @@ source("function/PCA.R")
 
 
 
-options(shiny.maxRequestSize = 40 * 1024 ^ 2) # defined the maximum size in Mb that R can load for one file
+options(shiny.maxRequestSize = 70 * 1024 ^ 2) # defined the maximum size in Mb that R can load for one file
 shinyUI(ui <- bootstrapPage(
   navbarPage(
     "MaTrix App",
@@ -36,7 +35,6 @@ shinyUI(ui <- bootstrapPage(
     
     tabPanel(p(icon("question-circle"),
                "How to use?"),
-             
              mainPanel(includeMarkdown("markdown/help.md"))),
     tabPanel(p(icon("info-circle"),
                "About"),

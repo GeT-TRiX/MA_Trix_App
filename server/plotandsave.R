@@ -54,8 +54,23 @@ observeEvent(input$heatm, {
         )
       })
       isolate({
-      heatmapfinal()})
-      dev.off()
+        if(!is.null(formated()))
+          withProgress(
+            message = 'Plotting heatmap:',
+            value = 0,
+            {
+              n <- NROW(formated())
+              
+              for (i in 1:n) {
+                incProgress(1 / n, detail = "Please wait...")
+              }
+              heatmapfinal() })
+        dev.off()
+      })  
+        
+        
+      #heatmapfinal()})
+      #dev.off()
     }
     
   )

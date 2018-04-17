@@ -217,10 +217,5 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=T,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),col=my_palette,key.par = list(cex=0.6))
 
   mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
-  # ColSideColors=gpcol,
-  #key.par = list(cex=0.5),
-  #key.par=list(mar=c(4,4,4,10))
-  #return(hmp02)
-  # lhei = c(0.5,5), lwid = c(1,5)
-  #key.par=list(mar=c(3,3,1,1),cex=0.5)
+
 }

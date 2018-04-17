@@ -20,6 +20,8 @@ library(readr)
 
 length(musmuscu)
 
+
+
 musmuscu <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
 colnames(musmuscu)
 mygrep = list(musmuscu, musmuscu , musmuscu)
@@ -88,8 +90,10 @@ colnames(testons[2])
 
 
 
-benchmark(
-pval <- read.csv2("data/All_topTableAll.csv"))
+
+pval <- read.csv2("data/All_topTableAll.csv")
+View(pval)
+
 
 benchmark(
 read.table(
