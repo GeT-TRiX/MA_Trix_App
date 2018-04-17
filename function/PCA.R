@@ -25,16 +25,14 @@ eboulis <- function(PCAres){
   return(p)
 }
 
-PCAplot <- function(PCAres, myax = myax, elips = T , rep = T , mylevel = groups$Grp){
+PCAplot <- function(PCAres, myax = c(1,2), elips = T , rep = T , mylevel = groups$Grp,  mylabsize = 4, dispelip = 0.8 , labeled = 'all', pal = brewer.pal(8, "Dark2")){
   
 
-  p <- fviz_mca_ind(PCAres, label= "all", habillage = mylevel, addEllipses= elips ,
-                    ellipse.level= 0.8, repel = T, axes = myax, pointsize = 2 )
-  p + scale_color_brewer(palette="Dark2")
-  p + theme_minimal()
-  p + labs(title = "Variances - PCA")
+  p <- fviz_mca_ind(PCAres, label= labeled , habillage = mylevel, addEllipses= elips ,
+                    ellipse.level= 0.8, repel = rep, axes = myax, pointsize = 2 , labelsize = mylabsize)
+
   
-  return(p)
+  return(p + scale_color_manual(values=pal))
 }
 
 

@@ -22,7 +22,9 @@ shinyServer(server <- function(input, output, session) {
   #################################
   
   heatmapfinal <- function() {
+    
     isolate({
+      
       plotHeatmaps(
         data.matrix(new_data()),
         formated(),
@@ -48,11 +50,26 @@ shinyServer(server <- function(input, output, session) {
         showrow = input$rowname,
         genename = csvf()[[3]]$GeneName
       )
+      
     })
   }
   
   
   PCAplot <- function() {
+    
+    
+    empty <- reactive ({
+      
+      if (is.null(colorspca()[[1]])){
+        palpca = brewer.pal(8, "Dark2")
+      }
+      else
+        palpca = unlist(colorspca())
+      
+      return(palpca)
+      
+    })
+    
     
     p <-fviz_mca_ind(
       PCAres(),
@@ -64,22 +81,10 @@ shinyServer(server <- function(input, output, session) {
       axes = c(as.integer(input$dim1), as.integer(input$dim2)),
       labelsize = input$labelsiize
     )
-    #p + scale_color_manual(values=unlist(colorspca()))
-    #p + theme_minimal()
-    #p + labs(title = "Variances - PCA")
 
-    print(colorspca())
-    if (is.null(colorspca()[1])){
-      palette = brewer.pal(8, "Dark2")
-      print("ok")
-    }
-    else
-      palette = unlist(colorspca())
+
+    return(p + scale_color_manual(values=empty()))
     
-    print(palette)
-
-    return(p + scale_color_manual(values=palette))
-      
   }
   
 
@@ -152,31 +157,8 @@ shinyServer(server <- function(input, output, session) {
   
   source(file.path("server", "PCAsandp.R"), local = TRUE)$value
   
-  
+  source(file.path("server", "colforpca.R"), local = TRUE)$value
 
-  colspca <- reactive({
-    
-      lapply(seq_along(unique(csvf()[[2]]$Grp)), function(i) {
-        colourInput(
-          paste("col", i, sep = "_"),
-          levels(csvf()[[2]]$Grp)[i],
-          brewer.pal(8, "Dark2")[i],
-          allowedCols =  brewer.pal(8, "Dark2"),
-          palette = "limited",
-          returnName = T)
-      })
-  })
-  
-
-  output$myPanelpca <- renderUI({
-    colspca()
-  })
-  
-    colorspca <- reactive({
-      lapply(seq_along(unique(csvf()[[2]]$Grp)), function(i) {
-        input[[paste("col", i, sep = "_")]]
-      })
-    })
   
 })
 

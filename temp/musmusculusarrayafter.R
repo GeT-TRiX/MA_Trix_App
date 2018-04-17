@@ -945,6 +945,8 @@ myl = list(colnames(musmuscu))
 
 mypca
 
+typeof(brewer.pal(8, "Dark2"))
+
 p <- fviz_pca_ind(mypca, label= "all", habillage = groups$Grp, addEllipses=TRUE, ellipse.level=0.8, repel = T, axes = c(1, 2))
   p + labs(title = "Variances - PCA")
   p + scale_color_manual(values=unlist(mylt))
