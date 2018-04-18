@@ -92,7 +92,8 @@ colnames(testons[2])
 
 
 pval <- read.csv2("data/All_topTableAll.csv")
-View(pval)
+
+
 
 
 benchmark(
@@ -1012,4 +1013,5 @@ PCA = prcomp(musmuscu[,-1],scale = T)
 x11()
 biplot(PCA,scale=0)
        mtext("Biplot", line = 3, col = "black", font = 2, cex = 1.2)
+
 
