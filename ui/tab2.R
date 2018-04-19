@@ -5,8 +5,8 @@ tabPanel(
   
   sidebarPanel(
     width = 3,
-    style = " font-size:100%; font-family:Arial;
-    border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
+    # style = " font-size:100%; font-family:Arial;
+    # border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
     #tags$style("#myNumericInput {font-size:10px;height:10px;}"),
     
     br(),
@@ -28,11 +28,12 @@ tabPanel(
         icon = icon("square-o"),
         style =
           "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-      ),
+      )
+      #,
       
-      p("You've selectionned the following individuals : "),
-      hr(),
-      verbatimTextOutput("indiv")
+      # p("You've selectionned the following individuals : "),
+      # hr(),
+      # verbatimTextOutput("indiv")
       
     ),
     wellPanel(
@@ -225,9 +226,10 @@ tabPanel(
       br(),br(),
       
       
-      shiny::actionButton("heatm", "Print Heatmap", style =
-                            "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-      uiOutput('Button')
+      # shiny::actionButton("heatm", "Print Heatmap", style =
+      #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+    
+    uiOutput("button")
       
     ),
     
@@ -244,6 +246,10 @@ tabPanel(
         ### no more error messages
         bsAlert("alert"),
         plotOutput(outputId = "distPlot")
+        
+        # p("You've selectionned the following individuals : "),
+        # hr(),
+        # verbatimTextOutput("indiv")
         
       ),
       tabPanel

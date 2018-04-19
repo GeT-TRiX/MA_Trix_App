@@ -53,10 +53,6 @@ indnull <- reactive({
 })
 
 
-# choix_cont <- eventReactive(input$vennd, {
-#   return(input$cont)
-# }, ignoreNULL = F)
-
 choix_cont <- reactive({
   return(input$cont)
 })

@@ -66,6 +66,16 @@ tabPanel(p(icon("line-chart"), "PCA"),
                  value = 4,
                  step = 1
                ),
+               
+               sliderInput(
+                 "pointsiize",
+                 "Label size",
+                 min = 2,
+                 max = 6,
+                 value = 2,
+                 step = 1
+               ),
+               
                uiOutput('myPanelpca')
                
                )

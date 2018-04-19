@@ -17,6 +17,11 @@ shinyServer(server <- function(input, output, session) {
                    shinyjs::toggle(id = "advancedcol", anim = TRUE))
   
   
+  
+  source(file.path("server", "changeheatmbut.R"), local = TRUE)$value
+  
+  
+  
   #################################
   ######## Plot in the renderView #
   #################################
@@ -65,7 +70,6 @@ shinyServer(server <- function(input, output, session) {
       }
       else
         palpca = unlist(colorspca())
-      
       return(palpca)
       
     })
@@ -79,9 +83,9 @@ shinyServer(server <- function(input, output, session) {
       ellipse.level = 0.8,
       repel = input$jitter,
       axes = c(as.integer(input$dim1), as.integer(input$dim2)),
-      labelsize = input$labelsiize
+      labelsize = input$labelsiize,
+      pointsize = input$pointsiize
     )
-
 
     return(p + scale_color_manual(values=empty()))
   }
