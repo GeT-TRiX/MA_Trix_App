@@ -3,7 +3,7 @@ source("function/formating.R")
 source("function/PCA.R")
 source("environnement/global.R")
 source("function/decideTestTrix.R")
-
+source("function/vennplot.R")
 
 shinyServer(server <- function(input, output, session) {
   
@@ -84,8 +84,15 @@ shinyServer(server <- function(input, output, session) {
 
 
     return(p + scale_color_manual(values=empty()))
-    
   }
+  
+
+    
+    output$myVenn <- renderPlot({
+      
+    plot(Vennplot())
+  }, width = 2000 , height = 1200, res = 100)
+
   
 
   source(file.path("server", "plotandsave.R"), local = TRUE)$value
@@ -158,7 +165,9 @@ shinyServer(server <- function(input, output, session) {
   source(file.path("server", "PCAsandp.R"), local = TRUE)$value
   
   source(file.path("server", "colforpca.R"), local = TRUE)$value
-
+  
+  source(file.path("server", "Venn.R"), local = TRUE)$value
+  
   
 })
 

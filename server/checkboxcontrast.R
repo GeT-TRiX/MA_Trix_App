@@ -50,3 +50,6 @@ output$test <- renderText({
   choix_test()
 })
 
+
+
+

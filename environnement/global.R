@@ -14,7 +14,7 @@ prefix = "toast"
 list.of.packages <- c("shiny","dplyr","shinythemes","shinyjs","ggplot2","shinyBS","markdown"
                       ,"BH","rCharts","data.table","DT","readr","rbenchmark","colourpicker",
                       "tools","devEMF","R.devices","FactoMineR","factoextra",
-                      "RColorBrewer","foreach","doParallel")
+                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra")
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)

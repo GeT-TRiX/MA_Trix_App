@@ -909,10 +909,32 @@ formating(adj,logfc,0.05,1000)
 
 
 colnames(pval)
+chimere  = read.csv2("data/file.csv")
 
-
+pval = read.csv2("data/All_topTableAll.csv")
 musmuscu = read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
 groups = read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv")
+groups <- as.data.frame(groups)
+colnames(groups) = c("ind","Grp")
+zz <- merge(musmuscu, pval, all = TRUE)
+
+which(colnames(zz) == "Row")
+myfirst <- zz[1:25]
+mylast <- zz[,c(1,26:59)]
+View(mylast)
+View(zz)
+
+
+View(myfirst)
+colnames(groups) = c("ind","Grp")
+cbind.na(musmuscu,groups)
+final <- merge(musmuscu, groups, all = F)
+View(final)
+View(groups)
+library(dplyr)
+inner_join(musmuscu,groups)
+
+
 View(groups$Grp)
 unique(groups$Grp)
 
@@ -925,7 +947,8 @@ musmuscu <- scale(musmuscu)
 View(musmuscu)
 x11()
 par(mfrow = c(1,2))
-my_res = PCA(musmuscu, graph = T)
+View(musmuscu)
+my_res = PCA(musmuscu[,-1], graph = T)
 x11()
 plot(my_res)
 biocLite("impute")
@@ -935,8 +958,21 @@ library(factoextra)
 myt = transpose(musmuscu)
 row.names(myt)
 
-help(PCA)
+cc1<-data.frame(PCAres$ind$coord)
+cc2<-data.frame(PCAres$var$coord)
+cc1
+cc2
+
+points <- data.frame(x = cc1$Dim.1, 
+                     y = cc1$Dim.2,
+                     color = groups$Grp,
+                     lab= colnames(musmuscu[,-1]))
+
+scatterD3(points,x=x,y=y,col_var = color, ellipses =  T, lab =lab , xlab = "Dim1" , ylab = "Dim2", colors = unlist(palette),
+          unit_circle = T) 
+
 PCAres=PCA(t(musmuscu[,-1]),scale.unit=F,graph=F)
+
 PCAres
 
 mypca$call
