@@ -27,9 +27,7 @@ shinyServer(server <- function(input, output, session) {
   #################################
   
   heatmapfinal <- function() {
-    
     isolate({
-      
       plotHeatmaps(
         data.matrix(new_data()),
         formated(),
@@ -61,11 +59,8 @@ shinyServer(server <- function(input, output, session) {
   
   
   PCAplot <- function() {
-    
-    
     empty <- reactive ({
-      
-      if (is.null(colorspca()[[1]])){
+      if (is.null(colorspca()[[1]])) {
         palpca = brewer.pal(8, "Dark2")
       }
       else
@@ -75,7 +70,7 @@ shinyServer(server <- function(input, output, session) {
     })
     
     
-    p <-fviz_mca_ind(
+    p <- fviz_mca_ind(
       PCAres(),
       label = labeled(),
       habillage = csvf()[[2]]$Grp,
@@ -86,19 +81,18 @@ shinyServer(server <- function(input, output, session) {
       labelsize = input$labelsiize,
       pointsize = input$pointsiize
     )
-
-    return(p + scale_color_manual(values=empty()))
+    
+    return(p + scale_color_manual(values = empty()))
   }
   
-
-    
-    output$myVenn <- renderPlot({
-      
+  
+  
+  output$myVenn <- renderPlot({
     plot(Vennplot())
   }, width = 2000 , height = 1200, res = 100)
-
   
-
+  
+  
   source(file.path("server", "plotandsave.R"), local = TRUE)$value
   
   
@@ -149,7 +143,7 @@ shinyServer(server <- function(input, output, session) {
   #########################################
   
   source(file.path("server", "backgroundcolor.R"), local = TRUE)$value
-
+  
   #########################################
   ######## Colors for the  groups         #
   #########################################

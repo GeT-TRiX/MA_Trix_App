@@ -7,11 +7,13 @@ tabPanel(p(icon("line-chart"), "PCA"),
                selectInput(
                  "dim1",
                  label = h6(gettext("x axis")),
-                 choices = list("1" = 1,
-                                "2" = 2,
-                                "3" = 3,
-                                "4" = 4,
-                                "5"= 5),
+                 choices = list(
+                   "1" = 1,
+                   "2" = 2,
+                   "3" = 3,
+                   "4" = 4,
+                   "5" = 5
+                 ),
                  selected = firstdim
                  #width = '80%'
                )
@@ -32,17 +34,17 @@ tabPanel(p(icon("line-chart"), "PCA"),
                  #width = '100%'
                )
              )),
-             checkboxInput("label", "Add labbels names",TRUE),
+             checkboxInput("label", "Add labbels names", TRUE),
              
              verbatimTextOutput("valuelab"),
              
              checkboxInput("ellipse", "Add ellipses", FALSE),
              verbatimTextOutput("ellipse"),
-          # ),
-           
-           
-         # wellPanel(
-          
+             # ),
+             
+             
+             # wellPanel(
+             
              shiny::actionButton(
                "toggleAdvancedPCA",
                "Show Advanced Options Setup",
@@ -52,46 +54,47 @@ tabPanel(p(icon("line-chart"), "PCA"),
              
              br(),
              
-             shinyjs::hidden(div(
-               id = "advancedPCA",
-               
-               checkboxInput("jitter", "Avoid overlap between points", FALSE),
-               verbatimTextOutput("valued"),
-               
-               sliderInput(
-                 "labelsiize",
-                 "Label size",
-                 min = 2,
-                 max = 6,
-                 value = 4,
-                 step = 1
-               ),
-               
-               sliderInput(
-                 "pointsiize",
-                 "Label size",
-                 min = 2,
-                 max = 6,
-                 value = 2,
-                 step = 1
-               ),
-               
-               uiOutput('myPanelpca')
-               
+             shinyjs::hidden(
+               div(
+                 id = "advancedPCA",
+                 
+                 checkboxInput("jitter", "Avoid overlap between points", FALSE),
+                 verbatimTextOutput("valued"),
+                 
+                 sliderInput(
+                   "labelsiize",
+                   "Label size",
+                   min = 2,
+                   max = 6,
+                   value = 4,
+                   step = 1
+                 ),
+                 
+                 sliderInput(
+                   "pointsiize",
+                   "Label size",
+                   min = 2,
+                   max = 6,
+                   value = 2,
+                   step = 1
+                 ),
+                 
+                 uiOutput('myPanelpca')
+                 
                )
              ),
-         br(),
-         # shiny::actionButton("pcam", "Run PCA", style =
-         #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-         
-          downloadButton("savepca", "Save your plot" , style =
-                           "color: #fff; background-color: #337ab7; border-color: #2e6da4")
-            
-             )
+             br(),
+             # shiny::actionButton("pcam", "Run PCA", style =
+             #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+             
+             downloadButton("savepca", "Save your plot" , style =
+                              "color: #fff; background-color: #337ab7; border-color: #2e6da4")
+             
+           )
          ),
          
          mainPanel(tabsetPanel(
-         tabPanel(
+           tabPanel(
              p("PCA plot"),
              tags$style(
                type = "text/css",
@@ -99,9 +102,10 @@ tabPanel(p(icon("line-chart"), "PCA"),
                ".shiny-output-error:before { visibility: hidden; }"
              ),
              plotOutput(outputId = "eigpca"),
-             br(),br(),br(),br(),
+             br(),
+             br(),
+             br(),
+             br(),
              plotOutput(outputId = "PCA")
            )
-         ))
-         
-)
+         )))
