@@ -31,6 +31,9 @@ shinyUI(ui <- bootstrapPage(
     source(file.path("ui", "tab3.R"), local = TRUE)$value,
     source(file.path("ui", "tab2.R"), local = TRUE)$value,
     
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+    ),
     
     #source(file.path("ui", "markdown.R"), local = TRUE)$value
     

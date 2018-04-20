@@ -9,13 +9,14 @@ Vennlist <- function(pval,adj){
 }
 
 
-Vennfinal <- function(myl,adj){
+Vennfinal <- function(myl,adj, cex ){
   indexnull = which( sapply(myl ,length) == 0)
   myl <- myl[sapply(myl, length) > 0]
   final = length(myl)-1
   futile.logger::flog.threshold(futile.logger::ERROR, name = "VennDiagramLogger")
-  g = venn.diagram(x = myl, filename = NULL, scaled = T, 
-                   category.names = colnames(adj[,-c(indexnull)]),fill = 2:(2+final), alpha = 0.3)
+  g = venn.diagram(x = myl, filename = NULL, scaled = F, 
+                   category.names = colnames(adj[,-c(indexnull)]),fill = 2:(2+final), alpha = 0.3, sub="lol", cex=1, 
+                   fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop") # na= stop
   final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom="DEG BH 0.05")
   
   return(final)

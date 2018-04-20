@@ -75,9 +75,9 @@ list_ind <- reactive({
 #   choix_individus()
 # })
 
-output$indiv <-  renderText({
-  choix_grp()
-})
+# output$indiv <-  renderText({
+#   my_final <<- paste(choix_grp(),as.character(),  sep=",") 
+# })
 
 #' Reactive function that select specific individuals in the data frame
 #'

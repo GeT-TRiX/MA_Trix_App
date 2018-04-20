@@ -14,6 +14,7 @@ formated <- reactive({
     user_group()[[2]],
     user_group()[[3]],
     DEGcutoff = input$pval,
+    #DEGcutoff = mypval(),
     FC = input$fc,
     cutoff_meth = input$method2
     

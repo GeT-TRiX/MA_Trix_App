@@ -1,3 +1,5 @@
+
+
 tabPanel(
   p(icon("line-chart"),
     "Heatmap "),
@@ -48,11 +50,11 @@ tabPanel(
         icon = icon("square-o"),
         style =
           "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-      ),
+      )
       
-      p("You'veselectionned the following test : "),
-      hr(),
-      verbatimTextOutput("test")
+      # p("You've selectionned the following test : "),
+      # hr()
+      #verbatimTextOutput("test")
       
     ),
     br(),
@@ -238,7 +240,8 @@ tabPanel(
     
   ),
   
-  mainPanel(tabsetPanel(
+  mainPanel(
+    tabsetPanel(
     tabPanel(
       p(icon("line-chart"), "Visualize the Heatmap"),
       tags$style(
@@ -246,15 +249,40 @@ tabPanel(
         ".shiny-output-error { visibility: hidden; }",
         ".shiny-output-error:before { visibility: hidden; }"
       ),
-      
+      ### from the library ShinyJS
       useShinyjs(),
       ### no more error messages
       bsAlert("alert"),
-      plotOutput(outputId = "distPlot")
+      plotOutput(outputId = "distPlot"),
+      ### Adding white spaces between the heatmap plot and the tracker
+      br(),br(),br(),br(),br(),br(),br(),br(),br(),
+      br(),br(),br(),br(),br(),br(),br(),br(),br(),
+      br(),br(),br(),br(),br(),br(),br(),br(),br(),
+      br(),br(),br(),br(),br(),br(),br(),br(),br(),
+      br(),br(),br(),br(),br(),
+      h1("Here's a tracker for your different selections:"),
+      #br(),
+      tags$head(tags$style("
+                  #container * {  
+      display: inline;
+                     }")),
+      div(id="container",p('You have selectionned the following groups :'), htmlOutput("indiv"),p("with the following contrasts")
+          ,textOutput("test")),
+      #br(),
+      div(id="container",p('The selected rows for your heatmap are based on the '), textOutput("myMET"),p("method, with a P-value and FC treshold respectively set to "),
+          textOutput("myPVAL"),p('and'),textOutput("myFC")
+        ),
+      #br(),
+      div(id="container",p('The'), textOutput("myMAT"),p("method was used to compute the matrix distance with a nomber of cluster for the significant genes equal to",
+                                                         textOutput("myCLUST")))
+      #div(id="container",p('The advanced color settings choosen for the following groups :'), htmlOutput("indiv"),p("are respectively correlated to the successive colors"))
       
-      # p("You've selectionned the following individuals : "),
-      # hr(),
-      # verbatimTextOutput("indiv")
+      
+      #,
+      # br(),
+      # div(id="container",p(""))
+      
+  
       
     ),
     tabPanel

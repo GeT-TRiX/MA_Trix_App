@@ -65,7 +65,7 @@ tabPanel(
         value = 0.05,
         step = 0.01
         ,width = "500")
-      #)
+
       ,
       dataTableOutput("data_summary")
     ),

@@ -11,7 +11,7 @@ vennlist <- reactive({
 
 
 Vennplot <- reactive({
-  Vennfinal(vennlist(),user_cont())
+  Vennfinal(vennlist(),user_cont(), cex = input$vennsize)
 })
 
 

@@ -42,13 +42,16 @@ choix_test <- eventReactive(input$heatm, {
   return(input$test)
 }, ignoreNULL = F)
 
+
 # choix_test <- reactive({
 #   return(input$test)
 # })
 
-output$test <- renderText({
-  choix_test()
-})
+  
+# output$test <- renderText({
+#   my_final <<- paste(choix_test(),as.character(),  sep=",") 
+# 
+# })
 
 
 
