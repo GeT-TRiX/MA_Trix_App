@@ -1,5 +1,3 @@
-
-
 tabPanel(
   p(icon("line-chart"),
     "Heatmap "),
@@ -184,7 +182,7 @@ tabPanel(
         
         numericInput(
           'legsize',
-          'Legende size',
+          'Legend size',
           0.8,
           min = 0.2,
           max = 1.5,
@@ -242,18 +240,19 @@ tabPanel(
   
   mainPanel(
     tabsetPanel(
-    tabPanel(
-      p(icon("line-chart"), "Visualize the Heatmap"),
-      tags$style(
-        type = "text/css",
-        ".shiny-output-error { visibility: hidden; }",
-        ".shiny-output-error:before { visibility: hidden; }"
-      ),
-      ### from the library ShinyJS
-      useShinyjs(),
-      ### no more error messages
-      bsAlert("alert"),
-      plotOutput(outputId = "distPlot"),
+      tabPanel(
+        p(icon("line-chart"), "Visualize the Heatmap"),
+        tags$style(
+          type = "text/css",
+          ".shiny-output-error { visibility: hidden; }",
+          ".shiny-output-error:before { visibility: hidden; }"
+        ),
+        ### from the library ShinyJS
+        useShinyjs(),
+        ### no more error messages
+        bsAlert("alert"),
+        plotOutput(outputId = "distPlot"),
+        
       ### Adding white spaces between the heatmap plot and the tracker
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
@@ -262,32 +261,60 @@ tabPanel(
       br(),br(),br(),br(),br(),
       h1("Here's a tracker for your different selections:"),
       #br(),
-      tags$head(tags$style("
-                  #container * {  
-      display: inline;
-                     }")),
-      div(id="container",p('You have selectionned the following groups :'), htmlOutput("indiv"),p("with the following contrasts")
-          ,textOutput("test")),
-      #br(),
-      div(id="container",p('The selected rows for your heatmap are based on the '), textOutput("myMET"),p("method, with a P-value and FC treshold respectively set to "),
-          textOutput("myPVAL"),p('and'),textOutput("myFC")
+      wellPanel(
+        tags$head(tags$style("
+                             #container * {
+                             display: inline;
+                             }")),
+      div(
+        id = "container",
+        p('You have selectionned the following groups :'),
+        htmlOutput("indiv"),
+        p("with the following contrasts")
+        ,
+        textOutput("test")
         ),
       #br(),
-      div(id="container",p('The'), textOutput("myMAT"),p("method was used to compute the matrix distance with a nomber of cluster for the significant genes equal to",
-                                                         textOutput("myCLUST")))
-      #div(id="container",p('The advanced color settings choosen for the following groups :'), htmlOutput("indiv"),p("are respectively correlated to the successive colors"))
+      div(
+        id = "container",
+        p('The selected rows for your heatmap are based on the '),
+        textOutput("myMET"),
+        p("method, with a P-value and FC treshold respectively set to "),
+        textOutput("myPVAL"),
+        p('and'),
+        textOutput("myFC")
+      ),
+      #br(),
+      div(
+        id = "container",
+        p('The'),
+        textOutput("myMAT"),
+        p(
+          "method was used to compute the matrix distance with a nomber of cluster for the significant genes equal to",
+          textOutput("myCLUST")
+        )
+      ),
+      div(
+        id = "container",
+        p('The advanced color settings choosen for the following groups :'),
+        textOutput("indivcol"),
+        p("are respectively correlated to the successive colors"),
+        htmlOutput("myPAL")
+      ),
+      div(
+        id = "container",
+        p(
+          'The legend size, row size, col size are respectively equals to :',
+          textOutput("myLEG"),
+          textOutput("myROW"),
+          textOutput("myCOL")
+        )
+      )
       
-      
-      #,
-      # br(),
-      # div(id="container",p(""))
-      
-  
-      
+        )
     ),
     tabPanel
-    (
-      p(icon("table"), "cutheatmap"),
+    (p(icon("table"), "cutheatmap"),
       column(
         12,
         h3(
@@ -298,8 +325,6 @@ tabPanel(
         )
         ,
         dataTableOutput("data_sign")
-      )
-      
-    )
-  ))
+      ))
+    ))
 )

@@ -54,6 +54,7 @@ output$myPanel <- renderUI({
 })
 
 
+
 colors <- reactive({
   lapply(seq_along(mycolgrp()), function(i) {
     input[[paste("col", i, sep = "_")]]

@@ -2,6 +2,11 @@ output$indiv <-  renderText({
   my_final <<- paste(choix_grp(),as.character(),  sep=",") 
 })
 
+output$indivcol <-  renderText({
+  my_final <<- paste(choix_grp(),as.character(),  sep=",") 
+})
+
+
 output$test <- renderText({
   my_final <<- paste(choix_test(),as.character(),  sep=",") 
 })
@@ -31,9 +36,22 @@ output$myMAT <- renderText({
   input$dist
 })
 
-# output$myCOL <- renderText({
-#   input$
-# })
+output$myPAL <- renderText({
+  if(is.null(mypal()))
+    palette[1:length(choix_grp())]
+  else
+    mypal()
+})
 
+output$myLEG <- renderText({
+  input$legsize
+})
+
+output$myROW <- renderText({
+  input$rowsize
+})
+output$myCOL <- renderText({
+  input$colsize
+})
 
 

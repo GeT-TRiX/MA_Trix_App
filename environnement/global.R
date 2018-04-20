@@ -2,9 +2,10 @@ wd_path= getwd()
 firstdim = 1
 secdim = 2
 
-palette = c("#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442",
+palette = c("#0072C2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442",
              "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray",
              "burlywood1","darkkhaki", "#CC0000" )
+
 firstcol = "green"
 intercol = "black"
 lastcol = "red"
