@@ -1,6 +1,6 @@
 library(shiny)
 
-source("create_forked_task.R")
+source("/home/franck1337/MA_Trix_App/function/create_forked_task.R")
 
 ui <- fluidPage(
   shinyjs::useShinyjs(), # Initialize shinyjs library
@@ -10,7 +10,8 @@ ui <- fluidPage(
   shinyjs::disabled(actionButton("stop", "Stop")),
   
   # This will display the job output
-  tableOutput("out")
+
+  plotOutput("out")
 )
 
 server <- function(input, output, session) {
@@ -21,8 +22,11 @@ server <- function(input, output, session) {
   output$out <- renderTable({
     # The task starts out NULL but is required. The req() takes
     # care of ensuring that we only proceed if it's non-NULL.
-    req(task)$result()
-  })
+    #plot(task$result())
+    final <- req(task)$result()
+    heatmap.2(final[[1]])
+    #final
+  }, width = 2000 , height = 2000, res = 100)
   
   observeEvent(input$start, {
     shinyjs::enable("stop")
@@ -30,8 +34,14 @@ server <- function(input, output, session) {
     
     task <<- create_forked_task({
       # Pretend this takes a long time
-      Sys.sleep(5)
-      cars[sample(nrow(cars), 10),]
+      Sys.sleep(2)
+      data(mtcars)
+      x  <- as.matrix(mtcars)
+      rc <- rainbow(nrow(x), start=0, end=.3)
+      cc <- rainbow(ncol(x), start=0, end=.3)
+      listed = list(x,rc,cc)
+      #heatmap.2(x, dendrogram="none",cexCol = 0.5, cexRow = 0.5,key=F)
+      
     })
     
     # Show progress message during task start

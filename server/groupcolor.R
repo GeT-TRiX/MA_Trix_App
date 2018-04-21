@@ -10,11 +10,9 @@ mycolgrp <- reactive  ({
   
   return(mygrpcol)
 })
-
-
 cols <- reactive({
 
-  if (is.null(mypal()))
+  if (is.null(mypal()) )
     lapply(seq_along(mycolgrp()), function(i) {
       colourInput(
         paste("col", i, sep = "_"),
@@ -24,6 +22,7 @@ cols <- reactive({
         palette = "limited",
         returnName = T)
     })
+  
   else 
   lapply(seq_along(mycolgrp()), function(i) {
     colourInput(
@@ -52,7 +51,6 @@ mypal <- reactive({
 output$myPanel <- renderUI({
   cols()
 })
-
 
 
 colors <- reactive({

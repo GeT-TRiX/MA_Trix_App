@@ -47,13 +47,14 @@ observeEvent(input$noIndividus, {
 #   return(input$indiv)
 # })
 
-choix_grp <- eventReactive(input$heatm, {
+choix_grp <- reactive({
+#choix_grp <- eventReactive(input$heatm, {
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)
   return(input$indiv)
-}, ignoreNULL = F)
-
+#}, ignoreNULL = F)
+})
 
 # choix_grp <- reactive({
 #   return(input$indiv)

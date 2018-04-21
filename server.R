@@ -4,23 +4,10 @@ source("function/PCA.R")
 source("environnement/global.R")
 source("function/decideTestTrix.R")
 source("function/vennplot.R")
+source("function/create_forked_task.R")
 
 shinyServer(server <- function(input, output, session) {
   
-  
-  # output$text1 <- renderText({paste("You have selected", input$var)})
-  # output$text2 <- renderText({paste("You have chosen a range that goes from",
-  #                                   input$range[1], "to", input$range[2])})
-  
-
-  output$text <- renderUI({
-    str1 <- paste("You have selected the following individuals", unlist(choix_grp()))
-    str2 <- paste("You have chosen a range that goes from",
-                  input$range[1], "to", input$range[2])
-    HTML(paste(str1, str2, sep = '<br/>'))
-
-  })
-
   
   shinyjs::onclick("toggleAdvanced",
                    shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event
@@ -64,7 +51,8 @@ shinyServer(server <- function(input, output, session) {
         labColu = input$colname ,
         labRowu = input$rowname,
         mypal =  unlist(colors()),
-        showcol = input$colname,
+        showcols
+        = input$colname,
         showrow = input$rowname,
         genename = csvf()[[3]]$GeneName
       )
@@ -105,6 +93,12 @@ shinyServer(server <- function(input, output, session) {
   output$myVenn <- renderPlot({
     plot(Vennplot())
   }, width = 1200 , height = 1200, res = 100)
+  
+  
+ 
+  
+  
+  
   
   source(file.path("server", "tracker.R"), local = TRUE)$value
   

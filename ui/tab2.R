@@ -1,27 +1,21 @@
 tabPanel(
   p(icon("line-chart"),
     "Heatmap "),
-  
-  
   sidebarPanel(
     width = 3,
     style = " font-size:100%; font-family:Arial;
     border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
     tags$style("#myNumericInput {font-size:10px;height:10px;}"),
-    
     br(),
-    
     wellPanel(
-      uiOutput("individusel")
-      ,
+      uiOutput("individusel"),
       actionButton(
         inputId = "allIndividus",
         label = "Select all",
         icon = icon("check-square-o"),
         style =
           "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-      )
-      ,
+      ),
       actionButton(
         inputId = "noIndividus",
         label = "Clear selection",
@@ -29,19 +23,16 @@ tabPanel(
         style =
           "color: #fff; background-color: #337ab7; border-color: #2e6da4"
       )
-      
     ),
     wellPanel(
-      uiOutput("testout")
-      ,
+      uiOutput("testout"),
       actionButton(
         inputId = "allTests",
         label = "Select all",
         icon = icon("check-square-o"),
         style =
           "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-      )
-      ,
+      ),
       actionButton(
         inputId = "noTests",
         label = "Clear selection",
@@ -56,7 +47,6 @@ tabPanel(
       
     ),
     br(),
-    
     numericInput(
       'maxgen',
       'Maximal number of genes by groups',
@@ -65,7 +55,6 @@ tabPanel(
       max = 1500
     ),
     br(),
-    
     sliderInput(
       "pval",
       "P-value treshold",
@@ -74,10 +63,7 @@ tabPanel(
       value = 0.05,
       step = 0.01
     ),
-    
     br(),
-    
-    
     sliderInput(
       "fc",
       "FC treshold",
@@ -86,46 +72,36 @@ tabPanel(
       value = 1,
       step = 1
     ),
-    
     br(),
-    
     selectInput(
       "method2",
       "Choose your matrix distance",
       choices = c("FDR", "None")
     ),
-    
     br(),
-    
     shiny::actionButton(
       "toggleAdvanced",
       "Advanced Computational Options",
       href = "#",
       style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
     ),
-    
     br(),
-    
     shinyjs::hidden(div(
       id = "advanced",
       wellPanel(
         numericInput('clusters', 'Cluster count', 3,
                      min = 1, max = 15),
-        
         br(),
-        
         selectInput(
           "dist",
           "Choose your matrix distance",
           choices = c("correlation", "euclidian")
         ),
-        
         checkboxInput("meangrp",
                       "Compute the mean for the different groups",
                       FALSE),
         verbatimTextOutput("value")
       )
-      
     )),
     br(),
     
@@ -215,6 +191,7 @@ tabPanel(
         
         uiOutput('myPanel'),
         
+        
         br()
       )
     )),
@@ -234,7 +211,8 @@ tabPanel(
     # shiny::actionButton("heatm", "Print Heatmap", style =
     #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
     
-    uiOutput("button")
+    uiOutput("button"), 
+    shinyjs::disabled(actionButton("stop", "Stop"))
     
   ),
   
@@ -251,8 +229,8 @@ tabPanel(
         useShinyjs(),
         ### no more error messages
         bsAlert("alert"),
-        plotOutput(outputId = "distPlot"),
-        
+        #plotOutput(outputId = "distPlot"),
+        plotOutput("distPlot"),
       ### Adding white spaces between the heatmap plot and the tracker
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
@@ -304,19 +282,19 @@ tabPanel(
       div(
         id = "container",
         p(
-          'The legend size, row size, col size are respectively equals to :',
+          'The legend size, row size, col size are respectively equals to ',
           textOutput("myLEG"),
+          p(','),
           textOutput("myROW"),
+          p(','),
           textOutput("myCOL")
         )
       )
-      
         )
     ),
     tabPanel
     (p(icon("table"), "cutheatmap"),
-      column(
-        12,
+      column(12,
         h3(
           "This table represent the significant genes for different condition"
         ),

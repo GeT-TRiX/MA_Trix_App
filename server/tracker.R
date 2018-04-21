@@ -1,3 +1,4 @@
+
 output$indiv <-  renderText({
   my_final <<- paste(choix_grp(),as.character(),  sep=",") 
 })
@@ -40,7 +41,7 @@ output$myPAL <- renderText({
   if(is.null(mypal()))
     palette[1:length(choix_grp())]
   else
-    mypal()
+    paste(mypal(),as.character(),  sep=",")
 })
 
 output$myLEG <- renderText({

@@ -5,8 +5,9 @@
 #' @return \new_data a  data frame with all the individuals selected
 #'
 
-user_group <- eventReactive(input$heatm, {
-  inFile <- input$file
+#user_group <- eventReactive(input$heatm, {
+user_group <- reactive({ 
+ inFile <- input$file
   if (is.null(inFile))
     return(NULL)
   
@@ -16,7 +17,8 @@ user_group <- eventReactive(input$heatm, {
                            select = choix_test()))
   
   return(myfinal)
-}, ignoreNULL = F)
+})
+#, ignoreNULL = F)
 
 
 #' Reactive function that select specific groups in the data frame
@@ -30,10 +32,12 @@ user_group <- eventReactive(input$heatm, {
 #new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
 
 
-new_group <- eventReactive(input$heatm, {
+#new_group <- eventReactive(input$heatm, {
+new_group <- reactive({  
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)
   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
-}
-, ignoreNULL = F)
+#}
+#, ignoreNULL = F)
+})

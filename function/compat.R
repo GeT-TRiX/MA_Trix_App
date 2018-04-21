@@ -16,8 +16,11 @@ num2cols=function(numVector,colp=palette()){
   mycol <- sort(unique(gpcol$numVector))
   if(length(colp) <numCols) warning("number of color names < number of levels! Give a color palette with at least ",numCols," terms to 'col' argument")
   cols=as.data.frame(matrix(c(mycol,colp[1:(numCols)]),nrow=numCols)) ## couleurs pour les groupes
-  
+  #print(numCols)
+  #cols=as.data.frame(matrix(c(1:numCols,colp[1:(numCols+1)]),nrow=numCols));
+  #print(cols)
   myColFun=function(x){
+    print(as.character(cols[cols[,1]==x[1],2]))
     as.character(cols[cols[,1]==x[1],2])
     
   }
@@ -133,7 +136,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   ##-----------------------##
   
   gpcol=num2cols(as.numeric(groups))
-  
+  print(gpcol)
   
   ##**********
   ## RowDendrogram
