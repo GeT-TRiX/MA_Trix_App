@@ -9,7 +9,7 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
   if (is.na(maxDE))
     maxDE = nrow(adj)
   
-  print(maxDE)
+  #print(maxDE)
   
   if (cutoff_meth == "FDR") 
     pList = adj[, contrast]
@@ -30,9 +30,9 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
   if (any(colSums(DEFC) > maxDE)) {
     
     # reduce the nbr of selecte probes to maxDE for each cont
-    cat("\n -> reduction of selected probes to",
-        maxDE,
-        "in each contrast\n")
+    # cat("\n -> reduction of selected probes to",
+    #     maxDE,
+    #     "in each contrast\n")
     
     DEmax = pList
     
@@ -52,18 +52,18 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
     }
     
     DEsel = DEp & DEFC & DEmax
-    print(colSums(DEsel, na.rm = T))
+    #print(colSums(DEsel, na.rm = T))
   }
   
   else{
     DEsel = DEp & DEFC
-    print(colSums(DEsel, na.rm = T))
+    #print(colSums(DEsel, na.rm = T))
   
   }
 
   
   DEsel = which(rowSums(DEsel, na.rm = T) > 0)
-  cat("Il y a",length(DEsel),"gène significatifs")
+  #cat("Il y a",length(DEsel),"gène significatifs")
   
   return(DEsel)
   

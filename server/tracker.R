@@ -1,3 +1,10 @@
+output$myNUM <- renderPrint({
+  if(is.null(formated()))
+    return("X")
+  else
+    cat(length(formated()))
+})
+
 
 output$indiv <-  renderText({
   my_final <<- paste(choix_grp(),as.character(),  sep=",") 

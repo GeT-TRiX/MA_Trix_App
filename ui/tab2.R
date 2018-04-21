@@ -244,13 +244,11 @@ tabPanel(
                              #container * {
                              display: inline;
                              }")),
-      div(
-        id = "container",
-        p('You have selectionned the following groups :'),
-        htmlOutput("indiv"),
-        p("with the following contrasts")
-        ,
-        textOutput("test")
+        div(
+          id = "container",
+          p("There are"),
+          htmlOutput("myNUM"),
+          p("significant genes")
         ),
       #br(),
       div(
