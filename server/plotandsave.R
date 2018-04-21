@@ -22,15 +22,13 @@ observeEvent(input$heatm, {
   
   
   output$save <- downloadHandler(filename <- function() {
-    isolate({
+    
       paste0(basename(file_path_sans_ext("myfile")),
              '_heatmap.',
              input$form,
              sep = '')
-    })
   },
   content <- function(file) {
-    isolate({
       if (input$form == "emf")
         
         emf(
@@ -54,9 +52,7 @@ observeEvent(input$heatm, {
         eps(file,
             width = 7,
             height = 7)
-    })
     
-    isolate({
       if (!is.null(formated()))
         withProgress(message = 'Plotting heatmap:',
                      value = 0,
@@ -71,7 +67,6 @@ observeEvent(input$heatm, {
                      })
       
       dev.off()
-    })
     
     
     #heatmapfinal()})

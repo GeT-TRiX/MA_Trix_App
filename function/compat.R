@@ -16,11 +16,7 @@ num2cols=function(numVector,colp=palette()){
   mycol <- sort(unique(gpcol$numVector))
   if(length(colp) <numCols) warning("number of color names < number of levels! Give a color palette with at least ",numCols," terms to 'col' argument")
   cols=as.data.frame(matrix(c(mycol,colp[1:(numCols)]),nrow=numCols)) ## couleurs pour les groupes
-  #print(numCols)
-  #cols=as.data.frame(matrix(c(1:numCols,colp[1:(numCols+1)]),nrow=numCols));
-  #print(cols)
   myColFun=function(x){
-    print(as.character(cols[cols[,1]==x[1],2]))
     as.character(cols[cols[,1]==x[1],2])
     
   }
@@ -72,8 +68,6 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   }else  palette(mypal)
 
 
-  if(fileType %in% c("emf","eps","svg") ) require("devEMF") 
-  
   if( any(rownames(exprData) != rownames(exprData)[order(as.numeric(rownames(exprData)))])) stop("Error: 'exprData' must have rownames in numerical ascending order!");
   if(length(RowSideColor)==1) RowSideColor=gray.colors(k, start = 0.2, end = 0.9)
   if(!Rowdistfun %in% c("correlation","euclidian")) stop("Rowdistfun must be one of 'cor' or 'euclidian'!")
@@ -84,16 +78,8 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   cl=palette(mypal);
   
   
-  ftype=c("tiff","emf","png","eps","svg")
-  if(!fileType%in%ftype) stop("Error: file type must be tiff, emf, png or eps");
   exprData=exprData[geneSet,]
-  
-  #colid=NULL;
-  #	rowv=TRUE;
-  wdt=900;
-  wdte=12;
-  kcex=0.4;
-  
+
   ##-----------------------##
   ## Row dendrogram
   ##-----------------------##
@@ -125,19 +111,12 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   ##**********
   ## Rownames
   
-  #rowIds=NA;
-  ## A travailler
-  # if(length(labrow)>1){
-  #   rowIds=labrow[geneSet]
-  # }else if(labrow) rowIds=NULL;
-  
   ##-----------------------##
   ## Col dendrogram
   ##-----------------------##
   
   gpcol=num2cols(as.numeric(groups))
-  print(gpcol)
-  
+
   ##**********
   ## RowDendrogram
   
@@ -164,15 +143,13 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   
   if(hclustGenes){
     cat("\n -> Plotting Dendrogram... \n")
-    #		hc02=as.hclust(hmp02$rowDendrogram)
-    #png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,"_hclustGenes.png",sep="")),width=800, height=400)
     plot(hc,hang=-1,labels=FALSE,sub=paste("hclust method: ward2\n", subdist),xlab="",main="")
     hcgp=rect.hclust(hc,k=k,border="red")
     
     
-    hts=rev( tail( hc$height,15))
-    bp=barplot(hts,names.arg=1:length(hts))
-    text(x=bp,y=hts,label= formatC(hts,1,format="f"),pos=3,cex=0.8) 
+    #hts=rev( tail( hc$height,15))
+    #bp=barplot(hts,names.arg=1:length(hts))
+    #text(x=bp,y=hts,label= formatC(hts,1,format="f"),pos=3,cex=0.8) 
     cat("    Done \n")
   }
   
@@ -195,7 +172,6 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
         colnames(gphcc)=c("probe","cluster")
         gphccOrd=gphcc[order(as.numeric(gphcc[,1])),]
         hcgp=factor(paste("c",gphccOrd[,2],sep=""),levels=paste("c",rep(1:k),sep=""))
-        #gpcolr=num2cols(as.numeric(hcgp),c("black",rep(RowSideColor,20)[1:(k)]))
         gpcolr=num2cols(as.numeric(hcgp),c(rep(RowSideColor,20)[1:(k)]))
         print(RowSideColor)
       }else gpcolr=NULL
