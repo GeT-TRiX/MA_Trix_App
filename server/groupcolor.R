@@ -10,6 +10,8 @@ mycolgrp <- reactive  ({
   
   return(mygrpcol)
 })
+
+
 cols <- reactive({
 
   if (is.null(mypal()) )

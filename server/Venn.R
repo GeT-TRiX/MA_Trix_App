@@ -1,3 +1,13 @@
+value=T
+
+output$bool <- reactive({
+  print(value)
+  value
+})
+
+
+outputOptions(output,"bool",suspendWhenHidden=F)
+
 vennlist<- reactive({
   if (is.null(csvf()))
     return(NULL)
@@ -8,17 +18,35 @@ vennlist<- reactive({
 Vennplot <- reactive({
   
   Vennploted <- reactive({
+    
   if(length(user_cont()) <= 5){
   g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize)
-  return(g)
-  }
-  else{
+  
+
+   observe({value <<-T})
+    
+    output$bool <- reactive({
+      print(value)
+      value
+    })
+  
+  return(g)}
+  else { 
+
+    observe({ value <<- F})
+    
+    output$bool <- reactive({
+      print(value)
+      value
+    })
+    
     output$image <- renderUI({
       tags$img(src = "https://i.imgur.com/lB5wmMp.png")
     })
     url <- a("venntools", href = "http://bioinformatics.psb.ugent.be/webtools/Venn/", target = "_blank")
     output$sorry <- renderUI({tagList("You're trying to plot more than 7 sets, download the csv file and use the following tool", url)})
-  }
+    
+    }
   })
   
   return(Vennploted())

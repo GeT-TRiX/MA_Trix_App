@@ -20,7 +20,7 @@ Scree_plot <- reactive({
 output$eigpca <- renderPlot({
   plot(Scree_plot())
   
-}, width = 1200 , height = 480, res = 100)
+}, width = 1200 , height = 800, res = 100)
 
 labeled <- reactive({
   
@@ -37,7 +37,7 @@ output$PCA <- renderPlot({
   
   plot(PCAplot())
   
-}, width = 1200 , height = 800, res = 100)
+}, width = 1400 , height = 1400, res = 100)
 
 
 output$savepca <- downloadHandler(
@@ -48,8 +48,8 @@ output$savepca <- downloadHandler(
   content <- function(file) {
     
     png(file,
-        width =800,
-        height = 800,
+        width =1400,
+        height = 1400,
         units = "px",
         pointsize= 12,
         res=100

@@ -3,6 +3,7 @@ source("ui/uiport.R")
 tabPanel(
   p(icon("upload"),
     "Data loading"),
+  titlePanel("Upload Data"),
   
   sidebarPanel(
     style = " font-size:100%; font-family:Arial;
@@ -15,7 +16,7 @@ tabPanel(
     #csvFileInput("file", "Choose your csv files"),
     fileInput(
       "file",
-      "Choose your csv file",
+      "Choose your csv files",
       accept = c("text/csv",
                  "text/comma-separated-values,text/plain",
                  ".csv"),
@@ -24,24 +25,22 @@ tabPanel(
     
     br(),
     
-  #   sliderInput(
-  #     "pval1",
-  #     "P-value treshold",
-  #     min = 0.01,
-  #     max = 0.05,
-  #     value = 0.05,
-  #     step = 0.01
-  #   )
-  # ,
-  
-  selectInput(
-    "method",
-    "Choose your matrix distance",
-    choices = c("FDR", "none")
-  )
-  #colourInput("col", "Select colour"),
-  #colourpicker::colourInput("col", "Select colour")
-  
+    #   sliderInput(
+    #     "pval1",
+    #     "P-value treshold",
+    #     min = 0.01,
+    #     max = 0.05,
+    #     value = 0.05,
+    #     step = 0.01
+    #   )
+    # ,
+    
+    selectInput("method",
+                "Choose your matrix distance",
+                choices = c("FDR", "none"))
+    #colourInput("col", "Select colour"),
+    #colourpicker::colourInput("col", "Select colour")
+    
   ),
   
   mainPanel(
@@ -53,9 +52,7 @@ tabPanel(
       h3(
         "This table summarize the significant genes depending on the p-value treshold choosen through the slider bar"
       ),
-      helpText(
-        "Choose your p-value treshold to modify the following data table"
-      )
+      helpText("Choose your p-value treshold to modify the following data table")
       ,
       sliderInput(
         "pval1",
@@ -64,13 +61,15 @@ tabPanel(
         max = 0.05,
         value = 0.05,
         step = 0.01
-        ,width = "500")
-
+        ,
+        width = "500"
+      )
+      
       ,
       dataTableOutput("data_summary")
     ),
-
-
+    
+    
     column(
       12,
       

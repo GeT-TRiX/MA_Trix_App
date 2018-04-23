@@ -12,8 +12,8 @@ shinyServer(server <- function(input, output, session) {
   shinyjs::onclick("toggleAdvanced",
                    shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event
   
-  shinyjs::onclick("toggleAdvancedPCA",
-                   shinyjs::toggle(id = "advancedPCA", anim = TRUE))
+  # shinyjs::onclick("toggleAdvancedPCA",
+  #                  shinyjs::toggle(id = "advancedPCA", anim = TRUE))
   
   shinyjs::onclick("toggleAdvancedcolors",
                    shinyjs::toggle(id = "advancedcol", anim = TRUE))
@@ -51,8 +51,7 @@ shinyServer(server <- function(input, output, session) {
         labColu = input$colname ,
         labRowu = input$rowname,
         mypal =  unlist(colors()),
-        showcols
-        = input$colname,
+        showcol = input$colname,
         showrow = input$rowname,
         genename = csvf()[[3]]$GeneName
       )
@@ -62,9 +61,14 @@ shinyServer(server <- function(input, output, session) {
   
   
   PCAplot <- function() {
+    
+    pcapal = brewer.pal(10,"Paired") %>%
+      list(brewer.pal(8,"Dark2") ) %>%
+      unlist()
+    
     empty <- reactive ({
       if (is.null(colorspca()[[1]])) {
-        palpca = brewer.pal(8, "Dark2")
+        palpca = pcapal
       }
       else
         palpca = unlist(colorspca())
@@ -90,12 +94,11 @@ shinyServer(server <- function(input, output, session) {
   
   
   observeEvent( input$vennd, {
-  
+    
   output$myVenn <- renderPlot({
     #plot(Vennplot())
     Vennplot()
-    #plot(Vennlist())
-  }, width = 1200 , height = 1200, res = 100)
+  }, width = 1400 , height = 1400, res = 100)
   })
   
   

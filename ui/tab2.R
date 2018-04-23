@@ -1,6 +1,7 @@
 tabPanel(
   p(icon("line-chart"),
     "Heatmap "),
+  titlePanel("Heatmap settings"),
   sidebarPanel(
     width = 3,
     style = " font-size:100%; font-family:Arial;

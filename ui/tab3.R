@@ -1,4 +1,5 @@
 tabPanel(p(icon("line-chart"), "PCA"),
+         titlePanel("PCA settings"),
          useShinyjs(),
          sidebarPanel(
            wellPanel(
@@ -45,18 +46,18 @@ tabPanel(p(icon("line-chart"), "PCA"),
              
              # wellPanel(
              
-             shiny::actionButton(
-               "toggleAdvancedPCA",
-               "Show Advanced Options Setup",
-               href = "##",
-               style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-             ),
+             # shiny::actionButton(
+             #   "toggleAdvancedPCA",
+             #   "Show Advanced Options Setup",
+             #   href = "##",
+             #   style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+             # ),
              
              br(),
              
-             shinyjs::hidden(
-               div(
-                 id = "advancedPCA",
+             # shinyjs::hidden(
+             #   div(
+             #     id = "advancedPCA",
                  
                  checkboxInput("jitter", "Avoid overlap between points", FALSE),
                  verbatimTextOutput("valued"),
@@ -79,10 +80,10 @@ tabPanel(p(icon("line-chart"), "PCA"),
                    step = 1
                  ),
                  
-                 uiOutput('myPanelpca')
+                 uiOutput('myPanelpca'),
                  
-               )
-             ),
+               #)
+             #),
              br(),
              # shiny::actionButton("pcam", "Run PCA", style =
              #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
@@ -93,7 +94,11 @@ tabPanel(p(icon("line-chart"), "PCA"),
            )
          ),
          
-         mainPanel(tabsetPanel(
+         mainPanel(
+           tabsetPanel(
+           tabPanel(
+             p("Scree plot"),
+             plotOutput(outputId = "eigpca")),
            tabPanel(
              p("PCA plot"),
              tags$style(
@@ -101,11 +106,6 @@ tabPanel(p(icon("line-chart"), "PCA"),
                ".shiny-output-error { visibility: hidden; }",
                ".shiny-output-error:before { visibility: hidden; }"
              ),
-             plotOutput(outputId = "eigpca"),
-             br(),
-             br(),
-             br(),
-             br(),
              plotOutput(outputId = "PCA")
            )
          )))

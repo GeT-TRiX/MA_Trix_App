@@ -1,5 +1,6 @@
 tabPanel(
   "Venn Diagram",
+  titlePanel("Venn diagram settings"),
   sidebarPanel(
   wellPanel(
     uiOutput("contout")
@@ -34,9 +35,13 @@ tabPanel(
     
   )),
   
-  
-  mainPanel(bsAlert("alert"),
-            #uiOutput(outputId = "image"), uiOutput("sorry"),
-            plotOutput(outputId = "myVenn")),
-            uiOutput(outputId = "image"), uiOutput("sorry")
+  mainPanel(
+    bsAlert("alert"),
+            plotOutput(outputId = "myVenn"),
+    
+    
+  conditionalPanel(condition='!output.bool',
+            uiOutput(outputId = "image")
+  , uiOutput("sorry"))
+)
 )
