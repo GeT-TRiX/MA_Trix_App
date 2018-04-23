@@ -3,7 +3,6 @@ library(venn)
 
 #test = venn(5,ilab = T, zcolor ="style")
 
-
 Vennlist <- function(pval,adj){
   myl=list()
   for(i in 1:ncol(adj)){
@@ -46,16 +45,53 @@ Vennsev <- function(myl, adj){
 }
 
 
-
 #pval <- read.csv2("data/All_topTableAll.csv")
-# pval<-read.csv2("/home/franck1337/toast/All_topTableAll.csv")
+#pval<-read.csv2("/home/franck1337/toast/All_topTableAll.csv")
 # colnames(pval)
-# adj = pval[,grep("^adj.P.Val", names(pval), value=TRUE)]
+#adj = pval[,grep("^adj.P.Val", names(pval), value=TRUE)]
 # colnames(adj)
 # View(adj[,-1][,-3])
 # library("grid")
 # library("gridExtra")
+
+
 # myven = Vennlist(pval, adj[1:5])
+# View(myven)
+# df <- data.frame(matrix(unlist(myven), ncol = 5))
+# colnames(df) = colnames(adj)
+# View(df)
+# write.csv(myven, file = "MyData.csv")
+# 
+
+
+# max.length <- max(sapply(myven, length))
+# l <- lapply(myven, function(v) { c(v, rep("", max.length-length(v)))})
+# test = do.call(cbind, l)
+# colnames(test) = colnames(adj)
+# write.table(test, "cnbd.csv",
+#             na = "",
+#             row.names = F,
+#             col.names = T,
+#             append = TRUE,
+#             sep = ";")
+
+# myventocsv <- function(myven,adj){
+#   
+#   max.length <- max(sapply(myven, length))
+#     myven %>%
+#     lapply(function(v){ c(v, rep("", max.length-length(v)))})%>%
+#       setNames(colnames(adj)) %>%
+#       write.table(.,"cnbd.csv",
+#                   na = "",
+#                   row.names = F,
+#                   col.names = T,
+#                   append = TRUE,
+#                   sep = ";")
+#       
+# }
+# 
+#myventocsv(myven,adj)
+
 # myven
 # adj[1:5]
 # 

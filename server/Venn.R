@@ -5,7 +5,6 @@ output$bool <- reactive({
   value
 })
 
-
 outputOptions(output,"bool",suspendWhenHidden=F)
 
 vennlist<- reactive({
@@ -26,7 +25,6 @@ Vennplot <- reactive({
    observe({value <<-T})
     
     output$bool <- reactive({
-      print(value)
       value
     })
   
@@ -36,7 +34,6 @@ Vennplot <- reactive({
     observe({ value <<- F})
     
     output$bool <- reactive({
-      print(value)
       value
     })
     
