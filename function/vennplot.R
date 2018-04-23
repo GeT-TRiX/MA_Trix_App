@@ -25,7 +25,6 @@ Vennfinal <- function(myl,adj, cex=1){
     g = venn.diagram(x = myl, filename = NULL, scaled = F, 
                    category.names = colnames(adj[,-c(indexnull)]),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
                    fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
-    
   else
     g = venn.diagram(x = myl, filename = NULL, scaled = F, 
                      category.names = colnames(adj),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
@@ -34,6 +33,19 @@ Vennfinal <- function(myl,adj, cex=1){
   final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom="DEG BH 0.05")
   return(final)
 }
+
+
+Vennsev <- function(myl, adj){
+  
+  myl <- myl[sapply(myl, length) > 0]
+  final = length(myl)-1
+  test = sum(sapply(myl,length))
+  mynumb = paste("total genes", test , collapse = ":")
+  g = venn(myven, ilabels= F, zcolor ="style", sname = colnames(adj), cexil = 0.5, size = 5, cexsn = 0.5)
+  return(g)
+}
+
+
 
 #pval <- read.csv2("data/All_topTableAll.csv")
 # pval<-read.csv2("/home/franck1337/toast/All_topTableAll.csv")
@@ -51,10 +63,6 @@ Vennfinal <- function(myl,adj, cex=1){
 # Vennfinal(myven,adj[1:5])
 #g = venn(myven, ilabels= F, zcolor ="style", sname = colnames(adj), cexil = 0.5, size = 5, cexsn = 0.5)
 
-
-# 
-# 
-# 
 # final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom="DEG BH 0.05")
 # help(venn)
 # 

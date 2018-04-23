@@ -89,15 +89,14 @@ shinyServer(server <- function(input, output, session) {
   }
   
   
+  observeEvent( input$vennd, {
   
   output$myVenn <- renderPlot({
-    plot(Vennplot())
+    #plot(Vennplot())
+    Vennplot()
+    #plot(Vennlist())
   }, width = 1200 , height = 1200, res = 100)
-  
-  
- 
-  
-  
+  })
   
   
   source(file.path("server", "tracker.R"), local = TRUE)$value
