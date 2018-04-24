@@ -13,7 +13,8 @@ vennlist<- reactive({
   mycont = Vennlist(pval = csvf()[[3]], user_cont())
   return(mycont)
 })
-    
+
+
 Vennplot <- reactive({
   
   Vennploted <- reactive({
@@ -102,3 +103,22 @@ user_cont <- reactive({
                   select = choix_cont()))
   return(mysel)
 })
+
+output$downloadvenn <- downloadHandler(
+  filename = function() {
+    "myvenn.csv"
+  },
+  content = function(fname) {
+    write.table(
+      myventocsv(vennlist(), user_cont()),
+      fname,
+      na = "",
+      row.names = F,
+      col.names = T,
+      append = TRUE,
+      sep = ";"
+    )
+  }
+)
+
+

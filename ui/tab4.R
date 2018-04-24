@@ -30,19 +30,31 @@ tabPanel(
         step = 0.1
       ),
       
+      br(),
+      selectInput("formven", "Choose your file format",
+                  choices = c("png", "eps", "emf")),
+      
       shiny::actionButton("vennd", "Print Venn diagram", style =
-                            "color: #fff; background-color: #337ab7; border-color: #2e6da4")
+                            "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      downloadButton('downloadvenn',"Download the data", 
+                     style =
+                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      downloadButton("savevenn", "Save your plot" , style =
+                       "color: #fff; background-color: #337ab7; border-color: #2e6da4")
       
     )
   ),
   
   mainPanel(
     bsAlert("alert"),
-    plotOutput(outputId = "myVenn"),
-    
     
     conditionalPanel(condition = '!output.bool',
                      uiOutput(outputId = "image")
-                     , uiOutput("sorry"))
+                     , uiOutput("sorry")),
+    
+    plotOutput(outputId = "myVenn")
+    
+
   )
+
 )
