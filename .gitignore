@@ -42,4 +42,9 @@ rsconnect/
 #pas de fichier log
 *.log
 
+#pas de fichier temp
+.temp
+.tmp
 
+#pas de Rplots.pdf
+Rplots.pdf
