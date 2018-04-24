@@ -46,6 +46,8 @@ shinyUI(ui <- bootstrapPage(
             value = 2,
             step = 0.5
           ),
+          
+          uiOutput("cutcluster"),
 
           br(),
           selectInput("formcut", "Choose your file format",

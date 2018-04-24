@@ -1,5 +1,6 @@
-cutHeatmaps= function(hmp,height,exprData,DEGres,workingPath=getwd(),groups,cexcol=1,cexrow=1,labrow=F,fileType="png",scale="row",
-                      meanGrp=F,col.hm= maPalette(low="green",high="red",mid="black",k=75), las=2, hmp.plot=F,distfun="cor",plot.boxplot=T,plot.stripchart=F,palette.col=NULL, probes.boxplot=F, ...)
+cutHeatmaps= function(hmp,height,exprData,DEGres,groups,cexcol=1,cexrow=1,labrow=F,fileType="png",scale="row",
+                      meanGrp=F,col.hm= maPalette(low="green",high="red",mid="black",k=75), 
+                      las=2, hmp.plot=F,distfun="cor",plot.boxplot=T,plot.stripchart=F,palette.col=NULL, probes.boxplot=F,num= 4, ...)
 {
   require(ggplot2)
   require(grid)
@@ -129,8 +130,11 @@ cutHeatmaps= function(hmp,height,exprData,DEGres,workingPath=getwd(),groups,cexc
       })
     }
   }
+  print(num)
+  print(class(num))
+  print(typeof(num))
   
-  return(myplots[[2]])
+  return(myplots[[as.numeric(num)]])
   #plot(myplots[[2]])
   #ggplotly(myplots[[4]])
   #print(p)

@@ -99,10 +99,24 @@ shinyServer(server <- function(input, output, session) {
         DEGres =  csvf()[[3]][,-1],
         plot.boxplot = T,
         plot.stripchart = F,
-        hmp.plot = F
+        hmp.plot = F,
+        num = input$cutcluster
       )
     })
   }
+  
+  output$cutcluster <- renderUI({
+    cut02=cut(p()$rowDendrogram,h=input$cutheight)
+    selectInput(
+      "cutcluster",
+      "Choose your cluster",
+      choices =  seq(1,length(cut02$lower),by=1)
+    )
+  })
+  
+  
+  
+  
   
   observeEvent(input$cutheat, {
     output$cutheatmap <- renderPlotly({
