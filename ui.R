@@ -31,6 +31,46 @@ shinyUI(ui <- bootstrapPage(
     source(file.path("ui", "tab3.R"), local = TRUE)$value,
     source(file.path("ui", "tab2.R"), local = TRUE)$value,
     
+    
+    tabPanel(
+      "Cut heatmap",
+      titlePanel("Cutheatmap settings"),
+      sidebarPanel(
+        wellPanel(
+          
+          sliderInput(
+            "cutheight",
+            "Choose where you cut the heatmap",
+            min = 0,
+            max = 15,
+            value = 2,
+            step = 0.5
+          ),
+
+          br(),
+          selectInput("formcut", "Choose your file format",
+                      choices = c("png", "eps", "emf")),
+          
+          shiny::actionButton("cutheat", "Print Venn diagram", style =
+                                "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+          downloadButton('downloadcut',"Download the data", 
+                         style =
+                           "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+          downloadButton("savecut", "Save your plot" , style =
+                           "color: #fff; background-color: #337ab7; border-color: #2e6da4")
+          
+        )
+      ),
+      
+      mainPanel(
+        bsAlert("alert"),
+        plotlyOutput(outputId = "cutheatmap")
+        
+      )
+      
+    ),
+    
+    
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
     ),

@@ -5,10 +5,9 @@ source("environnement/global.R")
 source("function/decideTestTrix.R")
 source("function/vennplot.R")
 source("function/create_forked_task.R")
+source("function/cutheat.R")
 
 shinyServer(server <- function(input, output, session) {
-  
-  
   shinyjs::onclick("toggleAdvanced",
                    shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event
   
@@ -59,11 +58,73 @@ shinyServer(server <- function(input, output, session) {
     })
   }
   
+  p <- reactive({
+    
+    plotHeatmaps(
+      data.matrix(new_data()),
+      formated(),
+      droplevels(new_group()$Grp),
+      workingPath = wd_path,
+      prefix,
+      suffix,
+      my_palette = colorRampPalette(c(
+        choix_col1(), my_intermediate(), choix_col3()
+      ))(n = 75),
+      k = input$clusters,
+      Rowdistfun = input$dist ,
+      Coldistfun = input$dist,
+      keysize = input$key,
+      mycex = input$legsize ,
+      cexrow = input$rowsize ,
+      cexcol = input$colsize ,
+      meanGrp = input$meangrp,
+      labColu = input$colname ,
+      labRowu = input$rowname,
+      mypal =  unlist(colors()),
+      showcol = input$colname,
+      showrow = input$rowname,
+      genename = csvf()[[3]]$GeneName
+    )
+    
+  })
+  
+  
+  cutfinal <- function() {
+    isolate({
+      cutHeatmaps(
+        p(),
+        height = input$cutheight ,
+        exprData = data.matrix(new_data()),
+        groups = droplevels(new_group()$Grp),
+        DEGres =  csvf()[[3]][,-1],
+        plot.boxplot = T,
+        plot.stripchart = F,
+        hmp.plot = F
+      )
+    })
+  }
+  
+  observeEvent(input$cutheat, {
+    output$cutheatmap <- renderPlotly({
+      ggplotly(cutfinal(), height = 600, width=600)
+    })
+    
+  })
+  
+  ###############################
+  ######## tracker              #
+  ###############################
+  
+  
+  source(file.path("server", "tracker.R"), local = TRUE)$value
+  
+  ###############################
+  ######## Plot&save heatm PCA  #
+  ###############################
   
   PCAplot <- function() {
-    
-    pcapal = brewer.pal(10,"Paired") %>%
-      list(brewer.pal(8,"Dark2") ) %>%
+    pcapal = brewer.pal(10, "Paired") %>%
+      list(brewer.pal(8, "Dark2")) %>%
       unlist()
     
     empty <- reactive ({
@@ -92,53 +153,6 @@ shinyServer(server <- function(input, output, session) {
     return(p + scale_color_manual(values = empty()))
   }
   
-  
-  observeEvent(input$vennd, {
-    output$myVenn <- renderPlot({
-      Vennplot()
-    }, width = 1400 , height = 1400, res = 100)
-    
-    
-    output$savevenn <- downloadHandler(filename <- function() {
-      paste0(basename(file_path_sans_ext("myfile")),
-             '_venn_diagram.',
-             input$formven,
-             sep = '')
-    },
-    content <- function(file) {
-      print(input$formven)
-      if (input$formven == "emf")
-        
-        emf(
-          file,
-          width = 7,
-          height = 7,
-          pointsize = 12,
-          coordDPI = 300
-        )
-      
-      else if (input$formven == "png")
-        png(
-          file,
-          width = 1200,
-          height = 1200,
-          units = "px",
-          pointsize = 12,
-          res = 100
-        )
-      else
-        eps(file,
-            width = 7,
-            height = 7)
-      
-                       
-      plot(Vennplot())
-      dev.off()
-    })
-    
-  })
-  
-  source(file.path("server", "tracker.R"), local = TRUE)$value
   
   source(file.path("server", "plotandsave.R"), local = TRUE)$value
   
@@ -211,7 +225,66 @@ shinyServer(server <- function(input, output, session) {
   
   source(file.path("server", "colforpca.R"), local = TRUE)$value
   
+  
+  #########################################
+  ######## Venn part                      #
+  #########################################
+  
   source(file.path("server", "Venn.R"), local = TRUE)$value
+  
+  
+  observeEvent(input$vennd, {
+    output$myVenn <- renderPlot({
+      Vennplot()
+    }, width = 1400 , height = 1400, res = 100)
+    
+    
+    output$savevenn <- downloadHandler(filename <- function() {
+      paste0(basename(file_path_sans_ext("myfile")),
+             '_venn_diagram.',
+             input$formven,
+             sep = '')
+    },
+    content <- function(file) {
+      print(input$formven)
+      if (input$formven == "emf")
+        
+        emf(
+          file,
+          width = 7,
+          height = 7,
+          pointsize = 12,
+          coordDPI = 300
+        )
+      
+      else if (input$formven == "png")
+        png(
+          file,
+          width = 1200,
+          height = 1200,
+          units = "px",
+          pointsize = 12,
+          res = 100
+        )
+      else
+        eps(file,
+            width = 7,
+            height = 7)
+      
+      
+      plot(Vennplot())
+      dev.off()
+    })
+    
+  })
+  
+  
+  
+  #########################################
+  ######## cutheatmap part                #
+  #########################################
+  
+  
   
   
 })

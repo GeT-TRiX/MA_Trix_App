@@ -1,4 +1,4 @@
-cutHeatmaps= function(hmp,height,exprData,DEGres,workingPath=getwd(),prefix,suffix,groups,cexcol=1,cexrow=1,labrow=F,fileType="png",scale="row",
+cutHeatmaps= function(hmp,height,exprData,DEGres,workingPath=getwd(),groups,cexcol=1,cexrow=1,labrow=F,fileType="png",scale="row",
                       meanGrp=F,col.hm= maPalette(low="green",high="red",mid="black",k=75), las=2, hmp.plot=F,distfun="cor",plot.boxplot=T,plot.stripchart=F,palette.col=NULL, probes.boxplot=F, ...)
 {
   require(ggplot2)
@@ -25,7 +25,7 @@ cutHeatmaps= function(hmp,height,exprData,DEGres,workingPath=getwd(),prefix,suff
   groups0=groups
   if(meanGrp){
     cat("\n -> calculating groups means \n")
-    prefix=paste(prefix,"meanGrp",sep="_")
+    #prefix=paste(prefix,"meanGrp",sep="_")
     exprData=t(apply(exprData,1,FUN=function(x){tapply(x,groups,mean,na.rm=T)}))
     groups=factor(levels(groups))
     colid=NA;
@@ -124,22 +124,16 @@ cutHeatmaps= function(hmp,height,exprData,DEGres,workingPath=getwd(),prefix,suff
         theme(plot.title=element_text(size=24, hjust = 0.5), plot.caption=element_text(size=14, hjust = 0.5),
              axis.title.x=element_text(size=18), axis.title.y=element_text(size=18) , 
              axis.text.x=element_text(size=14, colour="#888888", angle=45, hjust=1),axis.text.y=element_text(size=12, colour="#888888")) 
-      
-      #png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,"_gp",i,"_boxplots.png",sep="")),height=800,width=800)
-      #plot(ggbplot)
-  
-      
-      #p<- ggplotly(ggbplot)
-      #print(p)
-      
+    
       myplots[[i]] <<- ggbplot
       })
     }
   }
+  
+  return(myplots[[2]])
   #plot(myplots[[2]])
-  p<- ggplotly(myplots[[4]])
-    
-  print(p)
+  #ggplotly(myplots[[4]])
+  #print(p)
   
   
   #############"
