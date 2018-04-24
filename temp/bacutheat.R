@@ -1,0 +1,58 @@
+source("function/compat.R")
+source("function/cutheat.R")
+library(dplyr)
+
+musmuscu <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
+pval <- read.csv2("data/All_topTableAll.csv")
+groupss <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec = ",",header= T)
+
+adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|^adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
+
+View(musmuscu)
+
+formating = function( adj, musmuscu,pval){
+  
+  passingval = adj %>%
+    apply(2,FUN = function(x){return(x < 0.05)}) %>%
+    apply(1,sum) 
+  
+  passingval = which( passingval > 0)
+  cat("Il y a",length(passingval),"gène significatifs")
+  
+  row.names(musmuscu) = musmuscu$X
+  musmuscu <- data.matrix(musmuscu[,-1])
+  
+  newlist = list(passingval, musmuscu )
+  return(newlist)
+}
+treated = formating(adj,musmuscu,pval= 0.05)
+
+testos = c("green","red","orange","blue")
+x11()
+hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix, mypal = testos,
+                        showcol = F, showrow = F,genename=pval$GeneName)
+
+print(hmp01_All)
+View(hmp01_All)
+row.names(pval) = pval$X
+prefix ="test"
+suffix = "toast"
+source("function/cutheat.R")
+
+cutHeatmaps(hmp01_All,height = 1, exprData = musmuscu[,-1], groups = groupss$Grp, 
+            DEGres = pval[,-1],prefix= prefix,suffix= suffix, plot.boxplot = T,plot.stripchart = F,hmp.plot =F)
+
+Rowv=str(cut02$lower[[2]])
+
+cut02=cut(hmp01_All$rowDendrogram,h=15)
+print(cut02)
+
+print(labels(hmp01_All$rowDendrogram))
+treated[[2]]labels(hmp01_All$rowDendrogram)
+
+
+
+
+#cut02=cut(hmp01_All$rowDendrogram,h=height)
+#print(cut02)
+

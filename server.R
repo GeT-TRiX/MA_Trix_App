@@ -120,7 +120,7 @@ shinyServer(server <- function(input, output, session) {
       else if (input$formven == "png")
         png(
           file,
-          width = 900,
+          width = 1200,
           height = 1200,
           units = "px",
           pointsize = 12,
