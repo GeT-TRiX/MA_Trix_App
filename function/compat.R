@@ -158,10 +158,10 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   
   if(plotRowSideColor){
     if(!hclustGenes){
-      png(".tmp")
+      #png(".tmp")
       plot(hc,hang=-1,labels=FALSE,xlab="",main="")
       hcgp=rect.hclust(hc,k=k,border="red")
-      file.remove(".tmp")
+      #file.remove(".tmp")
     }
     if(length(RowSideColor) == length(geneSet)){
       gpcolr=RowSideColor;
@@ -189,7 +189,8 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   par("mar")
   par(mar=c(5,5,1,1.10))
   
-  
+  print(class(exprData))
+  print(typeof(exprData))
   hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=T,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),col=my_palette,key.par = list(cex=0.6))

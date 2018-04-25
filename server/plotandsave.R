@@ -1,8 +1,5 @@
 observeEvent(input$heatm, {
-  # updateActionButton(session,
-  #                    "heatm",
-  #                    label = "Update Heatmap",
-  #                    icon = icon("repeat"))
+
   
   output$distPlot <- renderPlot({
     isolate({

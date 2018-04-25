@@ -41,7 +41,7 @@ shinyUI(ui <- bootstrapPage(
           sliderInput(
             "cutheight",
             "Choose where you cut the heatmap",
-            min = 0,
+            min = 1,
             max = 15,
             value = 2,
             step = 0.5
@@ -66,7 +66,11 @@ shinyUI(ui <- bootstrapPage(
       
       mainPanel(
         bsAlert("alert"),
-        plotlyOutput(outputId = "cutheatmap")
+        plotlyOutput(outputId = "cutheatmap"),
+        br(),br(),br(),br(),br(),br(),br(),br(),br(),
+        br(),br(),br(),br(),br(),br(),br(),br(),br(),
+        br(),br(),
+        verbatimTextOutput("event")
         
       )
       

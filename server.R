@@ -59,32 +59,14 @@ shinyServer(server <- function(input, output, session) {
   }
   
   p <- reactive({
+    heatmapfinal()
+  })
+  
+  test <- reactive({
     
-    plotHeatmaps(
-      data.matrix(new_data()),
-      formated(),
-      droplevels(new_group()$Grp),
-      workingPath = wd_path,
-      prefix,
-      suffix,
-      my_palette = colorRampPalette(c(
-        choix_col1(), my_intermediate(), choix_col3()
-      ))(n = 75),
-      k = input$clusters,
-      Rowdistfun = input$dist ,
-      Coldistfun = input$dist,
-      keysize = input$key,
-      mycex = input$legsize ,
-      cexrow = input$rowsize ,
-      cexcol = input$colsize ,
-      meanGrp = input$meangrp,
-      labColu = input$colname ,
-      labRowu = input$rowname,
-      mypal =  unlist(colors()),
-      showcol = input$colname,
-      showrow = input$rowname,
-      genename = csvf()[[3]]$GeneName
-    )
+    mycsv = csvf()[[3]]
+    row.names(mycsv) = mycsv$X
+    return(test)
     
   })
   
@@ -96,11 +78,12 @@ shinyServer(server <- function(input, output, session) {
         height = input$cutheight ,
         exprData = data.matrix(new_data()),
         groups = droplevels(new_group()$Grp),
-        DEGres =  csvf()[[3]][,-1],
-        plot.boxplot = T,
-        plot.stripchart = F,
+        DEGres =  test()[,-1],
+        plot.boxplot = F,
+        plot.stripchart = T,
         hmp.plot = F,
-        num = input$cutcluster
+        num = input$cutcluster,
+        probes.boxplot = T
       )
     })
   }
@@ -115,12 +98,16 @@ shinyServer(server <- function(input, output, session) {
   })
   
   
+  output$event <- renderPrint({
+    d <- event_data("plotly_hover")
+    if (is.null(d)) "Hover on a point!" else 
+      cat("Average expression Z-score over replicates; ",length(d$pointNumber)," probes")
+  })
   
-  
-  
+
   observeEvent(input$cutheat, {
     output$cutheatmap <- renderPlotly({
-      ggplotly(cutfinal(), height = 600, width=600)
+      ggplotly(cutfinal(), height = 800, width=1200)
     })
     
   })
