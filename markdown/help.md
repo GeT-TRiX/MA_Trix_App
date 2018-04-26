@@ -10,4 +10,11 @@ A green message will then appear to validate the data loading with a summary tab
 You can select a region by handling the left click button if the files are stacked together, if it's not the case you can select the different files by maintening the Ctrl button and clicked on the files.
 
 ## Warning
+<<<<<<< HEAD
 It his highly recommanded that you dont modify these files (removed columns, change column names ...) in the aim of not disturbing the well functionning of the application.
+=======
+It his highly recommanded that you dont modify these files (removed columns, change column names ...) in the aim of not disturbing the well functionning of the application.
+
+
+
+>>>>>>> 744bc2bbea7ef37ac9b6c4dcc794d31af8cd1146
