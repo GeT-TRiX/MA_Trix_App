@@ -24,12 +24,12 @@ shinyUI(ui <- bootstrapPage(
     theme = shinytheme("united"),
 
     # multi-page user-interface that includes a navigation bar.
-    
+    #navbarMenu("menu",
     source(file.path("ui", "tab1.R"), local = TRUE)$value,
     source(file.path("ui", "tab4.R"), local = TRUE)$value,
     source(file.path("ui", "tab3.R"), local = TRUE)$value,
     source(file.path("ui", "tab2.R"), local = TRUE)$value,
-
+    #),
     tabPanel(p(icon("question-circle"),
                "How to use?"),
              mainPanel(includeMarkdown("markdown/help.md"))),

@@ -1,6 +1,7 @@
-p <- reactive({
-  heatmapfinal()
+p <- eventReactive(input$updateheatm,{
+  isolate(heatmapfinal())
 })
+
 
 test <- reactive({
   mycsv = csvf()[[3]]
@@ -12,9 +13,9 @@ test <- reactive({
 
 cutfinal <- function() {
 #cutfinal <- reactive({
-  #isolate({
+  isolate({
     cutHeatmaps(
-      heatmapfinal(),
+      isolate(p()),
       height = input$cutheight ,
       exprData = data.matrix(new_data()),
       groups = droplevels(new_group()$Grp),
@@ -22,18 +23,19 @@ cutfinal <- function() {
       num = input$cutcluster,
       type = input$cutinfo
     )
-  #})
+  })
 }
 
 
 
 
 output$cutcluster <- renderUI({
-  cut02 = cut(heatmapfinal()$rowDendrogram, h = input$cutheight)
+  req(p)
+  
+  cut02 = cut(p()$rowDendrogram, h = input$cutheight)
   selectInput("cutcluster",
               "Choose your cluster",
               choices =  seq(1, length(cut02$lower), by = 1))
-              #choices = cat("test"))
 })
 
 

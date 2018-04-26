@@ -1,10 +1,12 @@
+#navbarMenu("menu",
+
 tabPanel(
   p(icon("line-chart"),
     "Heatmap "),
   titlePanel("Heatmap settings"),
   sidebarPanel(
     tabsetPanel(
-      tabPanel("Heatmap", uiOutput("aToZPlayerList"),
+      tabPanel("Heatmap", 
 
     width = 3,
     style = " font-size:100%; font-family:Arial;
@@ -112,7 +114,7 @@ tabPanel(
     
     shiny::actionButton(
       "toggleAdvancedcolors",
-      "Advanced Color Settings",
+      "Advanced graphical Settings",
       href = "#",
       style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
     ),
@@ -175,10 +177,7 @@ tabPanel(
           radioButtons(
             "rowname",
             "show/hide rowname",
-            choiceNames = list("hide",
-                               "show"),
-            choiceValues = list(F, T),
-            selected = "hide"
+            c("hide", "show")
           )
           
         ),
@@ -187,10 +186,7 @@ tabPanel(
           radioButtons(
             "colname",
             "show/hide colnames",
-            choiceNames = list("hide",
-                               "show"),
-            choiceValues = list(T, F),
-            selected =  "show"
+            c("show","hide")
           )
         )),
         
@@ -241,6 +237,10 @@ tabPanel(
                
                shiny::actionButton("cutheat", "Plot cluster", style =
                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                
+               shiny::actionButton("updateheatm", "Update heatmap", style =
+                                     "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+            
                downloadButton('downloadcut',"Download the data", 
                               style =
                                 "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
@@ -342,3 +342,4 @@ tabPanel(
       )
     ))
 )
+#)

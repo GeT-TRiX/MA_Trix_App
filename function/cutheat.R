@@ -99,8 +99,8 @@ cutHeatmaps = function(hmp,
   #lower est une liste contenant les X sous-dendrogrammes generes par la coupure
   
   cat("\n -> size of", length(cut02$lower), "sub-dendrograms\n")
-  sapply(cut02$lower, function(x)
-    length(labels(x)))
+  print(sapply(cut02$lower, function(x)
+    length(labels(x))))
   #Pour voir quels sont les effectifs de chaque sous-groupe de genes
   
   ###export toptable sous groupes hclust
@@ -169,6 +169,11 @@ cutHeatmaps = function(hmp,
         isplotable = apply(simplify2array(dataCentS), 1:2, sum, na.rm = TRUE)
         nProbes = nrow(dataCentS)
         
+        #			png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,"_gp",i,"_boxplots.png",sep="")),height=800,width=800)
+        #			par(mar=par("mar")+c(2,0,0,0))
+        #			boxplot(dataCentS,ylab="average z-score",col=cl[(1:length(levels(groups)))+1],las=las,main=paste("Cluster ",i,sep=""),xaxt="n")
+        #			axis(1,at=1:ncol(dataCentS),labels=colnames(dataCentS),cex.axis=cexcol,las=las)
+        #			dev.off()
         
         ## boxplotggplot2
         footnote <-
@@ -330,15 +335,15 @@ cutHeatmaps = function(hmp,
               caption = footnote
             ) + #, x=factors.names[1], colour=factors.names[2]) +
             theme(
-              plot.title = element_text(size = 24, hjust = 0.5),
-              plot.caption = element_text(size = 14, hjust = 0.5),
-              axis.title.x = element_text(size = 18),
-              axis.title.y = element_text(size = 18) ,
+              plot.title = element_text(size = 20, hjust = 0.5),
+              plot.caption = element_text(size = 10, hjust = 0.5),
+              axis.title.x = element_text(size = 10),
+              axis.title.y = element_text(size = 10) ,
               axis.text.x = element_text(
-                size = 14,
+                size = 10,
                 colour = "#888888",
-                angle = 45,
-                hjust = 1
+                angle = 360,
+                hjust = 0.5
               ),
               axis.text.y = element_text(size = 12, colour = "#888888")
             )
@@ -385,13 +390,13 @@ cutHeatmaps = function(hmp,
             ) + #, x=factors.names[1], colour=factors.names[2]) +
             theme(
               plot.title = element_text(size = 24, hjust = 0.5),
-              axis.title.x = element_text(size = 18),
-              axis.title.y = element_text(size = 18) ,
+              axis.title.x = element_text(size = 10),
+              axis.title.y = element_text(size = 10) ,
               axis.text.x = element_text(
-                size = 14,
+                size = 10,
                 colour = "#888888",
-                angle = 45,
-                hjust = 1
+                angle = 360,
+                hjust = 0.5
               ),
               axis.text.y = element_text(size = 12, colour = "#888888")
             )
@@ -428,10 +433,10 @@ cutHeatmaps = function(hmp,
       # View(as.matrix(exprData[labels(cut02$lower[[num]]),]))
         useRasterTF = T
         #m02gp = heatmaply(
-        hmp =heatmaply(
+        heatmaply(
           as.matrix(exprData[labels(cut02$lower[[num]]),]),
           height=900,col = col.hm,distfun = distfunTRIX,hclustfun = hclustfun,
-          scale = scale,Colv = hmp$colDendrogram
+          scale = scale, Colv = hmp$colDendrogram
           )%>%
           layout(margin = list(l = 130, b = 100))
 
@@ -463,9 +468,7 @@ cutHeatmaps = function(hmp,
         # )
         #return(hm02gp)
      #}
-    # return(hm02gp)
+    return(hm02gp)
   # }
-  return(hmp)
   }
-  return(hmp)
 }

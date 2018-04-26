@@ -50,14 +50,28 @@ shinyServer(server <- function(input, output, session) {
         labColu = input$colname ,
         labRowu = input$rowname,
         mypal =  unlist(colors()),
-        showcol = input$colname,
-        showrow = input$rowname,
+        showcol = colname(),
+        showrow = rowname(),
         genename = csvf()[[3]]$GeneName
       )
       
     })
   }
   
+  rowname <- reactive({
+    rowname <- switch(input$rowname,
+                      hide = F,
+                      show = T,
+                      F)
+    return(rowname)
+  })
+  colname <- reactive({
+    colname <- switch(input$colname,
+                      hide = T,
+                      show = F,
+                      F)
+    return(colname)
+  })
   
   
   ###############################
