@@ -3,6 +3,11 @@ tabPanel(
     "Heatmap "),
   titlePanel("Heatmap settings"),
   sidebarPanel(
+    tabsetPanel(
+      tabPanel("Heatmap", uiOutput("aToZPlayerList"),
+      #tabPanel("byTeam", uiOutput("byTeamPlayerList"),
+    #),
+    
     width = 3,
     style = " font-size:100%; font-family:Arial;
     border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
@@ -213,10 +218,39 @@ tabPanel(
     #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
     
     uiOutput("button"), 
-    shinyjs::disabled(actionButton("stop", "Stop"))
-    
-  ),
-  
+    shinyjs::disabled(actionButton("stop", "Stop"))),
+    tabPanel("clustering of heatmap", 
+             wellPanel(
+               
+               sliderInput(
+                 "cutheight",
+                 "Choose where you cut the heatmap",
+                 min = 1,
+                 max = 15,
+                 value = 2,
+                 step = 0.5
+               ),
+               
+               uiOutput("cutcluster"),
+              
+               selectizeInput('cutinfo', 'Choose your types of plots', choices = cutheatmlist),
+               
+               
+               br(),
+               selectInput("formcut", "Choose your file format",
+                           choices = c("png", "eps", "emf")),
+               
+               shiny::actionButton("cutheat", "Plot cluster", style =
+                                     "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+               downloadButton('downloadcut',"Download the data", 
+                              style =
+                                "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+               downloadButton("savecut", "Save your plot" , style =
+                                "color: #fff; background-color: #337ab7; border-color: #2e6da4")
+               
+             )
+  #),
+      ))),
   mainPanel(
     tabsetPanel(
       tabPanel(
@@ -241,6 +275,10 @@ tabPanel(
       h1("Here's a tracker for your different selections:"),
       #br(),
       wellPanel(
+        tags$head(
+          tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+        ),
+        
         tags$head(tags$style("
                              #container * {
                              display: inline;
@@ -293,15 +331,13 @@ tabPanel(
     ),
     tabPanel
     (p(icon("table"), "cutheatmap"),
-      column(12,
-        h3(
-          "This table represent the significant genes for different condition"
-        ),
-        helpText(
-          "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-        )
-        ,
-        dataTableOutput("data_sign")
-      ))
+      bsAlert("alert"),
+      plotlyOutput(outputId = "cutheatmap"),
+      #plotOutput("mycutheat"),
+      br(),br(),br(),br(),br(),br(),br(),br(),br(),
+      br(),br(),br(),br(),br(),br(),br(),br(),br(),
+      br(),br(),
+      verbatimTextOutput("event")
+      )
     ))
 )

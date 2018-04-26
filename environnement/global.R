@@ -9,12 +9,16 @@ palette = c("#0072C2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","li
 firstcol = "green"
 intercol = "black"
 lastcol = "red"
-
 suffix = "test"
 prefix = "toast"
+
+cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"), 
+                     Stripchart=c(`Without boxplot`="LB", `With boxplot` = "WB"))
+
+
 list.of.packages <- c("shiny","dplyr","shinythemes","shinyjs","ggplot2","shinyBS","markdown"
                       ,"BH","rCharts","data.table","DT","readr","rbenchmark","colourpicker",
-                      "tools","devEMF","R.devices","FactoMineR","factoextra",
+                      "tools","devEMF","R.devices","FactoMineR","factoextra","heatmaply",
                       "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly")
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]

@@ -28,26 +28,22 @@ formating = function( adj, musmuscu,pval){
   return(newlist)
 }
 treated = formating(adj,musmuscu,pval= 0.05)
+row.names(musmuscu) = musmuscu$X
 
 testos = c("green","red","orange","blue")
 x11()
 hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix, mypal = testos,
                         showcol = F, showrow = F,genename=pval$GeneName)
 
-print(hmp01_All)
-View(hmp01_All)
-row.names(pval) = pval$X
-row.names(musmuscu) = musmuscu$X
-View(musmuscu)
-prefix ="test"
-suffix = "toast"
+
 source("function/cutheat.R")
 
 test = cutHeatmaps(hmp01_All,height = 5, exprData = musmuscu[,-1], groups = groupss$Grp, 
-            DEGres = pval[,-1], plot.boxplot = F,plot.stripchart = F,hmp.plot =T, num =1, probes.boxplot = F)
-print(test)
+            DEGres = pval[,-1], type = "Heatmap", num =1 )
 test
+print(test)
 draw(test)
+
 #hc02 = as.hclust(hmp01_All$rowDendrogram)
 plot(hc02)
 x11()

@@ -58,59 +58,7 @@ shinyServer(server <- function(input, output, session) {
     })
   }
   
-  p <- reactive({
-    heatmapfinal()
-  })
   
-  test <- reactive({
-    
-    mycsv = csvf()[[3]]
-    row.names(mycsv) = mycsv$X
-    return(test)
-    
-  })
-  
-  
-  cutfinal <- function() {
-    isolate({
-      cutHeatmaps(
-        p(),
-        height = input$cutheight ,
-        exprData = data.matrix(new_data()),
-        groups = droplevels(new_group()$Grp),
-        DEGres =  test()[,-1],
-        plot.boxplot = F,
-        plot.stripchart = T,
-        hmp.plot = F,
-        num = input$cutcluster,
-        probes.boxplot = T
-      )
-    })
-  }
-  
-  output$cutcluster <- renderUI({
-    cut02=cut(p()$rowDendrogram,h=input$cutheight)
-    selectInput(
-      "cutcluster",
-      "Choose your cluster",
-      choices =  seq(1,length(cut02$lower),by=1)
-    )
-  })
-  
-  
-  output$event <- renderPrint({
-    d <- event_data("plotly_hover")
-    if (is.null(d)) "Hover on a point!" else 
-      cat("Average expression Z-score over replicates; ",length(d$pointNumber)," probes")
-  })
-  
-
-  observeEvent(input$cutheat, {
-    output$cutheatmap <- renderPlotly({
-      ggplotly(cutfinal(), height = 800, width=1200)
-    })
-    
-  })
   
   ###############################
   ######## tracker              #
@@ -237,7 +185,7 @@ shinyServer(server <- function(input, output, session) {
   observeEvent(input$vennd, {
     output$myVenn <- renderPlot({
       Vennplot()
-    }, width = 1400 , height = 1400, res = 100)
+    }, width = 1200 , height = 800, res = 100)
     
     
     output$savevenn <- downloadHandler(filename <- function() {
@@ -285,7 +233,7 @@ shinyServer(server <- function(input, output, session) {
   ######## cutheatmap part                #
   #########################################
   
-  
+  source(file.path("server", "cutheatmap.R"), local = TRUE)$value
   
   
 })

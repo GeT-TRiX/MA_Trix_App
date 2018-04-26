@@ -39,6 +39,8 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,
   #RowSideColor: color palette to be used for rowSide cluster colors
   # can also be gray.colors(k, start = 0.2, end = 0.9) to get k colors of gray scale
   
+  print(mypal)
+  
   if(is.null(showcol))
      showcol = F
   

@@ -1,16 +1,63 @@
-cutHeatmaps= function(hmp,height,exprData,DEGres,groups,cexcol=1,cexrow=1,labrow=T,fileType="png",scale="row",
-                      meanGrp=F,col.hm= maPalette(low="green",high="red",mid="black",k=75), 
-                      las=2, hmp.plot=F,distfun="cor",plot.boxplot=T,plot.stripchart=F,palette.col=NULL, probes.boxplot=F,num= 4, ...)
+cutHeatmaps = function(hmp,
+                       height,
+                       exprData,
+                       DEGres,
+                       groups,
+                       cexcol = 1,
+                       cexrow = 1,
+                       labrow = T,
+                       fileType = "png",
+                       scale = "row",
+                       meanGrp = F,
+                       col.hm = maPalette(low = "green",
+                                          high = "red",
+                                          mid = "black",
+                                          k = 75),
+                       type = "None",
+                       las = 2,
+                       distfun = "cor",
+                       palette.col = NULL,
+                       num = 4,
+                       ...)
 {
   require(ggplot2)
   require(grid)
   require(gridExtra)
-
   
-  if(!is.null(palette.col)){
-    cl=palette(palette.col);
+  plot.boxplot = ifelse(type == "Boxplot", T, F)
+  plot.stripchart = ifelse(type == "LB" | type == "WB", T, F)
+  hmp.plot = ifelse(type == "Heatmap", T, F)
+  probes.boxplot = ifelse(type == "WB", T, F)
+  
+  
+  if (!is.null(palette.col)) {
+    cl = palette(palette.col)
+    
     #		}else cl=palette(c("black", "blue", "cyan", "magenta",   "darkgray", "darkgoldenrod", "violet",  "orange", "lightgreen","lightblue", "darkorchid", "darkred","darkslateblue", "darkslategray", "maroon", "burlywood1" , "darkolivegreen"));
-  }else cl=  palette(c("#000000", "#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442", "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray", "burlywood1","darkkhaki", "#CC0000" ));
+  } else
+    cl =  palette(
+      c(
+        "#000000",
+        "#0072c2",
+        "#D55E00",
+        "#999999",
+        "#56B4E9",
+        "#E69F00",
+        "#CC79A7",
+        "lightblue",
+        "#F0E442",
+        "lightgreen",
+        "deepskyblue4",
+        "darkred",
+        "#009E73",
+        "maroon3",
+        "darkslategray",
+        "burlywood1",
+        "darkkhaki",
+        "#CC0000"
+      )
+    )
+  
   
   colid = colnames(exprData)
   
@@ -52,8 +99,8 @@ cutHeatmaps= function(hmp,height,exprData,DEGres,groups,cexcol=1,cexrow=1,labrow
   #lower est une liste contenant les X sous-dendrogrammes generes par la coupure
   
   cat("\n -> size of", length(cut02$lower), "sub-dendrograms\n")
-  print(sapply(cut02$lower, function(x)
-    length(labels(x))))
+  sapply(cut02$lower, function(x)
+    length(labels(x)))
   #Pour voir quels sont les effectifs de chaque sous-groupe de genes
   
   ###export toptable sous groupes hclust
@@ -108,6 +155,7 @@ cutHeatmaps= function(hmp,height,exprData,DEGres,groups,cexcol=1,cexrow=1,labrow
     library(Hmisc)
     library(reshape2)
     library(plotly)
+    library(heatmaply)
     
     myplots <- list()
     
@@ -121,11 +169,6 @@ cutHeatmaps= function(hmp,height,exprData,DEGres,groups,cexcol=1,cexrow=1,labrow
         isplotable = apply(simplify2array(dataCentS), 1:2, sum, na.rm = TRUE)
         nProbes = nrow(dataCentS)
         
-        #			png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,"_gp",i,"_boxplots.png",sep="")),height=800,width=800)
-        #			par(mar=par("mar")+c(2,0,0,0))
-        #			boxplot(dataCentS,ylab="average z-score",col=cl[(1:length(levels(groups)))+1],las=las,main=paste("Cluster ",i,sep=""),xaxt="n")
-        #			axis(1,at=1:ncol(dataCentS),labels=colnames(dataCentS),cex.axis=cexcol,las=las)
-        #			dev.off()
         
         ## boxplotggplot2
         footnote <-
@@ -172,7 +215,8 @@ cutHeatmaps= function(hmp,height,exprData,DEGres,groups,cexcol=1,cexrow=1,labrow
           )
         
         if (nProbes > 2)
-          myplots[[i]] <<- (ggbplot + geom_violin(aes(fill = Group)))
+          myplots[[i]] <<-
+          (ggbplot + geom_violin(aes(fill = Group)))
         else
           myplots[[i]] <<- (ggbplot)
         
@@ -369,10 +413,10 @@ cutHeatmaps= function(hmp,height,exprData,DEGres,groups,cexcol=1,cexrow=1,labrow
   
   if (hmp.plot) {
     cat(" ->plot heatmap for each subgroup \n")
-
-    for (i in 1:length(cut02$lower)) {
-      if (length(labels(cut02$lower[[i]])) > 1) {
-        rowIds = NA
+    
+    # for (i in 1:length(cut02$lower)) {
+    #   if (length(labels(cut02$lower[[num]])) > 1) {
+    #     rowIds = NA
         
         #    if(length(labrow)>1){ rowIds=labrow[labels(cut02$lower[[i]])]
         #    }else if(labrow==T) rowIds=DEGres$ResTable$GeneName[labels(cut02$lower[[i]])]
@@ -381,37 +425,47 @@ cutHeatmaps= function(hmp,height,exprData,DEGres,groups,cexcol=1,cexrow=1,labrow
         if (labrow == T)
           rowIds = DEGres$ResTable[labels(cut02$lower[[num]]), "GeneName"]
         
+      # View(as.matrix(exprData[labels(cut02$lower[[num]]),]))
         useRasterTF = T
-
-        hm02gp = heatmap(
+        #m02gp = heatmaply(
+        hmp =heatmaply(
           as.matrix(exprData[labels(cut02$lower[[num]]),]),
-          Rowv = str(cut02$lower[[num]]),
-          Colv = hmp$colDendrogram,
-          col = col.hm,
-          distfun = distfunTRIX,
-          hclustfun = hclustfun,
-          labRow = rowIds,
-          labCol = colid,
-          ColSideColors = gpcol,
-          cexCol = cexcol,
-          cexRow = cexrow,
-          scale = scale,
-          na.rm = T,
-          margins = c(8, 8),
-          useRaster = useRasterTF
-        )
-        mtext(
-          side = 3,
-          sort(levels(groups)),
-          adj = 1,
-          padj = seq(0, by = 1.4, length.out = length(levels(groups))),
-          col = cl[(1:length(levels(groups)))],
-          cex = 1,
-          line = 3
-        )
-        
-      }
-    }
-    return(hm02gp)
+          height=900,col = col.hm,distfun = distfunTRIX,hclustfun = hclustfun,
+          scale = scale,Colv = hmp$colDendrogram
+          )%>%
+          layout(margin = list(l = 130, b = 100))
+
+          
+          
+        #Rowv = str(cut02$lower[[num]]),
+        # Colv = hmp$colDendrogram,
+        # col = col.hm,
+        # distfun = distfunTRIX,
+        # hclustfun = hclustfun,
+        # labRow = rowIds,
+        # labCol = colid,
+        # ColSideColors = gpcol,
+        # cexCol = cexcol,
+        # cexRow = cexrow,
+        # scale = scale,
+        # na.rm = T,
+        # margins = c(8, 8),
+        # useRaster = useRasterTF
+
+        # mtext(
+        #   side = 3,
+        #   sort(levels(groups)),
+        #   adj = 1,
+        #   padj = seq(0, by = 1.4, length.out = length(levels(groups))),
+        #   col = cl[(1:length(levels(groups)))],
+        #   cex = 1,
+        #   line = 3
+        # )
+        #return(hm02gp)
+     #}
+    # return(hm02gp)
+  # }
+  return(hmp)
   }
+  return(hmp)
 }
