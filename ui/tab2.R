@@ -5,9 +5,7 @@ tabPanel(
   sidebarPanel(
     tabsetPanel(
       tabPanel("Heatmap", uiOutput("aToZPlayerList"),
-      #tabPanel("byTeam", uiOutput("byTeamPlayerList"),
-    #),
-    
+
     width = 3,
     style = " font-size:100%; font-family:Arial;
     border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
@@ -46,10 +44,11 @@ tabPanel(
         style =
           "color: #fff; background-color: #337ab7; border-color: #2e6da4"
       )
-      
+      #,
+      # 
       # p("You've selectionned the following test : "),
-      # hr()
-      #verbatimTextOutput("test")
+      # hr(),
+      # verbatimTextOutput("test")
       
     ),
     br(),
@@ -287,7 +286,8 @@ tabPanel(
           id = "container",
           p("There are"),
           htmlOutput("myNUM"),
-          p("significant genes")
+          p("significant genes"),
+          p("with the following contrasts"),htmlOutput("test")
         ),
       #br(),
       div(
@@ -305,7 +305,7 @@ tabPanel(
         p('The'),
         textOutput("myMAT"),
         p(
-          "method was used to compute the matrix distance with a nomber of cluster for the significant genes equal to",
+          "method was used to compute the matrix distance with a number of clusters for the significant genes equal to",
           textOutput("myCLUST")
         )
       ),
@@ -333,10 +333,11 @@ tabPanel(
     (p(icon("table"), "cutheatmap"),
       bsAlert("alert"),
       plotlyOutput(outputId = "cutheatmap"),
-      #plotOutput("mycutheat"),
+
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
       br(),br(),
+      
       verbatimTextOutput("event")
       )
     ))
