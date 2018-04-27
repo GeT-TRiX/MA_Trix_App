@@ -14,29 +14,21 @@ shinyServer(server <- function(input, output, session) {
   ######## Load the csv files   #
   ###############################
   
-  source(file.path("server", "csvFile.R"), local = TRUE)$value
-  
-  ##############################################################
-  
-  shinyjs::onclick("toggleAdvanced",
-                   shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event
-  
-  # shinyjs::onclick("toggleAdvancedPCA",
-  #                  shinyjs::toggle(id = "advancedPCA", anim = TRUE))
-  
-  shinyjs::onclick("toggleAdvancedcolors",
-                   shinyjs::toggle(id = "advancedcol", anim = TRUE))
+  source(file.path("server", "csvFile.R"), local = TRUE)$value #
   
   
+  ##################################
+  ######## Hide and modify buttons #  
+  ##################################
   
-  source(file.path("server", "changeheatmbut.R"), local = TRUE)$value
-  
-  
+  source(file.path("server", "changeheatmbut.R"), local = TRUE)$value #
+  source(file.path("server", "hidevent.R"), local = TRUE)$value #
   
   #################################
   ######## Plot in the renderView #
   #################################
   
+
   heatmapfinal <- function() {
     isolate({
       plotHeatmaps(
@@ -75,6 +67,7 @@ shinyServer(server <- function(input, output, session) {
                       F)
     return(rowname)
   })
+  
   colname <- reactive({
     colname <- switch(input$colname,
                       hide = T,
@@ -89,7 +82,7 @@ shinyServer(server <- function(input, output, session) {
   ###############################
   
   
-  source(file.path("server", "tracker.R"), local = TRUE)$value
+  source(file.path("server", "tracker.R"), local = TRUE)$value #
   
   ###############################
   ######## Plot&save heatm PCA  #
@@ -110,7 +103,6 @@ shinyServer(server <- function(input, output, session) {
       
     })
     
-    
     p <- fviz_mca_ind(
       PCAres(),
       label = labeled(),
@@ -126,53 +118,49 @@ shinyServer(server <- function(input, output, session) {
     return(p + scale_color_manual(values = empty()))
   }
   
-  
-  source(file.path("server", "plotandsave.R"), local = TRUE)$value
-  
-  
-  
+  source(file.path("server", "plotandsave.R"), local = TRUE)$value #
   
   ###############################
   ######## Adding mean by group #
   ###############################
   
-  source(file.path("server", "computemean.R"), local = TRUE)$value
+  source(file.path("server", "computemean.R"), local = TRUE)$value #
   
   #################################
   ######## Select the individuals #
   #################################
   
-  source(file.path("server", "checkboxgrp.R"), local = TRUE)$value
+  source(file.path("server", "checkboxgrp.R"), local = TRUE)$value #
   
   #################################
   ######## Select the comparisons #
   #################################
   
-  source(file.path("server", "checkboxcontrast.R"), local = TRUE)$value
+  source(file.path("server", "checkboxcontrast.R"), local = TRUE)$value #
   
   #################################
   ######## Format the data frame  #
   #################################
   
-  source(file.path("server", "grepcol.R"), local = TRUE)$value
+  source(file.path("server", "grepcol.R"), local = TRUE)$value #
   
-  source(file.path("server", "indexselected.R"), local = TRUE)$value
+  source(file.path("server", "indexselected.R"), local = TRUE)$value #
   
-  source(file.path("server", "datasummary.R"), local = TRUE)$value
+  source(file.path("server", "datasummary.R"), local = TRUE)$value #
   
   
   #################################
   ### Selected group and contrast #
   #################################
   
-  source(file.path("server", "selgroupandcont.R"), local = TRUE)$value
+  source(file.path("server", "selgroupandcont.R"), local = TRUE)$value #
   
   
   #########################################
   ######## Updating a colourInput         #
   #########################################
   
-  source(file.path("server", "backgroundcolor.R"), local = TRUE)$value
+  source(file.path("server", "backgroundcolor.R"), local = TRUE)$value #+-
   
   #########################################
   ######## Colors for the  groups         #

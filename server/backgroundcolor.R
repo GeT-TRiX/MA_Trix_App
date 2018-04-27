@@ -26,18 +26,40 @@ colourpicker::updateColourInput(
   returnName = T
 )
 
-
+#' Reactive function that return a character color
+#'
+#' @param choix_col1 character color for the lowest values
+#'
+#' @return \choix_col1 reactive value
+#'
 
 choix_col1 <- reactive({
   return(input$col1)
 })
+
+#' Reactive function that return a character color
+#'
+#' @param choix_col3 character color for the lowest values
+#'
+#' @return \choix_col3 reactive value   
+#' 
 
 choix_col3 <- reactive({
   return(input$col3)
 })
 
 
+#' Reactive function that return a character color
+#'
+#' @param choix_col1 character color for the lowest values 
+#' @param choix_col2 character color for the highest values
+#'
+#' @return \inter character intermediate color between the lowest and the highest values
+#'
+
+
 my_intermediate <- reactive({
+  
   if (choix_col1() == "green" & choix_col3() == "red")
     inter = "black"
   

@@ -13,6 +13,7 @@ Vennlist <- function(pval,adj){
 
 Vennfinal <- function(myl,adj, cex=1){
   
+
   indexnull = which( sapply(myl ,length) == 0)
   myl <- myl[sapply(myl, length) > 0]
   final = length(myl)-1

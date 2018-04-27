@@ -1,8 +1,9 @@
-#' Reactive function that return a data frame with the adj.P.val selected by the individuals
+#' Reactive function that return a list containing multiple data frames
+#' with the adj.P.val, logFC and P.value selected for the corresponding groups
 #'
-#' @param csv Data frame corresponding to the Alltoptable
+#' @param csvf Data frame corresponding to the Alltoptable
 #'
-#' @return \adj a new data frame with all the adj.P.Val
+#' @return \mygrep a list of data frames 
 #'
 
 adjusted <- reactive({

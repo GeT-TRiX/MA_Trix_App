@@ -1,55 +1,45 @@
 source("ui/uiport.R")
 
-tabPanel(
-  p(icon("upload"),
-    "Data loading"),
-  titlePanel("Upload Data"),
+tabPanel( 
+  p(icon("upload"), #icon of the panel used with boostrap icons
+    # https://www.w3schools.com/icons/bootstrap_icons_glyphicons.asp
+    "Data loading"),# name of the Navbar
+  titlePanel("Upload Data"), 
   
-  sidebarPanel(
+  sidebarPanel( #Create a rectangular region containing the different widgets
     style = " font-size:100%; font-family:Arial;
-    border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
+    border-color: #2e6da4; background-color: #337ab7, width: 28px; ", #CSS attributes for the sidebarPanel
     width = 3,
     
     br(),
     
     
     #csvFileInput("file", "Choose your csv files"),
-    fileInput(
+    fileInput( # browse button (UI)
       "file",
       "Choose your csv files",
-      accept = c("text/csv",
+      accept = c("text/csv", #accept only csv and text files
                  "text/comma-separated-values,text/plain",
                  ".csv"),
-      multiple = T
+      multiple = T # Attribute to load multiple data at once
     ),
     
-    br(),
+    br(), # white space (<br> </br> basic HTML)
     
-    #   sliderInput(
-    #     "pval1",
-    #     "P-value treshold",
-    #     min = 0.01,
-    #     max = 0.05,
-    #     value = 0.05,
-    #     step = 0.01
-    #   )
-    # ,
     
-    selectInput("method",
+    selectInput("method", #  Create a select list that can be used to choose a single or multiple items from a list of values.
                 "Choose your matrix distance",
                 choices = c("FDR", "none"))
-    #colourInput("col", "Select colour"),
-    #colourpicker::colourInput("col", "Select colour")
-    
+
   ),
   
-  mainPanel(
-    bsAlert("alert"),
-    conditionalPanel(condition = 'output.boolmark',
-    includeMarkdown("markdown/help.md")),
-    
+  mainPanel( #Render right screen
+    bsAlert("alert"),#Alert message depending of the user's input
+    conditionalPanel(condition = 'output.boolmark', #Hide or Show event depending on the loading data success or failure
+    includeMarkdown("markdown/help.md"),
     br(),br(),br(),br(),br(),br(),br(),br(),
-    hr(),
+    hr()
+    ),
     
     # conditionalPanel(condition = 'output.boolmark',
     #                  br(),br(),br(),br(),br(),br(),br(),br()
@@ -60,7 +50,7 @@ tabPanel(
     #                  ,br(),br(),br(),br(),br(),br(),br(),br(),br(),br()),
     
     #conditionalPanel(condition = '!output.boolmark',bsAlert("alert"),
-    column(
+    column( #Create a column for use within a fluidRow or fixedRow
       12,
       
       h3(
@@ -68,7 +58,7 @@ tabPanel(
       ),
       helpText("Choose your p-value treshold to modify the following data table")
       ,
-      sliderInput(
+      sliderInput( #Constructs a slider widget to select a numeric value from a range.
         "pval1",
         "",
         min = 0.01,
@@ -80,7 +70,7 @@ tabPanel(
       )
       
       ,
-      dataTableOutput("data_summary")
+      dataTableOutput("data_summary") # render a renderTable or renderDataTable within an application page
     ),
     
     

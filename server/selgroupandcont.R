@@ -1,11 +1,11 @@
-#' Reactive function that return a comparison data frame with the specific user's selection
+#' Reactive function that return a list of data frame depending on the comparisons
 #'
-#' @param csv Data frame corresponding to the Alltoptable
+#' @param adjusted list of three data frame corresponding to the grep of respectively Adj.pval, P.val and logFC columns
+#' @param choix_test character corresponding to the defined contrast set by the user
 #'
-#' @return \new_data a  data frame with all the individuals selected
+#' @return \myfinal list containing three data frame for each contrast selected
 #'
 
-#user_group <- eventReactive(input$heatm, {
 user_group <- reactive({ 
  inFile <- input$file
   if (is.null(inFile))
@@ -18,26 +18,24 @@ user_group <- reactive({
   
   return(myfinal)
 })
-#, ignoreNULL = F)
+
 
 
 #' Reactive function that select specific groups in the data frame
 #'
-#' @param csv Data frame corresponding to the pData table
+#' @param csvf Data frame of the pData
+#' @param choix_grp() character corresponding to the defined groups set by the user
+#' 
+#' @return \new_group a new factor with the corresponding groups 
 #'
-#' @return \new_group a new factor with the corresponding individuals from the checkbox with the good levels
-#'
 
 
-#new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
-
-
-#new_group <- eventReactive(input$heatm, {
 new_group <- reactive({  
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)
   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
-#}
-#, ignoreNULL = F)
 })
+
+
+#new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
