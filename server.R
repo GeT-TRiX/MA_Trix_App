@@ -8,6 +8,16 @@ source("function/create_forked_task.R")
 source("function/cutheat.R")
 
 shinyServer(server <- function(input, output, session) {
+  
+  
+  ###############################
+  ######## Load the csv files   #
+  ###############################
+  
+  source(file.path("server", "csvFile.R"), local = TRUE)$value
+  
+  ##############################################################
+  
   shinyjs::onclick("toggleAdvanced",
                    shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event
   
@@ -120,11 +130,7 @@ shinyServer(server <- function(input, output, session) {
   source(file.path("server", "plotandsave.R"), local = TRUE)$value
   
   
-  ###############################
-  ######## Load the csv files   #
-  ###############################
   
-  source(file.path("server", "csvFile.R"), local = TRUE)$value
   
   ###############################
   ######## Adding mean by group #

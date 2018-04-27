@@ -36,7 +36,7 @@ csvf <- reactive({
       dismiss = FALSE
   
     )
-    Sys.sleep(2.5)
+    #Sys.sleep(2.5)
     closeAlert(session, "entryalert")
     
     return(NULL)
@@ -151,6 +151,11 @@ csvf <- reactive({
     
   }
   
+  observe({showmark <<-F})
+  
+  output$boolmark <- reactive({
+    showmark
+  })
   
   createAlert(
     session,
@@ -162,15 +167,11 @@ csvf <- reactive({
     append = FALSE
     
   )
-  
+
   Sys.sleep(1)
   closeAlert(session, "succeeded")
   
-  observe({showmark <<-F})
-  
-  output$boolmark <- reactive({
-    showmark
-  })
+ 
 
 
   return (csvord)

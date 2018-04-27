@@ -47,6 +47,16 @@ tabPanel(
     bsAlert("alert"),
     conditionalPanel(condition = 'output.boolmark',
     includeMarkdown("markdown/help.md")),
+    
+    # conditionalPanel(condition = 'output.boolmark',
+    #                  br(),br(),br(),br(),br(),br(),br(),br()
+    #                  ,br(),br(),br(),br(),br(),br(),br(),br(),br(),br(),
+    #                  br(),br(),br(),br(),br(),br(),br(),br()
+    #                  ,br(),br(),br(),br(),br(),br(),br(),br(),br(),br(),
+    #                  br(),br(),br(),br(),br(),br(),br(),br()
+    #                  ,br(),br(),br(),br(),br(),br(),br(),br(),br(),br()),
+    
+    #conditionalPanel(condition = '!output.boolmark',bsAlert("alert"),
     column(
       12,
       
@@ -103,6 +113,6 @@ tabPanel(
       ,
       dataTableOutput("new_group")
     )
+    )
     
-  )
 )

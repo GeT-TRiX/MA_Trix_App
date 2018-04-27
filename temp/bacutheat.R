@@ -6,6 +6,7 @@ musmuscu <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
 pval <- read.csv2("data/All_topTableAll.csv")
 write.csv2(head(musmuscu[1:8]),row.names = F, digits=2)
 write.table(format(head(musmuscu[1:8]), digits=4),  sep=';',row.names=F)
+write.table(format(head(pval[1:6]), digits=4),  sep=';',row.names=F)
 
 groupss <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec = ",",header= T)
 View(head(musmuscu))
