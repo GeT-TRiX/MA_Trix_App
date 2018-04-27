@@ -48,6 +48,9 @@ tabPanel(
     conditionalPanel(condition = 'output.boolmark',
     includeMarkdown("markdown/help.md")),
     
+    br(),br(),br(),br(),br(),br(),br(),br(),
+    hr(),
+    
     # conditionalPanel(condition = 'output.boolmark',
     #                  br(),br(),br(),br(),br(),br(),br(),br()
     #                  ,br(),br(),br(),br(),br(),br(),br(),br(),br(),br(),
