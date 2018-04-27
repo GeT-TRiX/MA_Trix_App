@@ -1,32 +1,34 @@
-#' Reactive function in the aim of loading csv files
-#'
-#' @param inFile
-#'
-#' @return csvord a list of csv files
-#'
-#' @examples
-#'
+###############################
+######## Load the csv files   #
+###############################
 
-# csvf <- reactive({  csvf <- callModule(csvFile, "datafile",
-#                        stringsAsFactors = FALSE)
-#   return(csvf())
-# })
+showmark <- T # Boolean uses to hide or show the mardkwon serving to load data
 
 
-showmark <- T
+#' Reactive function returned to the tab1.R 
+#'
+#' @return \showmark a bool corresponding to the loading status by default it is set to True
+#'
 
 output$boolmark <- reactive({
   showmark
 })
 
-outputOptions(output,"boolmark",suspendWhenHidden=F)
+outputOptions(output,"boolmark",suspendWhenHidden=F) 
+
+#' Reactive function in the aim of loading csv files
+#'
+#' @param inFile loaded files
+#'
+#' @return \csvord a list containing three data frames toptable and workingset and the pData 
+#'
 
 
 csvf <- reactive({
   inFile <- input$file
   
   if (is.null(inFile)) {
-    createAlert(
+    createAlert( 
       session,
       "alert",
       style = "info",
@@ -108,6 +110,11 @@ csvf <- reactive({
     
     csv <- lapply(
       csvtest,
+      
+      #' apply the fread method for each element in the csvtest list
+      #'
+      #' @return \csv a data frame object
+      #'
       FUN = function (x)
         
         # read.table( # benchmark read.table
@@ -144,14 +151,19 @@ csvf <- reactive({
         csvord[[1]] = csv[[i]]
     }
     
-    csvord[[2]] = chartofa(csvord[[2]])
+    csvord[[2]] = chartofa(csvord[[2]]) # transform dataframe containing characters to factors
     row.names(csvord[[1]]) = csvord[[1]][, 1]
     colnames(csvord[[3]])[1] = "X"
     colnames(csvord[[2]])[1] = "X"
     
   }
   
-  observe({showmark <<-F})
+  observe({showmark <<-F}) # modify and lock the bool value to false
+  
+  #' Reactive function returned to the tab1.R 
+  #'
+  #' @return \showmark a bool set to False
+  #'
   
   output$boolmark <- reactive({
     showmark
@@ -171,8 +183,6 @@ csvf <- reactive({
   Sys.sleep(1)
   closeAlert(session, "succeeded")
   
- 
-
 
   return (csvord)
 })

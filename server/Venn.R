@@ -42,7 +42,7 @@ Vennplot <- reactive({
       tags$img(src = "https://i.imgur.com/lB5wmMp.png")
     })
     url <- a("venntools", href = "http://jvenn.toulouse.inra.fr/app/example.html", target = "_blank")
-    output$sorry <- renderUI({tagList("You're trying to plot more than 7 sets, download the csv file and use the following tool", url)})
+    output$sorry <- renderUI({tagList("You're trying to plot more than 5 sets, download the csv file and use the following tool", url)})
     
     }
   })

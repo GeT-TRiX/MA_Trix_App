@@ -26,3 +26,35 @@ data_sign <- reactive({
                    "FDR<5%" = colSums(adjusted()[, -1] < ptv[2]))
   
 })
+
+## Checkboxgrp
+
+# choix_individus <- reactive({
+#   return(input$indiv)
+# })
+
+
+# choix_grp <- reactive({
+#   return(input$indiv)
+# })
+
+# output$indiv <-  renderText({
+#   choix_individus()
+# })
+
+# output$indiv <-  renderText({
+#   my_final <<- paste(choix_grp(),as.character(),  sep=",") 
+# })
+
+
+#new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
+
+
+# new_group <- reactive({
+#   inFile <- input$file
+#   if (is.null(inFile))
+#     return(NULL)
+#   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
+# })
+
+## CHeckboxctrst

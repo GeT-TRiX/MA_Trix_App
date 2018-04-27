@@ -3,7 +3,8 @@
 #################################
 
 
-output$individusel <- renderUI(
+# Render in the UI.R the levels for the pData Group 
+output$individusel <- renderUI( 
   checkboxGroupInput(
     inputId = "indiv" ,
     label =  "Choose your group to visualize",
@@ -14,7 +15,7 @@ output$individusel <- renderUI(
     
   )
 )
-
+# Select all groups
 observeEvent(input$allIndividus, {
   updateCheckboxGroupInput(
     session,
@@ -27,6 +28,7 @@ observeEvent(input$allIndividus, {
   )
 })
 
+# Unselect all groups
 observeEvent(input$noIndividus, {
   updateCheckboxGroupInput(session,
                            "indiv",
@@ -35,32 +37,23 @@ observeEvent(input$noIndividus, {
                            choices =  levels(csvf()[[2]]$Grp))
 })
 
-#' Reactive function in the aim of selecting individuals
+#' Reactive function which aim is to select/unselect groups
 #'
-#' @param input specific of the individuals data frame
+#' @param input'$indiv' specific of the individuals data frame
 #'
-#' @return string of the different individuals selected
+#' @return string/char of the different individuals selected
 #'
-
-
-# choix_individus <- reactive({
-#   return(input$indiv)
-# })
 
 choix_grp <- reactive({
-#choix_grp <- eventReactive(input$heatm, {
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)
   return(input$indiv)
-#}, ignoreNULL = F)
 })
 
-# choix_grp <- reactive({
-#   return(input$indiv)
-# })
 
-#' Reactive function in the aim of having selected individuals in a list
+
+#' Reactive function in the aim of having selected groups in a list
 #'
 #' @param input specific of the individuals data frame
 #'
@@ -72,24 +65,14 @@ list_ind <- reactive({
   return(list(input$indiv))
 })
 
-# output$indiv <-  renderText({
-#   choix_individus()
-# })
 
-# output$indiv <-  renderText({
-#   my_final <<- paste(choix_grp(),as.character(),  sep=",") 
-# })
 
-#' Reactive function that select specific individuals in the data frame
+#' Reactive function that select specific groups in the data frame
 #'
-#' @param csv Data frame corresponding to the pData table
+#' @param csvf Data frame corresponding to the pData table
 #'
-#' @return \new_group a new factor with the corresponding individuals from the checkbox with the good levels
+#' @return \newgroup a new factor with the corresponding groups 
 #'
-
-
-#new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
-
 
 new_group <- eventReactive(input$heatm, {
   inFile <- input$file
@@ -98,18 +81,15 @@ new_group <- eventReactive(input$heatm, {
   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
 }, ignoreNULL = F)
 
-# new_group <- reactive({
-#   inFile <- input$file
-#   if (is.null(inFile))
-#     return(NULL)
-#   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
-# })
+
+
+
 
 #' Reactive function that  select specific individuals in the data frame
 #'
-#' @param \csv Data frame corresponding to the Workingset
+#' @param \csvf Data frame corresponding to the Workingset
 #'
-#' @return adj a new data frame with all the adj.P.Val
+#' @return \newdata a data frame with specific columns depending on the user's choices
 #'
 
 

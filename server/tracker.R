@@ -1,4 +1,4 @@
-output$myNUM <- renderPrint({
+output$myNUM <- renderPrint({ # number of signficant genes in the heatmap produced
   if(is.null(formated()))
     return("X")
   else
@@ -6,59 +6,52 @@ output$myNUM <- renderPrint({
 })
 
 
-output$indiv <-  renderText({
-  my_final <<- paste(choix_grp(),as.character(),  sep=",") 
-})
-
-output$indivcol <-  renderText({
+output$indivcol <-  renderText({ # Groups selected
   my_final <<- paste(choix_grp(),as.character(),  sep=",") 
 })
 
 
-output$test <- renderText({
+output$test <- renderText({ #Contrast selected
   my_final <<- paste(choix_test(),as.character(),  sep=",") 
 })
 
-mypval <- reactive({
-  return(output$myPVAL)
-})
 
-output$myPVAL <- renderText({
+output$myPVAL <- renderText({ #pvalue selected
   input$pval
 })
 
 
-output$myFC <- renderText({
+output$myFC <- renderText({ #Fold change value selected, default =1
   input$fc
 })
 
-output$myMET <- renderText({
+output$myMET <- renderText({ #Method for choosing the signficant genes, default = FDR (BH method)
   input$method2
 })
 
-output$myCLUST <- renderText({
+output$myCLUST <- renderText({ #number of clusted selected, default = 3
   input$clusters
 })
 
-output$myMAT <- renderText({
+output$myMAT <- renderText({ #Method for the matrix distance, default = correlation method (pearson)
   input$dist
 })
 
-output$myPAL <- renderText({
+output$myPAL <- renderText({ #Colors selected for the different groups, default see palette in the global environment
   if(is.null(mypal()))
     palette[1:length(choix_grp())]
   else
     paste(mypal(),as.character(),  sep=",")
 })
 
-output$myLEG <- renderText({
+output$myLEG <- renderText({ #Legend size, default = 0.8
   input$legsize
 })
 
-output$myROW <- renderText({
+output$myROW <- renderText({#Row size, default = 0.9
   input$rowsize
 })
-output$myCOL <- renderText({
+output$myCOL <- renderText({#Col size, default = 0.9
   input$colsize
 })
 

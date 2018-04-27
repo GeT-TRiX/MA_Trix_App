@@ -11,11 +11,11 @@ test <- reactive({
 })
 
 
-cutfinal <- function() {
-#cutfinal <- reactive({
-  isolate({
+#cutfinal <- function() {
+cutfinal <- reactive({
+  #isolate({
     cutHeatmaps(
-      isolate(p()),
+      p(),
       height = input$cutheight ,
       exprData = data.matrix(new_data()),
       groups = droplevels(new_group()$Grp),
@@ -23,14 +23,12 @@ cutfinal <- function() {
       num = input$cutcluster,
       type = input$cutinfo
     )
-  })
-}
-
-
+})
+#}
 
 
 output$cutcluster <- renderUI({
-  req(p)
+  req(p())
   
   cut02 = cut(p()$rowDendrogram, h = input$cutheight)
   selectInput("cutcluster",
@@ -50,10 +48,10 @@ output$event <- renderPrint({
 })
 
 
-observeEvent(input$cutheat, {
-  if (input$cutheat == "Heatmap") {
+#observeEvent(input$cutheat, {
+observe({
+  if (req(input$cutinfo) == "Heatmap") {
     output$cutheatmap <- renderPlotly({
-      #cutHeatmaps()
        cutfinal()
 
     })

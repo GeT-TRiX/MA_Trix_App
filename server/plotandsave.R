@@ -4,10 +4,10 @@ observeEvent(input$heatm, {
   output$distPlot <- renderPlot({
     isolate({
       if (!is.null(formated()))
-        withProgress(message = 'Plotting heatmap:',
+        withProgress(message = 'Plotting heatmap:', # Add sliderbar when loading heatmap
                      value = 0,
                      {
-                       n <- NROW(formated())
+                       n <- NROW(formated()) #number of row in the formated dataframe
                        
                        for (i in 1:n) {
                          incProgress(1 / n, detail = "Please wait...")
@@ -66,7 +66,5 @@ observeEvent(input$heatm, {
       dev.off()
     
     
-    #heatmapfinal()})
-    #dev.off()
   })
 })

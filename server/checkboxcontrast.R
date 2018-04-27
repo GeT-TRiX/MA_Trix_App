@@ -2,7 +2,7 @@
 ######## Select the comparisons #
 #################################
 
-
+# Render in the UI.R the levels for the pData Group 
 output$testout <- renderUI(
   checkboxGroupInput(
     inputId = "test" ,
@@ -13,6 +13,7 @@ output$testout <- renderUI(
   )
 )
 
+#Select all the contrasts
 observeEvent(input$allTests, {
   updateCheckboxGroupInput(
     session,
@@ -23,6 +24,7 @@ observeEvent(input$allTests, {
   )
 })
 
+#Unselect all the contrasts
 observeEvent(input$noTests, {
   updateCheckboxGroupInput(session,
                            "test",
@@ -30,11 +32,10 @@ observeEvent(input$noTests, {
                            choices = colnames(adjusted()[[1]][, -1]))
 })
 
-#' Reactive function in the aim of selecting different comparison
+#' Reactive function in the aim of selecting different comparison 
 #'
-#' @param input specific of the comparison data frame
 #'
-#' @return \string of the different comparisons selected ### à verifier
+#' @return \input`$test` a string of the different comparisons selected when clicked on the heatmap button
 #'
 
 
