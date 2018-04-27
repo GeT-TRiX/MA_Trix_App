@@ -45,7 +45,8 @@ tabPanel(
   
   mainPanel(
     bsAlert("alert"),
-    
+    conditionalPanel(condition = 'output.boolmark',
+    includeMarkdown("markdown/help.md")),
     column(
       12,
       

@@ -13,6 +13,15 @@
 # })
 
 
+showmark <- T
+
+output$boolmark <- reactive({
+  showmark
+})
+
+outputOptions(output,"boolmark",suspendWhenHidden=F)
+
+
 csvf <- reactive({
   inFile <- input$file
   
@@ -156,6 +165,13 @@ csvf <- reactive({
   
   Sys.sleep(1)
   closeAlert(session, "succeeded")
+  
+  observe({showmark <<-F})
+  
+  output$boolmark <- reactive({
+    showmark
+  })
+
 
   return (csvord)
 })
