@@ -4,7 +4,11 @@ library(dplyr)
 
 musmuscu <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
 pval <- read.csv2("data/All_topTableAll.csv")
+write.csv2(head(musmuscu[1:8]),row.names = F, digits=2)
+write.table(format(head(musmuscu[1:8]), digits=4),  sep=';',row.names=F)
+
 groupss <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec = ",",header= T)
+View(head(musmuscu))
 
 #adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|^adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
 adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.", names(pval), value=TRUE)]
