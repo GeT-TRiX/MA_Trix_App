@@ -31,7 +31,7 @@ num2cols=function(numVector,colp=palette()){
 ############################################################################ 
 
 
-plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),prefix,suffix,k=2,fileType="png",cexcol=1.5,cexrow=1.5,
+plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=2,fileType="png",cexcol=1.5,cexrow=1.5,
                       colOrder=NULL,labrow=F,na.color="black",scale="row",hclustGenes=T,meanGrp=F,plotRowSideColor=T,#col.hm=greenred(75),
                       RowSideColor=c("gray25","gray75"), Rowdistfun="correlation",Coldistfun="correlation" ,palette.col=NULL, 
                       margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75),mycex = 0.6,...,mypal=test,colid = NULL, showcol = T ,showrow =F, genename=NULL){
