@@ -7,7 +7,7 @@ showmark <- T # Boolean uses to hide or show the mardkwon serving to load data
 
 #' Reactive function returned to the tab1.R 
 #'
-#' @return \showmark a bool corresponding to the loading status by default it is set to True
+#' @return \showmark a reactive value of type boolean corresponding to the loading status by default it is set to True
 #'
 
 output$boolmark <- reactive({
@@ -20,7 +20,7 @@ outputOptions(output,"boolmark",suspendWhenHidden=F)
 #'
 #' @param inFile loaded files
 #'
-#' @return \csvord a list containing three data frames toptable and workingset and the pData 
+#' @return \csvf a reactive value of type list containing three data frames toptable and workingset and the pData 
 #'
 
 
@@ -162,7 +162,7 @@ csvf <- reactive({
   
   #' Reactive function returned to the tab1.R 
   #'
-  #' @return \showmark a bool set to False
+  #' @return \showmark a reactive value of type boolean set to False
   #'
   
   output$boolmark <- reactive({

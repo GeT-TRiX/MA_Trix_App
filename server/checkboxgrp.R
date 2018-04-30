@@ -37,11 +37,11 @@ observeEvent(input$noIndividus, {
                            choices =  levels(csvf()[[2]]$Grp))
 })
 
-#' Reactive function which aim is to select/unselect groups
+#' choix_grp is a reactive function which aim is to select/unselect groups
 #'
 #' @param input'$indiv' specific of the individuals data frame
 #'
-#' @return string/char of the different individuals selected
+#' @return a reactive  character value for the different individuals selected
 #'
 
 choix_grp <- reactive({
@@ -53,11 +53,11 @@ choix_grp <- reactive({
 
 
 
-#' Reactive function in the aim of having selected groups in a list
+#' list_ind is a reactive function in the aim of having selected groups in a list
 #'
 #' @param input specific of the individuals data frame
 #'
-#' @return a list of the different individuals selected
+#' @return a reactive list for the different individuals selected
 #'
 
 
@@ -67,11 +67,11 @@ list_ind <- reactive({
 
 
 
-#' Reactive function that select specific groups in the data frame
+#' new_group is an eventreactive function that select specific groups in the data frame
 #'
 #' @param csvf Data frame corresponding to the pData table
 #'
-#' @return \newgroup a new factor with the corresponding groups 
+#' @return \newgroup an eventreactive factor with the corresponding groups selected
 #'
 
 new_group <- eventReactive(input$heatm, {
@@ -85,11 +85,11 @@ new_group <- eventReactive(input$heatm, {
 
 
 
-#' Reactive function that  select specific individuals in the data frame
+#' new_data is a reactive function that aim is to select specific individuals in the data frame
 #'
 #' @param \csvf Data frame corresponding to the Workingset
 #'
-#' @return \newdata a data frame with specific columns depending on the user's choices
+#' @return \newdata a reactive data frame with specific columns depending on the user's choices
 #'
 
 

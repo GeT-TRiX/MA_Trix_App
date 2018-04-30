@@ -29,7 +29,16 @@ shinyServer(server <- function(input, output, session) {
   #################################
   
 
+  #' Title
+  #'
+  #' @return
+  #' @export
+  #'
+  #' @examples
+  #' 
+  
   heatmapfinal <- function() {
+    
     isolate({
       plotHeatmaps(
         data.matrix(new_data()),
@@ -88,7 +97,15 @@ shinyServer(server <- function(input, output, session) {
   ######## Plot&save heatm PCA  #
   ###############################
   
+  #' Title
+  #'
+  #' @return
+  #' @export
+  #'
+  #' @examples
+  
   PCAplot <- function() {
+    
     pcapal = brewer.pal(10, "Paired") %>%
       list(brewer.pal(8, "Dark2")) %>%
       unlist()
@@ -160,34 +177,34 @@ shinyServer(server <- function(input, output, session) {
   ######## Updating a colourInput         #
   #########################################
   
-  source(file.path("server", "backgroundcolor.R"), local = TRUE)$value #+-
+  source(file.path("server", "backgroundcolor.R"), local = TRUE)$value #
   
   #########################################
   ######## Colors for the  groups         #
   #########################################
   
-  source(file.path("server", "groupcolor.R"), local = TRUE)$value
+  source(file.path("server", "groupcolor.R"), local = TRUE)$value #
   
   #########################################
   ######## Plot the data frame wiht input #
   #########################################
   
-  source(file.path("server", "renderertable.R"), local = TRUE)$value
+  source(file.path("server", "renderertable.R"), local = TRUE)$value #
   
   #########################################
   ######## PCA part                       #
   #########################################
   
-  source(file.path("server", "PCAsandp.R"), local = TRUE)$value
+  source(file.path("server", "PCAsandp.R"), local = TRUE)$value #
   
-  source(file.path("server", "colforpca.R"), local = TRUE)$value
+  source(file.path("server", "colforpca.R"), local = TRUE)$value #
   
   
   #########################################
   ######## Venn part                      #
   #########################################
   
-  source(file.path("server", "Venn.R"), local = TRUE)$value
+  source(file.path("server", "Venn.R"), local = TRUE)$value #
   
   
   observeEvent(input$vennd, {
@@ -241,7 +258,7 @@ shinyServer(server <- function(input, output, session) {
   ######## cutheatmap part                #
   #########################################
   
-  source(file.path("server", "cutheatmap.R"), local = TRUE)$value
+  source(file.path("server", "cutheatmap.R"), local = TRUE)$value #
   
   
 })

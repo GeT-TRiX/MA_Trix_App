@@ -3,6 +3,7 @@ source("function/cutheat.R")
 library(dplyr)
 
 musmuscu <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_WorkingSet.csv")
+length(musmuscu)
 class(musmuscu)
 typeof(musmuscu$X)
 pval <- read.csv2("data/All_topTableAll.csv")

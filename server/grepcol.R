@@ -3,7 +3,7 @@
 #'
 #' @param csvf Data frame corresponding to the Alltoptable
 #'
-#' @return \mygrep a list of data frames 
+#' @return \adjusted a reactive list of data frames 
 #'
 
 adjusted <- reactive({

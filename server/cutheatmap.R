@@ -1,7 +1,25 @@
+#########################################
+######## Cut heatmap Part               #
+#########################################
+
+
+#' PCAres is a reactive function that computed a PCA of non-normalized data
+#'
+#' @param csvf a data frame corresponding to the WorkingSet
+#'
+#' @return \PCAres a reactive data frame with PCA attributes
+#'
+
 p <- eventReactive(input$updateheatm,{
   isolate(heatmapfinal())
 })
 
+#' PCAres is a reactive function that computed a PCA of non-normalized data
+#'
+#' @param csvf a data frame corresponding to the WorkingSet
+#'
+#' @return \PCAres a reactive data frame with PCA attributes
+#'
 
 test <- reactive({
   mycsv = csvf()[[3]]
@@ -10,10 +28,14 @@ test <- reactive({
   
 })
 
+#' PCAres is a reactive function that computed a PCA of non-normalized data
+#'
+#' @param csvf a data frame corresponding to the WorkingSet
+#'
+#' @return \PCAres a reactive data frame with PCA attributes
+#'
 
-#cutfinal <- function() {
 cutfinal <- reactive({
-  #isolate({
     cutHeatmaps(
       p(),
       height = input$cutheight ,
@@ -24,7 +46,7 @@ cutfinal <- reactive({
       type = input$cutinfo
     )
 })
-#}
+
 
 
 output$cutcluster <- renderUI({
@@ -47,8 +69,6 @@ output$event <- renderPrint({
         " probes")
 })
 
-
-#observeEvent(input$cutheat, {
 observe({
   if (req(input$cutinfo) == "Heatmap") {
     output$cutheatmap <- renderPlotly({

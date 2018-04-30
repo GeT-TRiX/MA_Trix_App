@@ -3,7 +3,7 @@
 #' @param adjusted list of three data frame corresponding to the grep of respectively Adj.pval, P.val and logFC columns
 #' @param choix_test character corresponding to the defined contrast set by the user
 #'
-#' @return \myfinal list containing three data frame for each contrast selected
+#' @return \usergroup a reactive list containing three data frame for each contrast selected
 #'
 
 user_group <- reactive({ 
@@ -26,7 +26,7 @@ user_group <- reactive({
 #' @param csvf Data frame of the pData
 #' @param choix_grp() character corresponding to the defined groups set by the user
 #' 
-#' @return \new_group a new factor with the corresponding groups 
+#' @return \new_group a reactive new factor with the corresponding groups 
 #'
 
 

@@ -32,10 +32,10 @@ observeEvent(input$noTests, {
                            choices = colnames(adjusted()[[1]][, -1]))
 })
 
-#' Reactive function in the aim of selecting different comparison 
+#' choix_test is a reactive function in the aim of selecting different comparison 
 #'
 #'
-#' @return \input`$test` a string of the different comparisons selected when clicked on the heatmap button
+#' @return \input`$test` a reactive value of type character for the different comparisons selected 
 #'
 
 

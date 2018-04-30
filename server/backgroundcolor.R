@@ -30,7 +30,7 @@ colourpicker::updateColourInput(
 #'
 #' @param choix_col1 character color for the lowest values
 #'
-#' @return \choix_col1 reactive value
+#' @return \choix_col1 a reactive value
 #'
 
 choix_col1 <- reactive({
@@ -41,7 +41,7 @@ choix_col1 <- reactive({
 #'
 #' @param choix_col3 character color for the lowest values
 #'
-#' @return \choix_col3 reactive value   
+#' @return \choix_col3 a reactive value   
 #' 
 
 choix_col3 <- reactive({
@@ -54,7 +54,7 @@ choix_col3 <- reactive({
 #' @param choix_col1 character color for the lowest values 
 #' @param choix_col2 character color for the highest values
 #'
-#' @return \inter character intermediate color between the lowest and the highest values
+#' @return \my_intermediata a reactive character intermediate color between the lowest and the highest values
 #'
 
 
