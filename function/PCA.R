@@ -2,6 +2,14 @@ require(FactoMineR)
 require(factoextra)
 
 
+#' res.pca is a function that computed a PCA of non-normalized data with the FactoMineR package
+#'
+#' @param workingset a data frame corresponding to the WorkingSet
+#' @param scale a boolean; by default this value is set to False non-normalized data
+#'
+#' @return \PCAres a data frame with PCA attributes
+#' 
+
 res.pca <- function(workingset, scale = F) {
   
   myt = transpose(workingset)
@@ -15,6 +23,13 @@ res.pca <- function(workingset, scale = F) {
 }
 
 
+#' eboulis is a function which aim is to display the eigenvalues of the data with the package factoextra
+#'
+#' @param PCAresa a data frame with PCA attributes
+#'
+#' @return \p a factoextra object
+#' 
+
 eboulis <- function(PCAres){
   
   p <- fviz_eig(PCAres, addlabels=TRUE, hjust = -0.3, barfill="white", barcolor ="darkblue", linecolor ="red")
@@ -25,9 +40,24 @@ eboulis <- function(PCAres){
   return(p)
 }
 
+#' PCAplot is a function that return a factoextra object of PCA type
+#'
+#' @param PCAres a data frame with PCA attributes
+#' @param myax a numeric vector of length 2 specifying the dimensions to be plotted
+#' @param elips a boolean value to add ellipse to the data distribution  for the different groups; default = False
+#' @param rep a boolean value to avoid overlaps between the label points
+#' @param mylevel a data frame corresponding to the pData
+#' @param mylabsize a numeric value representing the police size to display for the different labels
+#' @param dispelip a numeric value representing the ellipsoid dispersion
+#' @param labeled a character to display labels and/or points
+#' @param pal a color object from the RcolorBrewer package
+#'
+#' @return
+#' 
+
 PCAplot <- function(PCAres, myax = c(1,2), elips = T , rep = T , mylevel = groups$Grp,  mylabsize = 4, dispelip = 0.8 , labeled = 'all', pal = brewer.pal(8, "Dark2")){
   
-
+  
   p <- fviz_mca_ind(PCAres, label= labeled , habillage = mylevel, addEllipses= elips ,
                     ellipse.level= 0.8, repel = rep, axes = myax, pointsize = 2 , labelsize = mylabsize)
 
@@ -36,9 +66,6 @@ PCAplot <- function(PCAres, myax = c(1,2), elips = T , rep = T , mylevel = group
 }
 
 
-# Xname=fData(MAtreated_AllChip$WorkingSet)$GeneName
-# 
-# plotVar(res_splsda_n5,comp=1:2, legend=T,var.names=list(name=Xname),cutoff=0.7,comp.select=1:2)
 
 
 

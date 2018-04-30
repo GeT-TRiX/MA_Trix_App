@@ -2,6 +2,14 @@ require(VennDiagram)
 library(venn)
 
 
+#' Vennlist is a function which aim is to return a list of signficant genes for a treshold pvalue of 5%
+#'
+#' @param pval a data frame
+#' @param adj a data frame with the contrast selected
+#'
+#' @return \myl a list
+#' 
+
 Vennlist <- function(pval,adj){
   myl=list()
   for(i in 1:ncol(adj)){
@@ -11,9 +19,18 @@ Vennlist <- function(pval,adj){
 }
 
 
+#' Vennfinal is a function which aim is to return an object containing a venn diagram 
+#' 
+#' @param myl a list of genes for the different contrasts
+#' @param adj a data frame 
+#' @param cex a vector giving the size for each area label 
+#'
+#' @return \final draw on the current device
+#' 
+
 Vennfinal <- function(myl,adj, cex=1){
   
-
+  
   indexnull = which( sapply(myl ,length) == 0)
   myl <- myl[sapply(myl, length) > 0]
   final = length(myl)-1
@@ -43,6 +60,14 @@ Vennsev <- function(myl, adj){
   g = venn(myven, ilabels= F, zcolor ="style", sname = colnames(adj), cexil = 0.5, size = 5, cexsn = 0.5)
   return(g)
 }
+
+#' myventocsv is a function that create a csv file of the signficant genes for the different contrasts for a cutoff of 5%
+#'
+#' @param myven a list of genes for the different contrasts
+#' @param adj a data frame
+#'
+#' @return
+#' 
 
 myventocsv <- function(myven,adj){
   

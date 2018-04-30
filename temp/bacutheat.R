@@ -38,6 +38,12 @@ formating = function( adj, musmuscu,pval){
   return(newlist)
 }
 treated = formating(adj,musmuscu,pval= 0.05)
+exprData=treated[[2]][treated[[1]],]
+View(exprData)
+ColvOrd = exprData %>%
+  t() %>%
+  distcor()
+print(ColvOrd)
 row.names(musmuscu) = musmuscu$X
 
 testos = c("green","red","orange","blue")

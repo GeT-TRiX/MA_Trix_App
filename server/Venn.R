@@ -21,7 +21,7 @@ outputOptions(output,"bool",suspendWhenHidden=F)
 #' vennlist is a reactive function which aim is to return a list of signficant genes for a treshold pvalue of 5%
 #'
 #' @csvf a data frame
-#' @user_cont a  data frame with the contrast selected
+#' @user_cont a data frame with the contrast selected
 #'
 #' @return \vennlist a reactive list
 #'

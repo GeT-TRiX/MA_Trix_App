@@ -8,7 +8,7 @@
 #'@param PCAres a data frame with PCA attributes
 #'@param label a boolean value depending of the user's choice to display or not the labels
 #'@param habillage a data frame corresponding to the pData
-#'@param addEllipseda boolean value to add ellipse to the data distribution  for the different groups
+#'@param addEllipseda a boolean value to add ellipse to the data distribution  for the different groups
 #'@param ellipse.level a numeric value set to 0.8
 #'@param repel a boolean value to avoid overlaps between the label points
 #'@param axes a numeric vector of length 2 specifying the dimensions to be plotted

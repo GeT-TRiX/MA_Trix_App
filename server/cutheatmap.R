@@ -31,9 +31,10 @@ rownamtoX <- reactive({
 #' cutfinal is a reactive function that computed a PCA of non-normalized data
 #'
 #' @param p an heatmap object
-#' @param input$cutheight height to cut the dendogram 
+#' @param input$cutheight a numeric value to cut the dendogram 
 #' @param new_data a data frame with specific columns depending on the user's choices
 #' @param rownamtoX a data frame
+#' @param groups a data frame of the choosen groups
 #' @param input$cutcluster an heatmap object
 #' @param input$cutinfo a character to select the plot to display heatmap, boxplot or stripchart
 #'

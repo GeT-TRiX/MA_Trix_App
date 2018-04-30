@@ -1,3 +1,17 @@
+#' decTestTRiX is a function 
+#'
+#' @param adj a data frame with the "adj.P.Val"
+#' @param logfc a data frame with the "logFC"
+#' @param pval a data frame with the "P.value"
+#' @param DEGcutoff a numeric value for tresholding the data on the pvalue
+#' @param FC a numeric value for tresholding the data on the FC value
+#' @param cutoff_meth a character to choose the method appropriate, "FDR" in order to cut off with the "adj.P.Val" and "None" for the "P.value"; default is set to "FDR"
+#' @param maxDE a numeric value that gives a maximal number of genes to display for all the differents contrasts
+#' @param contrast a numeric value representing the length of the data frame
+#'
+#' @return \DEsel a matrix of double values containing the signficant genes
+#' 
+
 decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "FDR",maxDE = NULL,contrast = 1:ncol(adj))
 
 {
@@ -64,6 +78,8 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
   
   DEsel = which(rowSums(DEsel, na.rm = T) > 0)
   #cat("Il y a",length(DEsel),"gène significatifs")
+  
+
   
   return(DEsel)
   

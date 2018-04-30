@@ -1,24 +1,54 @@
+#' distcor is a function that computes the distance correlation 
+#'
+#' @param x 
+#'
+#' @return a matrix distance
+#' 
+
 distcor<-function(x) {as.dist(1-cor(t(x),use="pairwise.complete.obs"))}
+
+
+#' disteuc is a function that computes the euclidean correlation
+#'
+#' @param x 
+#'
+#' @return a matrix distance
+#' 
+
 disteucl<-function(x) {dist(x,method="euclidian")}
+
+
+#' hclustfun is a function that performs a hiearchical cluster analysis with the method of Ward
+#'
+#' @param d 
+#'
+#' @return an object of class hclust
+#' 
+
 hclustfun=function(d) {hclust(d,method="ward.D2")} 
 
 require("Biobase")  
 require("marray") 
 
 
+#' num2cols is a function that gives a character vector of color names for a given numeric vector
+#'
+#' @param numVector a numeric vector
+#' @param colp a character vector
+#'
+#' @return a matrix object 
+#' 
+
 num2cols=function(numVector,colp=palette()){
   
-  # gives a character vector of color names for a given numeric vector
-  
   gpcol=as.data.frame(numVector)
-  
+
   numCols=length(unique(gpcol[,1]))
   mycol <- sort(unique(gpcol$numVector))
   if(length(colp) <numCols) warning("number of color names < number of levels! Give a color palette with at least ",numCols," terms to 'col' argument")
   cols=as.data.frame(matrix(c(mycol,colp[1:(numCols)]),nrow=numCols)) ## couleurs pour les groupes
   myColFun=function(x){
     as.character(cols[cols[,1]==x[1],2])
-    
   }
   apply(gpcol,1,FUN=myColFun)
   
@@ -31,10 +61,44 @@ num2cols=function(numVector,colp=palette()){
 ############################################################################ 
 
 
+#' plotHeatmaps is a function that create a false color image with a dendogram added to the left side and the top
+#'
+#' @param exprData a data frame with all the individuals selected
+#' @param geneSet a data frame with the indexes corresponding to the sigificant genes
+#' @param groups a data frame with the corresponding groups 
+#' @param workingPath an access path
+#' @param k a numeric value which aim is to defined the treshold value to cut the dendogram
+#' @param fileType a character value which extension corresponds to different file types
+#' @param cexcol  a positive numbers, used as cex.axis in for the row or column axis labeling
+#' @param cexrow a positive numbers, used as cex.axis in for the row or column axis labeling
+#' @param colOrder a positive numbers, used as cex.axis in for the row or column axis labeling
+#' @param labrow a character vectors with row and column labels to use
+#' @param na.color color to use for missing value 
+#' @param scale a character indicating if the values should be centered and scaled in either the row direction or the column direction, or none
+#' @param hclustGenes a function used to compute the hierarchical clustering when Rowv or Colv are not dendrograms
+#' @param meanGrp a boolean value to computes the mean for each groups; default = F
+#' @param plotRowSideColor a boolean value that colors or not the rows side
+#' @param RowSideColor a character vector of length nrow containing the color names for a vertical side bar that may be used to annotate the rows of x.
+#' @param Rowdistfun a function used to compute the distance for the rows
+#' @param Coldistfun a function used to compute the distance for the columns
+#' @param palette.col NULL
+#' @param margins a numeric vector of length 2 containing the margins (see par(mar= *)) for column and row names, respectively.
+#' @param my_palette a character vetor of length 17
+#' @param mycex a numeric value which aim is to change the size of the legend
+#' @param mypal a character vetor of length 17 
+#' @param colid a character vectors with row and column labels to use; default NULL
+#' @param showcol a boolean value used to hide or show the colnames 
+#' @param showrow a boolean value used to hide or show the rownames
+#' @param genename a data frame list corresponding to the gene names 
+#'
+#' @return an heatmap object
+#' 
+
+
 plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=2,fileType="png",cexcol=1.5,cexrow=1.5,
                       colOrder=NULL,labrow=F,na.color="black",scale="row",hclustGenes=T,meanGrp=F,plotRowSideColor=T,#col.hm=greenred(75),
                       RowSideColor=c("gray25","gray75"), Rowdistfun="correlation",Coldistfun="correlation" ,palette.col=NULL, 
-                      margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75),mycex = 0.6,...,mypal=test,colid = NULL, showcol = T ,showrow =F, genename=NULL){
+                      margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75),mycex = 0.6,mypal=test,colid = NULL, showcol = T ,showrow =F, genename=NULL){
   
   #RowSideColor: color palette to be used for rowSide cluster colors
   # can also be gray.colors(k, start = 0.2, end = 0.9) to get k colors of gray scale
@@ -78,7 +142,6 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=2,fileType="
   library(marray)
   cl=palette(mypal);
   
-  
   exprData=exprData[geneSet,]
 
   ##-----------------------##
@@ -118,14 +181,29 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=2,fileType="
   
   gpcol=num2cols(as.numeric(groups))
 
+
   ##**********
   ## RowDendrogram
   
   # build dendrogram
-  if(Coldistfun=="correlation") ColvOrd=as.dendrogram(hclustfun(distcor(t(exprData))))
-  if(Coldistfun=="euclidian") ColvOrd=as.dendrogram(hclustfun(disteucl(t(exprData))))
+
+  
+  if(Coldistfun=="correlation")
+    ColvOrd = exprData %>%
+      t() %>%
+      distcor()%>%
+      hclustfun()%>%
+      as.dendrogram()
+
+  if(Coldistfun=="euclidian")
+    ColvOrd = exprData %>%
+    t() %>%
+    disteucl()%>%
+    hclustfun()%>%
+    as.dendrogram()
   
   # re-order dendrogram
+  
   if(!is.null(colOrder)){ # reorder col dendrogram
     if(length(colOrder)==ncol(exprData)){
       ord=colOrder	#vector of order values
@@ -190,14 +268,11 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=2,fileType="
   
   par("mar")
   par(mar=c(5,5,1,1.10))
-  
   print(class(exprData))
   print(typeof(exprData))
   hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=T,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),col=my_palette,key.par = list(cex=0.6))
-
   mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
-  
   return(hmp02)
 }

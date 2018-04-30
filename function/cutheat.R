@@ -1,25 +1,34 @@
-cutHeatmaps = function(hmp,
-                       height,
-                       exprData,
-                       DEGres,
-                       groups,
-                       cexcol = 1,
-                       cexrow = 1,
-                       labrow = T,
-                       fileType = "png",
-                       scale = "row",
-                       meanGrp = F,
-                       col.hm = maPalette(low = "green",
-                                          high = "red",
-                                          mid = "black",
-                                          k = 75),
-                       type = "None",
-                       las = 2,
-                       distfun = "cor",
-                       palette.col = NULL,
-                       num = 4,
-                       ...)
+#' cutHeatmaps if a function that takes as input an heatmap object and depending on the cut height and the cluster
+#' choosen render a ggplot object or an heatmap object
+#'
+#' @param hmp an heatmap object
+#' @param height a numeric value to cut the dendogram
+#' @param exprData a data frame with specific columns depending on the user's choices
+#' @param DEGres a data frame corresponding to the xxx_topTableAll
+#' @param groups a data frame of the choosen groups
+#' @param cexcol a positive numbers, used as cex.axis in for the row or column axis labeling
+#' @param cexrow a positive numbers, used as cex.axis in for the row or column axis labeling
+#' @param labrow a character vectors with row and column labels to use
+#' @param fileType a character to select the plot to display heatmap, boxplot or stripchart
+#' @param scale a character indicating if the values should be centered and scaled in either the row direction or the column direction, or none
+#' @param meanGrp a boolean value to computes the mean for each groups; default = F
+#' @param col.hm a character vector
+#' @param type a character to select the plot to display heatmap, boxplot or stripchart
+#' @param las a numeric value
+#' @param distfun function used to compute the distance (dissimilarity) between both rows and columns.
+#' @param palette.col a character vector 
+#' @param num an item of the heatmap object corresponding to a specific cluster choosen by the user 
+#' @param ... 
+#'
+#' @return a ggplot object or heatmapply object
+#' 
+
+cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,labrow = T,
+                       fileType = "png",scale = "row",meanGrp = F,
+                       col.hm = maPalette(low = "green",high = "red",mid = "black",k = 75),
+                       type = "None",las = 2,distfun = "cor",palette.col = NULL,num = 4,...)
 {
+  
   require(ggplot2)
   require(grid)
   require(gridExtra)
@@ -105,16 +114,8 @@ cutHeatmaps = function(hmp,
   
   ###export toptable sous groupes hclust
   cat(" ->export result tables for each subgroup \n")
-  # for(i in 1:length(cut02$lower)){
-  #   write.csv2(DEGres$ResTable[labels(cut02$lower[[i]]),],file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,"_gp",i,".csv",sep="")))
-  # }
-  
-  
   gpcol = num2cols(as.numeric(groups))
-  #	if(!is.null(palette.col)){
-  #		gpcol=num2cols(as.numeric(groups),palette.col)
-  #	}else gpcol=num2cols(as.numeric(groups))
-  
+
   
   # idx sondes de chaque cluster
   HCgroupsLab = lapply(cut02$lower, function(x)
@@ -168,13 +169,7 @@ cutHeatmaps = function(hmp,
         dataCentS = HCgroupsLabExrsCenterScaleMean[[i]]
         isplotable = apply(simplify2array(dataCentS), 1:2, sum, na.rm = TRUE)
         nProbes = nrow(dataCentS)
-        
-        #			png(file.path(workingPath,"DEG",paste(prefix,"_heatmap_",suffix,"_gp",i,"_boxplots.png",sep="")),height=800,width=800)
-        #			par(mar=par("mar")+c(2,0,0,0))
-        #			boxplot(dataCentS,ylab="average z-score",col=cl[(1:length(levels(groups)))+1],las=las,main=paste("Cluster ",i,sep=""),xaxt="n")
-        #			axis(1,at=1:ncol(dataCentS),labels=colnames(dataCentS),cex.axis=cexcol,las=las)
-        #			dev.off()
-        
+
         ## boxplotggplot2
         footnote <-
           paste("Average expression Z-score over replicates; ",
@@ -229,10 +224,6 @@ cutHeatmaps = function(hmp,
     }
     return(myplots[[as.numeric(num)]])
   }
-  
-  
-  
-  
   
   #############"
   ### ggplot2

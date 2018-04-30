@@ -10,22 +10,21 @@
 #'@param new_group  a data frame with the corresponding groups 
 #'@param workingPath the current user's repository 
 #'@param my_palette a vector of colors 
-#'@param k a numeric value which aim is to defined the number of clusters wanted for the rows defined by the user input input$clusters
+#'@param k a numeric value which aim is to defined the treshold value to cut the dendogram input$clusters
 #'@param Rowdistfun a character value set by the user to defined the method to calculate the dendogram matrix distance for the genes input$dist
 #'@param Coldistfun a character value set by the user to defined the method to calculate the dendogram matrix distance for the contrasts input$dist
 #'@param keysize 
 #'@param mycex a numeric value which aim is to change the size of the legend in the heatmap defined by the user input$legsize
-#'@param cexrow 
-#'@param cexcol 
+#'@param cexrow  a numeric value to change the size of the police legend for the rows input$rowsize
+#'@param cexcol a numeric value to change the size of the police legend for the columns input$colsize
 #'@param meanGrp a boolean value to compute or not the mean of each contrasts in the heatmap input$meangrp
-#'@param labColu a numeric value to change the size of the police legend for the columns input$colsize
-#'@param labRowu a numeric value to change the size of the police legend for the rows input$rowsize
 #'@param mypal a list of values 
 #'@param showcol a boolean value used to hide or show the colnames input$colname
 #'@param showrow a boolean value used to hide or show the rownames input$rowname
 #'@param genename a data frame list corresponding to the gene names 
 #'
-#' @return \heatmapfinal an heatmap object 
+#'
+#'@return \heatmapfinal an heatmap object 
 #' 
 
 
@@ -43,13 +42,11 @@ heatmapfinal <- function() {
       k = input$clusters,
       Rowdistfun = input$dist ,
       Coldistfun = input$dist,
-      keysize = input$key,
+      #keysize = input$key,
       mycex = input$legsize ,
       cexrow = input$rowsize ,
       cexcol = input$colsize ,
       meanGrp = input$meangrp,
-      labColu = input$colname ,
-      labRowu = input$rowname,
       mypal =  unlist(colors()),
       showcol = colname(),
       showrow = rowname(),

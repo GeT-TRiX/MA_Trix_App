@@ -2,7 +2,7 @@
 ##### Franck Soubès
 
 
-#' Can be upgraded
+#' formating is a function alpha version of the higher elaborate decTestTRiX function 
 #'
 #' @param adj
 #' @param pval 
@@ -157,12 +157,12 @@ createdfsign = function(adj) {
 
 
 
-#' This function return a data frame of the element which are superior to a defined FC and pvalue
+#' This function return a data frame of the element which are superior to a vector character 1.2,2,4,6 and 10 and for a defined pvalue
 #'
-#' @param alltop 
-#' @param pval 
+#' @param alltop a data frame
+#' @param pval a numeric pvalue
 #'
-#' @return \fcpval 
+#' @return \fcpval a data frame 
 
 myfinalfc = function(alltop, pval) {
   
