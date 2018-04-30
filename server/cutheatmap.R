@@ -3,36 +3,41 @@
 #########################################
 
 
-#' PCAres is a reactive function that computed a PCA of non-normalized data
+#' p is a reactive function that return an heatmap gplots object
 #'
-#' @param csvf a data frame corresponding to the WorkingSet
+#' @param heatmapfinal a function
 #'
-#' @return \PCAres a reactive data frame with PCA attributes
+#' @return \p an object
 #'
 
 p <- eventReactive(input$updateheatm,{
   isolate(heatmapfinal())
 })
 
-#' PCAres is a reactive function that computed a PCA of non-normalized data
+#' PCAres is a reactive function that change the rownames values
 #'
-#' @param csvf a data frame corresponding to the WorkingSet
+#' @param csvf a data frame 
 #'
-#' @return \PCAres a reactive data frame with PCA attributes
+#' @return \rownamtoX a data frame with the row.names index corresponding to the first column index
 #'
 
-test <- reactive({
+rownamtoX <- reactive({
   mycsv = csvf()[[3]]
   row.names(mycsv) = mycsv$X
-  return(test)
   
+  return(rownamtoX)
 })
 
-#' PCAres is a reactive function that computed a PCA of non-normalized data
+#' cutfinal is a reactive function that computed a PCA of non-normalized data
 #'
-#' @param csvf a data frame corresponding to the WorkingSet
+#' @param p an heatmap object
+#' @param input$cutheight height to cut the dendogram 
+#' @param new_data a data frame with specific columns depending on the user's choices
+#' @param rownamtoX a data frame
+#' @param input$cutcluster an heatmap object
+#' @param input$cutinfo a character to select the plot to display heatmap, boxplot or stripchart
 #'
-#' @return \PCAres a reactive data frame with PCA attributes
+#' @return \cutfinal a ggplot object or heatmapply object
 #'
 
 cutfinal <- reactive({
@@ -41,15 +46,15 @@ cutfinal <- reactive({
       height = input$cutheight ,
       exprData = data.matrix(new_data()),
       groups = droplevels(new_group()$Grp),
-      DEGres =  test()[, -1],
+      DEGres =  rownamtoX()[, -1],
       num = input$cutcluster,
       type = input$cutinfo
     )
 })
 
 
-
-output$cutcluster <- renderUI({
+# render to the ui the number of clusted for a define height in function of the current heatmap object
+output$cutcluster <- renderUI({ 
   req(p())
   
   cut02 = cut(p()$rowDendrogram, h = input$cutheight)
@@ -59,7 +64,7 @@ output$cutcluster <- renderUI({
 })
 
 
-output$event <- renderPrint({
+output$event <- renderPrint({ # interactive cursor that shows the selected points 
   d <- event_data("plotly_hover")
   if (is.null(d))
     "Hover on a point!"
@@ -69,9 +74,9 @@ output$event <- renderPrint({
         " probes")
 })
 
-observe({
+observe({ 
   if (req(input$cutinfo) == "Heatmap") {
-    output$cutheatmap <- renderPlotly({
+    output$cutheatmap <- renderPlotly({ # Plot/Render an object of class plotly
        cutfinal()
 
     })
