@@ -22,12 +22,14 @@
 #'
 #' @return a ggplot object or heatmapply object
 #' 
+#' @export
 
 cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,labrow = T,
                        fileType = "png",scale = "row",meanGrp = F,
                        col.hm = maPalette(low = "green",high = "red",mid = "black",k = 75),
                        type = "None",las = 2,distfun = "cor",palette.col = NULL,num = 4,...)
 {
+
   
   require(ggplot2)
   require(grid)

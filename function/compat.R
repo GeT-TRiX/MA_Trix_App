@@ -4,6 +4,7 @@
 #'
 #' @return a matrix distance
 #' 
+#' @export
 
 distcor<-function(x) {as.dist(1-cor(t(x),use="pairwise.complete.obs"))}
 
@@ -14,6 +15,7 @@ distcor<-function(x) {as.dist(1-cor(t(x),use="pairwise.complete.obs"))}
 #'
 #' @return a matrix distance
 #' 
+#' @export
 
 disteucl<-function(x) {dist(x,method="euclidian")}
 
@@ -24,6 +26,7 @@ disteucl<-function(x) {dist(x,method="euclidian")}
 #'
 #' @return an object of class hclust
 #' 
+#' @export
 
 hclustfun=function(d) {hclust(d,method="ward.D2")} 
 
@@ -38,6 +41,7 @@ require("marray")
 #'
 #' @return a matrix object 
 #' 
+#' @export
 
 num2cols=function(numVector,colp=palette()){
   
@@ -93,6 +97,7 @@ num2cols=function(numVector,colp=palette()){
 #'
 #' @return an heatmap object
 #' 
+#' @export
 
 
 plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=2,fileType="png",cexcol=1.5,cexrow=1.5,

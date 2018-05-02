@@ -9,6 +9,7 @@ require(factoextra)
 #'
 #' @return \PCAres a data frame with PCA attributes
 #' 
+#' @export
 
 res.pca <- function(workingset, scale = F) {
   
@@ -29,6 +30,7 @@ res.pca <- function(workingset, scale = F) {
 #'
 #' @return \p a factoextra object
 #' 
+#' @export
 
 eboulis <- function(PCAres){
   
@@ -54,6 +56,7 @@ eboulis <- function(PCAres){
 #'
 #' @return
 #' 
+#' @export
 
 PCAplot <- function(PCAres, myax = c(1,2), elips = T , rep = T , mylevel = groups$Grp,  mylabsize = 4, dispelip = 0.8 , labeled = 'all', pal = brewer.pal(8, "Dark2")){
   

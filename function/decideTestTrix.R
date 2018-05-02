@@ -11,6 +11,7 @@
 #'
 #' @return \DEsel a matrix of double values containing the signficant genes
 #' 
+#' @export
 
 decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "FDR",maxDE = NULL,contrast = 1:ncol(adj))
 

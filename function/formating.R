@@ -12,6 +12,7 @@
 #'
 #' @examples
 #' 
+#' @export
 
 formating = function( adj, pval){
   
@@ -34,6 +35,8 @@ formating = function( adj, pval){
 #' @param dataframe 
 #'
 #' @return
+#' 
+#' @export
 
 
 transform <- function(dataframe,toast){
@@ -75,6 +78,8 @@ transform <- function(dataframe,toast){
 #' @param pv a list
 #'
 #' @return \grp1 of class data frame
+#' 
+#' @export
 
 evaluatesign = function(adj,elem,pv){
   
@@ -96,6 +101,8 @@ evaluatesign = function(adj,elem,pv){
 #' @param pv 
 #'
 #' @return \grp1 of class data.frame
+#' 
+#' @export
 
 
 evaluatesignpar = function(adj,elem,pv) { ### for benchmarking 
@@ -117,6 +124,8 @@ evaluatesignpar = function(adj,elem,pv) { ### for benchmarking
 #' @param adj a data frame containing the adjusted p-value
 #'
 #' @return \dtsign a data frame 
+#' 
+#' @export
 
 createdfsign = function(adj) {
 
@@ -163,6 +172,8 @@ createdfsign = function(adj) {
 #' @param pval a numeric pvalue
 #'
 #' @return \fcpval a data frame 
+#' 
+#' @export
 
 myfinalfc = function(alltop, pval) {
   
@@ -193,6 +204,15 @@ myfinalfc = function(alltop, pval) {
   
   return(fcpval)
 }
+
+#' This function return a a transofrmed data frame of character type to a data frame of factor type
+#'
+#' @param datach a data frames
+#'
+#' @return \datach a data frame 
+#' 
+#' @export
+
 
 chartofa = function(datach){
   
