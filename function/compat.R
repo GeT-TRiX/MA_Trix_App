@@ -1,3 +1,7 @@
+require(dplyr)
+require(RColorBrewer)
+
+
 #' distcor is a function that computes the distance correlation 
 #'
 #' @param x 
@@ -108,8 +112,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=2,fileType="
   #RowSideColor: color palette to be used for rowSide cluster colors
   # can also be gray.colors(k, start = 0.2, end = 0.9) to get k colors of gray scale
   
-  print(mypal)
-  
+
   if(is.null(showcol))
      showcol = F
   
@@ -128,9 +131,14 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=2,fileType="
 
   
   if(is.null(mypal))
-    mypal =c ("#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442",
-             "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray",
-             "burlywood1","darkkhaki", "#CC0000" )
+    mypal = brewer.pal(8,"Dark2") %>%
+      list(brewer.pal(10,"Paired")) %>%
+      unlist()
+    
+    
+    # mypal =c ("#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442",
+    #          "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray",
+    #          "burlywood1","darkkhaki", "#CC0000" )
   
   
   if(!is.null(palette.col)){

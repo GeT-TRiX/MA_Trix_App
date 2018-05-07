@@ -28,7 +28,7 @@ tabPanel(
     
     
     selectInput("method", #  Create a select list that can be used to choose a single or multiple items from a list of values.
-                "Choose your matrix distance",
+                "Choose your statistical method",
                 choices = c("FDR", "none"))
 
   ),
