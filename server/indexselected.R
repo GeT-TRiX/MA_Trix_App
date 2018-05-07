@@ -12,6 +12,7 @@
 
 formated <- reactive({
   
+  #req(!is.null(user_group()))
   #treated = formating(new_test(), csvf()[[1]], input$pval)
   treated = decTestTRiX(
     user_group()[[1]],
@@ -26,3 +27,4 @@ formated <- reactive({
   )
   return(treated)
 })
+

@@ -9,7 +9,6 @@ library(venn)
 #'
 #' @return \myl a list
 #' 
-#' @export
 
 Vennlist <- function(pval,adj){
   myl=list()
@@ -28,7 +27,6 @@ Vennlist <- function(pval,adj){
 #'
 #' @return \final draw on the current device
 #' 
-#' @export
 
 Vennfinal <- function(myl,adj, cex=1){
   
@@ -52,16 +50,6 @@ Vennfinal <- function(myl,adj, cex=1){
   return(final)
 }
 
-#' Vennsev is a function which aim is to return an object containing a venn diagram 
-#' 
-#' @param myl a list of genes for the different contrasts
-#' @param adj a data frame 
-#' @param cexil a vector giving the size for each area label 
-#'
-#' @return \g a venn diagram object
-#' 
-#' @export
-
 
 Vennsev <- function(myl, adj){
   
@@ -80,7 +68,6 @@ Vennsev <- function(myl, adj){
 #'
 #' @return
 #' 
-#' @export
 
 myventocsv <- function(myven,adj){
   
