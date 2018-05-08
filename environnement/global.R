@@ -24,7 +24,7 @@ cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatm
 
 
 list.of.packages <- c("shiny","dplyr","shinythemes","shinyjs","ggplot2","shinyBS","markdown"
-                      ,"BH","rCharts","data.table","DT","readr","rbenchmark","colourpicker",
+                      ,"BH","data.table","DT","readr","rbenchmark","colourpicker",
                       "tools","devEMF","R.devices","FactoMineR","factoextra","heatmaply",
                       "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly")
 

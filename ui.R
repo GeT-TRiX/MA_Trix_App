@@ -20,11 +20,16 @@ shinyUI(ui <- bootstrapPage( # Create a Shiny UI page that loads the CSS and Jav
     
     #useShinyjs(),
     theme = shinytheme("united"),
+    
+    
 
     source(file.path("ui", "tab1.R"), local = TRUE)$value, # loading data
     source(file.path("ui", "tab4.R"), local = TRUE)$value, # ploting Venn
     source(file.path("ui", "tab3.R"), local = TRUE)$value, # ploting PCA
     source(file.path("ui", "tab2.R"), local = TRUE)$value, # ploting Heatmap and cutheatmap
+    
+    
+    
     
     tabPanel(p(icon("info-circle"),
                "About"),

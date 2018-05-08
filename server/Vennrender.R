@@ -22,8 +22,8 @@ observeEvent(input$vennd, {
       
       emf(
         file,
-        width = 7,
-        height = 7,
+        width = 12,
+        height = 12,
         pointsize = 12,
         coordDPI = 300
       )
@@ -39,11 +39,12 @@ observeEvent(input$vennd, {
       )
     else
       eps(file,
-          width = 7,
-          height = 7)
+          width = 12,
+          height = 12)
     
     
     plot(Vennplot())
+    #Vennplot()
     dev.off()
   })
   

@@ -104,7 +104,7 @@ num2cols=function(numVector,colp=palette()){
 #' @export
 
 
-plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=2,fileType="png",cexcol=1.5,cexrow=1.5,
+plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="png",cexcol=1.5,cexrow=1.5,
                       colOrder=NULL,labrow=F,na.color="black",scale="row",hclustGenes=T,meanGrp=F,plotRowSideColor=T,#col.hm=greenred(75),
                       RowSideColor=c("gray25","gray75"), Rowdistfun="correlation",Coldistfun="correlation" ,palette.col=NULL, 
                       margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75),mycex = 0.6,mypal=test,colid = NULL, showcol = T ,showrow =F, genename=NULL){
@@ -281,8 +281,6 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=2,fileType="
   
   par("mar")
   par(mar=c(5,5,1,1.10))
-  print(class(exprData))
-  print(typeof(exprData))
   hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=T,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),col=my_palette,key.par = list(cex=0.6))

@@ -12,8 +12,24 @@ shinyServer(server <- function(input, output, session) {
   ###############################
   ######## Load the csv files   #
   ###############################
+
   
   source(file.path("server", "csvFile.R"), local = TRUE)$value #
+  
+  
+  output$downloadData <- downloadHandler(
+    filename <-function(){
+      paste("sampleData",".zip", sep='')
+    },
+    content <- function(file) {
+      file.copy("data/sampleData.zip", file)
+    },
+    contentType = "zip"
+  )
+  
+  observeEvent(input$resetAll, {
+    reset("form")
+  })
   
   ##################################
   ######## Hide and modify buttons #  

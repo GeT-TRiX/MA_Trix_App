@@ -6,14 +6,25 @@ library(venn)
 #'
 #' @param pval a data frame
 #' @param adj a data frame with the contrast selected
+#' @param fc a data frame with the constrast selected
+#' @param regulation a character
 #'
 #' @return \myl a list
 #' 
 
-Vennlist <- function(pval,adj){
+Vennlist <- function(pval,adj,fc, regulation){
+  
+  reguser = ifelse(regulation == "up", T, F)
   myl=list()
-  for(i in 1:ncol(adj)){
-      myl[[i]] = which(adj[[i]] < 0.05)
+  if(reguser){
+    for(i in 1:ncol(adj)){
+        myl[[i]] = which(adj[[i]] < 0.05 & fc[[i]] > 0)
+    }
+  }
+  else{
+    for(i in 1:ncol(adj)){
+      myl[[i]] = which(adj[[i]] < 0.05 & fc[[i]] < 0)
+    }
   }
   return(myl)
 }
@@ -84,8 +95,13 @@ myventocsv <- function(myven,adj){
 
 # pval <- read.csv2("data/All_topTableAll.csv")
 # adj = pval[,grep("^adj.P.Val", names(pval), value=TRUE)]
+# fc = pval[,grep("^logFC", names(pval), value=TRUE)]
+# View(fc)
+# View(pval)
 # library(dplyr)
-# myven = Vennlist(pval, adj[1:5])
+# myven = Vennlist(pval, adj[1:5], fc[1:5], "test")
+# print(myven)
+
 # test = myventocsv(myven,adj[1:5])
 # View(test)
 

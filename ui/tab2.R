@@ -11,6 +11,8 @@ tabPanel(
       border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
       tags$style("#myNumericInput {font-size:10px;height:10px;}"),
       br(),
+      actionLink("resetAll",  label = ("reset all"), style="float:right"),
+      br(),
       wellPanel(
         uiOutput("individusel"),
         actionButton(
@@ -28,6 +30,9 @@ tabPanel(
             "color: #fff; background-color: #337ab7; border-color: #2e6da4"
         )
       ),
+      div(
+        id = "form",
+      
       wellPanel(
         # Creates a panel with a slightly inset border and grey background
         uiOutput("testout"),
@@ -127,8 +132,7 @@ tabPanel(
         id = "advancedcol",
         wellPanel(
           fluidRow(
-            column(
-              5,
+            column(5,
               colourpicker::colourInput(
                 # Creation of a color button
                 "col1",
@@ -194,19 +198,24 @@ tabPanel(
           
           br()
         )
-      )),
+      ))), #end of the div "form"
       
       br(),
       
       selectInput("form", "Choose your file format",
                   choices = c("png", "eps", "emf")),
       br(),
+      fluidRow(
+        column(4,
       downloadButton(
         "save",
         "Save your plot" ,
         style = ## allowed to download an image
           "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-      ),
+      )),
+      column(4,
+      uiOutput("button"))),
+      #actionButton("resetAll", "Reset all"),
       
       br(),
       br(),
@@ -214,8 +223,7 @@ tabPanel(
       
       # shiny::actionButton("heatm", "Print Heatmap", style =
       #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-      
-      uiOutput("button"),
+
       # Render input from server.R
       shinyjs::disabled(actionButton("stop", "Stop"))
     ),

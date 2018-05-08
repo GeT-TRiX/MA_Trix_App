@@ -11,9 +11,8 @@ tabPanel(
     border-color: #2e6da4; background-color: #337ab7, width: 28px; ", #CSS attributes for the sidebarPanel
     width = 3,
     
-    br(),
-    
-    
+    downloadLink("downloadData", label = "download sample data"),
+    br(),br(),
     #csvFileInput("file", "Choose your csv files"),
     fileInput( # browse button (UI)
       "file",

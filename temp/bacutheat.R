@@ -16,7 +16,7 @@ groupss <- read.csv2("data/TOXA_HEGU_MA0191 _AllChip_pData.csv", sep= ";" , dec 
 class(groupss)
 typeof(groupss)
 View(head(musmuscu))
-
+View(pval)
 #adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|^adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
 adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.", names(pval), value=TRUE)]
 
@@ -49,10 +49,30 @@ row.names(musmuscu) = musmuscu$X
 
 testos = c("green","red","orange","blue")
 x11()
-hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,prefix,suffix, mypal = testos,
-                        showcol = F, showrow = F,genename=pval$GeneName)
+hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,mypal = testos,
+                        showcol = F, showrow = T,genename=pval$GeneName)
+
+exprData=treated[[2]][treated[[1]],]
+genename=pval$GeneName
+View(genename)
+rowIds = genename[treated[[1]]]
+View(exprData)
+print(treated[[1]])
+final = exprData[rev(hmp01_All$rowInd), hmp01_All$colInd]
+mygen = row.names(final)
+print(mygen)
+mygen = as.integer(mygen)
+testo = pval[as.integer(mygen)]
+
+test = (pval$X == 170) 
+test == 
 
 
+View(test)
+
+View(final)
+hmp01_All$rowDendrogram
+View(pval)
 source("function/cutheat.R")
 
 test = cutHeatmaps(hmp01_All,height = 5, exprData = musmuscu[,-1], groups = groupss$Grp, 
@@ -86,8 +106,24 @@ labels(cut02$lower)
 print(labels(hmp01_All$rowDendrogram))
 treated[[2]]labels(hmp01_All$rowDendrogram)
 
+which(pval,rowsum >0 )
 
 
+adj = pval[,grep("^adj.P.Val.", names(pval), value=TRUE)]
+
+myl = c()
+for(i in 1:ncol(adj)){
+  myl[[i]] = which(adj[[i]] < 0.05)
+}
+View(myl)
+indexnull = which( sapply(myl ,length) == 0)
+print(indexnull)
+indexnull= c(1,3)
+final = colnames(adj[,-c(indexnull)])
+
+help("colSums")
+colnames(adj[final])
+colnames(adj[1:indexnull])
 
 #cut02=cut(hmp01_All$rowDendrogram,h=height)
 #print(cut02)

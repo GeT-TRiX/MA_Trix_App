@@ -29,7 +29,7 @@ outputOptions(output,"bool",suspendWhenHidden=F)
 vennlist <- reactive({
   if (is.null(csvf()))
     return(NULL)
-  mycont = Vennlist(pval = csvf()[[3]], user_cont())
+  mycont = Vennlist(pval = csvf()[[3]], user_cont(),user_fc(), input$regulation)
   return(mycont)
 })
 
@@ -100,16 +100,18 @@ Vennplot <- reactive({
 })
 
 
+  
 output$contout <- renderUI(
   checkboxGroupInput(
     inputId = "cont" ,
     label =  "Choose your comparison",
-    choices = colnames(adjusted()[[1]][,-1]),
-    selected = colnames(adjusted()[[1]][,-1])
-    #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())]),
-    #selected = colnames(adjusted()[[1]][,-1][,-c(indnull())])
+    #choices = colnames(adjusted()[[1]][,-1]),
+    #selected = colnames(adjusted()[[1]][,-1])
+    choices = colnames(adjusted()[[1]][,-1][myindex()]),
+    selected = colnames(adjusted()[[1]][,-1][myindex()])
   )
 )
+
 
 observeEvent(input$allCont, {
   updateCheckboxGroupInput(
@@ -118,8 +120,8 @@ observeEvent(input$allCont, {
     label = "Choose your comparison",
     #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())]),
     #selected = colnames(adjusted()[[1]][,-1][,-c(indnull())])
-    choices = colnames(adjusted()[[1]][,-1]),
-    selected = colnames(adjusted()[[1]][,-1])
+    choices = colnames(adjusted()[[1]][,-1][myindex()]),
+    selected = colnames(adjusted()[[1]][,-1][myindex()])
   )
 })
 
@@ -128,7 +130,7 @@ observeEvent(input$noCont, {
                            "cont",
                            label = "Choose your comparison",
                            #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())])
-                           choices = colnames(adjusted()[[1]][,-1])
+                           choices = colnames(adjusted()[[1]][,-1][myindex()])
   )
 })
 
@@ -140,6 +142,7 @@ observeEvent(input$noCont, {
 #'
 
 indnull <- reactive({
+
     indexnull = which( sapply(vennlist() ,length) == 0)
     return(indexnull)
 })
@@ -172,6 +175,15 @@ user_cont <- reactive({
   return(mysel)
 })
 
+user_fc <- reactive({
+  
+  mysel = (subset(adjusted()[[2]],
+                  select = choix_cont()))
+  return(mysel)
+})
+
+
+
 output$downloadvenn <- downloadHandler(
   filename = function() {
     "myvenn.csv"
@@ -195,3 +207,16 @@ output$downloadvenn <- downloadHandler(
 #   return(length(user_cont()))
 # })
 
+################# TO DO commented
+
+myindex <- reactive ({
+  
+  myl = c()
+  for(i in 1:ncol(adjusted()[[1]])){
+    myl[[i]] = which(adjusted()[[1]][[i]] < 0.05)
+  }
+  indexnull = which( sapply(myl ,length) == 0)
+  final = colnames(adjusted()[[1]][,-c(indexnull)])
+  return(final)
+  
+})

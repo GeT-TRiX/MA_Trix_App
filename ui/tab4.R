@@ -21,6 +21,10 @@ tabPanel(
           "color: #fff; background-color: #337ab7; border-color: #2e6da4"
       ),
       
+      selectInput("regulation", #  Create a select list that can be used to choose a single or multiple items from a list of values.
+                  "Choose your regulation upregulated or downregulated",
+                  choices = c("up", "down")),
+      
       sliderInput(
         "vennsize",
         "Size of the police",
