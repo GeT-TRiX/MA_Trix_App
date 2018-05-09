@@ -31,6 +31,12 @@ shinyServer(server <- function(input, output, session) {
     reset("form")
   })
   
+  
+  observeEvent(input$session,{
+    output$SessionInfo <- renderText(paste(capture.output(sessionInfo()), collapse = "<br>"))
+  })
+  
+  
   ##################################
   ######## Hide and modify buttons #  
   ##################################

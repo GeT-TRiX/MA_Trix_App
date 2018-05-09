@@ -35,7 +35,14 @@ shinyUI(ui <- bootstrapPage( # Create a Shiny UI page that loads the CSS and Jav
                "About"),
              mainPanel(includeMarkdown(
                "markdown/about.md"
-             )))
+             )),
+             br(), br(), br(), br(),
+             br(),br(), br(), br(), br(),
+             
+             actionLink("session", "Print version information about R, the OS and attached or loaded packages."),
+             
+             htmlOutput("SessionInfo")
+             )
     
   )
 ))
