@@ -71,7 +71,7 @@ transform <- function(dataframe,toast){
 # btestos <- droplevels(test)
 
 
-#' This function return an integer for the number of significant genes
+#' This function returns an integer for the number of significant genes
 #'
 #' @param adj a data frame
 #' @param elem a list
@@ -94,7 +94,7 @@ evaluatesign = function(adj,elem,pv){
 }
 
 
-#' This function return an integer for the number of significant genes using parallelism
+#' This function returns an integer for the number of significant genes using parallelism
 #' 
 #' @param adj 
 #' @param elem 
@@ -166,7 +166,7 @@ createdfsign = function(adj) {
 
 
 
-#' This function return a data frame of the element which are superior to a vector character 1.2,2,4,6 and 10 and for a defined pvalue
+#' This function returns a data frame of the element which are superior to a vector character 1.2,2,4,6 and 10 and for a defined pvalue
 #'
 #' @param alltop a data frame
 #' @param pval a numeric pvalue
@@ -211,7 +211,7 @@ myfinalfc = function(alltop, pval, testrix) {
   return(fcpval)
 }
 
-#' This function return a a transofrmed data frame of character type to a data frame of factor type
+#' This function returns a transformed data frame of character type to a data frame of factor type
 #'
 #' @param datach a data frames
 #'
@@ -228,3 +228,53 @@ chartofa = function(datach){
   
   return(datach)
 }
+
+
+#' This function returns a data frame of the significant genes associated with the corresponding cluster index
+#'
+#' @param cut02 a heatmap object
+#' @param treated a list
+#' @param pval a data frame
+#'
+#' @return a data frame
+#' @export
+#'
+
+
+heatmtoclust = function(cut02, treated, pval){
+  
+  
+  HCgroupsLab = lapply(cut02$lower, function(x)
+    labels(x))
+  
+  exprData=treated[[2]][treated[[1]],]
+  final = exprData[rev(hmp01_All$rowInd), hmp01_All$colInd]
+  
+  my_last= as.integer(lapply(seq(length(HCgroupsLab)), function(x)
+  {return(tail(HCgroupsLab[[x]],1))}))
+  
+  mygen = as.integer(row.names(final))
+  
+  heatmclust = pval %>%
+    select (X,GeneName) %>%
+    filter( X %in% mygen) %>%
+    left_join(data.frame(X=mygen), . , by="X") %>%
+    arrange(-row_number())
+  
+  i = 1
+  for(row in 1:nrow(heatmclust)){
+    if(heatmclust$X[row] == my_last[i] ){
+      heatmclust$cluster[row] = i
+      i = i+1
+    }
+    else
+      heatmclust$cluster[row] = i
+  }
+  
+  return(heatmclust)
+  
+}
+
+
+
+
