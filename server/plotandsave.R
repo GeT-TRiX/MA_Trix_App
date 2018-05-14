@@ -12,7 +12,9 @@ observeEvent(input$heatm, {
                        for (i in 1:n) {
                          incProgress(1 / n, detail = "Please wait...")
                        }
-                       heatmapfinal()
+                       
+                       hm()
+                       #heatmapfinal()
                      })
     })
   }, width = 900 , height = 1200, res = 100)
@@ -61,6 +63,7 @@ observeEvent(input$heatm, {
                        }
                        
                        heatmapfinal()
+
                      })
       
       dev.off()

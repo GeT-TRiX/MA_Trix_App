@@ -80,14 +80,21 @@ View(pval)
 seq(length(HCgroupsLab))
 
 
-mycsv = heatmtoclust(cut02, treated, pval)
-
-
+mycsv = heatmtoclust(cut02, treated[[1]],treated[[2]], pval)
+typeof(mycsv)
+class(mycsv)
+write.csv(mycsv,file ="myclust.csv", row.names = F)
+View(mycsv)
 
 HCgroupsLab = lapply(cut02$lower, function(x)
   labels(x))
 
 exprData=treated[[2]][treated[[1]],]
+class(treated[[2]])
+class(treated[[1]])
+
+View(treated[[2]])
+
 final = exprData[rev(hmp01_All$rowInd), hmp01_All$colInd]
 
 my_last= as.integer(lapply(seq(length(HCgroupsLab)), function(x)

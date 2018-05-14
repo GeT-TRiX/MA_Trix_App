@@ -3,6 +3,42 @@
 ###############################
 
 
+hm <- eventReactive(input$heatm,{
+  #isolate(heatmapfinal())
+  heatmapfinal()
+})
+
+# cutedhm <- reactive({
+#   req(hm())
+#   cut02 = cut(hm()$rowDendrogram, h = input$cutheatm)
+#   return(cut02)
+# })
+
+
+clustering <-  eventReactive(input$heatm,{
+
+  cut02 = cut(hm()$rowDendrogram, h = input$cutheatm)
+  dfclust = heatmtoclust(cut02, hm(), formated(), data.matrix(new_data()), csvf()[[3]])
+  print(dfclust)
+  #return(dfclust)
+})
+
+
+
+
+
+output$downloadcut <- downloadHandler(
+  filename = function() {
+    paste(input$dataset, ".csv", sep = "")
+  },
+  content = function(file) {
+    write.csv(clustering(), file, row.names = FALSE)
+  }
+)
+
+output$clustering <- renderDataTable(clustering()) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)
+#output$clustering <- renderPrint(clustering())
+
 #' heatmapfinal is an isolate function that only react to a user's click on the heatmap button 
 #' 
 #'@param new_data a data frame with all the individuals selected

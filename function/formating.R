@@ -233,7 +233,8 @@ chartofa = function(datach){
 #' This function returns a data frame of the significant genes associated with the corresponding cluster index
 #'
 #' @param cut02 a heatmap object
-#' @param treated a list
+#' @param ind a vector of integer
+#' @param signws a matrix 
 #' @param pval a data frame
 #'
 #' @return a data frame
@@ -241,13 +242,13 @@ chartofa = function(datach){
 #'
 
 
-heatmtoclust = function(cut02, treated, pval){
+heatmtoclust = function(cut02, hmp01_All, ind, signws, pval){
   
   
   HCgroupsLab = lapply(cut02$lower, function(x)
     labels(x))
   
-  exprData=treated[[2]][treated[[1]],]
+  exprData=signws[ind,]
   final = exprData[rev(hmp01_All$rowInd), hmp01_All$colInd]
   
   my_last= as.integer(lapply(seq(length(HCgroupsLab)), function(x)

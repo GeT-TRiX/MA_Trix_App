@@ -85,6 +85,16 @@ tabPanel(
         value = 1,
         step = 1
       ),
+      
+      sliderInput(
+        "cutheatm",
+        "Choose where you cut the heatmap",
+        min = 1,
+        max = 15,
+        value = 2,
+        step = 0.5
+      ),
+      
       br(),
       selectInput(
         "method2",
@@ -214,7 +224,12 @@ tabPanel(
           "color: #fff; background-color: #337ab7; border-color: #2e6da4"
       )),
       column(4,
-      uiOutput("button"))),
+      uiOutput("button")),
+      
+      downloadButton('downloadcut', "Download the data",
+                     style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
+      
+      ),
       #actionButton("resetAll", "Reset all"),
       
       br(),
@@ -225,8 +240,13 @@ tabPanel(
       #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
 
       # Render input from server.R
-      shinyjs::disabled(actionButton("stop", "Stop"))
+      shinyjs::disabled(actionButton("stop", "Stop")),
+      
+      shiny::actionButton("banana", "test")
     ),
+    
+    
+    
     tabPanel(
       "clustering of heatmap",
       wellPanel(
@@ -256,9 +276,6 @@ tabPanel(
         shiny::actionButton("updateheatm", "Update the clusters", style =
                               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
         
-        downloadButton('downloadcut', "Download the data",
-                       style =
-                         "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
         downloadButton("savecut", "Save your plot" , style =
                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")
         
@@ -346,7 +363,25 @@ tabPanel(
           )
         )
         )
+    ),
+  #),
+  
+  tabPanel(
+    "clustering of heatmap",
+  
+
+    column(
+      12,
+
+      h3("This table shows the samples with the accoording groups"),
+      helpText(
+        "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+      )
+      ,
+      dataTableOutput("clustering")
+    )
   ),
+
   tabPanel
   (
     p(icon("table"), "cutheatmap"),

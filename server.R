@@ -37,6 +37,11 @@ shinyServer(server <- function(input, output, session) {
   })
   
   
+  
+  
+  
+  
+  
   ##################################
   ######## Hide and modify buttons #  
   ##################################
