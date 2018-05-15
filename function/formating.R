@@ -242,13 +242,17 @@ chartofa = function(datach){
 #'
 
 
-heatmtoclust = function(cut02, hmp01_All, ind, signws, pval){
+#heatmtoclust = function( hmp01_All, ind, signws, pval, myval= 5){
+
+heatmtoclust = function( hmp01_All, exprData, pval, myval= 5){
+  
+  cut02 = cut(hmp01_All$rowDendrogram, h = myval )
   
   
   HCgroupsLab = lapply(cut02$lower, function(x)
     labels(x))
   
-  exprData=signws[ind,]
+  #exprData=signws[ind,]
   final = exprData[rev(hmp01_All$rowInd), hmp01_All$colInd]
   
   my_last= as.integer(lapply(seq(length(HCgroupsLab)), function(x)

@@ -1,5 +1,7 @@
-source("function/compat.R")
+source("function/heatmtruncated.R")
 source("function/cutheat.R")
+source("function/formating.R")
+#source("function/compat.R")
 library(dplyr)
 
 musmuscu <- read.csv2("data/TOXA_HEGU_MA0191_AllChip_WorkingSet.csv")
@@ -47,10 +49,19 @@ ColvOrd = exprData %>%
 print(ColvOrd)
 row.names(musmuscu) = musmuscu$X
 
+
+hmbis = truncatedhat(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path)
+View(hmbis)
 testos = c("green","red","orange","blue")
 x11()
+hm01 = plotHeatmaps(hmbis[[1]],treated[[1]],groupss$Grp,workingPath=wd_path,mypal = testos,
+                    showcol = F, showrow = T,genename=pval, rowv = hmbis[[4]], ColvOrd = hmbis[[3]],
+                    gpcol = hmbis[[5]], gpcolr = hmbis[[6]], distfunTRIX = hmbis[[2]] )
+
+View(hm01)
+x11()
 hmp01_All= plotHeatmaps(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,mypal = testos,
-                        showcol = F, showrow = T,genename=pval$GeneName)
+                        showcol = F, showrow = T,genename=pval)
 
 
 cut02 = cut(hmp01_All$rowDendrogram, h = 1)
@@ -79,7 +90,7 @@ print(mygen)
 View(pval)
 seq(length(HCgroupsLab))
 
-
+mycsv = heatmtoclust( hmp01_All, treated[[1]],treated[[2]], pval, h=2)
 mycsv = heatmtoclust(cut02, treated[[1]],treated[[2]], pval)
 typeof(mycsv)
 class(mycsv)
@@ -94,14 +105,16 @@ class(treated[[2]])
 class(treated[[1]])
 
 View(treated[[2]])
+print(treated[[1]])
+exprData[rev(hmp01_All$rowInd), hmp01_All$colInd]
 
 final = exprData[rev(hmp01_All$rowInd), hmp01_All$colInd]
-
+View(final)
 my_last= as.integer(lapply(seq(length(HCgroupsLab)), function(x)
 {return(tail(HCgroupsLab[[x]],1))}))
 
 mygen = as.integer(row.names(final))
-
+View(pval)
 test = pval %>%
   select (X,GeneName) %>%
   filter( X %in% mygen) %>%
@@ -143,7 +156,8 @@ View(pval)
 source("function/cutheat.R")
 
 test = cutHeatmaps(hmp01_All,height = 5, exprData = musmuscu[,-1], groups = groupss$Grp, 
-            DEGres = pval[,-1], type = "Heatmap", num =1 )
+            DEGres = pval[,-1], type = "Boxplot", num =2 )
+
 test
 print(test)
 draw(test)
@@ -151,7 +165,7 @@ draw(test)
 #hc02 = as.hclust(hmp01_All$rowDendrogram)
 plot(hc02)
 x11()
-ggplotly(test,1200,800)
+ggplotly(test,600,600)
 plot(hmp01_All$rowDendrogram, hang=-1, labels = T, sub = paste("hclust method: Ward2\n", subdist = "dist method 1-cor"),xlab ="",main="")
 
 hts=rev(tail(hmp01_All$rowDendrogram,15))

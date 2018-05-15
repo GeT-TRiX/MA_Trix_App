@@ -11,7 +11,7 @@
 #'
 
 p <- eventReactive(input$updateheatm,{
-  isolate(heatmapfinal())
+  isolate(heatmapfinal(isplot = T))
 })
 
 #' PCAres is a reactive function that change the rownames values
@@ -28,7 +28,7 @@ rownamtoX <- reactive({
   return(rownamtoX)
 })
 
-#' cutfinal is a reactive function that computed a PCA of non-normalized data
+#' cutfinal is a reactive function that ....
 #'
 #' @param p an heatmap object
 #' @param input$cutheight a numeric value to cut the dendogram 
@@ -43,7 +43,8 @@ rownamtoX <- reactive({
 
 cutfinal <- reactive({
     cutHeatmaps(
-      p(),
+      heatmapfinal(isplot = T),
+      #p(),
       height = input$cutheight ,
       exprData = data.matrix(new_data()),
       groups = droplevels(new_group()$Grp),
@@ -56,9 +57,9 @@ cutfinal <- reactive({
 
 # render to the ui the number of clusted for a define height in function of the current heatmap object
 output$cutcluster <- renderUI({ 
-  req(p())
-  
-  cut02 = cut(p()$rowDendrogram, h = input$cutheight)
+
+   cut02 = cut( heatmapfinal(isplot = T)$rowDendrogram, h = input$cutheight)
+  #cut02 = cut(p()$rowDendrogram, h = input$cutheight)
   selectInput("cutcluster",
               "Choose your cluster",
               choices =  seq(1, length(cut02$lower), by = 1))

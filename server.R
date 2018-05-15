@@ -1,4 +1,5 @@
-source("function/compat.R")
+#source("function/compat.R")
+source("function/heatmtruncated.R")
 source("function/formating.R")
 source("function/PCA.R")
 source("environnement/global.R")
@@ -6,6 +7,8 @@ source("function/decideTestTrix.R")
 source("function/vennplot.R")
 source("function/create_forked_task.R")
 source("function/cutheat.R")
+# options(shiny.reactlog=TRUE)
+# showReactLog(time = TRUE)
 
 shinyServer(server <- function(input, output, session) {
   
