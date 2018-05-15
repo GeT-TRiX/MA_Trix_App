@@ -240,9 +240,8 @@ tabPanel(
       #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
 
       # Render input from server.R
-      shinyjs::disabled(actionButton("stop", "Stop")),
+      shinyjs::disabled(actionButton("stop", "Stop"))
       
-      shiny::actionButton("banana", "test")
     ),
     
     

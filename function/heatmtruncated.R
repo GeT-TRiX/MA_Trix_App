@@ -95,7 +95,7 @@ num2cols=function(numVector,colp=palette()){
 
 
 truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="png",
-                      colOrder=NULL,na.color="black",hclustGenes=T,meanGrp=F,plotRowSideColor=T,#col.hm=greenred(75),
+                      colOrder=NULL,na.color="black",hclustGenes=T,meanGrp=F,plotRowSideColor=T,mypal=NULL,
                       RowSideColor=c("gray25","gray75"), Rowdistfun="correlation",Coldistfun="correlation" ,palette.col=NULL , notplot = T){
   
   
@@ -108,6 +108,19 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   
   library(gplots)
   library(marray)
+  
+  
+  
+  if(is.null(mypal))
+    mypal = brewer.pal(8,"Dark2") %>%
+      list(brewer.pal(10,"Paired")) %>%
+      unlist()
+  
+  if(!is.null(palette.col)){
+    palette(palette.col);
+  }else  palette(mypal)
+  
+  cl=palette(mypal);
   
   
   exprData=exprData[geneSet,]
@@ -226,11 +239,6 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   
   objforheat = list(exprData,distfunTRIX,ColvOrd,rowv,gpcol,gpcolr)
   
-  ##-----------------------##
-  ## plot Heatmap
-  ##-----------------------##
-  cat("\n -> Plotting HeatMap... \n")
-  
   
   return(objforheat)
 }
@@ -301,10 +309,6 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),fileType="png"
     rowIds = genename$GeneName[geneSet]
   
   
-  if(is.null(mypal))
-    mypal = brewer.pal(8,"Dark2") %>%
-      list(brewer.pal(10,"Paired")) %>%
-      unlist()
   
   
   # mypal =c ("#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442",
@@ -312,12 +316,22 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),fileType="png"
   #          "burlywood1","darkkhaki", "#CC0000" )
   
   
+  if(is.null(mypal))
+    mypal = brewer.pal(8,"Dark2") %>%
+      list(brewer.pal(10,"Paired")) %>%
+      unlist()
+  
   if(!is.null(palette.col)){
     palette(palette.col);
   }else  palette(mypal)
   
   cl=palette(mypal);
   
+  
+  ##-----------------------##
+  ## plot Heatmap
+  ##-----------------------##
+  cat("\n -> Plotting HeatMap... \n")
   
   par("mar")
   
@@ -329,6 +343,8 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),fileType="png"
   
   if(notplot)
     dev.off()
+  
+  cat("    Done \n")
   
   return(heatmtoclust(hmp02,exprData,genename))
   
