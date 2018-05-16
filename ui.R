@@ -17,7 +17,7 @@ options(shiny.maxRequestSize = 70 * 1024 ^ 2) # defined the maximum size in Mb t
 shinyUI(ui <- bootstrapPage( # Create a Shiny UI page that loads the CSS and JavaScript for Bootstrap
   navbarPage( # divided between the differnt tabPanel
     "MaTrix App",# MA for microarray and Trix for the name of the team
-    
+    id ="matrixapp",
     #useShinyjs(),
     theme = shinytheme("united"),
     

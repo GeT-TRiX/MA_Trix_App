@@ -1,8 +1,25 @@
 require(dplyr)
 require(RColorBrewer)
-#gsub("[^A-Z|_]", "", x) 
 
-#' distcor is a function that computes the distance correlation 
+
+## Add jackknife correlation good for false positives with the pval methods add citation ....
+
+
+#' distcos is a function that computes the cosine similarity for a given matrix
+#'
+#' @param x 
+#'
+#' @return a matrix distance
+#' 
+#' @export
+
+distcos <- function(x){ #Jonathan Chang
+  as.dist(1 - x%*%t(x)/(sqrt(rowSums(x^2) %*% t(rowSums(x^2))))) 
+}
+
+
+
+#' distcor is a function that computes the pearson correlation 
 #'
 #' @param x 
 #'
@@ -13,7 +30,7 @@ require(RColorBrewer)
 distcor<-function(x) {as.dist(1-cor(t(x),use="pairwise.complete.obs"))}
 
 
-#' disteuc is a function that computes the euclidean correlation
+#' disteuc is a function that computes the euclidean distance matrices
 #'
 #' @param x 
 #'
@@ -290,8 +307,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),fileType="png"
   
   #RowSideColor: color palette to be used for rowSide cluster colors
   # can also be gray.colors(k, start = 0.2, end = 0.9) to get k colors of gray scale
-  
-  
+
   if(is.null(showcol))
     showcol = F
   

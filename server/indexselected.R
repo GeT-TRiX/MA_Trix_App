@@ -5,26 +5,29 @@
 #' @param input$method2 character method, default = BH
 #' @param input$pval numeric pvalue
 #' @param input$maxgen numeric maxgen, default = NULL
-#' 
+#'
 #' @return \formated a reactive data frame with the indexes corresponding to the sigificant genes
 #'
 
 
 formated <- reactive({
   
-  #req(!is.null(user_group()))
-  #treated = formating(new_test(), csvf()[[1]], input$pval)
-  treated = decTestTRiX(
-    user_group()[[1]],
-    user_group()[[2]],
-    user_group()[[3]],
-    DEGcutoff = input$pval,
-    FC = input$fc,
-    cutoff_meth = input$method2
-    
-    ,maxDE = input$maxgen
-    
-  )
+  req(user_group())
+  
+  df <- csvf()
+  if (is.null(df))
+    return(NULL)
+  
+  else
+    treated = decTestTRiX(
+      user_group()[[1]],
+      user_group()[[2]],
+      user_group()[[3]],
+      DEGcutoff = input$pval,
+      FC = input$fc,
+      cutoff_meth = input$method2,
+      maxDE = input$maxgen
+      
+    )
   return(treated)
 })
-

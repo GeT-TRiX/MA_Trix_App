@@ -7,6 +7,9 @@
 #'
 
 user_group <- reactive({ 
+  
+  req(choix_test())
+  
  inFile <- input$file
   if (is.null(inFile))
     return(NULL)
@@ -30,7 +33,9 @@ user_group <- reactive({
 #'
 
 
-new_group <- reactive({  
+new_group <- reactive({ 
+  req(choix_grp())
+  
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)

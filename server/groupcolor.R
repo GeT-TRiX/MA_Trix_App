@@ -15,6 +15,7 @@ mycolgrp <- reactive  ({
     unique() %>%
     droplevels()
   
+  
   return(mygrpcol)
 })
 

@@ -45,9 +45,12 @@ observeEvent(input$noIndividus, {
 #'
 
 choix_grp <- reactive({
+  req(input$indiv)
+  
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)
+  
   return(input$indiv)
 })
 
@@ -74,12 +77,14 @@ list_ind <- reactive({
 #' @return \newgroup an eventreactive factor with the corresponding groups selected
 #'
 
-new_group <- eventReactive(input$heatm, {
+#new_group <- eventReactive(input$heatm, {
+new_group <- reactive({
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)
   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
-}, ignoreNULL = F)
+})
+#}, ignoreNULL = F)
 
 
 

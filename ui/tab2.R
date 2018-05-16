@@ -1,7 +1,7 @@
 #navbarMenu("menu",
 tabPanel(
   p(icon("line-chart"),
-    "Heatmap "),
+    "Heatmap"),
   titlePanel("Heatmap settings"),
   sidebarPanel(tabsetPanel(
     tabPanel(
