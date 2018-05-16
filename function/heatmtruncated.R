@@ -1,6 +1,6 @@
 require(dplyr)
 require(RColorBrewer)
-
+#gsub("[^A-Z|_]", "", x) 
 
 #' distcor is a function that computes the distance correlation 
 #'

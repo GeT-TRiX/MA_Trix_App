@@ -1,4 +1,3 @@
-#source("function/compat.R")
 source("function/heatmtruncated.R")
 source("function/formating.R")
 source("function/PCA.R")
@@ -38,9 +37,6 @@ shinyServer(server <- function(input, output, session) {
   observeEvent(input$session,{
     output$SessionInfo <- renderText(paste(capture.output(sessionInfo()), collapse = "<br>"))
   })
-  
-  
-  
   
   
   
@@ -140,6 +136,18 @@ shinyServer(server <- function(input, output, session) {
   #########################################
   
   source(file.path("server", "cutheatmap.R"), local = TRUE)$value #
+  
+  
+  #########################################
+  ######## GO enrichissment               #
+  #########################################
+  
+  
+  
+  #########################################
+  ######## graph ???????????              #
+  #########################################
+  
   
 })
 

@@ -63,7 +63,7 @@ csvf <- reactive({
   }
   
   else{
-    if (length(data) > 3)
+    if (length(data) > 2)
     {
       createAlert(
         session,
@@ -71,8 +71,8 @@ csvf <- reactive({
         "exampleAlert",
         style = "danger",
         title = "Oops Error",
-        content = "Are you sure it's the good number of files? you  have imported more than 3 files,
-        you need to import 3 csv files
+        content = "Are you sure it's the good number of files? you  have imported more than 2 files,
+        you need to import 2 csv files
         Tips: Use ctrl+left click then choose your files ",
         append = FALSE
       )
@@ -80,7 +80,7 @@ csvf <- reactive({
       return (NULL)
     }
     
-    else if (length(data) < 3) {
+    else if (length(data) < 2) {
       createAlert(
         session,
         "alert",
@@ -88,7 +88,7 @@ csvf <- reactive({
         style = "danger",
         title = "Oops Error",
         content = "Are you sure it's the good number of files? you have imported less than
-        3 files, you need to import 3 csv files
+        2 files, you need to import 2 csv files
         Tips: Use ctrl+left click then choose your files ",
         append = FALSE
         
@@ -138,19 +138,16 @@ csvf <- reactive({
     csvord = list()
     
     for (i in 1:length(csv)) {
-      if (colnames(csv[[i]][2]) == "Grp") {
-        csvord[[2]] = csv[[i]]
-        
-      }
-      else if (any(grepl("adj.P.Val" , colnames(csv[[i]]))))
-      {
+       if (any(grepl("adj.P.Val" , colnames(csv[[i]])))){
         csvord[[3]] = csv[[i]]
-        
       }
       else
         csvord[[1]] = csv[[i]]
     }
     
+    csvord[[2]] = as.data.frame(colnames(csvord[[1]][,-1]))
+    colnames(csvord[[2]])[1] = "X"
+    csvord[[2]]$Grp = gsub("[^A-Z|_|^a-z]", "", csvord[[2]]$X )
     csvord[[2]] = chartofa(csvord[[2]]) # transform dataframe containing characters to factors
     row.names(csvord[[1]]) = csvord[[1]][, 1]
     colnames(csvord[[3]])[1] = "X"
