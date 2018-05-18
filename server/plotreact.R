@@ -29,10 +29,13 @@
 #' 
 
 
+shinyjs::disable("heatm")
+
 heatmapfinal <- function(isplot  = T) {
+
   plotHeatmaps(
     hmbis()[[1]],
-    formated(),
+    formated(), 
     droplevels(new_group()$Grp),
     workingPath = wd_path,
     my_palette = colorRampPalette(c(
@@ -52,6 +55,7 @@ heatmapfinal <- function(isplot  = T) {
     gpcolr = hmbis()[[6]],
     distfunTRIX = hmbis()[[2]]
   )
+  
 }
 
 #' hmbis is an event reactive function that pre-computed hierarchical clustering on microarray data 
@@ -72,12 +76,11 @@ heatmapfinal <- function(isplot  = T) {
 
 
 hmbis <- reactive( {
-  #hmbis <- eventReactive(input$heatm, {
-  
-  isolate( # isolate in order to avoid that reactive values update the heatmap 
+
+  #isolate( # isolate in order to avoid that reactive values update the heatmap 
     truncatedhat(
       data.matrix(new_data()),
-      formated(),
+      isolate(formated()), 
       droplevels(new_group()$Grp),
       workingPath = wd_path,
       k = input$clusters,
@@ -86,80 +89,35 @@ hmbis <- reactive( {
       Coldistfun = input$dist,
       meanGrp = input$meangrp
     )
-  )
+  
+  #)
 })
 
-#heatmapobj <<- hmbis() # a static variable 
 
+hm <- reactive({
+  heatmapfinal(isplot = F)
+})
 
 
 output$distPlot <- renderPlot({
-  isolate({
+  #isolate({
     if (!is.null(formated()))
       withProgress(message = 'Plotting heatmap:', # Add sliderbar when loading heatmap
                    value = 0,
                    {
                      n <- NROW(formated()) #number of row in the formated dataframe
-                     
+                     if (n >2000)
+                       return(isolate(heatmapfinal(isplot = F)))
                      for (i in 1:n) {
                        incProgress(1 / n, detail = "Please wait...")
                      }
-                     hmbis()
+                     isolate(hmbis())
                      heatmapfinal(isplot = F)
-                   })
-  })
+                     #hmobj$hm <- (hm())
+                     
+ })
 }, width = 900 , height = 1200, res = 100)
 
-
-output$save <- downloadHandler(filename <- function() {
-  paste0(basename(file_path_sans_ext("myfile")),
-         '_heatmap.',
-         input$form,
-         sep = '')
-},
-content <- function(file) {
-  if (input$form == "emf")
-    
-    emf(
-      file,
-      width = 7,
-      height = 7,
-      pointsize = 12,
-      coordDPI = 300
-    )
-  
-  else if (input$form == "png")
-    png(
-      file,
-      width = 900,
-      height = 1200,
-      units = "px",
-      pointsize = 12,
-      res = 100
-    )
-  else
-    eps(file,
-        width = 7,
-        height = 7)
-  
-  if (!is.null(formated()))
-    withProgress(message = 'Saving heatmap:',
-                 value = 0,
-                 {
-                   n <- NROW(formated())
-                   
-                   for (i in 1:n) {
-                     incProgress(1 / n, detail = "Please wait...")
-                   }
-                   
-                   heatmapfinal(isplot = F)
-                   
-                 })
-  
-  dev.off()
-  
-  
-})
 
 
 

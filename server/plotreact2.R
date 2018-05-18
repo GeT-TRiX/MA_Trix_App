@@ -27,8 +27,11 @@
 #' 
 #' @export
 #' 
-
-
+ 
+  shinyjs::enable("heatm")
+  
+  
+  
   heatmapfinal <- function(isplot  = T) {
     plotHeatmaps(
       heatmapobj[[1]],
@@ -53,6 +56,7 @@
       distfunTRIX = heatmapobj[[2]]
     )
   }
+  
   
   
   #' hmbis is an event reactive function that pre-computed hierarchical clustering on microarray data 
@@ -109,53 +113,4 @@
   }, width = 900 , height = 1200, res = 100)
   
   
-  output$save <- downloadHandler(filename <- function() {
-    paste0(basename(file_path_sans_ext("myfile")),
-           '_heatmap.',
-           input$form,
-           sep = '')
-  },
-  content <- function(file) {
-    if (input$form == "emf")
-      
-      emf(
-        file,
-        width = 7,
-        height = 7,
-        pointsize = 12,
-        coordDPI = 300
-      )
-    
-    else if (input$form == "png")
-      png(
-        file,
-        width = 900,
-        height = 1200,
-        units = "px",
-        pointsize = 12,
-        res = 100
-      )
-    else
-      eps(file,
-          width = 7,
-          height = 7)
-    
-    if (!is.null(formated()))
-      withProgress(message = 'Saving heatmap:',
-                   value = 0,
-                   {
-                     n <- NROW(formated())
-                     
-                     for (i in 1:n) {
-                       incProgress(1 / n, detail = "Please wait...")
-                     }
-                     
-                     heatmapfinal(isplot = F)
-                     
-                   })
-    
-    dev.off()
-    
-    
-  })
   

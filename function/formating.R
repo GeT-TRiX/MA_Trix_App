@@ -261,7 +261,7 @@ heatmtoclust = function( hmp01_All, exprData, pval, myval= 5){
   mygen = as.integer(row.names(final))
   
   heatmclust = pval %>%
-    select (X,GeneName) %>%
+    dplyr::select (X,GeneName) %>%
     filter( X %in% mygen) %>%
     left_join(data.frame(X=mygen), . , by="X") %>%
     arrange(-row_number())
