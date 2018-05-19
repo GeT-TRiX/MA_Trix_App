@@ -31,11 +31,13 @@
 
 shinyjs::disable("heatm")
 
-heatmapfinal <- function(isplot  = T) {
+heatmapfinal <- function(isplot  = F) {
+
 
   plotHeatmaps(
     hmbis()[[1]],
-    formated(), 
+
+    geneSet =  hmbis()[[7]],
     droplevels(new_group()$Grp),
     workingPath = wd_path,
     my_palette = colorRampPalette(c(
@@ -77,7 +79,6 @@ heatmapfinal <- function(isplot  = T) {
 
 hmbis <- reactive( {
 
-  #isolate( # isolate in order to avoid that reactive values update the heatmap 
     truncatedhat(
       data.matrix(new_data()),
       isolate(formated()), 
@@ -87,33 +88,33 @@ hmbis <- reactive( {
       mypal = unlist(colors()),
       Rowdistfun = input$dist ,
       Coldistfun = input$dist,
-      meanGrp = input$meangrp
+      meanGrp = input$meangrp,
+      genename =  csvf()[[3]]
     )
-  
-  #)
+
 })
 
 
-hm <- reactive({
-  heatmapfinal(isplot = F)
-})
+# hm <- reactive({
+#   heatmapfinal(isplot = F)
+# })
 
 
 output$distPlot <- renderPlot({
-  #isolate({
+
     if (!is.null(formated()))
+      n <- NROW(formated())
+      if (n>2000)
+        return(isolate(heatmapfinal(isplot = F)))
       withProgress(message = 'Plotting heatmap:', # Add sliderbar when loading heatmap
                    value = 0,
                    {
-                     n <- NROW(formated()) #number of row in the formated dataframe
-                     if (n >2000)
-                       return(isolate(heatmapfinal(isplot = F)))
                      for (i in 1:n) {
                        incProgress(1 / n, detail = "Please wait...")
                      }
                      isolate(hmbis())
-                     heatmapfinal(isplot = F)
-                     #hmobj$hm <- (hm())
+                     hmobj$hm <- heatmapfinal(isplot = F)
+                     hmobj$hm
                      
  })
 }, width = 900 , height = 1200, res = 100)

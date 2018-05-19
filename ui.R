@@ -8,7 +8,7 @@
 ##################################
 ##################################
 
-source("function/compat.R")
+#source("function/compat.R")
 source("function/formating.R")
 source("environnement/global.R")
 source("function/PCA.R")

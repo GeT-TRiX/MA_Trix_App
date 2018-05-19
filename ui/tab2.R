@@ -212,6 +212,28 @@ tabPanel(
       
       br(),
       
+      
+      shiny::actionButton(
+        "toggleAdvancedgo",
+        "Advanced graphical Settings",
+        href = "#",
+        style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+      ),
+      
+      shinyjs::hidden(div(
+        # Hide some widgets between the tags
+        id = "advancedgo",
+        wellPanel(
+          numericInput("numberGenes", "Choose How Many Top Gene Ontologies to Display:", value = 10),
+          selectInput("Species", "Choose Genome Database:", selected = "mm9", 
+              c("Mouse" = "mm9", "Human" = "hg19", "Chimpanzee" = "panTro2", 
+              "Rat" = "rn4", "Worm" = "ce6", "Zebrafish" = "danRer6", "Fly" = "dm3", "Yeast" = "sacCer2", "Cow" = "bosTau4", "Dog" = "canFam2",
+              "Anopheles gambiae" = "anoGam1", "Rhesus" = "rheMac2", "Frog" = "xenTro2", "Chicken" = "galGal3")),
+          uiOutput("cutgo")
+        )
+      )),
+      
+      
       selectInput("form", "Choose your file format",
                   choices = c("png", "eps", "emf")),
       br(),
@@ -230,6 +252,9 @@ tabPanel(
                      style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
       
       ),
+      
+      actionButton("GO", "Run GO"),
+      
       #actionButton("resetAll", "Reset all"),
       
       br(),
@@ -379,6 +404,11 @@ tabPanel(
       ,
       dataTableOutput("clustering")
     )
+  ),
+  
+  tabPanel(
+    "(GO) enrichment-based cluster analysis",
+    verbatimTextOutput("clustgo")
   ),
 
   tabPanel

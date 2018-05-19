@@ -33,13 +33,12 @@ require("org.Mm.eg.db")
 
 
 
-library(dplyr)
 
 musmuscu <- read.csv2("data/TOXA_HEGU_MA0191_AllChip_WorkingSet.csv")
 pval <- read.csv2("data/All_topTableAll.csv")
 groupss <- read.csv2("data/TOXA_HEGU_MA0191_AllChip_pData.csv", sep= ";" , dec = ",",header= T)
 adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|^adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
-#adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.", names(pval), value=TRUE)]
+adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.", names(pval), value=TRUE)]
 require(Biobase)
 
 formating = function( adj, musmuscu,pval){
@@ -62,13 +61,19 @@ treated = formating(adj,musmuscu,pval= 0.05)
 
 
 
-hmbis = truncatedhat(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path)
-View(hmbis)
+hmbis = truncatedhat(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,genename = pval)
+print(hmbis)
+
+
 testos = c("green","red","orange","blue")
 x11()
+print(length(levels(groupss$Grp)))
+padj = seq(0,by=1.4,length.out = length(levels(groupss$Grp)))
+print(padj)
+
 hm01 = plotHeatmaps(hmbis[[1]],treated[[1]],groupss$Grp,workingPath=wd_path,mypal = testos,
                     showcol = F, showrow = T,genename=pval, rowv = hmbis[[4]], ColvOrd = hmbis[[3]],
-                    gpcol = hmbis[[5]], gpcolr = hmbis[[6]], distfunTRIX = hmbis[[2]] )
+                    gpcol = hmbis[[5]], gpcolr = hmbis[[6]], distfunTRIX = hmbis[[2]],geneSet = hmbis[[7]] )
 
 
 affyLib <- paste(annotation(ALL), "db", sep = ".")
@@ -168,40 +173,6 @@ go.obj <- new("topGOdata", ontology="MF",
               gene2GO="org.Mm.eg.db"
 )
 
-# Mm.egGO2EG <- as.list(org.Mm.eg.db)
-# get("GO:0045766", org.Mm.eg.db)
-# 
-# View(Mm.egGO2EG)
-# 
-# final = as.vector(as.double(matrix(0.001, length(genlist$cluster))))
-# names(final) = as.character(genlist[,2])
-# View(final)
-# names(final) = (row.names(genlist))
-# final[1:10]
-# 
-# sampleGOdata <- new("topGOdata",
-#                     description = "Simple session", ontology = "MF",
-#                     allGenes = final, geneSel = topDiffGenes,
-#                     nodeSize = 10,annot=annFUN.org, mapping="org.Mm.eg.db")
-# 
-# for(i in 1:3){
-#   
-#   ## prepare data
-#   tgd <- new( "topGOdata", ontology=onts[i], allGenes = final, nodeSize=5,
-#               annot=annFUN.org, mapping= Mm.egGO2EG, ID = "ensembl" )
-#   
-#   ## run tests
-#   resultTopGO.elim <- runTest(tgd, algorithm = "elim", statistic = "Fisher" )
-#   resultTopGO.classic <- runTest(tgd, algorithm = "classic", statistic = "Fisher" )
-#   
-#   ## look at results
-#   tab[[i]] <- GenTable( tgd, Fisher.elim = resultTopGO.elim, 
-#                         Fisher.classic = resultTopGO.classic,
-#                         orderBy = "Fisher.classic" , topNodes = 200)
-#   
-# }
-
-#ID = "ensembl"
 
 
 
@@ -302,34 +273,133 @@ Species <- reactive({
 clusterlist <- list()
 
 for (i in 1:NROW(unique(hm01$cluster))) {
+  print(i)
+}
+
+lapply(NROW(unique(hm01$cluster), FUN = function(x)
+  return(x)))
+
+lapply(1:NROW(unique(hm01$cluster)), function(x)
+{return(x)})
+
+library(parallel)
+
+parallel::detectCores()
+no_cores <- detectCores()
+cl <- makeCluster(no_cores)
+
+registerDoParallel(no_cores)
+
+
+#tested <- lapply(1:4, function(i){
+#system.time({
+for (i in 1:NROW(unique(hm01$cluster))) {
+
+  genlist <- hm01[!duplicated(hm01[2]),]
+  genlist$DEgenes = 1
+  genlist$bias.data = 100
+  genlist$pwf = 0.01
+  row.names(genlist)= genlist$GeneName
+  pwf <-genlist %>% dplyr::select(cluster,GeneName,DEgenes, bias.data,pwf)   %>% filter(cluster == i)
+  row.names(pwf)= pwf$GeneName
+  
+  clusterlist[[i]] <- goseq(pwf[,-1,-2], "mm9" , "geneSymbol", use_genes_without_cat = T)
+  
+  #clusterlist[[i]] = filter(finalons, numInCat >4 ) %>%
+    #arrange(desc(numInCat))
+  #return(clusterlist)
+}
+
+length(test[[1]]$category)
+
+
+test= gosearch(hm01,"mm9", "geneSymbol",5,35)
+
+
+for (i in 1:NROW(unique(hm01$cluster))) {
   
   genlist <- hm01[!duplicated(hm01[2]),]
-  genlist <-
-    genlist %>% dplyr::select(cluster, GeneName)   %>% filter(cluster == i)
-  final = as.double(matrix(0.001, length(genlist$cluster)))
+  genlist <- genlist %>% dplyr::select(cluster, GeneName)   %>% filter(cluster == i)
+  final = as.double(matrix(1, length(genlist$cluster)))
   names(final) = (genlist$GeneName)
   pwf <- final %>% nullp("mm9", "geneSymbol") %>% na.omit()
-  finalons <-
-    goseq(pwf, "mm9" , "geneSymbol", use_genes_without_cat = T)
-  
-  clusterlist[[i]] = filter(finalons, numInCat >4 ) %>%
+  finalons <-goseq(pwf, "mm9" , "geneSymbol", use_genes_without_cat = F)
+  clusterlist[[i]] = filter(finalons, numInCat >5 ) %>%
     arrange(desc(numInCat))
   
 }
 
+View(clusterlist)
+wclust(clusterlist , "toast.txt",top=1,min=5)
+
+
+genlist <- hm01[!duplicated(hm01[2]),]
+genlist2 <- genlist %>% dplyr::select(cluster, GeneName)   %>% filter(cluster == 4)
+View(genlist2)
+final = as.double(matrix(1, length(genlist2$cluster)))
+names(final) = (genlist2$GeneName)
+
+pwf <- final %>% nullp("mm9", "geneSymbol") %>% na.omit()
+View(pwf)
+finalons <-goseq(pwf, "mm9" , "geneSymbol", use_genes_without_cat = T)
+View(finalons)
+
+View(clusterlist[[1]]$category)
+genlist <- hm01[!duplicated(hm01[2]),]
+genlist$DEgenes = 1
+genlist$bias.data = 100
+genlist$pwf = 0.01
+
+
+length(final)
+genlist <- hm01[!duplicated(hm01[2]),]
+genlist <-genlist %>% dplyr::select(cluster, GeneName)   %>% filter(cluster == 1) 
+row.names(genlist)= genlist$GeneName
+genlist$DEgenes = 1
+genlist$bias.data = 100
+genlist$pwf = 0.01
+View(pwf)
+colnames(pwf)
+pwf <- genlist[3:5]
+View(polo)
+View(genlist)[3:6]
+goseq(genlist[3:6])
+
+test <- goseq(pwf,"mm9", "geneSymbol")
+View(test)
+
+
+
+pwf <- final %>% nullp("mm9", "geneSymbol",plot.fit = F) %>% na.omit()
+finalons <-
+  goseq(pwf, "mm9" , "geneSymbol", use_genes_without_cat = T)
+View(finalons)
+
+final = as.double(matrix(1, length(genlist$cluster)))
+names(final) = (genlist$GeneName)
+pwf <- final %>% nullp("mm9", "geneSymbol",plot.fit = F) %>% na.omit()
+View(pwf)
+View(final)
+
+finalons <- goseq(pwf, "mm9" , "geneSymbol", use_genes_without_cat = T)
 
 
 cat("Clustering", file="test.txt")
 sink("test.txt")
 sink()
 con <- file("test.txt", "w")
+
 for (i in 1:NROW(clusterlist)){
+#mclapply(1:NROW(clusterlist),mc.cores = 8,function(i){
+ 
   if(!i==1)
     cat("--------------------------------------\n",file=con)
   cat(paste("cluster:", i),  file=con)
   if(!i==1)
     cat("\n--------------------------------------\n",file=con)
   cat("\n--------------------------------------\n",file=con)
+
+
   if(!length(clusterlist[[1]][[i]]) == 0) {
     for(go in 1:length(clusterlist[[i]][[1]])) {
       cat(paste("GOID:",as.character(GOID(clusterlist[[i]][[1]][[go]]))),file=con)
@@ -345,3 +415,41 @@ for (i in 1:NROW(clusterlist)){
 }
 
 close(con)
+
+
+x <-replicate(10000, list(rnorm(24)) )  # list length 10000 
+library(zoo)
+library(parallel)
+system.time({
+  tmpp = lapply(x, function(x) {
+    rollmean(x, 7)
+  })
+})
+#   user  system elapsed 
+#  8.250   0.044   8.249 
+parallel::detectCores()
+#[1] 8
+system.time({
+  tmpp = mclapply(x, mc.cores=8, function(z) {
+    rollmean(z, 7)
+  })
+})
+
+library(foreach)
+library(doParallel)
+nocore <- detectCores()
+
+cl<- makeCluster(nocore)
+registerDoParallel(nocore)
+
+
+
+
+grp1 = foreach(i = iter(adj[elem], by = "col"), .combine = c) %dopar%  
+  (sign= {i < pv}) %>%
+  as.data.frame() %>%
+  filter(. == T) %>%
+  nrow()
+
+return(grp1) 
+

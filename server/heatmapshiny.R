@@ -39,13 +39,22 @@ heatmapobj <- NULL # declare outside the observeEvent
 formatidus <- NULL
 hmbis <- reactiveValues()
 hmobj <- reactiveValues()
+hmsize <- reactiveValues()
 
 
 observe({
   
+  # finalsize <- reactive({
+  #   req(lengthhm())
+  #   return(length(lengthhm()))
+  # })
+  
+  
   heatid <- input$matrixapp
   if (grepl("Heatmap", heatid)) {
-    formatidus <<- length(formated()) # doit trouver une autre valeur que formated pour donner la taille
+    hmobj$size <- length(formated())
+    #formatidus <<- hmobj$size # doit trouver une autre valeur que formated pour donner la taille
+    formatidus <<- hmobj$size 
     if (formatidus < 2000)
       source(file.path("server", "plotreact.R"), local = TRUE)$value #
    else
@@ -53,13 +62,10 @@ observe({
   }
  
 
-
-# observe({
-#   obj <- hmobj$hm 
-#   print(obj)
-# 
+  
+# hm <- reactive({
+#   heatmapfinal(isplot = F)
 # })
-
 
 output$save <- downloadHandler(filename <- function() {
   paste0(basename(file_path_sans_ext("myfile")),
@@ -95,7 +101,7 @@ content <- function(file) {
   if (!is.null(formated()))
     withProgress(message = 'Saving heatmap:',
                  value = 0, {
-                   n <- NROW(formated())
+                   n <- NROW(formatidus)
                    for (i in 1:n) {
                      incProgress(1 / n, detail = "Please wait...")
                    }
@@ -114,16 +120,18 @@ content <- function(file) {
             sep = '')
     },
     content = function(file) {
-      write.csv(heatmapfinal(isplot = T), file, row.names = FALSE)
+      write.csv(heatmapfinal(isplot = F), file, row.names = FALSE)
     }
   )
   
-  output$clustering <-
-    renderDataTable(heatmapfinal(isplot = T)) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)
+  
+  
+  
+  output$clustering <- renderDataTable(hmobj$hm) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)
 })
 
 
-obsC <- observe(quote({ print(formatidus) }), quoted = TRUE)
+
 
 # cutedhm <- reactive({
 #   req(hm())

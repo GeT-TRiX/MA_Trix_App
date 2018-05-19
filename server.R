@@ -2,14 +2,16 @@
 ######## Loading functions    #
 ###############################
 
+
 source("function/heatmtruncated.R")
 source("function/formating.R")
 source("function/PCA.R")
-source("environnement/global.R")
 source("function/decideTestTrix.R")
 source("function/vennplot.R")
 source("function/create_forked_task.R")
 source("function/cutheat.R")
+source("function/gosearch.R")
+source("environnement/global.R")
 
 ###############################
 ######## creating graph log   #
@@ -151,6 +153,117 @@ shinyServer(server <- function(input, output, session) {
   
   #########################################
   ######## GO enrichissment               #
+  #########################################
+  
+  
+  #obsC <- observe(quote({ print(hmobj$hm) }), quoted = TRUE)
+  
+  gores <- reactiveValues()
+  
+  obsC <- observe({ 
+    
+    print(unique(hmobj$hm$cluster))
+    
+
+    })
+  
+  observe({
+  
+  totalclust <- reactive({
+    
+    req(hmobj$hm)
+    n <- unique(hmobj$hm$cluster)
+    selectInput("cutgo",
+                "Choose your cluster",
+                choices =  seq(1, NROW(n) , by = 1))
+    
+  })
+  
+  output$cutgo <- renderUI({ 
+    totalclust()
+  })
+  
+  
+  })
+  
+  
+  observeEvent(input$GO,{
+    
+    testad <- reactive({
+      req(hmobj$hm)
+      final = gosearch(hmobj$hm,input$Species, "geneSymbol", 20,50 )
+      return(final)
+    })
+    
+    gores$obj <- testad()
+    
+    
+  
+    output$clustgo <- renderPrint({
+      req(input$cutgo)
+      
+      mycut <- reactive({
+        
+        return(input$cutgo)
+      })
+      
+      if(!length(testad()[[1]]) == 0) {
+        for(go in 1:input$numberGenes) {
+          
+          cat(paste("GOID:",as.character(GOID(testad()[[mycut()]][[1]][[go]]))))
+          cat("\n")
+          cat(paste("Term:",as.character(Term(testad()[[mycut()]][[1]][[go]]))))
+          cat("\n")
+          cat(paste("Definition:",as.character(Definition(testad()[[mycut()]][[1]][[go]]))))
+          cat("\n")
+
+          cat("--------------------------------------\n")
+        }
+      }
+      else
+        print("Sorry, no enriched genes for this cluster")
+
+   })
+  
+  })
+  
+  Species <- reactive({ 
+    
+    if(input$Genome == "hg19"){ # human
+      require("org.Hs.eg.db")
+    }
+    else if (input$Genome == "mm9"){ # mouse
+      require("org.Mm.eg.db")
+    }
+    else if(input$Genome == "danRer6"){ #Zebra fish
+      require("org.Dr.eg.db")
+    }
+    else if(input$Genome == "galGal3"){ # chicken
+      require("org.Gg.eg.db")  
+    }
+    else if(input$Genome == "equCab2"){ # horse
+      require("org.Gg.eg.db")  
+    }
+    else if(input$Genome == "ce6"){ # cC elegans
+      require("org.Gg.eg.db")  
+    }
+    else if(input$Genome == "rn4"){ # Rat
+      require("org.Gg.eg.db")  
+    }
+    else if(input$Genome == "Pig"){ # Rat
+      require("org.Ss.e")  
+    }
+    else if(input$Genome == "rn4"){ # Rat
+      require("org.Gg.eg.db")  
+    }
+    else if(input$Genome == "rn4"){ # Rat
+      require("org.Gg.eg.db")  
+    }
+  })
+  
+  
+  #########################################
+  ######## KEGG enrichissment             #
   #########################################
   
   

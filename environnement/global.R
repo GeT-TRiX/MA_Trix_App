@@ -1,3 +1,26 @@
+
+
+firstcol = "green"
+intercol = "black"
+lastcol = "red"
+suffix = "test"
+prefix = "toast"
+
+cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"), 
+                     Stripchart=c(`Without boxplot`="LB", `With boxplot` = "WB"))
+
+
+list.of.packages <- c("shiny","shinythemes","shinyjs","ggplot2","shinyBS","markdown"
+                      ,"BH","data.table","DT","readr","rbenchmark","colourpicker",
+                      "tools","devEMF","R.devices","FactoMineR","factoextra","heatmaply",
+                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly",
+                      "goseq", "GO.db","dplyr")
+
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+lapply(list.of.packages,function(x){library(x,character.only=TRUE)}) 
+##"foreach","doParallel"
+
 require(dplyr)
 require(RColorBrewer)
 
@@ -12,23 +35,3 @@ secdim = 2
 palette = brewer.pal(8,"Dark2") %>%
   list(brewer.pal(10,"Paired")) %>%
   unlist()
-
-firstcol = "green"
-intercol = "black"
-lastcol = "red"
-suffix = "test"
-prefix = "toast"
-
-cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"), 
-                     Stripchart=c(`Without boxplot`="LB", `With boxplot` = "WB"))
-
-
-list.of.packages <- c("shiny","dplyr","shinythemes","shinyjs","ggplot2","shinyBS","markdown"
-                      ,"BH","data.table","DT","readr","rbenchmark","colourpicker",
-                      "tools","devEMF","R.devices","FactoMineR","factoextra","heatmaply",
-                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly")
-
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-lapply(list.of.packages,function(x){library(x,character.only=TRUE)}) 
-##"foreach","doParallel"

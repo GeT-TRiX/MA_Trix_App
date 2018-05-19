@@ -113,7 +113,7 @@ num2cols=function(numVector,colp=palette()){
 
 truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="png",
                       colOrder=NULL,na.color="black",hclustGenes=T,meanGrp=F,plotRowSideColor=T,mypal=NULL,
-                      RowSideColor=c("gray25","gray75"), Rowdistfun="correlation",Coldistfun="correlation" ,palette.col=NULL , notplot = T){
+                      RowSideColor=c("gray25","gray75"), Rowdistfun="correlation",Coldistfun="correlation" ,palette.col=NULL , notplot = T,genename=pval){
   
   
   
@@ -252,9 +252,10 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
     }
   }else gpcolr=rep("white",nrow(exprData))
   
+  rowIds = genename$GeneName[geneSet]
   
   
-  objforheat = list(exprData,distfunTRIX,ColvOrd,rowv,gpcol,gpcolr)
+  objforheat = list(exprData,distfunTRIX,ColvOrd,rowv,gpcol,gpcolr,rowIds)
   
   
   return(objforheat)
@@ -296,13 +297,13 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
 #' 
 #' @export
 
-plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),fileType="png",cexcol=1.5,cexrow=1.5,
+plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=1.5,cexrow=1.5,
                       colOrder=NULL,labrow=F,na.color="black",scale="row", rowv =list4, ColvOrd = list3,
                       gpcol =list5 , gpcolr =list6 , distfunTRIX = list2,
                       RowSideColor=c("gray25","gray75") ,palette.col=NULL, 
                       margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75)
                       ,mycex = 0.6,mypal=test,colid = NULL, showcol = T ,showrow =F,
-                      genename=pval, notplot = F){
+                       notplot = F, geneSet= list7,genename = csvf){
   
   
   #RowSideColor: color palette to be used for rowSide cluster colors
@@ -322,8 +323,8 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),fileType="png"
   if(showrow == F)
     rowIds = NA
   else
-    rowIds = genename$GeneName[geneSet]
-  
+   #rowIds = genename$GeneName[geneSet]
+  rowIds = geneSet
   
   
   
@@ -361,8 +362,8 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),fileType="png"
     dev.off()
   
   cat("    Done \n")
-  
   return(heatmtoclust(hmp02,exprData,genename))
+  #return(hmp02)
   
 }
 

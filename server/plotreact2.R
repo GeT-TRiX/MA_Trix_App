@@ -33,9 +33,10 @@
   
   
   heatmapfinal <- function(isplot  = T) {
+
     plotHeatmaps(
       heatmapobj[[1]],
-      formated(),
+      geneSet =  hmbis()[[7]],
       droplevels(new_group()$Grp),
       workingPath = wd_path,
       my_palette = colorRampPalette(c(
@@ -86,7 +87,8 @@
         k = input$clusters,
         Rowdistfun = input$dist ,
         Coldistfun = input$dist,
-        meanGrp = input$meangrp
+        meanGrp = input$meangrp,
+        genename =  csvf()[[3]]
       )
     )
   })
@@ -107,7 +109,8 @@
                          incProgress(1 / n, detail = "Please wait...")
                        }
                        
-                       heatmapfinal(isplot = F)
+                       hmobj$hm = heatmapfinal(isplot = F)
+                       hmobj$hm
                      })
     })
   }, width = 900 , height = 1200, res = 100)
