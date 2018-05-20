@@ -219,9 +219,10 @@ shinyServer(server <- function(input, output, session) {
     slidergoen <- reactive({
       req(testad())
       req(input$cutgo)
+      x <- input$cutgo
       
       sliderInput("slidergo", label = h3("Slider Range"), min = 1, 
-                  max = length(testad()[[input$cutgo]]$category), value = c(1, 25))
+                  max = length(testad()[[as.integer(x)]][[1]]), value = c(1, 25))
       
     })
     
@@ -254,7 +255,6 @@ shinyServer(server <- function(input, output, session) {
       req(input$cutgo)
       req(input$slidergo)
       x <- input$cutgo
-      print(input$slidergo)
       if (!is.null(testad()[[as.integer(x)]])) {
         for (go in input$slidergo[[1]]:input$slidergo[[2]]) {
           cat(paste("GOID:", (GOID(
