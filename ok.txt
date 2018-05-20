@@ -1,0 +1,52 @@
+cluster: 1
+--------------------------------------
+GOID: GO:0044421
+Term: extracellular region part
+Definition: Any constituent part of the extracellular region, the space external to the outermost structure of a cell. For cells without external protective or external encapsulating structures this refers to space outside of the plasma membrane. This term covers constituent parts of the host cell environment outside an intracellular parasite.
+--------------------------------------
+GOID: GO:0005515
+Term: protein binding
+Definition: Interacting selectively and non-covalently with any protein or protein complex (a complex of two or more proteins that may include other nonprotein molecules).
+--------------------------------------
+GOID: GO:0044710
+Term: single-organism metabolic process
+Definition: A metabolic process - chemical reactions and pathways, including anabolism and catabolism, by which living organisms transform chemical substances - which involves a single organism.
+--------------------------------------
+GOID: GO:0005576
+Term: extracellular region
+Definition: The space external to the outermost structure of a cell. For cells without external protective or external encapsulating structures this refers to space outside of the plasma membrane. This term covers the host cell environment outside an intracellular parasite.
+--------------------------------------
+GOID: GO:0065007
+Term: biological regulation
+Definition: Any process that modulates a measurable attribute of any biological process, quality or function.
+--------------------------------------
+GOID: GO:0044444
+Term: cytoplasmic part
+Definition: Any constituent part of the cytoplasm, all of the contents of a cell excluding the plasma membrane and nucleus, but including other subcellular structures.
+--------------------------------------
+GOID: GO:0044238
+Term: primary metabolic process
+Definition: The chemical reactions and pathways involving those compounds which are formed as a part of the normal anabolic and catabolic processes. These processes take place in most, if not all, cells of the organism.
+--------------------------------------
+GOID: GO:0016020
+Term: membrane
+Definition: A lipid bilayer along with all the proteins and protein complexes embedded in it an attached to it.
+--------------------------------------
+GOID: GO:0044237
+Term: cellular metabolic process
+Definition: The chemical reactions and pathways by which individual cells transform chemical substances.
+--------------------------------------
+GOID: GO:0003824
+Term: catalytic activity
+Definition: Catalysis of a biochemical reaction at physiological temperatures. In biologically catalyzed reactions, the reactants are known as substrates, and the catalysts are naturally occurring macromolecular substances known as enzymes. Enzymes possess specific binding sites for substrates, and are usually composed wholly or largely of protein, but RNA that has catalytic activity (ribozyme) is often also regarded as enzymatic.
+--------------------------------------
+GOID: GO:0071704
+Term: organic substance metabolic process
+Definition: The chemical reactions and pathways involving an organic substance, any molecular entity containing carbon.
+--------------------------------------
+
+--------------------------------------
+cluster: 2
+--------------------------------------
+
+--------------------------------------

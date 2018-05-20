@@ -246,9 +246,9 @@ chartofa = function(datach){
 
 #heatmtoclust = function( hmp01_All, ind, signws, pval, myval= 5){
 
-heatmtoclust = function( hmp01_All, exprData, pval, myval= 5){
+heatmtoclust = function( hmp01_All, exprData, pval, height= 5){
   
-  cut02 = cut(hmp01_All$rowDendrogram, h = myval )
+  cut02 = cut(hmp01_All$rowDendrogram, h = height )
   
   
   HCgroupsLab = lapply(cut02$lower, function(x)

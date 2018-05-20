@@ -55,7 +55,8 @@ heatmapfinal <- function(isplot  = F) {
     ColvOrd = hmbis()[[3]],
     gpcol = hmbis()[[5]],
     gpcolr = hmbis()[[6]],
-    distfunTRIX = hmbis()[[2]]
+    distfunTRIX = hmbis()[[2]],
+    height = hmbis()[[8]]
   )
   
 }

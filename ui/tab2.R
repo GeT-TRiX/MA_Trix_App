@@ -229,7 +229,8 @@ tabPanel(
               c("Mouse" = "mm9", "Human" = "hg19", "Chimpanzee" = "panTro2", 
               "Rat" = "rn4", "Worm" = "ce6", "Zebrafish" = "danRer6", "Fly" = "dm3", "Yeast" = "sacCer2", "Cow" = "bosTau4", "Dog" = "canFam2",
               "Anopheles gambiae" = "anoGam1", "Rhesus" = "rheMac2", "Frog" = "xenTro2", "Chicken" = "galGal3")),
-          uiOutput("cutgo")
+          uiOutput("cutgo"),
+          uiOutput("slidergo")
         )
       )),
       
@@ -408,6 +409,8 @@ tabPanel(
   
   tabPanel(
     "(GO) enrichment-based cluster analysis",
+    downloadButton("savego", "Save your plot" , style =
+                     "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
     verbatimTextOutput("clustgo")
   ),
 

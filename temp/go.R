@@ -27,7 +27,7 @@ library(topGO)
 #library(AnnotationDbi)
 library(ALL)
 
-ource("https://bioconductor.org/biocLite.R")
+source("https://bioconductor.org/biocLite.R")
 biocLite("org.Mm.eg.db")
 require("org.Mm.eg.db") 
 
@@ -61,8 +61,10 @@ treated = formating(adj,musmuscu,pval= 0.05)
 
 
 
-hmbis = truncatedhat(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,genename = pval)
-print(hmbis)
+hmbis = truncatedhat(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,genename = pval,k=4)
+
+
+
 
 
 testos = c("green","red","orange","blue")
@@ -73,7 +75,19 @@ print(padj)
 
 hm01 = plotHeatmaps(hmbis[[1]],treated[[1]],groupss$Grp,workingPath=wd_path,mypal = testos,
                     showcol = F, showrow = T,genename=pval, rowv = hmbis[[4]], ColvOrd = hmbis[[3]],
-                    gpcol = hmbis[[5]], gpcolr = hmbis[[6]], distfunTRIX = hmbis[[2]],geneSet = hmbis[[7]] )
+                    gpcol = hmbis[[5]], gpcolr = hmbis[[6]], distfunTRIX = hmbis[[2]],geneSet = hmbis[[7]] , height = hmbis[[8]])
+
+hmp01_All$rowDendrogram[[2]]
+cut02 = cut(hmp01_All$rowDendrogram, h = hmbis[[8]] )
+
+print(cut02)
+
+print(hm01$rowDendrogram[[2]])
+print(hm01$colDendrogram[[1]])
+plot(hm01$rowDendrogram)
+plot(hm01$rowDendrogram,hang=-1,labels=FALSE,sub=paste("hclust method: ward2\n", subdist),xlab="",main="")
+hcgp=rect.hclust(hm01$rowDendrogram,k=2,border="red")
+
 
 
 affyLib <- paste(annotation(ALL), "db", sep = ".")

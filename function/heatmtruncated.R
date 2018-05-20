@@ -219,12 +219,15 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
     cat("\n -> Plotting Dendrogram... \n")
     plot(hc,hang=-1,labels=FALSE,sub=paste("hclust method: ward2\n", subdist),xlab="",main="")
     hcgp=rect.hclust(hc,k=k,border="red")
-
     
     
     #hts=rev( tail( hc$height,15))
-    #bp=barplot(hts,names.arg=1:length(hts))
-    #text(x=bp,y=hts,label= formatC(hts,1,format="f"),pos=3,cex=0.8) 
+    # bp=barplot(hts,names.arg=1:length(hts))
+    # text(x=bp,y=hts,label= formatC(hts,1,format="f"),pos=3,cex=0.8) 
+    # dev.off()
+    myheight = rev( tail( hc$height,15))
+
+    
     cat("    Done \n")
   }
   
@@ -236,7 +239,8 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
     if(!hclustGenes){
       plot(hc,hang=-1,labels=FALSE,xlab="",main="")
       hcgp=rect.hclust(hc,k=k,border="red")
-      dev.off
+      print(hcgp)
+      #dev.off
     }
     if(length(RowSideColor) == length(geneSet)){
       gpcolr=RowSideColor;
@@ -254,8 +258,8 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   
   rowIds = genename$GeneName[geneSet]
   
-  
-  objforheat = list(exprData,distfunTRIX,ColvOrd,rowv,gpcol,gpcolr,rowIds)
+    
+  objforheat = list(exprData,distfunTRIX,ColvOrd,rowv,gpcol,gpcolr,rowIds,myheight[[k]])
   
   
   return(objforheat)
@@ -303,7 +307,7 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
                       RowSideColor=c("gray25","gray75") ,palette.col=NULL, 
                       margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75)
                       ,mycex = 0.6,mypal=test,colid = NULL, showcol = T ,showrow =F,
-                       notplot = F, geneSet= list7,genename = csvf){
+                       notplot = F, geneSet= list7,genename = csvf, height = list8){
   
   
   #RowSideColor: color palette to be used for rowSide cluster colors
@@ -356,14 +360,14 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=T,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),col=my_palette,key.par = list(cex=0.6))
-  mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
+  #mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
   
   if(notplot)
     dev.off()
   
   cat("    Done \n")
-  return(heatmtoclust(hmp02,exprData,genename))
-  #return(hmp02)
+  return(heatmtoclust(hmp02,exprData,genename,height= height))
+
   
 }
 
