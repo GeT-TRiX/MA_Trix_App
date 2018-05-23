@@ -10,7 +10,6 @@
 #' @return
 #' @export
 #'
-#' @examples
 #' 
 #' @export
 
@@ -263,6 +262,7 @@ heatmtoclust = function( hmp01_All, exprData, pval, height= 5){
   mygen = as.integer(row.names(final))
   
   heatmclust = pval %>%
+    #dplyr::select (X,ProbeName,GeneName) %>%
     dplyr::select (X,GeneName) %>%
     filter( X %in% mygen) %>%
     left_join(data.frame(X=mygen), . , by="X") %>%

@@ -4,12 +4,24 @@
 
 
 
-observeEvent(input$vennd, {
+#observeEvent(input$vennd, {
   output$myVenn <- renderPlot({
+    validate(
+      need(csvf(), 'You need to import data to visualize this plot!'))
+    validate(
+      need(length(user_cont()) >0, 'You need to to select some groups!'))
+    
+    req(Vennplot())
+    
     Vennplot()
   }, width = 1200 , height = 800, res = 100)
   
+ 
+observe({
   
+  validate(
+    need(csvf(), 'You need to import data to visualize this plot!'))
+   
   output$savevenn <- downloadHandler(filename <- function() {
     paste0(basename(file_path_sans_ext("myfile")),
            '_venn_diagram.',

@@ -3,6 +3,17 @@
 ###############################
 
 
+boolhm <- F
+
+
+output$heatmbool <- reactive({
+  print(boolhm)
+  boolhm
+})
+
+
+
+outputOptions(output,"heatmbool",suspendWhenHidden=F)
 
 #' rowname is a reactive function which aim is to hide or show the rownames
 #'
@@ -44,18 +55,20 @@ hmsize <- reactiveValues()
 
 observe({
   
-  # finalsize <- reactive({
-  #   req(lengthhm())
-  #   return(length(lengthhm()))
-  # })
+  output$warningsheat <- renderPlot({
+    
+    validate(
+      need(csvf(), 'You need to import data to visualize to plot the Heatmap'))
+  })
   
+  # output$warningplot <- renderPlot({
+  #   validate(
+  #     need(csvf(), 'You need to import data to visualize to plot the Heatmap'))
+  # })
   
   heatid <- input$matrixapp
   if (grepl("Heatmap", heatid)) {
-    hmobj$size <- length(formated())
-    #formatidus <<- hmobj$size # doit trouver une autre valeur que formated pour donner la taille
-    formatidus <<- hmobj$size 
-    if (formatidus < 2000)
+    if (input$reactheat == T)
       source(file.path("server", "plotreact.R"), local = TRUE)$value #
    else
      source(file.path("server", "plotreact2.R"), local = TRUE)$value #
@@ -98,10 +111,10 @@ content <- function(file) {
         width = 7,
         height = 7)
   
-  if (!is.null(formated()))
+  if (!is.null(formated()[[1]]))
     withProgress(message = 'Saving heatmap:',
                  value = 0, {
-                   n <- NROW(formatidus)
+                   n <- NROW(formated()[[1]])
                    for (i in 1:n) {
                      incProgress(1 / n, detail = "Please wait...")
                    }

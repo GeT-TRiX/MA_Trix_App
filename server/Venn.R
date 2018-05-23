@@ -12,7 +12,6 @@ value=T # boolean at t=0
 #'
 
 output$bool <- reactive({
-  #print(value)
   value
 })
 
@@ -27,6 +26,8 @@ outputOptions(output,"bool",suspendWhenHidden=F)
 #'
 
 vennlist <- reactive({
+  req(user_cont() > 0)
+  
   if (is.null(csvf()))
     return(NULL)
   mycont = Vennlist(pval = csvf()[[3]], user_cont(),user_fc(), input$regulation)
@@ -41,6 +42,8 @@ vennlist <- reactive({
 #'
 
 Vennplot <- reactive({
+  
+  req(vennlist)
   
   #' Vennplot is a reactive function that return an object of type venn if the number of set is stricly inferior to 6
   #' or a link to a website if it's not
@@ -99,9 +102,16 @@ Vennplot <- reactive({
   return(Vennploted())
 })
 
-
+observe({
+  
+  
+  validate(
+    need(csvf(), 'You need to import data to visualize this plot!'))
+  #req(csvf())
   
 output$contout <- renderUI(
+  ##validate
+  
   checkboxGroupInput(
     inputId = "cont" ,
     label =  "Choose your comparison",
@@ -111,7 +121,7 @@ output$contout <- renderUI(
     selected = colnames(adjusted()[[1]][,-1][myindex()])
   )
 )
-
+})
 
 observeEvent(input$allCont, {
   updateCheckboxGroupInput(
@@ -183,14 +193,13 @@ user_fc <- reactive({
 })
 
 
-
 output$downloadvenn <- downloadHandler(
   filename = function() {
     "myvenn.csv"
   },
   content = function(fname) {
     write.table(
-      myventocsv(vennlist(), user_cont()),
+      try(myventocsv(vennlist(), user_cont())),
       fname,
       na = "",
       row.names = F,
@@ -202,7 +211,6 @@ output$downloadvenn <- downloadHandler(
 )
 
 
-# 
 # user_length<- reactive({
 #   return(length(user_cont()))
 # })

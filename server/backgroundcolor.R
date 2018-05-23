@@ -70,8 +70,10 @@ my_intermediate <- reactive({
     inter = "white"
   
   else if (choix_col1() == "blue" & choix_col3() == "yellow")
-    inter = "green"
+    inter = "black"
   
+  else
+    inter= NULL
   
   return(inter)
   

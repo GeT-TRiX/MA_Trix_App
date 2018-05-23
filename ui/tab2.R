@@ -86,14 +86,14 @@ tabPanel(
         step = 1
       ),
       
-      sliderInput(
-        "cutheatm",
-        "Choose where you cut the heatmap",
-        min = 1,
-        max = 15,
-        value = 2,
-        step = 0.5
-      ),
+      # sliderInput(
+      #   "cutheatm",
+      #   "Choose where you cut the heatmap",
+      #   min = 1,
+      #   max = 15,
+      #   value = 2,
+      #   step = 0.5
+      # ),
       
       br(),
       selectInput(
@@ -129,6 +129,7 @@ tabPanel(
       )),
       br(),
       
+      
       shiny::actionButton(
         "toggleAdvancedcolors",
         "Advanced graphical Settings",
@@ -137,7 +138,7 @@ tabPanel(
       ),
       
       br(),
-      
+    
       shinyjs::hidden(div(
         id = "advancedcol",
         wellPanel(
@@ -215,7 +216,7 @@ tabPanel(
       
       shiny::actionButton(
         "toggleAdvancedgo",
-        "Advanced graphical Settings",
+        "Advanced enrichment Settings",
         href = "#",
         style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
       ),
@@ -224,49 +225,69 @@ tabPanel(
         # Hide some widgets between the tags
         id = "advancedgo",
         wellPanel(
-          numericInput("numberGenes", "Choose How Many Top Gene Ontologies to Display:", value = 10),
-          selectInput("Species", "Choose Genome Database:", selected = "mm9", 
-              c("Mouse" = "mm9", "Human" = "hg19", "Chimpanzee" = "panTro2", 
-              "Rat" = "rn4", "Worm" = "ce6", "Zebrafish" = "danRer6", "Fly" = "dm3", "Yeast" = "sacCer2", "Cow" = "bosTau4", "Dog" = "canFam2",
-              "Anopheles gambiae" = "anoGam1", "Rhesus" = "rheMac2", "Frog" = "xenTro2", "Chicken" = "galGal3")),
-          uiOutput("cutgo"),
-          uiOutput("slidergo")
+          
         )
       )),
-      
       
       selectInput("form", "Choose your file format",
                   choices = c("png", "eps", "emf")),
       br(),
-      fluidRow(
-        column(4,
-      downloadButton(
-        "save",
-        "Save your plot" ,
-        style = ## allowed to download an image
-          "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-      )),
-      column(4,
-      uiOutput("button")),
       
-      downloadButton('downloadcut', "Download the data",
-                     style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
       
+      fluidRow(column(
+        5, uiOutput("button")
+       
       ),
+      column(
+        5,
+        checkboxInput("reactheat",
+                      "Add reactivity",
+                      FALSE))
+      ),
+    helpText("Note: It is highly advised to check this box if you're working with a set of genes close to 1000."),
       
-      actionButton("GO", "Run GO"),
+      # fluidRow(
+      #   column(4,
+      # downloadButton(
+      #   "save",
+      #   "Save your plot" ,
+      #   style = ## allowed to download an image
+      #     "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+      # )),
+      # 
+      # downloadButton('downloadcut', "Download the data",
+      #                style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
+      # 
+      # ),
+    conditionalPanel(condition = 'output.heatmbool',
+       actionButton("GO", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+
+                     fluidRow(column(
+                       5,
+                       selectInput("Species", "Choose Genome Database:", selected = "mm9", 
+                                   c("Mouse" = "mm9", "Human" = "hg19", "Chimpanzee" = "panTro2", 
+                                     "Rat" = "rn4", "Worm" = "ce6", "Zebrafish" = "danRer6", "Fly" = "dm3", "Yeast" = "sacCer2", "Cow" = "bosTau4", "Dog" = "canFam2",
+                                     "Anopheles gambiae" = "anoGam1", "Rhesus" = "rheMac2", "Frog" = "xenTro2", "Chicken" = "galGal3"))
+                     ),
+                     column(
+                       5,
+                       uiOutput("cutgo"))
+                     ),
+      uiOutput("slidergo"),
+      helpText("GO enrichment are ranked from highest to the lowest, with 1 corresponding to the highest")
+      ),
       
       #actionButton("resetAll", "Reset all"),
       
       br(),
-      br(),
+      br()
       
       
       # shiny::actionButton("heatm", "Print Heatmap", style =
       #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
 
       # Render input from server.R
-      shinyjs::disabled(actionButton("stop", "Stop"))
+      #shinyjs::disabled(actionButton("stop", "Stop"))
       
     ),
     
@@ -307,21 +328,41 @@ tabPanel(
       )
     )
   )),
+  
   mainPanel(tabsetPanel(
     # Tabsets are useful for dividing output into multiple independently viewable sections.
     tabPanel(
       p(icon("line-chart"), "Visualize the Heatmap"),
       tags$style(
-        type = "text/css",
-        ".shiny-output-error { visibility: hidden; }",
-        ".shiny-output-error:before { visibility: hidden; }"
+        type = "text/css"#,
+        #".shiny-output-error { visibility: hidden; }",
+        #".shiny-output-error:before { visibility: hidden; }"
       ),
       ### from the library ShinyJS
       useShinyjs(),
       ### no more error messages
       bsAlert("alert"),
       #plotOutput(outputId = "distPlot"),
+      #fluidRow(
+       # column(1,
+      div(style="display:inline-block",
+          
+               downloadButton(
+                 "save",
+                 "Save your plot" ,
+                 style = ## allowed to download an image
+                   "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+               ),
+        downloadButton('downloadcut', "Download the data",
+                       style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
+        
+      ),
+      
+      br(),br(),br(),
+      conditionalPanel(condition = 'output.boolmark',
+      plotOutput("warningsheat")),
       plotOutput("distPlot"),
+     
       ### Adding white spaces between the heatmap plot and the tracker
       
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
@@ -346,7 +387,7 @@ tabPanel(
           p("There are"),
           htmlOutput("myNUM"),
           p("significant genes"),
-          p("with the following contrasts"),
+          p("for the following contrasts"),
           htmlOutput("test")
         ),
         #br(),
@@ -409,7 +450,7 @@ tabPanel(
   
   tabPanel(
     "(GO) enrichment-based cluster analysis",
-    downloadButton("savego", "Save your plot" , style =
+    downloadButton("savego", "Save your enrichment" , style =
                      "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
     verbatimTextOutput("clustgo")
   ),

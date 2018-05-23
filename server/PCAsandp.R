@@ -10,7 +10,7 @@
 #'
 
 PCAres <- reactive({
-  
+  req(csvf())
   if (is.null(csvf()[[1]]))
     return(NULL)
   
@@ -27,12 +27,37 @@ PCAres <- reactive({
 #'
 
 Scree_plot <- reactive({
+  req(PCAres())
   mybar = eboulis(PCAres())
-  return(mybar)
+  return(mybar+theme_classic())
 })
 
 
+output$savescre <- downloadHandler(
+  
+  filename <- function() {
+    paste0(basename(file_path_sans_ext("myfile")), '_screeplot.png', sep='')    
+  },
+  content <- function(file) {
+    
+    png(file,
+        width =1400,
+        height = 1400,
+        units = "px",
+        pointsize= 12,
+        res=100
+    )
+    
+    plot(Scree_plot())
+    dev.off()
+  })
+
+
 output$eigpca <- renderPlot({
+  
+  validate(
+    need(csvf(), 'You need to import data to visualize this plot!'))
+  
   plot(Scree_plot())
   
 }, width = 1200 , height = 600, res = 100)
@@ -57,6 +82,9 @@ labeled <- reactive({
 
 
 output$PCA <- renderPlot({
+
+  validate(
+    need(csvf(), 'You need to import data to visualize this plot!'))
   
   plot(PCAplot())
   

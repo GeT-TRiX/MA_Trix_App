@@ -24,19 +24,22 @@ gosearch <- function(hm01, species, ids) {
     names(final) = (genlist$GeneName)
     
     h <- function(w)
-        if (any(grepl("constraints", w)))
+        if (any(grepl("constraints|library", w)))
           invokeRestart("muffleWarning")
     
     pwf <- tryCatch({
-      withCallingHandlers(nullp(final, species, ids), warning = h) %>% na.omit()
+      withCallingHandlers(nullp(final, species, ids ), warning = h) %>% na.omit()
     }, warning = function(e) {
       warning("40 % of genes misssing")
       #return(enrichment_empty())
       return(NULL)
     })
     
+    #pwf <- nullp(final, species, ids) %>% na.omit()
+    # cat(length(row.names(pwf)))
+    
     if (!is.null(pwf)) {
-      finalons <- goseq(pwf, species , ids, use_genes_without_cat = T)
+      finalons <- goseq(pwf, species , ids, use_genes_without_cat = F, method = "Hypergeometric")
       clusterlist[[i]] = filter(finalons, numInCat > 1 ) %>%
         arrange(desc(numInCat))
     }

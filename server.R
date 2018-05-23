@@ -22,6 +22,8 @@ source("environnement/global.R")
 
 
 shinyServer(server <- function(input, output, session) {
+  
+  
   ###############################
   ######## Load the csv files   #
   ###############################
@@ -176,15 +178,10 @@ shinyServer(server <- function(input, output, session) {
     })
     
     
-    
-    
-    
-    
     output$cutgo <- renderUI({
       totalclust()
     })
   
-    
   })
   
   
@@ -221,7 +218,7 @@ shinyServer(server <- function(input, output, session) {
       req(input$cutgo)
       x <- input$cutgo
       
-      sliderInput("slidergo", label = h3("Slider Range"), min = 1, 
+      sliderInput("slidergo", label = "Select (GO) range of observations", min = 1, 
                   max = length(testad()[[as.integer(x)]][[1]]), value = c(1, 25))
       
     })
@@ -287,7 +284,8 @@ shinyServer(server <- function(input, output, session) {
     }
     else if (input$Genome == "mm9") {
       # mouse
-      require("org.Mm.eg.db")
+      #require("org.Mm.eg.db")
+      require("mgug4122a.db")
     }
     else if (input$Genome == "danRer6") {
       #Zebra fish
@@ -311,7 +309,7 @@ shinyServer(server <- function(input, output, session) {
     }
     else if (input$Genome == "Pig") {
       # Rat
-      require("org.Ss.e")
+      require("org.Ss.eg.db")
     }
     else if (input$Genome == "rn4") {
       # Rat

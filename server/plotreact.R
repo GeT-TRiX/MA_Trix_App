@@ -29,20 +29,25 @@
 #' 
 
 
+
 shinyjs::disable("heatm")
 
 heatmapfinal <- function(isplot  = F) {
+  if(is.null(my_intermediate()))
+    mypal = (colorRampPalette(c(
+     "green", "black", "red"))(n = 75))
+  else
+    mypal= (colorRampPalette(c(
+      choix_col1(), my_intermediate(), choix_col3()))(n = 75))
 
-
+  
   plotHeatmaps(
     hmbis()[[1]],
-
     geneSet =  hmbis()[[7]],
     droplevels(new_group()$Grp),
     workingPath = wd_path,
-    my_palette = colorRampPalette(c(
-      choix_col1(), my_intermediate(), choix_col3()
-    ))(n = 75),
+    my_palette = (colorRampPalette(c(
+      choix_col1(), my_intermediate(), choix_col3()))(n = 75)),#mypal,
     mycex = input$legsize ,
     cexrow = input$rowsize ,
     cexcol = input$colsize ,
@@ -82,7 +87,7 @@ hmbis <- reactive( {
 
     truncatedhat(
       data.matrix(new_data()),
-      isolate(formated()), 
+      formated()[[1]], 
       droplevels(new_group()$Grp),
       workingPath = wd_path,
       k = input$clusters,
@@ -96,30 +101,25 @@ hmbis <- reactive( {
 })
 
 
-# hm <- reactive({
-#   heatmapfinal(isplot = F)
-# })
+observe(
+if(is.null(my_intermediate())){
+  heatmapfinal(isplot = F)
+  shinyjs::alert("your choice color are not fit to be together!!")
 
+}
+else
+  output$distPlot <- renderPlot({
 
-output$distPlot <- renderPlot({
+      hmbis()
+      observe({boolhm <<-T})
+      output$heatmbool <- reactive({
+        boolhm
+      })
+      hmobj$hm <- heatmapfinal(isplot = F)
+      hmobj$hm
 
-    if (!is.null(formated()))
-      n <- NROW(formated())
-      if (n>2000)
-        return(isolate(heatmapfinal(isplot = F)))
-      withProgress(message = 'Plotting heatmap:', # Add sliderbar when loading heatmap
-                   value = 0,
-                   {
-                     for (i in 1:n) {
-                       incProgress(1 / n, detail = "Please wait...")
-                     }
-                     isolate(hmbis())
-                     hmobj$hm <- heatmapfinal(isplot = F)
-                     hmobj$hm
-                     
- })
-}, width = 900 , height = 1200, res = 100)
-
+  }, width = 900 , height = 1200, res = 100)
+)
 
 
 

@@ -83,24 +83,30 @@ tabPanel(
       
       uiOutput('myPanelpca'),
 
-      br(),
+      br()
       
-      downloadButton("savepca", "Save your plot" , style =
-                       "color: #fff; background-color: #337ab7; border-color: #2e6da4")
+    
       
     )
   ),
   
   mainPanel(tabsetPanel(
+  
     tabPanel(p("Scree plot"),
+             downloadButton("savescre", "Save your Scree plot" , style =
+                              "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+             br(),br(),br(), 
              plotOutput(outputId = "eigpca")),
     tabPanel(
       p("PCA plot"),
       tags$style(
         type = "text/css",
-        ".shiny-output-error { visibility: hidden; }",
+       # ".shiny-output-error { visibility: hidden; }",
         ".shiny-output-error:before { visibility: hidden; }"
       ),
+      downloadButton("savepca", "Save your PCA" , style =
+                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      br(),br(),br(),
       plotOutput(outputId = "PCA")
     )
   ))

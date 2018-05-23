@@ -78,6 +78,7 @@ hm01 = plotHeatmaps(hmbis[[1]],treated[[1]],groupss$Grp,workingPath=wd_path,mypa
                     gpcol = hmbis[[5]], gpcolr = hmbis[[6]], distfunTRIX = hmbis[[2]],geneSet = hmbis[[7]] , height = hmbis[[8]])
 
 hmp01_All$rowDendrogram[[2]]
+hm01$ProbeName
 cut02 = cut(hmp01_All$rowDendrogram, h = hmbis[[8]] )
 
 print(cut02)

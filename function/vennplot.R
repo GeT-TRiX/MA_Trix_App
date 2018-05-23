@@ -14,6 +14,10 @@ library(venn)
 
 Vennlist <- function(pval,adj,fc, regulation){
   
+  
+  if(is.null(pval)) 
+    return(NULL)
+  
   reguser = ifelse(regulation == "up", T, F)
   myl=list()
   if(reguser){
@@ -26,6 +30,7 @@ Vennlist <- function(pval,adj,fc, regulation){
       myl[[i]] = which(adj[[i]] < 0.05 & fc[[i]] < 0)
     }
   }
+  
   return(myl)
 }
 
@@ -40,6 +45,9 @@ Vennlist <- function(pval,adj,fc, regulation){
 #' 
 
 Vennfinal <- function(myl,adj, cex=1){
+  
+  if(is.null(myl))
+    return(NULL)
   
   
   indexnull = which( sapply(myl ,length) == 0)
@@ -58,6 +66,7 @@ Vennfinal <- function(myl,adj, cex=1){
                      fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
   
   final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom="DEG BH 0.05")
+  
   return(final)
 }
 

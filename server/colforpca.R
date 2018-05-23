@@ -11,6 +11,7 @@
 #'
 
 colspca <- reactive({
+    
     pcapal = brewer.pal(8,"Dark2") %>%
     list(brewer.pal(10,"Paired")) %>%
     unlist()
@@ -55,6 +56,8 @@ colorspca <- reactive({
 #'
 
 mycolgrppca <- reactive  ({
+  req(csvf())
+  
   mygrpcol <- csvf()[[2]]$Grp %>%
     sort() %>%
     unique() 

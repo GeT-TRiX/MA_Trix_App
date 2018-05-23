@@ -29,7 +29,13 @@ formated <- reactive({
       maxDE = input$maxgen
       
     )
+  
+
+  
   return(treated)
+  
 })
+
+
 
 

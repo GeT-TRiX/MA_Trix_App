@@ -1,4 +1,6 @@
-
+#########################################
+######## Global Environment             #
+#########################################
 
 firstcol = "green"
 intercol = "black"
@@ -16,13 +18,24 @@ list.of.packages <- c("shiny","shinythemes","shinyjs","ggplot2","shinyBS","markd
                       "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly",
                       "goseq", "GO.db","dplyr")
 
+
+
+# 
+# list.of.packages <- c("shiny","shinythemes","shinyjs","ggplot2","shinyBS","markdown"
+#                       ,"BH","data.table","DT","readr","rbenchmark","colourpicker",
+#                       "tools","devEMF","R.devices","FactoMineR","factoextra","heatmaply",
+#                       "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly",
+#                       "dplyr")
+
+
+
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 lapply(list.of.packages,function(x){library(x,character.only=TRUE)}) 
 ##"foreach","doParallel"
 
-require(dplyr)
-require(RColorBrewer)
+# require(dplyr)
+# require(RColorBrewer)
 
 wd_path= getwd()
 firstdim = 1

@@ -1,8 +1,8 @@
 output$myNUM <- renderPrint({ # number of signficant genes in the heatmap produced
-  if(is.null(formated()))
+  if(is.null(formated()[[1]]))
     return("X")
   else
-    cat(length(formated()))
+    cat(length(formated()[[1]]))
 })
 
 

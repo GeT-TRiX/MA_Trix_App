@@ -79,9 +79,9 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
   
   DEsel = which(rowSums(DEsel, na.rm = T) > 0)
   #cat("Il y a",length(DEsel),"gène significatifs")
+  elements= list(DEsel, length(DEsel))
   
-
   
-  return(DEsel)
+  return(elements)
   
 }
