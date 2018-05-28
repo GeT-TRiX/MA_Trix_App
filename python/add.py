@@ -1,5 +1,4 @@
 import sys
-import csv
 import requests
 import os.path
 import webbrowser
@@ -15,6 +14,7 @@ For a listing genes, display a web page with the enrichment of theses genes. It 
 def enrichmentdav(outputlist):
     
     url = "http://david.abcc.ncifcrf.gov/api.jsp?type=OFFICIAL_GENE_SYMBOL&ids="
+    #url = "http://david.abcc.ncifcrf.gov/api.jsp?type=ENTREZ_GENE_ID&ids="
     for gene in outputlist:
         url += gene + ","
     url += "&tool=summary&annot=GOTERM_BP_ALL,GOTERM_CC_ALL,GOTERM_MF_ALL,"

@@ -41,6 +41,7 @@ heatmapfinal <- function(isplot  = F) {
       choix_col1(), my_intermediate(), choix_col3()))(n = 75))
 
   
+  
   plotHeatmaps(
     hmbis()[[1]],
     geneSet =  hmbis()[[7]],
@@ -82,6 +83,7 @@ heatmapfinal <- function(isplot  = F) {
 #' @export
 #' 
 
+#hmbis <- eventReactive(input$heatm,{
 
 hmbis <- reactive( {
 
@@ -103,20 +105,35 @@ hmbis <- reactive( {
 
 observe(
 if(is.null(my_intermediate())){
-  heatmapfinal(isplot = F)
+  isolate(heatmapfinal(isplot = F))
   shinyjs::alert("your choice color are not fit to be together!!")
-
 }
+
 else
   output$distPlot <- renderPlot({
-
+    
+    validate(need(
+      csvf(),
+      'You need to import data to visualize to plot the Heatmap' ) %next%
+        need(length(choix_test()) >0, 'You need to select a contrast(s) with reactivity triggered you dont need to click on the update heatmap button')
+    )
+    
+    if ( input$reactheat == T){
+    
       hmbis()
       observe({boolhm <<-T})
       output$heatmbool <- reactive({
         boolhm
       })
-      hmobj$hm <- heatmapfinal(isplot = F)
-      hmobj$hm
+
+      hmboth$tot <- heatmapfinal(isplot = F)
+      hmobj$hm <- hmboth$tot[[1]]
+      hmobj$obj <-hmboth$tot[[2]]
+    }
+    else
+      isolate(
+      heatmapfinal(isplot = F))
+      
 
   }, width = 900 , height = 1200, res = 100)
 )

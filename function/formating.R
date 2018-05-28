@@ -187,9 +187,9 @@ myfinalfc = function(alltop, pval, testrix) {
     adj = alltop[, grep("X|^P.value", names(alltop), value = TRUE)]
     
   logfc = alltop[, grep("X|^logFC", names(alltop), value = TRUE)]
-  myfc = c(1.2, 2, 4, 6, 10)
+  myfc = c(1, 1.2, 2, 4, 6, 10)
   fcpval = data.frame(matrix(ncol = length(myfc), nrow = length(adj[, -1])))
-  mycolnames = c("FC >1.2" , "FC >2", "FC >4", "FC >6", "FC >10")
+  mycolnames = c("FC>1.0", "FC >1.2" , "FC >2", "FC >4", "FC >6", "FC >10")
 
   
   for (fc in myfc) {
@@ -262,8 +262,7 @@ heatmtoclust = function( hmp01_All, exprData, pval, height= 5){
   mygen = as.integer(row.names(final))
   
   heatmclust = pval %>%
-    #dplyr::select (X,ProbeName,GeneName) %>%
-    dplyr::select (X,GeneName) %>%
+    dplyr::select (X,ProbeName,GeneName) %>%
     filter( X %in% mygen) %>%
     left_join(data.frame(X=mygen), . , by="X") %>%
     arrange(-row_number())

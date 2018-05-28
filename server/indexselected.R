@@ -14,6 +14,8 @@ formated <- reactive({
   
   req(user_group())
   
+  #print(intput$method2)
+  
   df <- csvf()
   if (is.null(df))
     return(NULL)

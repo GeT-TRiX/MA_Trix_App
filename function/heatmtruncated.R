@@ -135,7 +135,9 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   
   if(!is.null(palette.col)){
     palette(palette.col);
-  }else  palette(mypal)
+  }
+  else  
+    palette(mypal)
   
   cl=palette(mypal);
   
@@ -217,16 +219,15 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   
   if(hclustGenes){
     cat("\n -> Plotting Dendrogram... \n")
+
     plot(hc,hang=-1,labels=FALSE,sub=paste("hclust method: ward2\n", subdist),xlab="",main="")
     hcgp=rect.hclust(hc,k=k,border="red")
-    
-    
+
     #hts=rev( tail( hc$height,15))
     # bp=barplot(hts,names.arg=1:length(hts))
     # text(x=bp,y=hts,label= formatC(hts,1,format="f"),pos=3,cex=0.8) 
     # dev.off()
     myheight = rev( tail( hc$height,15))
-
     
     cat("    Done \n")
   }
@@ -237,10 +238,10 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   
   if(plotRowSideColor){
     if(!hclustGenes){
+      
       plot(hc,hang=-1,labels=FALSE,xlab="",main="")
       hcgp=rect.hclust(hc,k=k,border="red")
-      print(hcgp)
-      #dev.off
+
     }
     if(length(RowSideColor) == length(geneSet)){
       gpcolr=RowSideColor;
@@ -327,8 +328,7 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   if(showrow == F)
     rowIds = NA
   else
-   #rowIds = genename$GeneName[geneSet]
-  rowIds = geneSet
+    rowIds = geneSet
   
   
   
@@ -357,18 +357,22 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   par("mar")
   
   par(mar=c(5,5,1,1.10))
+  
+  #pdf(NULL)
   hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=T,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),col=my_palette,key.par = list(cex=0.6))
-  #mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
+  mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
   
   if(notplot)
     dev.off()
   
   cat("    Done \n")
-  return(heatmtoclust(hmp02,exprData,genename,height= height))
+  myfinalobj = list(heatmtoclust(hmp02,exprData,genename,height= height),hmp02)
 
-  
+  #return(heatmtoclust(hmp02,exprData,genename,height= height))
+
+  return(myfinalobj)
 }
 
 

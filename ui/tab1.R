@@ -25,10 +25,13 @@ tabPanel(
     
     br(), # white space (<br> </br> basic HTML)
     
+    # selectInput("method2", "Choose your matrix distance:", selected = "FDR", 
+    #             c("adj.p.val(FDR)" = "FDR", "p.value(raw)" = "None" )),  
+    
     
     selectInput("method", #  Create a select list that can be used to choose a single or multiple items from a list of values.
                 "Choose your statistical method",
-                choices = c("FDR", "none"))
+                choices = c("adj.p.val(FDR)" = "FDR", "p.value(raw)" = "None"))
 
   ),
   
@@ -53,7 +56,7 @@ tabPanel(
       12,
       
       h3(
-        "This table summarize the significant genes depending on the p-value treshold choosen through the slider bar"
+        "This table summarize the significant genes depending on the p-value treshold choosen with the slider bar"
       ),
       helpText("Choose your p-value treshold to modify the following data table")
       ,
@@ -76,11 +79,7 @@ tabPanel(
     column(
       12,
       
-      h3("This table shows the samples with the accoording groups"),
-      helpText(
-        "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-      )
-      ,
+      h3("This table shows the samples with the corresponding groups"),
       dataTableOutput("new_test")
     ),
     
@@ -88,10 +87,6 @@ tabPanel(
       12,
       
       h3("This table shows the head of the working set"),
-      helpText(
-        "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-      )
-      ,
       dataTableOutput("new_data")
     ),
     

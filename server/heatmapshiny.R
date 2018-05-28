@@ -2,18 +2,36 @@
 ########heatmap function & co #
 ###############################
 
-
 boolhm <- F
 
 
+#hmneed <- T # Boolean uses to hide or show the mardkwon serving to load data
+
+
+
 output$heatmbool <- reactive({
-  print(boolhm)
+
   boolhm
 })
 
 
 
-outputOptions(output,"heatmbool",suspendWhenHidden=F)
+outputOptions(output, "heatmbool", suspendWhenHidden = F)
+
+
+
+observe({
+  req(csvf(),length(choix_test()) >0,global$clicked )
+  
+  observe({boolhm <<-T}) # modify and lock the bool value to false
+  
+  output$heatmbool <- reactive({
+    boolhm
+  })
+  
+  
+})
+
 
 #' rowname is a reactive function which aim is to hide or show the rownames
 #'
@@ -49,82 +67,108 @@ colname <- reactive({
 heatmapobj <- NULL # declare outside the observeEvent
 formatidus <- NULL
 hmbis <- reactiveValues()
+hmboth <- reactiveValues()
 hmobj <- reactiveValues()
 hmsize <- reactiveValues()
 
 
 observe({
   
-  output$warningsheat <- renderPlot({
-    
-    validate(
-      need(csvf(), 'You need to import data to visualize to plot the Heatmap'))
+  #   output$required <- renderPrint({
+  #
+  #   validate(
+  #     need(csvf(), 'You need to import data to visualize to plot the Heatmap') %then%
+  #     need(choix_test() > 0, 'You need to select your comparison(s)'))
+  #
+  # })
+  
+  #click <- reactive({
+  # boolneed <- F
+  #   observeEvent(input$heatm,{
+  #     boolneed <<- T
+  #   })
+   # return(bool)
+  #})
+  
+
+  
+  
+  
+  output$warningsheat <- renderPrint({#renderPlot({
+    validate(need(
+      csvf(),
+      'You need to import data to visualize to plot the Heatmap' ) %next% 
+      need(length(choix_test()) >0, 'You need to select a contrast(s), then click on the heatmap button down below the heatmap settings')
+
+    )
   })
   
-  # output$warningplot <- renderPlot({
-  #   validate(
-  #     need(csvf(), 'You need to import data to visualize to plot the Heatmap'))
-  # })
   
   heatid <- input$matrixapp
   if (grepl("Heatmap", heatid)) {
     if (input$reactheat == T)
       source(file.path("server", "plotreact.R"), local = TRUE)$value #
-   else
-     source(file.path("server", "plotreact2.R"), local = TRUE)$value #
+    else{
+      print(input$reactheat)
+      source(file.path("server", "plotreact2.R"), local = TRUE)$value #
+    }
   }
- 
-
   
-# hm <- reactive({
-#   heatmapfinal(isplot = F)
-# })
-
-output$save <- downloadHandler(filename <- function() {
-  paste0(basename(file_path_sans_ext("myfile")),
-         '_heatmap.',
-         input$form,
-         sep = '')
-},
-content <- function(file) {
-  if (input$form == "emf")
-    
-    emf(
-      file,
-      width = 7,
-      height = 7,
-      pointsize = 12,
-      coordDPI = 300
-    )
   
-  else if (input$form == "png")
-    png(
-      file,
-      width = 900,
-      height = 1200,
-      units = "px",
-      pointsize = 12,
-      res = 100
-    )
-  else
-    eps(file,
+  print(input$reactheat)
+  
+  
+  output$savehm <- downloadHandler(filename <- function() {
+    paste0(basename(file_path_sans_ext("myfile")),
+           '_heatmap.',
+           input$formhm,
+           sep = '')
+  },
+  content <- function(file) {
+    if (input$formhm == "emf")
+      
+      emf(
+        file,
         width = 7,
-        height = 7)
+        height = 7,
+        pointsize = 12,
+        coordDPI = 300
+      )
+    
+    else if (input$formhm == "png")
+      png(
+        file,
+        width = 900,
+        height = 1200,
+        units = "px",
+        pointsize = 12,
+        res = 100
+      )
+    else
+      eps(file,
+          width = 7,
+          height = 9)
+    
+    if (!is.null(formated()[[1]]))
+      withProgress(message = 'Saving heatmap:',
+                   value = 0, {
+                     n <- NROW(formated()[[1]])
+                     for (i in 1:n) {
+                       incProgress(1 / n, detail = "Please wait...")
+                     }
+                     heatmapfinal(isplot = F)
+                   })
+    dev.off()
+    
+  })
   
-  if (!is.null(formated()[[1]]))
-    withProgress(message = 'Saving heatmap:',
-                 value = 0, {
-                   n <- NROW(formated()[[1]])
-                   for (i in 1:n) {
-                     incProgress(1 / n, detail = "Please wait...")
-                   }
-                   heatmapfinal(isplot = F)
-                 })
-  dev.off()
-  
+  observe({
+    req(hmobj$hm)
+    print(hmobj$hm[[2]])
   })
 
-
+  
+  
   output$downloadcut <- downloadHandler(
     filename = function() {
       paste(basename(file_path_sans_ext(input$filename)),
@@ -133,14 +177,38 @@ content <- function(file) {
             sep = '')
     },
     content = function(file) {
-      write.csv(heatmapfinal(isplot = F), file, row.names = FALSE)
+      write.csv(ordered(), file, row.names = FALSE)
     }
   )
   
+  ordered <- reactive({
+    req(hmobj$hm)
+    
+    if (input$method2 == "FDR")
+      met = "adj.P.Val_"
+    else
+      met = "P.value_"
+    
+    mycont = paste0(met, choix_test())
+    ordered = csvf()[[3]] %>% filter(ProbeName %in% hmobj$hm$ProbeName)  %>%
+      select(ProbeName,  mycont) %>%
+      full_join(hmobj$hm[,-1], ., by = "ProbeName") %>%
+      select(ProbeName, GeneName, mycont, cluster)
+    rightor = sort(as.integer(rownames(ordered)), decreasing = T)
+    ordered = ordered[match(rightor, rownames(ordered)), ]
+    
+    return(ordered)
+  })
   
+  # observe({
+  #   print(hmobj$hm)
+  #   
+  # })
+  # 
   
+  output$clustering <-
+    renderDataTable(ordered()) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)
   
-  output$clustering <- renderDataTable(hmobj$hm) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)
 })
 
 

@@ -3,8 +3,6 @@ require(GO.db)
 library(dplyr)
 
 
-
-
 # enrichment_empty <- function () {
 #   data.frame(category=numeric(0),
 #              over_represented_pvalue=numeric(0),
@@ -15,10 +13,11 @@ library(dplyr)
 #              under_represented_pvalue_adj=numeric(0))
 # }
 
-gosearch <- function(hm01, species, ids) {
-  clusterlist = list()
+gosearch <- function(hm01, species, ids, clusterlist) {
+  #clusterlist = NULL
+  
   for (i in 1:NROW(unique(hm01$cluster))) {
-    genlist <- hm01[!duplicated(hm01[2]),]
+    genlist <- hm01[!duplicated(hm01$GeneName),]
     genlist <-genlist %>% select(cluster, GeneName)   %>% filter(cluster == i)
     final = as.double(matrix(1, length(genlist$cluster)))
     names(final) = (genlist$GeneName)
@@ -27,16 +26,20 @@ gosearch <- function(hm01, species, ids) {
         if (any(grepl("constraints|library", w)))
           invokeRestart("muffleWarning")
     
+    e <- function(y)
+      if(any(grepl("Rplots.pdf", y)))
+        invokeRestart("muffleWarning")
+
     pwf <- tryCatch({
-      withCallingHandlers(nullp(final, species, ids ), warning = h) %>% na.omit()
+      withCallingHandlers(nullp(final, species, ids ,plot.fit=FALSE), warning = h, error = e) %>% na.omit()
     }, warning = function(e) {
-      warning("40 % of genes misssing")
+      warning("40 % of genes are misssing")
       #return(enrichment_empty())
       return(NULL)
     })
     
-    #pwf <- nullp(final, species, ids) %>% na.omit()
-    # cat(length(row.names(pwf)))
+    #pwf <- nullp(final, species, ids,plot.fit=FALSE) %>% na.omit()
+    cat(length(row.names(pwf)))
     
     if (!is.null(pwf)) {
       finalons <- goseq(pwf, species , ids, use_genes_without_cat = F, method = "Hypergeometric")

@@ -7,9 +7,8 @@
 #observeEvent(input$vennd, {
   output$myVenn <- renderPlot({
     validate(
-      need(csvf(), 'You need to import data to visualize this plot!'))
-    validate(
-      need(length(user_cont()) >0, 'You need to to select some groups!'))
+      need(csvf(), 'You need to import data to visualize this plot!') %next%
+      need(length(user_cont()) >0, 'You need to  select some groups!'))
     
     req(Vennplot())
     
@@ -23,13 +22,12 @@ observe({
     need(csvf(), 'You need to import data to visualize this plot!'))
    
   output$savevenn <- downloadHandler(filename <- function() {
-    paste0(basename(file_path_sans_ext("myfile")),
+    paste0(basename(tools::file_path_sans_ext("myfile")),
            '_venn_diagram.',
            input$formven,
            sep = '')
   },
   content <- function(file) {
-    print(input$formven)
     if (input$formven == "emf")
       
       emf(
@@ -56,7 +54,7 @@ observe({
     
     
     plot(Vennplot())
-    #Vennplot()
+
     dev.off()
   })
   

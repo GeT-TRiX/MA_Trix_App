@@ -22,8 +22,6 @@ source("environnement/global.R")
 
 
 shinyServer(server <- function(input, output, session) {
-  
-  
   ###############################
   ######## Load the csv files   #
   ###############################
@@ -50,6 +48,9 @@ shinyServer(server <- function(input, output, session) {
       renderText(paste(capture.output(sessionInfo()), collapse = "<br>"))
   })
   
+  observeEvent(input$heatm, {
+    print(colnames(adjusted()[[1]]))
+  })
   
   
   
@@ -157,7 +158,7 @@ shinyServer(server <- function(input, output, session) {
   
   #obsC <- observe(quote({ print(hmobj$hm) }), quoted = TRUE)
   
-  gores <- reactiveValues()
+  #gores <- reactiveValues()
   
   obsC <- observe({
     print(unique(hmobj$hm$cluster))
@@ -165,8 +166,10 @@ shinyServer(server <- function(input, output, session) {
     
   })
   
+  
+  gores <- reactiveValues()
+  
   observe({
-    
     totalclust <- reactive({
       req(hmobj$hm)
       
@@ -181,15 +184,15 @@ shinyServer(server <- function(input, output, session) {
     output$cutgo <- renderUI({
       totalclust()
     })
-  
+    
   })
   
   
-  observeEvent(input$GO, {
-    
+  observe({
     testad <- eventReactive(input$GO, {
       req(hmobj$hm)
-      
+      gores$obj <- NULL
+      myl <- NULL
       
       withProgress(message = 'Performing GO enrichment:',
                    value = 0, {
@@ -199,27 +202,39 @@ shinyServer(server <- function(input, output, session) {
                      }
                      
                      final = tryCatch({
-                       gosearch(hmobj$hm, input$Species, "geneSymbol")
+                       gosearch(hmobj$hm, input$Species, "geneSymbol", myl)
                      },
                      error = function(e) {
                        warning("ERROR")
                      })
                      
                    })
+      
+
       return(final)
     })
     
-    gores$obj <- testad()
+    observe({
+      req(gores$down)
+      print(testad()[[1]])
+      print(testad()[[2]])
+      
+    })
     
     
     
     slidergoen <- reactive({
-      req(testad())
-      req(input$cutgo)
+      req(testad(), input$cutgo)
+      
       x <- input$cutgo
       
-      sliderInput("slidergo", label = "Select (GO) range of observations", min = 1, 
-                  max = length(testad()[[as.integer(x)]][[1]]), value = c(1, 25))
+      sliderInput(
+        "slidergo",
+        label = "Select (GO) range of observations",
+        min = 1,
+        max = length(testad()[[as.integer(x)]][[1]]),
+        value = c(1, 25)
+      )
       
     })
     
@@ -229,52 +244,133 @@ shinyServer(server <- function(input, output, session) {
     
     
     observe({
-      req(testad())
-      print(input$slidergo)
-      print(input$slidergo[[1]])
+      req(input$heatmconf)
+      heatidsw <- input$heatmconf
+      if (grepl("cutpan", heatidsw)) {
+        updateTabsetPanel(session, "mainhmtabset",
+                          selected = "cuthmmainpan")
+      }
+      else if(grepl("hmpan", heatidsw)) {
+        updateTabsetPanel(session, "mainhmtabset",
+                          selected = "hmmainpan")
+       }
+      })
+    
+    observe({
+      req(input$mainhmtabset)
+      heatidswmain <- input$mainhmtabset
+      if (grepl("cuthmmainpan", heatidswmain)) {
+        updateTabsetPanel(session, "heatmconf",
+                          selected = "cutpan")
+      }
+      else if(grepl("hmmainpan", heatidswmain)) { #|dfhmclu|maingo
+        updateTabsetPanel(session, "heatmconf",
+                          selected = "hmpan")
+      }
     })
     
-    output$savego <- downloadHandler( ## not working
 
-      filename = function() {
-         paste(basename(file_path_sans_ext(input$filename)),
-               'enrichment_clusters',
-               '.txt', sep = '')
-       },
-      content = function() {
-        write.csv(testad()[[1]], file, row.names = FALSE)
-        #wclust(testad(),"ok.txt", 15, 25)
-      }
-    )
+    
+    # output$savego <- downloadHandler(
+    #   
+    #   filename = function() {
+    #     paste(basename(file_path_sans_ext(input$filename)),
+    #           'enrichment_clusters',
+    #           '.txt',
+    #           sep = '')
+    #   },
+    #   content = function() {
+    #     write.csv(gores$down[[1]],file,row.names = F)
+    #   }
+    # )
+    
+    
+    clustergrep <- reactive({
+      
+      req(hmobj$hm, input$cutgo)
+      genlist <- hmobj$hm[!duplicated(hmobj$hm$GeneName), ]
+      genlist <- genlist %>%
+        dplyr::select(cluster, GeneName)   %>%
+        filter(cluster == input$cutgo)
+      mygensymb = genlist$cluster %>%
+        length() %>%
+        matrix(1, .) %>%
+        as.double()
+      names(mygensymb) = genlist$GeneName
+      mygensymb = as.list(names(mygensymb))
+      mygensymb <-mygensymb[lapply(mygensymb, function(x)
+          length(grep("chr", x, value = FALSE))) == 0] # remove non-annotated genes
+      
+      
+      return(mygensymb)
+    })
+    
+    
+  
+    
+    #davidurl <- reactive({
+    
+    observeEvent(input$DAVID, {
+      davidurl <- eventReactive(input$DAVID, {
+        req(clustergrep())
+        #use_python("/usr/bin/python")
+        # os <- import("os")
+        # requests <- import("requests")
+        # os$listdir(".")
+        # request$listdir(".")
+        source_python('./python/add.py')
+        
+        enrichmentdav(clustergrep())
+        
+      })
+      
+      davidurl()
+      
+    })
     
     
     output$clustgo <- renderPrint({
-      req(input$cutgo)
-      req(input$slidergo)
+      validate(
+        need(csvf(), 'You need to import data to visualize the data!') %next%
+          need(input$cutgo, 'You need to click on the heatmap button! then on the run GO button')
+      )
+      gores$obj <- isolate(testad())
+      
+      req(input$cutgo, input$slidergo)
       x <- input$cutgo
       if (!is.null(testad()[[as.integer(x)]])) {
         for (go in input$slidergo[[1]]:input$slidergo[[2]]) {
-          cat(paste("GOID:", (GOID(
-            testad()[[as.integer(x)]][[1]][[go]]
-          ))))
-          cat("\n")
-          cat(paste("Term:", (Term(
-            testad()[[as.integer(x)]][[1]][[go]]
-          ))))
-          cat("\n")
-          cat(paste("Definition:", (Definition(
-            testad()[[as.integer(x)]][[1]][[go]]
-          ))))
-          cat("\n")
-          
-          cat("--------------------------------------\n")
+          if (Ontology(testad()[[as.integer(x)]][[1]][[go]]) == input$onto) {
+            cat(paste("GOID:", (GOID(
+              gores$obj[[as.integer(x)]][[1]][[go]]
+            ))))
+            cat("\n")
+            cat(paste("Term:", (Term(
+              gores$obj[[as.integer(x)]][[1]][[go]]
+            ))))
+            cat("\n")
+            cat(paste("Ontology:", (Ontology(
+              gores$obj[[as.integer(x)]][[1]][[go]]
+            ))))
+            cat("\n")
+            cat(paste("Definition:", (Definition(
+              gores$obj[[as.integer(x)]][[1]][[go]]
+            ))))
+            cat("\n")
+            cat(paste("Synonym:", (Synonym(
+              gores$obj[[as.integer(x)]][[1]][[go]]
+            ))))
+            cat("\n")
+            
+            cat("--------------------------------------\n")
+          }
         }
       }
       else
         print("Sorry, no enriched genes for this cluster")
       
     })
-    
+    #gores$obj <- NULL
   })
   
   Species <- reactive({
@@ -283,9 +379,8 @@ shinyServer(server <- function(input, output, session) {
       require("org.Hs.eg.db")
     }
     else if (input$Genome == "mm9") {
-      # mouse
-      #require("org.Mm.eg.db")
-      require("mgug4122a.db")
+      # Mouse
+      require("org.Mm.eg.db")
     }
     else if (input$Genome == "danRer6") {
       #Zebra fish
@@ -301,24 +396,17 @@ shinyServer(server <- function(input, output, session) {
     }
     else if (input$Genome == "ce6") {
       # cC elegans
-      require("org.Gg.eg.db")
+      require("org.Ce.eg.db")
     }
     else if (input$Genome == "rn4") {
       # Rat
-      require("org.Gg.eg.db")
+      require("org.Rn.eg.db")
     }
-    else if (input$Genome == "Pig") {
-      # Rat
+    else if (input$Genome == "susScr3") {
+      # Pig
       require("org.Ss.eg.db")
     }
-    else if (input$Genome == "rn4") {
-      # Rat
-      require("org.Gg.eg.db")
-    }
-    else if (input$Genome == "rn4") {
-      # Rat
-      require("org.Gg.eg.db")
-    }
+    
   })
   
   

@@ -11,7 +11,7 @@
 #'
 
 p <- eventReactive(input$updateheatm,{
-  isolate(heatmapfinal(isplot = T))
+  isolate(hmobj$obj)
 })
 
 #' PCAres is a reactive function that change the rownames values
@@ -43,8 +43,7 @@ rownamtoX <- reactive({
 
 cutfinal <- reactive({
     cutHeatmaps(
-      heatmapfinal(isplot = T),
-      #p(),
+      hmobj$obj,
       height = input$cutheight ,
       exprData = data.matrix(new_data()),
       groups = droplevels(new_group()$Grp),
@@ -58,7 +57,7 @@ cutfinal <- reactive({
 # render to the ui the number of clusted for a define height in function of the current heatmap object
 output$cutcluster <- renderUI({ 
 
-   cut02 = cut( heatmapfinal(isplot = T)$rowDendrogram, h = input$cutheight)
+   cut02 = cut( hmobj$obj$rowDendrogram, h = input$cutheight)
   #cut02 = cut(p()$rowDendrogram, h = input$cutheight)
   selectInput("cutcluster",
               "Choose your cluster",

@@ -180,7 +180,9 @@ params <- new('GOHyperGParams', geneIds=entrezids, ontology="BP", pvalueCutoff=0
 params
 hgOver <- try(hyperGTest(params))
 hgOver
+
 test <- summary(hgOver)
+View(test)
 
 source("https://bioconductor.org/biocLite.R")
 biocLite("AnnotationDbi")

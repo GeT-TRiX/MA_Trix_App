@@ -3,30 +3,6 @@ source("function/cutheat.R")
 source("function/formating.R")
 #source("function/compat.R")
 
-# source("http://bioconductor.org/biocLite.R")
-#biocLite("topGO")
-source("http://bioconductor.org/biocLite.R")
-biocLite()
-
-source("http://bioconductor.org/biocLite.R")
-biocLite("goseq")
-library(goseq)
-
-source("https://bioconductor.org/biocLite.R")
-biocLite("DEGseq")
-
-source("https://bioconductor.org/biocLite.R")
-biocLite("GO.db")
-library(GO.db)
-
-source("https://bioconductor.org/biocLite.R")
-biocLite("ALL")
-
-library(dplyr)
-library(topGO)
-#library(AnnotationDbi)
-library(ALL)
-
 source("https://bioconductor.org/biocLite.R")
 biocLite("org.Mm.eg.db")
 require("org.Mm.eg.db") 
@@ -39,6 +15,7 @@ pval <- read.csv2("data/All_topTableAll.csv")
 groupss <- read.csv2("data/TOXA_HEGU_MA0191_AllChip_pData.csv", sep= ";" , dec = ",",header= T)
 adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|^adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
 adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.", names(pval), value=TRUE)]
+
 require(Biobase)
 
 formating = function( adj, musmuscu,pval){
@@ -61,11 +38,11 @@ treated = formating(adj,musmuscu,pval= 0.05)
 
 
 
-hmbis = truncatedhat(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,genename = pval,k=4)
+hmbis = truncatedhat(treated[[2]],treated[[1]],groupss$Grp,workingPath=wd_path,genename = pval,k=3)
 
 
-
-
+source("function/formating.R")
+source("function/heatmtruncated.R")
 
 testos = c("green","red","orange","blue")
 x11()
@@ -77,6 +54,53 @@ hm01 = plotHeatmaps(hmbis[[1]],treated[[1]],groupss$Grp,workingPath=wd_path,mypa
                     showcol = F, showrow = T,genename=pval, rowv = hmbis[[4]], ColvOrd = hmbis[[3]],
                     gpcol = hmbis[[5]], gpcolr = hmbis[[6]], distfunTRIX = hmbis[[2]],geneSet = hmbis[[7]] , height = hmbis[[8]])
 
+
+View(hm01)
+hm01$ProbeName
+arrange(desc(hm01))
+colnames(adj[-1])
+dplyr::arrange(desc(hm01))
+
+arrange(hm01, desc(rownames(hm01)))
+
+test = sort(as.integer(rownames(hm01)), decreasing = T)
+print(test)
+hm01[match(test, rownames(hm01)), ]
+
+first = "adj.P.Val_"
+test = "LWT_MCD-LWT_CTRL"
+paste0(first, test)
+typeof(colnames(adj[-1]))
+
+
+filter(hm01$cluster) %>%
+  sort()
+
+
+
+ordered = pval %>% filter(ProbeName %in% hm01$ProbeName)  %>% 
+  select( ProbeName,  colnames(adj[-1])) %>% 
+  full_join(hm01[,-1],.,by="ProbeName")
+
+help(order)
+ordered[order(row.names(ordered)),] 
+View(ordered)
+
+View(ordered)
+ordering = full_join(hm01[,-1], test, by ="ProbeName")
+sort(rownames(hm01), decreasing = T)
+newdat[order(row.names(newdat)),] 
+
+View(test)
+View(hm01)
+View(ordered)
+
+length(unique(pval$ProbeName))
+everything(hm01)
+
+
+View(pval)
+View(hm01)
 hmp01_All$rowDendrogram[[2]]
 hm01$ProbeName
 cut02 = cut(hmp01_All$rowDendrogram, h = hmbis[[8]] )

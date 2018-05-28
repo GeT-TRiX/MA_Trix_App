@@ -115,10 +115,8 @@ output$contout <- renderUI(
   checkboxGroupInput(
     inputId = "cont" ,
     label =  "Choose your comparison",
-    #choices = colnames(adjusted()[[1]][,-1]),
-    #selected = colnames(adjusted()[[1]][,-1])
-    choices = colnames(adjusted()[[1]][,-1][myindex()]),
-    selected = colnames(adjusted()[[1]][,-1][myindex()])
+    choices = colnames(adjusted()[[1]][,-1][myindex()])
+    #selected = colnames(adjusted()[[1]][,-1][myindex()])
   )
 )
 })
@@ -128,8 +126,7 @@ observeEvent(input$allCont, {
     session,
     "cont",
     label = "Choose your comparison",
-    #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())]),
-    #selected = colnames(adjusted()[[1]][,-1][,-c(indnull())])
+
     choices = colnames(adjusted()[[1]][,-1][myindex()]),
     selected = colnames(adjusted()[[1]][,-1][myindex()])
   )

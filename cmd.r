@@ -1,1 +1,0 @@
-entrezUniverse <- unique(unlist(mget(unique(as.character(myval$ProbeName)), MmAgilentDesign026655ENTREZID ,ifnotfound=NA)))

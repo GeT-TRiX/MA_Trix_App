@@ -3,9 +3,10 @@ tabPanel(
   p(icon("line-chart"),
     "Heatmap"),
   titlePanel("Heatmap settings"),
-  sidebarPanel(tabsetPanel(
+  sidebarPanel(tabsetPanel(id = "heatmconf",
     tabPanel(
       "Heatmap",
+      value="hmpan",
       width = 3,
       style = " font-size:100%; font-family:Arial;
       border-color: #2e6da4; background-color: #337ab7, width: 28px; ",
@@ -96,10 +97,15 @@ tabPanel(
       # ),
       
       br(),
+      
+      # selectInput("method2", "Choose your matrix distance:", selected = "FDR", 
+      #             c("adj.p.val(FDR)" = "FDR", "p.value(raw)" = "None" )),
+      
+      
       selectInput(
         "method2",
         "Choose your matrix distance",
-        choices = c("FDR", "None")
+        choices = c("adj.p.val(FDR)"= "FDR", "p.value(raw)" = "None")
       ),
       br(),
       shiny::actionButton(
@@ -214,12 +220,12 @@ tabPanel(
       br(),
       
       
-      shiny::actionButton(
-        "toggleAdvancedgo",
-        "Advanced enrichment Settings",
-        href = "#",
-        style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-      ),
+      # shiny::actionButton(
+      #   "toggleAdvancedgo",
+      #   "Advanced enrichment Settings",
+      #   href = "#",
+      #   style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+      # ),
       
       shinyjs::hidden(div(
         # Hide some widgets between the tags
@@ -229,7 +235,7 @@ tabPanel(
         )
       )),
       
-      selectInput("form", "Choose your file format",
+      selectInput("formhm", "Choose your file format",
                   choices = c("png", "eps", "emf")),
       br(),
       
@@ -259,23 +265,29 @@ tabPanel(
       #                style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
       # 
       # ),
+    
     conditionalPanel(condition = 'output.heatmbool',
-       actionButton("GO", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
 
                      fluidRow(column(
                        5,
                        selectInput("Species", "Choose Genome Database:", selected = "mm9", 
-                                   c("Mouse" = "mm9", "Human" = "hg19", "Chimpanzee" = "panTro2", 
-                                     "Rat" = "rn4", "Worm" = "ce6", "Zebrafish" = "danRer6", "Fly" = "dm3", "Yeast" = "sacCer2", "Cow" = "bosTau4", "Dog" = "canFam2",
-                                     "Anopheles gambiae" = "anoGam1", "Rhesus" = "rheMac2", "Frog" = "xenTro2", "Chicken" = "galGal3"))
-                     ),
+                                   c("Mouse" = "mm9", "Human" = "hg19", "Rat" = "rn4", "C. elegans" = "ce6",
+                                     "Zebrafish" = "danRer6",  "Pig" = "susScr3", 
+                                      "Chicken" = "galGal3", "Chimpanzee" = "panTro2" ))),
                      column(
                        5,
                        uiOutput("cutgo"))
                      ),
       uiOutput("slidergo"),
-      helpText("GO enrichment are ranked from highest to the lowest, with 1 corresponding to the highest")
+      helpText("GO enrichment are ranked from highest to the lowest, with 1 corresponding to the highest"),
+      fluidRow(column(4, selectInput("onto", "Choose your Ontology", 
+                                     selected ="BP", choices = c("BP", "MF", "CC"))
       ),
+      
+      column(4,br(),
+      actionButton("GO", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      actionButton("DAVID", "Run DAVID",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"))
+      )),
       
       #actionButton("resetAll", "Reset all"),
       
@@ -294,7 +306,8 @@ tabPanel(
     
     
     tabPanel(
-      "clustering of heatmap",
+      "Heatmap clustering",
+      value="cutpan",
       wellPanel(
         sliderInput(
           "cutheight",
@@ -329,10 +342,11 @@ tabPanel(
     )
   )),
   
-  mainPanel(tabsetPanel(
+  mainPanel(tabsetPanel(id = "mainhmtabset",
     # Tabsets are useful for dividing output into multiple independently viewable sections.
     tabPanel(
       p(icon("line-chart"), "Visualize the Heatmap"),
+      value = "hmmainpan",
       tags$style(
         type = "text/css"#,
         #".shiny-output-error { visibility: hidden; }",
@@ -348,10 +362,9 @@ tabPanel(
       div(style="display:inline-block",
           
                downloadButton(
-                 "save",
+                 "savehm",
                  "Save your plot" ,
-                 style = ## allowed to download an image
-                   "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+                 style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                ),
         downloadButton('downloadcut', "Download the data",
                        style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
@@ -359,9 +372,11 @@ tabPanel(
       ),
       
       br(),br(),br(),
-      conditionalPanel(condition = 'output.boolmark',
-      plotOutput("warningsheat")),
-      plotOutput("distPlot"),
+      conditionalPanel(condition = '!output.heatmbool',  verbatimTextOutput("warningsheat")
+                       ),
+      #plotOutput("warningsheat")
+      conditionalPanel(condition = 'output.heatmbool',
+                       plotOutput("distPlot"),
      
       ### Adding white spaces between the heatmap plot and the tracker
       
@@ -369,7 +384,7 @@ tabPanel(
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
-      br(),br(),br(),br(),br(),
+      br(),br(),br(),br(),br()),
       
       h1("Here's a tracker for your different selections:"),
       #br(),
@@ -433,15 +448,15 @@ tabPanel(
   #),
   
   tabPanel(
-    "clustering of heatmap",
+    "Heatmap clusters",
+    value = "dfhmclu",
   
-
     column(
       12,
 
-      h3("This table shows the samples with the accoording groups"),
+      h3("Table summarizing the heatmap"),
       helpText(
-        "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+        "Heatmap's cluster are upside down in order to match the genes with the heatmap from top to bottom"
       )
       ,
       dataTableOutput("clustering")
@@ -449,7 +464,7 @@ tabPanel(
   ),
   
   tabPanel(
-    "(GO) enrichment-based cluster analysis",
+    "(GO) enrichment-based cluster analysis",value="maingo",
     downloadButton("savego", "Save your enrichment" , style =
                      "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
     verbatimTextOutput("clustgo")
@@ -457,8 +472,8 @@ tabPanel(
 
   tabPanel
   (
-    p(icon("table"), "cutheatmap"),
-    bsAlert("alert"),
+    p(icon("table"), "Cut heatmap"),
+    bsAlert("alert"),value = "cuthmmainpan",
     plotlyOutput(outputId = "cutheatmap"),
     
     
@@ -470,4 +485,3 @@ tabPanel(
   )
   ))
 )
-#)
