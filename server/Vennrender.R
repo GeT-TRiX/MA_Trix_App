@@ -22,7 +22,7 @@ observe({
     need(csvf(), 'You need to import data to visualize this plot!'))
    
   output$savevenn <- downloadHandler(filename <- function() {
-    paste0(basename(tools::file_path_sans_ext("myfile")),
+    paste0(basename(tools::file_path_sans_ext(projectname())),
            '_venn_diagram.',
            input$formven,
            sep = '')

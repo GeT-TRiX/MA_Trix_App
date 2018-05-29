@@ -108,14 +108,12 @@ observe({
   if (grepl("Heatmap", heatid)) {
     if (input$reactheat == T)
       source(file.path("server", "plotreact.R"), local = TRUE)$value #
-    else{
-      print(input$reactheat)
+    else
       source(file.path("server", "plotreact2.R"), local = TRUE)$value #
-    }
+    
   }
   
   
-  print(input$reactheat)
   
   
   output$savehm <- downloadHandler(filename <- function() {
@@ -161,12 +159,6 @@ observe({
     dev.off()
     
   })
-  
-  observe({
-    req(hmobj$hm)
-    print(hmobj$hm[[2]])
-  })
-
   
   
   output$downloadcut <- downloadHandler(

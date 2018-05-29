@@ -52,6 +52,32 @@ shinyServer(server <- function(input, output, session) {
     print(colnames(adjusted()[[1]]))
   })
   
+  file_name <- reactive({
+    inFile <- input$file
+    
+    if (is.null(inFile))
+      return(NULL) else return (tools::file_path_sans_ext(inFile$name))
+  })     
+  
+   
+  
+  projectname <- reactive({
+  
+    req(file_name())
+    projed <- strsplit(file_name(), "_")
+    proj = grepl("^MA",projed[[1]])
+    index = which(proj==T)
+    return(projed[[1]][index])
+    
+  })
+  
+  # observe({
+  #   req(file_name())
+  #   print(file_name()[[1]])
+  #   
+  # })
+  # 
+  # output$myFileName <- renderText({ projectname()})
   
   
   ##################################
@@ -160,12 +186,6 @@ shinyServer(server <- function(input, output, session) {
   
   #gores <- reactiveValues()
   
-  obsC <- observe({
-    print(unique(hmobj$hm$cluster))
-    
-    
-  })
-  
   
   gores <- reactiveValues()
   
@@ -214,13 +234,13 @@ shinyServer(server <- function(input, output, session) {
       return(final)
     })
     
-    observe({
-      req(gores$down)
-      print(testad()[[1]])
-      print(testad()[[2]])
-      
-    })
     
+    # observe({
+    #   req(gores$down)
+    #   print(testad()[[1]])
+    #   print(testad()[[2]])
+    #   
+    # })
     
     
     slidergoen <- reactive({

@@ -42,7 +42,7 @@ tabPanel(
     br(),br(),br(),br(),br(),br(),br(),br(),
     hr()
     ),
-    
+    textOutput("myFileName"),
     # conditionalPanel(condition = 'output.boolmark',
     #                  br(),br(),br(),br(),br(),br(),br(),br()
     #                  ,br(),br(),br(),br(),br(),br(),br(),br(),br(),br(),

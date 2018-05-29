@@ -74,7 +74,7 @@ tabPanel(
       
       sliderInput(
         "pointsiize",
-        "Label size",
+        "Point size",
         min = 2,
         max = 6,
         value = 2,

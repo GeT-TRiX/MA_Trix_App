@@ -63,7 +63,7 @@ tabPanel(
       numericInput(
         # Create an input control for entry of numeric values
         'maxgen',
-        'Maximal number of genes by groups',
+        'Maximal number of genes by contrast(s)',
         NULL,
         min = 100,
         max = 1500
@@ -210,9 +210,16 @@ tabPanel(
                          c("show", "hide"))
           )),
           
-          uiOutput('myPanel'),
-          
-          
+          # fluidRow(column(
+          #   5,
+          # uiOutput('myPanel1')),
+          # column(
+          #   5,
+          #   uiOutput('myPanel2'))
+          # 
+          # ),
+          uiOutput('myPanel',inline=T),
+
           br()
         )
       ))), #end of the div "form"
@@ -270,7 +277,7 @@ tabPanel(
 
                      fluidRow(column(
                        5,
-                       selectInput("Species", "Choose Genome Database:", selected = "mm9", 
+                       selectInput("Species", "Choose your Genome Database:", selected = "mm9", 
                                    c("Mouse" = "mm9", "Human" = "hg19", "Rat" = "rn4", "C. elegans" = "ce6",
                                      "Zebrafish" = "danRer6",  "Pig" = "susScr3", 
                                       "Chicken" = "galGal3", "Chimpanzee" = "panTro2" ))),
@@ -280,7 +287,7 @@ tabPanel(
                      ),
       uiOutput("slidergo"),
       helpText("GO enrichment are ranked from highest to the lowest, with 1 corresponding to the highest"),
-      fluidRow(column(4, selectInput("onto", "Choose your Ontology", 
+      fluidRow(column(4, selectInput("onto", "Choose your category", 
                                      selected ="BP", choices = c("BP", "MF", "CC"))
       ),
       
@@ -429,7 +436,7 @@ tabPanel(
           id = "container",
           p('The advanced color settings choosen for the following groups :'),
           textOutput("indivcol"),
-          p("are respectively correlated to the successive colors"),
+          p("are respectively correlated to the following colors"),
           htmlOutput("myPAL")
         ),
         div(
