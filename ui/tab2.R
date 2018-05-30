@@ -293,7 +293,7 @@ tabPanel(
       
       column(4,br(),
       actionButton("GO", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-      actionButton("DAVID", "Run DAVID",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"))
+      actionButton("DAVID", "Open DAVID",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"))
       )),
       
       #actionButton("resetAll", "Reset all"),

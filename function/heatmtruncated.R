@@ -162,7 +162,6 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   rowv=as.dendrogram(hc)
   if(meanGrp){
     cat("\n -> calculating groups means... \n")
-    suffix=paste("meanGrp",suffix,sep="_")
     exprData=t(apply(exprData,1,FUN=function(x){tapply(x,groups,mean,na.rm=T)}))
     cat("    Done \n")
     groups=factor(levels(groups),levels=levels(groups))
