@@ -48,7 +48,6 @@ heatmapfinal <- function(isplot  = F) {
     my_palette = (colorRampPalette(
       c(choix_col1(), my_intermediate(), choix_col3())
     )(n = 75)),
-    #mypal,
     mycex = input$legsize ,
     cexrow = input$rowsize ,
     cexcol = input$colsize ,

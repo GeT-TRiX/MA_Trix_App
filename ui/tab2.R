@@ -384,7 +384,8 @@ tabPanel(
                  "Save your plot" ,
                  style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                )),
-               column( 3, 
+               column(1),
+               column( 1, 
           selectInput("formhm", "",
                       choices = c("png", "eps", "emf")))
           
@@ -420,6 +421,8 @@ tabPanel(
                              #container * {
                              display: inline;
                              }")),
+        
+        
         div(
           id = "container",
           p("There are"),

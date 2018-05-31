@@ -1,0 +1,74 @@
+@import url("//fonts.googleapis.com/css?family=Lobster|Cabin:400,700");
+@import url("//fonts.googleapis.com/css?family=Tangerine|Inconsolata|Droid+Sans");
+
+h1 {
+  font-family: 'Lobster', cursive;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #ad1d28;
+  position: static;
+}
+
+ul li {
+ font-family: 'Inconsolata', cursive;
+  font-weight: 500;
+  line-height: 1.5;
+  color: black;
+  position: static;
+  font-size: 18px;
+
+} 
+
+
+h2 {
+  font-family: 'Lobster', cursive;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #ad1d28;
+  position: relative;
+  left: 15px
+}
+
+#container {
+   font-size: 20px;
+}
+
+p {
+  font-family: 'Inconsolata', cursive;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.5;
+  color: black;
+  position: static;
+
+}
+
+
+
+/*
+body, 
+#selector, 
+.container, 
+.navbar-inner {
+    background-color: #cfcfcf !important;
+} 
+*/
+
+.navbar-static-top {
+  position: static;
+  margin-bottom: 0px;
+  background-color: #cfcfcf !important;
+}
+
+.navbar-nav li a:hover, .navbar-nav > .active > a {
+color: #fff !important;
+
+background-color:#2e6da4 !important;
+background-image: none !important;
+}
+
+
+.navbar-default .navbar-brand {
+    color: black;
+}
+

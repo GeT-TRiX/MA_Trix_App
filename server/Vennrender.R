@@ -8,7 +8,7 @@
   output$myVenn <- renderPlot({
     validate(
       need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(length(user_cont()) >0, 'You need to  select some groups and your p-value!'))
+      need(length(user_cont()) >0,  'You need to  select some groups and your p-value!'))
     
     req(Vennplot())
     

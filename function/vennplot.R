@@ -33,7 +33,7 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){
   }
   else{
     for(i in 1:ncol(adj)){
-      myl[[i]] = which(adj[[i]] < cutoffpval  )
+      myl[[i]] = which(adj[[i]] < cutoffpval )
     }
   }
   
@@ -50,7 +50,7 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){
 #' @return \final draw on the current device
 #' 
 
-Vennfinal <- function(myl,adj, cex=1, cutoffpval){
+Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc){
   
   if(is.null(myl))
     return(NULL)
@@ -62,7 +62,7 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval){
   test = sum(sapply(myl,length))
   mynumb = paste("total genes", test , collapse = ":")
   futile.logger::flog.threshold(futile.logger::ERROR, name = "VennDiagramLogger")
-  mytresh = paste0("DEG BH ", cutoffpval)
+  mytresh = paste0("DEG BH ", cutoffpval, " and FC " , cutofffc)
   if(length(indexnull)>0)
     g = venn.diagram(x = myl, filename = NULL, scaled = F, 
                    category.names = colnames(adj[,-c(indexnull)]),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
