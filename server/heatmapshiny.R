@@ -192,11 +192,7 @@ observe({
     return(ordered)
   })
   
-  # observe({
-  #   print(hmobj$hm)
-  #   
-  # })
-  # 
+
   
   output$clustering <-
     renderDataTable(ordered()) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)

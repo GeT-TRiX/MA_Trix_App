@@ -8,7 +8,7 @@
   output$myVenn <- renderPlot({
     validate(
       need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(length(user_cont()) >0,  'You need to  select some groups and your p-value!'))
+      need(length(user_cont()) >0,  'You need to  select your p-value and then some groups!'))
     
     req(Vennplot())
     
@@ -28,14 +28,13 @@ observe({
            sep = '')
   },
   content <- function(file) {
-    if (input$formven == "emf")
+    if (input$formven == "pdf")
       
-      emf(
+      pdf(
         file,
         width = 12,
         height = 12,
-        pointsize = 12,
-        coordDPI = 300
+        pointsize = 12
       )
     
     else if (input$formven == "png")
@@ -48,9 +47,11 @@ observe({
         res = 100
       )
     else
-      eps(file,
-          width = 12,
-          height = 12)
+      #ggsave(file, device=cairo_ps, fallback_resolution = 600)
+      # eps(file, paper="special", family="Helvetica", fonts=c("serif","Helvetica"),
+      #     width = 12,
+      #     height = 12)
+      cairo_ps(filename=file, width=11, height=11,pointsize = 12)
     
     
     plot(Vennplot())

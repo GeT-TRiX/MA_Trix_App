@@ -80,11 +80,6 @@ mypal <- reactive({
 })
 
 
-# observe({
-#   req(cols())
-#   print(cols())
-#   
-# })
 
 output$myPanel <- renderUI({
   fluidRow(

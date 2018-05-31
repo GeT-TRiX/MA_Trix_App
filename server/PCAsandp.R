@@ -2,6 +2,36 @@
 ######## PCA part                       #
 #########################################
 
+output$individuselpca <- renderUI( 
+  checkboxGroupInput(
+    inputId = "indiv" ,
+    label =  "Choose your group to visualize",
+    choices =  levels(csvf()[[2]]$Grp),
+    selected = levels(csvf()[[2]]$Grp)
+    
+  )
+)
+# Select all groups
+observeEvent(input$allIndividuspca, {
+  updateCheckboxGroupInput(
+    session,
+    "indiv",
+    label = "Choose your group to visualize",
+    choices =  levels(csvf()[[2]]$Grp),
+    selected = levels(csvf()[[2]]$Grp)
+  )
+})
+
+# Unselect all groups
+observeEvent(input$noIndividuspca, {
+  updateCheckboxGroupInput(session,
+                           "indiv",
+                           label = "Choose your group to visualize",
+                           choices =  levels(csvf()[[2]]$Grp))
+})
+
+
+
 #' PCAres is a reactive function that computed a PCA of non-normalized data
 #'
 #' @param csvf a data frame corresponding to the WorkingSet
@@ -13,8 +43,8 @@ PCAres <- reactive({
   req(csvf())
   if (is.null(csvf()[[1]]))
     return(NULL)
-  
-  mypca = res.pca(csvf()[[1]][,-1], scale =F)
+
+  mypca = res.pca(new_data(), scale =F)
   return(mypca)
 })
 
@@ -53,10 +83,14 @@ output$savescre <- downloadHandler(
   })
 
 
+
 output$eigpca <- renderPlot({
   
   validate(
-    need(csvf(), 'You need to import data to visualize this plot!'))
+    need(csvf(), 'You need to import data to visualize this plot!') %next%
+      need(length(new_group()) >0, 'You need to select groups!')%next%
+      need(length(unique(new_group()$Grp)) >1, 'You need to select more than one group!')
+      )
   
   plot(Scree_plot())
   
@@ -84,7 +118,10 @@ labeled <- reactive({
 output$PCA <- renderPlot({
 
   validate(
-    need(csvf(), 'You need to import data to visualize this plot!'))
+    need(csvf(), 'You need to import data to visualize this plot!') %next%
+      need(length(unique(new_group()$Grp)) >0, 'You need to select groups!')%next%
+      need(length(unique(new_group()$Grp)) >1, 'You need to select more than one group!')
+  )
   
   plot(PCAplot())
   

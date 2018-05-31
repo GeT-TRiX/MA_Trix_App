@@ -390,8 +390,6 @@ tabPanel(
                       choices = c("png", "eps", "emf")))
           
           
-        # downloadButton('downloadcut', "Download the data",
-        #                style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
         
       ),
       
@@ -476,7 +474,8 @@ tabPanel(
   tabPanel(
     "Heatmap clusters",
     value = "dfhmclu",
-  
+    downloadButton('downloadcut', "Download the data",
+                   style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
     column(
       12,
 

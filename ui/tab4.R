@@ -20,10 +20,18 @@ tabPanel(
         style =
           "color: #fff; background-color: #337ab7; border-color: #2e6da4"
       ),
-      
+      br(),br(),
+      fluidRow(
+        column(5,
       selectInput("regulation", #  Create a select list that can be used to choose a single or multiple items from a list of values.
-                  "Choose your regulation both, upregulated or downregulated",
-                  choices = c("both","up", "down")),
+                  "Choose your regulation",
+                  choices = c("both","up", "down"))),
+      column(5,
+      selectInput(
+        "formven",
+        "Choose your file format",
+        choices = c("png", "eps", "pdf"))
+      )),
       
       
       br(),
@@ -54,12 +62,12 @@ tabPanel(
         step = 0.1
       ),
       
-      br(),
-      selectInput(
-        "formven",
-        "Choose your file format",
-        choices = c("png", "eps", "emf")
-      )
+      br()
+      # selectInput(
+      #   "formven",
+      #   "Choose your file format",
+      #   choices = c("png", "eps", "emf")
+      # )
     )
   ),
   
@@ -75,6 +83,8 @@ tabPanel(
                          "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
         downloadButton("savevenn", "Save your plot" , style =
                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")
+       
+        
         
     ),
     

@@ -2,6 +2,7 @@
 ########  PCA function        #
 ###############################
 
+
 #' PCAplot is a function that return a factoextra object of PCA type
 #'
 #'@param brew.pal a color object from the RcolorBrewer package
@@ -38,7 +39,7 @@ PCAplot <- function() {
   p <- fviz_mca_ind(
     PCAres(),
     label = labeled(),
-    habillage = csvf()[[2]]$Grp,
+    habillage = droplevels(new_group()$Grp),
     addEllipses = input$ellipse ,
     ellipse.level = 0.8,
     repel = input$jitter,

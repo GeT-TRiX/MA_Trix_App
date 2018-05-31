@@ -57,10 +57,11 @@ colorspca <- reactive({
 
 mycolgrppca <- reactive  ({
   req(csvf())
-  
-  mygrpcol <- csvf()[[2]]$Grp %>%
+  mygrpcol <- new_group()$Grp %>%
+  #mygrpcol <- csvf()[[2]]$Grp %>%
     sort() %>%
-    unique() 
+    unique() %>%
+    droplevels()
   
   return(mygrpcol)
 })

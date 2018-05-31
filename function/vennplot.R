@@ -33,7 +33,8 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){
   }
   else{
     for(i in 1:ncol(adj)){
-      myl[[i]] = which(adj[[i]] < cutoffpval )
+      myl[[i]] = which(adj[[i]] < cutoffpval & abs(fc[[i]]) > log2(cutofffc)  )
+      
     }
   }
   

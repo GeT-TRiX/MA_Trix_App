@@ -3,6 +3,26 @@ tabPanel(
   titlePanel("PCA settings"),
   useShinyjs(),
   sidebarPanel(
+    
+    wellPanel(
+      uiOutput("individuselpca"),
+      actionButton(
+        inputId = "allIndividuspca",
+        label = "Select all",
+        icon = icon("check-square-o"),
+        style =
+          "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+      ),
+      actionButton(
+        inputId = "noIndividuspca",
+        label = "Clear selection",
+        icon = icon("square-o"),
+        style =
+          "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+      )
+    ),
+    
+    
     wellPanel(
       fluidRow(column(
         5,
@@ -36,12 +56,16 @@ tabPanel(
           #width = '100%'
         )
       )),
-      checkboxInput("label", "Add labbels names", TRUE),
-      
-      verbatimTextOutput("valuelab"),
-      
-      checkboxInput("ellipse", "Add ellipses", FALSE),
-      verbatimTextOutput("ellipse"),
+      fluidRow(column(
+        5,
+      checkboxInput("label", "Add labbels names", TRUE)),
+      column(
+        5,
+      verbatimTextOutput("valuelab")),
+      column(
+        5,
+      checkboxInput("ellipse", "Add ellipses", FALSE)),
+      verbatimTextOutput("ellipse")),
       # ),
       
       
@@ -68,7 +92,7 @@ tabPanel(
         "Label size",
         min = 2,
         max = 6,
-        value = 4,
+        value = 3,
         step = 1
       ),
       
