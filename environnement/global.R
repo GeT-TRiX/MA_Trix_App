@@ -7,8 +7,7 @@
 list.of.packages <- c("shiny","shinythemes","shinyjs","AnnotationDbi","ggplot2","shinyBS","markdown"
                       ,"BH","data.table","DT","readr","colourpicker",
                       "tools","devEMF","R.devices","FactoMineR","factoextra","gplots",
-                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly"
-		      ,"dplyr","reticulate","Hmisc")
+                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly","dplyr","reticulate","Hmisc")
 
 #"goseq","GO.db","rbenchmark","heatmaply"
 
@@ -49,3 +48,12 @@ cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatm
 palette = brewer.pal(8,"Dark2") %>%
   list(brewer.pal(10,"Paired")) %>%
   unlist()
+
+
+
+textInputRow<-function (inputId, label, value = "") 
+{
+  div(style="display:inline-block",
+      tags$label(label, `for` = inputId), 
+      tags$input(id = inputId, type = "text", value = value,class="input-small"))
+}

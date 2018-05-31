@@ -143,7 +143,7 @@ observe({
                        })
         })
         
-      }, width = 900 , height = 1200, res = 100)
+      }, width = 800 , height = 1100, res = 100)
   })
   
 })

@@ -60,6 +60,7 @@ tabPanel(
         
       ),
       br(),
+      fluidRow( column(5,
       numericInput(
         # Create an input control for entry of numeric values
         'maxgen',
@@ -67,7 +68,13 @@ tabPanel(
         NULL,
         min = 100,
         max = 1500
-      ),
+      )),column(5,
+      selectInput(
+        "method2",
+        "Choose your statistical method",
+        choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")
+      ))),
+      
       br(),
       sliderInput(
         "pval",
@@ -102,12 +109,6 @@ tabPanel(
       #             c("adj.p.val(FDR)" = "FDR", "p.value(raw)" = "None" )),
       
       
-      selectInput(
-        "method2",
-        "Choose your statistical method",
-        choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")
-      ),
-      br(),
       shiny::actionButton(
         "toggleAdvanced",
         "Advanced Computational Options",
@@ -252,8 +253,7 @@ tabPanel(
         )
       )),
       
-      selectInput("formhm", "Choose your file format",
-                  choices = c("png", "eps", "emf")),
+      
       br(),
       
       
@@ -287,7 +287,7 @@ tabPanel(
 
                      fluidRow(column(
                        5,
-                       selectInput("Species", "Choose your Genome Database:", selected = "mm9", 
+                       selectInput("Species", "Choose your Species:", selected = "mm9", 
                                    c("Mouse" = "mm9", "Human" = "hg19", "Rat" = "rn4", "C. elegans" = "ce6",
                                      "Zebrafish" = "danRer6",  "Pig" = "susScr3", 
                                       "Chicken" = "galGal3", "Chimpanzee" = "panTro2" ))),
@@ -297,12 +297,13 @@ tabPanel(
                      ),
       uiOutput("slidergo"),
       helpText("GO enrichment are ranked from highest to the lowest, with 1 corresponding to the highest"),
-      fluidRow(column(4, selectInput("onto", "Choose your category", 
+      fluidRow(column(3, selectInput("onto", "Category", 
                                      selected ="BP", choices = c("BP", "MF", "CC"))
       ),
       
-      column(4,br(),
-      actionButton("GO", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+      column(3,br(),
+      actionButton("GO", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+      column(3,br(),
       actionButton("DAVID", "Open DAVID",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"))
       )),
       
@@ -376,15 +377,20 @@ tabPanel(
       #plotOutput(outputId = "distPlot"),
       #fluidRow(
        # column(1,
-      div(style="display:inline-block",
-          
+      #div(style="display:inline-block",
+       fluidRow( column(1 , br(),
                downloadButton(
                  "savehm",
                  "Save your plot" ,
                  style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-               ),
-        downloadButton('downloadcut', "Download the data",
-                       style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
+               )),
+               column( 3, 
+          selectInput("formhm", "",
+                      choices = c("png", "eps", "emf")))
+          
+          
+        # downloadButton('downloadcut', "Download the data",
+        #                style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
         
       ),
       

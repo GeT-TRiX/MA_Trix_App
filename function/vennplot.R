@@ -12,7 +12,7 @@ require(VennDiagram)
 #' @return \myl a list
 #' 
 
-Vennlist <- function(pval,adj,fc, regulation, cutoffpval){
+Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){
   
   
   if(is.null(pval)) 
@@ -23,17 +23,17 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval){
   myl=list()
   if(reguser && !reguserboth){
     for(i in 1:ncol(adj)){
-        myl[[i]] = which(adj[[i]] < cutoffpval & fc[[i]] > 0)
+        myl[[i]] = which(adj[[i]] < cutoffpval & fc[[i]] > log2(cutofffc))
     }
   }
   else if(!reguser && !reguserboth){
     for(i in 1:ncol(adj)){
-      myl[[i]] = which(adj[[i]] < cutoffpval & fc[[i]] < 0)
+      myl[[i]] = which(adj[[i]] < cutoffpval & fc[[i]] < -log2(cutofffc))
     }
   }
   else{
     for(i in 1:ncol(adj)){
-      myl[[i]] = which(adj[[i]] < cutoffpval )
+      myl[[i]] = which(adj[[i]] < cutoffpval  )
     }
   }
   
