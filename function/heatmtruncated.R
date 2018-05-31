@@ -51,7 +51,7 @@ disteucl<-function(x) {dist(x,method="euclidian")}
 
 hclustfun=function(d) {hclust(d,method="ward.D2")} 
 
-require("Biobase")  
+#require("Biobase")  
 require("marray") 
 
 
@@ -123,8 +123,8 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   if(!Rowdistfun %in% c("correlation","euclidian")) stop("Rowdistfun must be one of 'cor' or 'euclidian'!")
   if(!Coldistfun %in% c("correlation","euclidian")) stop("Coldistfun must be one of 'cor' or 'euclidian'!")
   
-  library(gplots)
-  library(marray)
+  #library(gplots)
+  #library(marray)
   
   
   
@@ -351,6 +351,7 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   ##-----------------------##
   ## plot Heatmap
   ##-----------------------##
+  
   cat("\n -> Plotting HeatMap... \n")
   
   par("mar")

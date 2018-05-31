@@ -31,7 +31,7 @@ tabPanel(
     
     selectInput("method", #  Create a select list that can be used to choose a single or multiple items from a list of values.
                 "Choose your statistical method",
-                choices = c("adj.p.val(FDR)" = "FDR", "p.value(raw)" = "None"))
+                choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None"))
 
   ),
   
@@ -56,7 +56,7 @@ tabPanel(
       12,
       
       h3(
-        "This table summarize the significant genes depending on the p-value treshold choosen with the slider bar"
+        "This table summarize the number of significant genes depending on the p-value treshold choosen with the slider bar"
       ),
       helpText("Choose your p-value treshold to modify the following data table")
       ,

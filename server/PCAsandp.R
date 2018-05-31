@@ -36,7 +36,7 @@ Scree_plot <- reactive({
 output$savescre <- downloadHandler(
   
   filename <- function() {
-    paste0(basename(file_path_sans_ext("myfile")), '_screeplot.png', sep='')    
+    paste0(basename(file_path_sans_ext(projectname())), '_screeplot.png', sep='')    
   },
   content <- function(file) {
     
@@ -94,7 +94,7 @@ output$PCA <- renderPlot({
 output$savepca <- downloadHandler(
   
   filename <- function() {
-    paste0(basename(file_path_sans_ext("myfile")), '_pca.png', sep='')    
+    paste0(basename(file_path_sans_ext(projectname())), '_pca.png', sep='')    
   },
   content <- function(file) {
     

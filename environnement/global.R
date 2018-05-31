@@ -4,13 +4,13 @@
 
 
 
-list.of.packages <- c("shiny","shinythemes","shinyjs","ggplot2","shinyBS","markdown"
-                      ,"BH","data.table","DT","readr","rbenchmark","colourpicker",
-                      "tools","devEMF","R.devices","FactoMineR","factoextra","heatmaply",
-                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly",
-                      "goseq", "GO.db","dplyr","reticulate","Hmisc")
+list.of.packages <- c("shiny","shinythemes","shinyjs","AnnotationDbi","ggplot2","shinyBS","markdown"
+                      ,"BH","data.table","DT","readr","colourpicker",
+                      "tools","devEMF","R.devices","FactoMineR","factoextra","gplots",
+                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly"
+		      ,"dplyr","reticulate","Hmisc")
 
-
+#"goseq","GO.db","rbenchmark","heatmaply"
 
 #Warning: Error in py_run_file_impl: ImportError: No module named requests
 # 

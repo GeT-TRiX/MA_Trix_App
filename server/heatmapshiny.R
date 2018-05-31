@@ -117,7 +117,7 @@ observe({
   
   
   output$savehm <- downloadHandler(filename <- function() {
-    paste0(basename(file_path_sans_ext("myfile")),
+    paste0(basename(file_path_sans_ext(projectname())),
            '_heatmap.',
            input$formhm,
            sep = '')
@@ -163,8 +163,8 @@ observe({
   
   output$downloadcut <- downloadHandler(
     filename = function() {
-      paste(basename(file_path_sans_ext(input$filename)),
-            '_clustered',
+      paste(basename(file_path_sans_ext(projectname())),
+            '_clustered_hm',
             '.csv',
             sep = '')
     },

@@ -63,7 +63,7 @@ tabPanel(
       numericInput(
         # Create an input control for entry of numeric values
         'maxgen',
-        'Maximal number of genes by contrast(s)',
+        'Maximal number of genes by comparison(s)',
         NULL,
         min = 100,
         max = 1500
@@ -104,8 +104,8 @@ tabPanel(
       
       selectInput(
         "method2",
-        "Choose your matrix distance",
-        choices = c("adj.p.val(FDR)"= "FDR", "p.value(raw)" = "None")
+        "Choose your statistical method",
+        choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")
       ),
       br(),
       shiny::actionButton(
@@ -119,20 +119,30 @@ tabPanel(
         # Hide some widgets between the tags
         id = "advanced",
         wellPanel(
+          fluidRow(
+            column(5,
           numericInput('clusters', 'Cluster count', 3,
-                       min = 1, max = 15),
-          br(),
+                       min = 1, max = 15)),
+          #br(),
+          column(5,
           selectInput(
             "dist",
             "Choose your matrix distance",
-            choices = c("correlation", "euclidian")
-          ),
+            choices = c("correlation", "euclidian"))
+          )),
+          fluidRow(
+            column(5,
           checkboxInput("meangrp",
                         "Compute the mean for the different groups",
-                        FALSE),
-          verbatimTextOutput("value")
+                        FALSE)),
+          #verbatimTextOutput("value"),
+          column(5,
+          checkboxInput("scalcol",
+                        "Apply scaling to columns",
+                        FALSE))
+          
         )
-      )),
+      ))),
       br(),
       
       
@@ -409,7 +419,7 @@ tabPanel(
           p("There are"),
           htmlOutput("myNUM"),
           p("significant genes"),
-          p("for the following contrasts"),
+          p("for the following comparison(s)"),
           htmlOutput("test")
         ),
         #br(),

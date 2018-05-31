@@ -12,22 +12,28 @@ library(venn)
 #' @return \myl a list
 #' 
 
-Vennlist <- function(pval,adj,fc, regulation){
+Vennlist <- function(pval,adj,fc, regulation, cutoffpval){
   
   
   if(is.null(pval)) 
     return(NULL)
   
   reguser = ifelse(regulation == "up", T, F)
+  reguserboth = ifelse(regulation == "both", T, F)
   myl=list()
-  if(reguser){
+  if(reguser && !reguserboth){
     for(i in 1:ncol(adj)){
-        myl[[i]] = which(adj[[i]] < 0.05 & fc[[i]] > 0)
+        myl[[i]] = which(adj[[i]] < cutoffpval & fc[[i]] > 0)
+    }
+  }
+  else if(!reguser && !reguserboth){
+    for(i in 1:ncol(adj)){
+      myl[[i]] = which(adj[[i]] < cutoffpval & fc[[i]] < 0)
     }
   }
   else{
     for(i in 1:ncol(adj)){
-      myl[[i]] = which(adj[[i]] < 0.05 & fc[[i]] < 0)
+      myl[[i]] = which(adj[[i]] < cutoffpval )
     }
   }
   
@@ -44,7 +50,7 @@ Vennlist <- function(pval,adj,fc, regulation){
 #' @return \final draw on the current device
 #' 
 
-Vennfinal <- function(myl,adj, cex=1){
+Vennfinal <- function(myl,adj, cex=1, cutoffpval){
   
   if(is.null(myl))
     return(NULL)
@@ -56,6 +62,7 @@ Vennfinal <- function(myl,adj, cex=1){
   test = sum(sapply(myl,length))
   mynumb = paste("total genes", test , collapse = ":")
   futile.logger::flog.threshold(futile.logger::ERROR, name = "VennDiagramLogger")
+  mytresh = paste0("DEG BH ", cutoffpval)
   if(length(indexnull)>0)
     g = venn.diagram(x = myl, filename = NULL, scaled = F, 
                    category.names = colnames(adj[,-c(indexnull)]),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
@@ -65,7 +72,7 @@ Vennfinal <- function(myl,adj, cex=1){
                      category.names = colnames(adj),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
                      fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
   
-  final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom="DEG BH 0.05")
+  final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom= mytresh)
   
   return(final)
 }

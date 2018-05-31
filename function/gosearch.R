@@ -1,5 +1,5 @@
-require(goseq)
-require(GO.db)
+#require(goseq)
+#require(GO.db)
 library(dplyr)
 
 
@@ -15,10 +15,12 @@ library(dplyr)
 
 gosearch <- function(hm01, species, ids, clusterlist) {
   #clusterlist = NULL
-  
+  library(goseq)
+  library(GO.db)
+	
   for (i in 1:NROW(unique(hm01$cluster))) {
     genlist <- hm01[!duplicated(hm01$GeneName),]
-    genlist <-genlist %>% select(cluster, GeneName)   %>% filter(cluster == i)
+    genlist <-genlist %>% dplyr::select(cluster, GeneName)   %>% filter(cluster == i)
     final = as.double(matrix(1, length(genlist$cluster)))
     names(final) = (genlist$GeneName)
     

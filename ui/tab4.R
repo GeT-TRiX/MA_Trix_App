@@ -22,8 +22,28 @@ tabPanel(
       ),
       
       selectInput("regulation", #  Create a select list that can be used to choose a single or multiple items from a list of values.
-                  "Choose your regulation upregulated or downregulated",
-                  choices = c("up", "down")),
+                  "Choose your regulation both, upregulated or downregulated",
+                  choices = c("both","up", "down")),
+      
+      
+      br(),
+      sliderInput(
+        "pvalvenn",
+        "P-value treshold",
+        min = 0.01,
+        max = 0.05,
+        value = 0.05,
+        step = 0.01
+      ),
+      br(),
+      sliderInput(
+        "fcvenn",
+        "FC treshold",
+        min = 1,
+        max = 10,
+        value = 1,
+        step = 1
+      ),
       
       sliderInput(
         "vennsize",
@@ -40,8 +60,6 @@ tabPanel(
         "Choose your file format",
         choices = c("png", "eps", "emf")
       )
-     
-      
     )
   ),
   

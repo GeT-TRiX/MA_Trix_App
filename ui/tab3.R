@@ -10,11 +10,11 @@ tabPanel(
           "dim1",
           label = h6(gettext("x axis")),
           choices = list(
-            "1" = 1,
-            "2" = 2,
-            "3" = 3,
-            "4" = 4,
-            "5" = 5
+            "Dim 1" = 1,
+            "Dim 2" = 2,
+            "Dim 3" = 3,
+            "Dim 4" = 4,
+            "Dim 5" = 5
           ),
           selected = firstdim
           #width = '80%'
@@ -26,11 +26,11 @@ tabPanel(
           "dim2",
           label = h6(gettext("y axis")),
           choices = list(
-            "1" = 1,
-            "2" = 2,
-            "3" = 3,
-            "4" = 4,
-            "5" = 5
+            "Dim 1" = 1,
+            "Dim 2" = 2,
+            "Dim 3" = 3,
+            "Dim 4" = 4,
+            "Dim 5" = 5
           ),
           selected = secdim
           #width = '100%'
@@ -54,7 +54,7 @@ tabPanel(
       #   style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
       # ),
       
-      br(),
+      #br(),
       
       # shinyjs::hidden(
       #   div(

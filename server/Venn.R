@@ -30,7 +30,7 @@ vennlist <- reactive({
   
   if (is.null(csvf()))
     return(NULL)
-  mycont = Vennlist(pval = csvf()[[3]], user_cont(),user_fc(), input$regulation)
+  mycont = Vennlist(pval = csvf()[[3]], user_cont(),user_fc(), input$regulation, input$pvalvenn)
   return(mycont)
 })
 
@@ -58,7 +58,7 @@ Vennplot <- reactive({
   Vennploted <- reactive({
     
   if(length(user_cont()) <= 5){
-  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize)
+  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn)
   
 
    observe({value <<-T}) # listen inside the reactive expression 
@@ -94,6 +94,7 @@ Vennplot <- reactive({
       tags$img(src = "https://i.imgur.com/lB5wmMp.png")
     })
     url <- a("venntools", href = "http://jvenn.toulouse.inra.fr/app/example.html", target = "_blank")
+    url2 <- a("venntools2", href = "http://bioinfogp.cnb.csic.es/tools/venny/", target = "_blank")
     output$sorry <- renderUI({tagList("You're trying to plot more than 5 sets, download the csv file and use the following tool", url)})
     
     }
@@ -192,7 +193,10 @@ user_fc <- reactive({
 
 output$downloadvenn <- downloadHandler(
   filename = function() {
-    "myvenn.csv"
+    paste(basename(file_path_sans_ext(projectname())),
+          '_clustered_venn',
+          '.csv',
+          sep = '')
   },
   content = function(fname) {
     write.table(
@@ -218,7 +222,7 @@ myindex <- reactive ({
   
   myl = c()
   for(i in 1:ncol(adjusted()[[1]])){
-    myl[[i]] = which(adjusted()[[1]][[i]] < 0.05)
+    myl[[i]] = which(adjusted()[[1]][[i]] < input$pvalvenn)
   }
   indexnull = which( sapply(myl ,length) == 0)
   final = colnames(adjusted()[[1]][,-c(indexnull)])
