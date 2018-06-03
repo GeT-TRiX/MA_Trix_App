@@ -31,7 +31,9 @@ vennlist <- reactive({
   if (is.null(csvf()))
     return(NULL)
   mycont = Vennlist(pval = csvf()[[3]], user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
-  return(mycont)
+  probven = rowtoprob(mycont,csvf()[[3]], user_cont() )
+  
+  return(probven)
 })
 
 #' Vennplot is a reactive function that return a plot object or a link if the user want to display more tha  5sets
@@ -57,8 +59,11 @@ Vennplot <- reactive({
   
   Vennploted <- reactive({
     
+  
+    
   if(length(user_cont()) <= 5){
-  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
+  #g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
+    g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
   
 
    observe({value <<-T}) # listen inside the reactive expression 
@@ -200,7 +205,7 @@ output$downloadvenn <- downloadHandler(
   },
   content = function(fname) {
     write.table(
-      try(myventocsv(vennlist(), user_cont())),
+      try(myventocsv(vennlist())),
       fname,
       na = "",
       row.names = F,

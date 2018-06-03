@@ -67,18 +67,20 @@ shinyServer(server <- function(input, output, session) {
     projed <- strsplit(file_name(), "_")
     proj = grepl("^MA",projed[[1]])
     index = which(proj==T)
-    return(projed[[1]][index])
+    myproj = list(projed[[1]][index],proj)
+    
+    return(myproj)
     
   })
   
-  # observe({
-  #   req(file_name())
-  #   print(file_name()[[1]])
-  #   
-  # })
-  # 
-  # output$myFileName <- renderText({ projectname()})
   
+  observe({
+    req(projectname())
+    print(projectname)
+    
+  })
+  
+
   
   ##################################
   ######## Hide and modify buttons #
@@ -169,6 +171,43 @@ shinyServer(server <- function(input, output, session) {
   
   source(file.path("server", "Venn.R"), local = TRUE)$value #
   source(file.path("server", "Vennrender.R"), local = TRUE)$value #
+  
+  
+  vennchoice <- reactive({if (is.null (input$intscol)) return(NULL) else return(input$intscol)})
+  
+  output$myselvenn <- renderUI({
+    req(adjusted())
+    intscol <- names(adjusted()[[1]][,-1])
+    selectInput('intscol', 'Specify your interaction(s):', choices = intscol, multiple = TRUE)
+  }) 
+  
+  venninter <- reactive({
+    req(vennlist(), user_cont())
+    myelist <- setvglobalvenn(vennlist(),user_cont())
+    return(myelist)
+  })
+  
+  
+  vennfinal <- reactive({
+    req(vennchoice())
+    reordchoice <- vennchoice() %>%
+      factor(levels = names(adjusted()[[1]][,-1] )) %>%
+      sort() %>%
+      paste(collapse="")
+    res = venninter()[[reordchoice]] %>%
+      as.data.frame()
+    return(res)
+  })
+  
+
+  observe({
+    req(vennfinal())
+    #print(vennfinal())
+  })
+  
+  
+  output$vennresinter <- renderDataTable(vennfinal()) 
+  
   
   #########################################
   ######## cutheatmap part                #
@@ -333,11 +372,7 @@ shinyServer(server <- function(input, output, session) {
     observeEvent(input$DAVID, {
       davidurl <- eventReactive(input$DAVID, {
         req(clustergrep())
-        #use_python("/usr/bin/python")
-        # os <- import("os")
-        # requests <- import("requests")
-        # os$listdir(".")
-        # request$listdir(".")
+
         source_python('./python/add.py')
         
         enrichmentdav(clustergrep())
@@ -428,6 +463,8 @@ shinyServer(server <- function(input, output, session) {
     }
     
   })
+  
+  
   
   
   #########################################

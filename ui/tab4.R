@@ -62,16 +62,16 @@ tabPanel(
         step = 0.1
       ),
       
-      br()
-      # selectInput(
-      #   "formven",
-      #   "Choose your file format",
-      #   choices = c("png", "eps", "emf")
-      # )
+      br(),
+      uiOutput("myselvenn"),
+      helpText(
+        "Choose your interaction(s)"
+      )
     )
   ),
   
-  mainPanel(
+  mainPanel(tabsetPanel(id = "mainvenntabset",
+    tabPanel("Visualize the Venn diagram",
     bsAlert("alert"),
     
     div(style="display:inline-block",
@@ -95,6 +95,13 @@ tabPanel(
     
     plotOutput(outputId = "myVenn")
     
-  )
+  ),
+  tabPanel("Visualize the interaction table",
+           h3("Table showing the gene names for the interaction(s) selected"),
+
+           dataTableOutput("vennresinter")
+  
+  
+  )))
   
 )

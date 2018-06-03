@@ -1,5 +1,40 @@
 require(VennDiagram)
-#library(venn)
+
+#Intersect, Union and Setdiff (https://stackoverflow.com/questions/34130233/give-name-to-list-variable)
+
+Intersect <- function (x) {  
+  # Multiple set version of intersect
+  # x is a list
+  
+  if (length(x) == 1) {
+    unlist(x)
+  } else if (length(x) == 2) {
+    intersect(x[[1]], x[[2]])
+  } else if (length(x) > 2){
+    intersect(x[[1]], Intersect(x[-1]))
+  }
+}
+
+Union <- function (x) {  
+  # Multiple set version of union
+  # x is a list
+  if (length(x) == 1) {
+    unlist(x)
+  } else if (length(x) == 2) {
+    union(x[[1]], x[[2]])
+  } else if (length(x) > 2) {
+    union(x[[1]], Union(x[-1]))
+  }
+}
+
+Setdiff <- function (x, y) {
+  # Remove the union of the y's from the common x's. 
+  # x and y are lists of characters.
+  xx <- Intersect(x)
+  yy <- Union(y)
+  setdiff(xx, yy)
+}
+
 
 
 #' Vennlist is a function which aim is to return a list of signficant genes for a treshold pvalue of 5%
@@ -12,34 +47,25 @@ require(VennDiagram)
 #' @return \myl a list
 #' 
 
-Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){
-  
+Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de foreach parallel
   
   if(is.null(pval)) 
     return(NULL)
   
   reguser = ifelse(regulation == "up", T, F)
   reguserboth = ifelse(regulation == "both", T, F)
-  myl=list()
-  if(reguser && !reguserboth){
-    for(i in 1:ncol(adj)){
-        myl[[i]] = which(adj[[i]] < cutoffpval & fc[[i]] > log2(cutofffc))
-    }
-  }
-  else if(!reguser && !reguserboth){
-    for(i in 1:ncol(adj)){
-      myl[[i]] = which(adj[[i]] < cutoffpval & fc[[i]] < -log2(cutofffc))
-    }
-  }
-  else{
-    for(i in 1:ncol(adj)){
-      myl[[i]] = which(adj[[i]] < cutoffpval & abs(fc[[i]]) > log2(cutofffc)  )
-      
-    }
-  }
-  
-  return(myl)
+  lapply(1:ncol(adj), FUN = function(x){
+    if(reguser && !reguserboth)
+      return(as.character(which(adj[[x]] < cutoffpval & fc[[x]] > log2(cutofffc))))
+    else if(!reguser && !reguserboth)
+      return( as.character(which(adj[[x]] < cutoffpval & fc[[x]] < -log2(cutofffc))))
+    else
+      return(as.character(which(adj[[x]] < cutoffpval & abs(fc[[x]]) > log2(cutofffc))))
+  })
+
 }
+
+
 
 
 #' Vennfinal is a function which aim is to return an object containing a venn diagram 
@@ -99,87 +125,53 @@ Vennsev <- function(myl, adj){
 
 myventocsv <- function(myven,adj){
   
+
   max.length <- max(sapply(myven, length))
   myven %>%
     lapply(function(v){ c(v, rep("", max.length-length(v)))}) %>%
-    setNames(colnames(adj)) %>%
+    setNames(names(myven)) %>%
     as.data.frame()
 
 }
 
+setvglobalvenn <- function(vennlist,adj){
+  
+  names(vennlist) = colnames(adj)
+
+  
+  global <- unlist(lapply(1:length(vennlist), 
+                  function(x) combn(names(vennlist), x, simplify = FALSE)),
+           recursive = FALSE)
+  
+  names(global) <- sapply(global, function(p) paste0(p, collapse = ""))
+
+  elements <- 
+    lapply(global, function(i) Setdiff(vennlist[i], vennlist[setdiff(names(vennlist), i)]))
+  
+  
+  elements <- elements[sapply(elements, length) > 0]
+  
+  return(elements)
+}
 
 
-
-# pval <- read.csv2("data/All_topTableAll.csv")
-# adj = pval[,grep("^adj.P.Val", names(pval), value=TRUE)]
-# fc = pval[,grep("^logFC", names(pval), value=TRUE)]
-# View(fc)
-# View(pval)
-# library(dplyr)
-# myven = Vennlist(pval, adj[1:5], fc[1:5], "test")
-# print(myven)
-
-# test = myventocsv(myven,adj[1:5])
-# View(test)
-
-# View(myven)
-# df <- data.frame(matrix(unlist(myven), ncol = 5))
-# colnames(df) = colnames(adj)
-# View(df)
-# write.csv(myven, file = "MyData.csv")
-# 
-
-
-# max.length <- max(sapply(myven, length))
-# l <- lapply(myven, function(v) { c(v, rep("", max.length-length(v)))})
-# test = do.call(cbind, l)
-# colnames(test) = colnames(adj)
-# write.table(test, "cnbd.csv",
-#             na = "",
-#             row.names = F,
-#             col.names = T,
-#             append = TRUE,
-#             sep = ";")
+rowtoprob <- function(myven,pval,adj) {
+  
+  pval$rownames = rownames(pval)
+  names(myven) = colnames(adj)
+  final = lapply(
+    names(myven),
+    FUN = function(x) {
+      test = pval[pval$rownames %in% myven[[x]],]
+      
+      what <- test %>%
+        select(ProbeName) %>%
+        unlist() %>%
+        as.character()
+      
+      return(what)
+    }
+  )
+}
 
 
-
-# 
-#myventocsv(myven,adj)
-
-# myven
-# adj[1:5]
-# 
-# 
-# Vennfinal(myven,adj[1:5])
-#g = venn(myven, ilabels= F, zcolor ="style", sname = colnames(adj), cexil = 0.5, size = 5, cexsn = 0.5)
-
-# final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom="DEG BH 0.05")
-# help(venn)
-# 
-# evenn(data("Data_Lists"), annot = T, display = Yndisplay, ud  =T, Profils = T)
-# print(myven[[1]])
-# 
-# final= list(A=myven[[1]],B=myven[[2]],C=myven[[4]],D= myven[[5]])
-# plot(euler(final))
-# 
-# help(euler)
-# combo <- c(A = 2, B = 2, C = 2, "A&B" = 1, "A&C" = 1, "B&C" = 1)
-# fit1 <- euler(combo)
-# final = euler(list(A = c("a", "ab", "ac", "abc"),
-#            B = c("b", "ab", "bc", "abc"),
-#            C = c("c", "ac", "bc", "abc")))
-# 
-# 
-# w <- compute.Venn(Venn(final))
-# gp <- VennThemes(w)
-# plot(w, types= squares)
-# 
-# test = Vennerable::Venn(myven)
-# 
-# plot(test)
-# 
-# 
-# plot(final)
-# 
-# Vennfinal(myven,adj)
-# data("Data_Lists")
