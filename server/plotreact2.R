@@ -119,8 +119,6 @@ observe({
     else
       output$distPlot <- renderPlot({
         
-        
-        
         isolate({
           hmbis()
           hmsize$cut <- hmbis()[[8]]

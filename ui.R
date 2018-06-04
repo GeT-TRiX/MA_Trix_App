@@ -8,14 +8,28 @@
 ##################################
 ##################################
 
-source("function/formating.R")
-source("environnement/global.R")
-source("function/PCA.R")
+# source("function/formating.R")
+# source("environnement/global.R")
+# source("function/PCA.R")
+# source("css/owncss.R")
+
 
 options(shiny.maxRequestSize = 70 * 1024 ^ 2) # defined the maximum size in Mb that R can load for one file
 shinyUI(
-  ui <-
-    bootstrapPage(
+  ui <-bootstrapPage(
+    
+    inlineCSS(appCSS),
+    div(id = "loading-content-bar",
+        p()),
+    div(
+      id = "loading-content",
+      br(),
+      br(),
+      br(),
+      h2("Please wait MATRiX app is loading...")),
+    
+    
+    
       # Create a Shiny UI page that loads the CSS and JavaScript for Bootstrap
       navbarPage(
         # divided between the differnt tabPanel
@@ -23,6 +37,8 @@ shinyUI(
         # MA for microarray and Trix for the name of the team
         id = "matrixapp",
         theme = shinytheme("united"),
+        
+        
         
         source(file.path("ui", "tab1.R"), local = TRUE)$value,
         # loading data

@@ -38,20 +38,10 @@ tabPanel(
   mainPanel( #Render right screen
     bsAlert("alert"),#Alert message depending of the user's input
     conditionalPanel(condition = 'output.boolmark', #Hide or Show event depending on the loading data success or failure
-    includeMarkdown("markdown/help.md"),
-    br(),br(),br(),br(),br(),br(),br(),br(),
-    hr()
-    ),
+    includeMarkdown("markdown/help.md")),
+    conditionalPanel(condition = '!output.boolmark',
     textOutput("myFileName"),
-    # conditionalPanel(condition = 'output.boolmark',
-    #                  br(),br(),br(),br(),br(),br(),br(),br()
-    #                  ,br(),br(),br(),br(),br(),br(),br(),br(),br(),br(),
-    #                  br(),br(),br(),br(),br(),br(),br(),br()
-    #                  ,br(),br(),br(),br(),br(),br(),br(),br(),br(),br(),
-    #                  br(),br(),br(),br(),br(),br(),br(),br()
-    #                  ,br(),br(),br(),br(),br(),br(),br(),br(),br(),br()),
-    
-    #conditionalPanel(condition = '!output.boolmark',bsAlert("alert"),
+
     column( #Create a column for use within a fluidRow or fixedRow
       12,
       
@@ -99,7 +89,7 @@ tabPanel(
       )
       ,
       dataTableOutput("new_group")
-    )
+    ))
     )
     
 )

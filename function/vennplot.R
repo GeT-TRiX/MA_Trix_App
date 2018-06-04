@@ -109,8 +109,8 @@ Vennsev <- function(myl, adj){
   
   myl <- myl[sapply(myl, length) > 0]
   final = length(myl)-1
-  test = sum(sapply(myl,length))
-  mynumb = paste("total genes", test , collapse = ":")
+  tot = sum(sapply(myl,length))
+  mynumb = paste("total genes", tot , collapse = ":")
   g = venn(myven, ilabels= F, zcolor ="style", sname = colnames(adj), cexil = 0.5, size = 5, cexsn = 0.5)
   return(g)
 }

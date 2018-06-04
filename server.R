@@ -2,15 +2,15 @@
 ######## Loading functions    #
 ###############################
 
-source("function/heatmtruncated.R")
-source("function/formating.R")
-source("function/PCA.R")
-source("function/decideTestTrix.R")
-source("function/vennplot.R")
-source("function/create_forked_task.R")
-source("function/cutheat.R")
-source("function/gosearch.R")
-source("environnement/global.R")
+# source("function/heatmtruncated.R")
+# source("function/formating.R")
+# source("function/PCA.R")
+# source("function/decideTestTrix.R")
+# source("function/vennplot.R")
+# source("function/create_forked_task.R")
+# source("function/cutheat.R")
+# source("function/gosearch.R")
+# source("environnement/global.R")
 
 ###############################
 ######## creating graph log   #
@@ -22,6 +22,11 @@ source("environnement/global.R")
 
 
 shinyServer(server <- function(input, output, session) {
+  
+  hide(id = "loading-content", anim = TRUE, animType = "fade",time=1.5)
+  hide(id = "loading-content-bar", anim = TRUE, animType = "fade",time=1.5)
+  
+  
   ###############################
   ######## Load the csv files   #
   ###############################

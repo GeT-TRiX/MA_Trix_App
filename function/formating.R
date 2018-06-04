@@ -193,12 +193,11 @@ myfinalfc = function(alltop, pval, testrix) {
 
   
   for (fc in myfc) {
-
     fcpval[j] = cbind.data.frame(colSums(adj[,-1] < pval &
-                                           2 ** abs(logfc[,-1]) > fc))
+                                          2 ** abs(logfc[,-1]) > fc))
     j = j + 1
   }
-  
+
   names(logfc) =  gsub(
     pattern = "^logFC_",
     replacement = "",
@@ -243,8 +242,6 @@ chartofa = function(datach){
 #'
 
 
-#heatmtoclust = function( hmp01_All, ind, signws, pval, myval= 5){
-
 heatmtoclust = function( hmp01_All, exprData, pval, height= 5){
   
   cut02 = cut(hmp01_All$rowDendrogram, h = height )
@@ -253,7 +250,7 @@ heatmtoclust = function( hmp01_All, exprData, pval, height= 5){
   HCgroupsLab = lapply(cut02$lower, function(x)
     labels(x))
   
-  #exprData=signws[ind,]
+
   final = exprData[rev(hmp01_All$rowInd), hmp01_All$colInd]
   
   my_last= as.integer(lapply(seq(length(HCgroupsLab)), function(x)
@@ -282,5 +279,16 @@ heatmtoclust = function( hmp01_All, exprData, pval, height= 5){
 }
 
 
+
+# test <- sessionInfo()
+# final <- cbind(lapply(names(test$otherPkgs),
+#                       function(x)
+#                         return(
+#                           paste(test$otherPkgs[[x]]$Package, test$otherPkgs[[x]]$Version)
+#                         )),
+#                lapply(names(test$otherPkgs), function(x)
+#                  return(paste(test$otherPkgs[[x]]$Title)))) %>%
+#   as.data.frame()
+# colnames(final) = c('version', "definition")
 
 
