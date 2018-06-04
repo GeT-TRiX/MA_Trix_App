@@ -42,6 +42,7 @@ rownamtoX <- reactive({
 #'
 
 cutfinal <- reactive({
+    pdf(NULL)
     cutHeatmaps(
       hmobj$obj,
       height = input$cutheight ,
