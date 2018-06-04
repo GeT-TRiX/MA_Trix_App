@@ -105,6 +105,7 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
   ## decoupage de la heatmap
   ###=======================
   # decouper le dendro en 2 parties (upper et lower) a la hauteur desiree
+  print(height)
   cut02 = cut(hmp$rowDendrogram, h = height)
   #upper est une version tronquee de l'arbre de depart
   #lower est une liste contenant les X sous-dendrogrammes generes par la coupure
@@ -199,7 +200,7 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
             shape = 16,
             size = 3
           ) +
-          geom_boxplot(width = 0.1, fill = NA) +
+          #geom_boxplot(width = 0.1, fill = NA) +
           
           labs(title = paste("Cluster", i),
                subtitle = paste(caption = footnote)) +
@@ -219,7 +220,7 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
         
         if (nProbes > 2)
           myplots[[i]] <<-
-          (ggbplot + geom_violin(aes(fill = Group)))
+          (ggbplot + geom_violin(aes(fill = Group),alpha = 0.3,width=0.3)+geom_boxplot(width = 0.1, aes(fill = Group),alpha = 0.3))
         else
           myplots[[i]] <<- (ggbplot)
         

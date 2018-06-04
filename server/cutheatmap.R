@@ -45,7 +45,7 @@ cutfinal <- reactive({
     pdf(NULL)
     cutHeatmaps(
       hmobj$obj,
-      height = input$cutheight ,
+      height =  hmsize$cut,
       exprData = data.matrix(new_data()),
       groups = droplevels(new_group()$Grp),
       DEGres =  rownamtoX()[, -1],
@@ -57,9 +57,8 @@ cutfinal <- reactive({
 
 # render to the ui the number of clusted for a define height in function of the current heatmap object
 output$cutcluster <- renderUI({ 
-
-   cut02 = cut( hmobj$obj$rowDendrogram, h = input$cutheight)
-  #cut02 = cut(p()$rowDendrogram, h = input$cutheight)
+  
+  cut02 = cut( hmobj$obj$rowDendrogram, h = hmsize$cut)
   selectInput("cutcluster",
               "Choose your cluster",
               choices =  seq(1, length(cut02$lower), by = 1))
@@ -70,10 +69,10 @@ output$event <- renderPrint({ # interactive cursor that shows the selected point
   d <- event_data("plotly_hover")
   if (is.null(d))
     "Hover on a point!"
-  else
-    cat("Average expression Z-score over replicates; ",
-        length(d$pointNumber),
-        " probes")
+  else {
+    
+    round(sort(d),digits=2)
+  }
 })
 
 observe({ 

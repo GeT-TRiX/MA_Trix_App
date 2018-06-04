@@ -123,6 +123,7 @@ observe({
         
         isolate({
           hmbis()
+          hmsize$cut <- hmbis()[[8]]
           observe({
             boolhm <<- T
           })

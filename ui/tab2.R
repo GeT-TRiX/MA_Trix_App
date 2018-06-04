@@ -327,14 +327,15 @@ tabPanel(
       "Heatmap clustering",
       value="cutpan",
       wellPanel(
-        sliderInput(
-          "cutheight",
-          "Choose where you cut the heatmap",
-          min = 1,
-          max = 15,
-          value = 2,
-          step = 0.5
-        ),
+        
+        # sliderInput(
+        #   "cutheight",
+        #   "Choose where you cut the heatmap",
+        #   min = 1,
+        #   max = 15,
+        #   value = 2,
+        #   step = 0.5
+        # ),
         
         uiOutput("cutcluster"),
         
@@ -349,6 +350,9 @@ tabPanel(
           "Choose your file format",
           choices = c("png", "eps", "emf")
         ),
+        
+        verbatimTextOutput("event"),
+        
         
         shiny::actionButton("updateheatm", "Update the clusters", style =
                               "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
@@ -504,9 +508,9 @@ tabPanel(
     
     br(),br(),br(),br(),br(),br(),br(),br(),br(),
     br(),br(),br(),br(),br(),br(),br(),br(),br(),
-    br(),br(),
+    br(),br()
     
-    verbatimTextOutput("event")
+    #verbatimTextOutput("event")
   )
   ))
 )

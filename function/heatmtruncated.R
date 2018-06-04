@@ -258,7 +258,8 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   
   rowIds = genename$GeneName[geneSet]
   
-    
+  
+  #print(myheight[[k]])  
   objforheat = list(exprData,distfunTRIX,ColvOrd,rowv,gpcol,gpcolr,rowIds,myheight[[k]])
   
   
