@@ -159,7 +159,7 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
     library(Hmisc)
     library(reshape2)
     library(plotly)
-    library(heatmaply)
+    #library(heatmaply)
     
     myplots <- list()
     
