@@ -149,6 +149,7 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
   
   
   if (plot.boxplot & !plot.stripchart) {
+    
     ###=======================
     ## boxplot de la heatmap
     ###=======================

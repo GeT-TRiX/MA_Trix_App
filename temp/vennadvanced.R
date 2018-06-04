@@ -5,6 +5,19 @@ library(dplyr)
 pval <- read.csv2("data/All_topTableAll.csv")
 adj = pval[,grep("^adj.P.Val", names(pval), value=TRUE)]
 fc = pval[,grep("^logFC", names(pval), value=TRUE)]
+mylog = (fc[1:2])
+print(myprob)
+colnames(pval)
+
+
+
+pval %>% filter(ProbeName %in% myprob) %>% select(ProbeName,GeneName, colnames(mylog))
+
+test %>% mutate_if(is.numeric, funs(formatC(., format = "f")))
+
+help(formatC)
+
+
 View(fc)
 row.names(adj) = pval$ProbeName
 row.names(fc) = pval$ProbeName
@@ -18,14 +31,13 @@ xord = colnames(pval[26:30])
 myord <- factor(xtest, levels = xord)
 sort(myord)
 paste(myord, collapse="")
+test = c(0.005,2,3,4)
+
+formatC(test, format  = "E")
 
 
-print(myord)
-x1 <- c("white","white","blue","green","red","blue","red")
-ord <- c("red","white","blue","green")
-f1 <- factor(x1,levels=ord)
-sort(f1)
-print(x1)
+View(pval[seq_along(NROW(pval))])
+pval[seq(NCOL(pval)-1)]
 
 rownames(pval)
 library(dplyr)

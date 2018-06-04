@@ -4,7 +4,7 @@
 
 output$individuselpca <- renderUI( 
   checkboxGroupInput(
-    inputId = "indiv" ,
+    inputId = "indivpca" ,
     label =  "Choose your group to visualize",
     choices =  levels(csvf()[[2]]$Grp),
     selected = levels(csvf()[[2]]$Grp)
@@ -15,7 +15,7 @@ output$individuselpca <- renderUI(
 observeEvent(input$allIndividuspca, {
   updateCheckboxGroupInput(
     session,
-    "indiv",
+    "indivpca",
     label = "Choose your group to visualize",
     choices =  levels(csvf()[[2]]$Grp),
     selected = levels(csvf()[[2]]$Grp)
@@ -25,11 +25,60 @@ observeEvent(input$allIndividuspca, {
 # Unselect all groups
 observeEvent(input$noIndividuspca, {
   updateCheckboxGroupInput(session,
-                           "indiv",
+                           "indivpca",
                            label = "Choose your group to visualize",
                            choices =  levels(csvf()[[2]]$Grp))
 })
 
+
+
+#' choix_grp is a reactive function which aim is to select/unselect groups
+#'
+#' @param input'$indiv' specific of the individuals data frame
+#'
+#' @return a reactive  character value for the different individuals selected
+#'
+
+choix_grpca <- reactive({
+  req(input$indivpca)
+  
+  inFile <- input$file
+  if (is.null(inFile))
+    return(NULL)
+  
+  return(input$indivpca)
+})
+
+
+
+#' list_ind is a reactive function in the aim of having selected groups in a list
+#'
+#' @param input specific of the individuals data frame
+#'
+#' @return a reactive list for the different individuals selected
+#'
+
+
+list_ind <- reactive({
+  return(list(input$indivpca))
+})
+
+
+
+#' new_group is an eventreactive function that select specific groups in the data frame
+#'
+#' @param csvf Data frame corresponding to the pData table
+#'
+#' @return \newgroup an eventreactive factor with the corresponding groups selected
+#'
+
+#new_group <- eventReactive(input$heatm, {
+new_grouppca <- reactive({
+  inFile <- input$file
+  if (is.null(inFile))
+    return(NULL)
+  csvf()[[2]][csvf()[[2]]$Grp %in% choix_grpca(),]
+})
 
 
 #' PCAres is a reactive function that computed a PCA of non-normalized data
@@ -44,7 +93,7 @@ PCAres <- reactive({
   if (is.null(csvf()[[1]]))
     return(NULL)
 
-  mypca = res.pca(new_data(), scale =F)
+  mypca = res.pca(new_datapca(), scale =F)
   return(mypca)
 })
 
@@ -60,6 +109,24 @@ Scree_plot <- reactive({
   req(PCAres())
   mybar = eboulis(PCAres())
   return(mybar+theme_classic())
+})
+
+
+
+#' new_data is a reactive function that aim is to select specific individuals in the data frame
+#'
+#' @param \csvf Data frame corresponding to the Workingset
+#'
+#' @return \newdata a reactive data frame with specific columns depending on the user's choices
+#'
+
+
+new_datapca <- reactive({
+  inFile <- input$file
+  if (is.null(inFile))
+    return(NULL)
+  #subset(csvf()[[1]],select = choix_individus())
+  select(csvf()[[1]], as.character(factor(new_grouppca()$X)))
 })
 
 
@@ -88,8 +155,8 @@ output$eigpca <- renderPlot({
   
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(length(new_group()) >0, 'You need to select groups!')%next%
-      need(length(unique(new_group()$Grp)) >1, 'You need to select more than one group!')
+      need(length(new_grouppca()) >0, 'You need to select groups!')%next%
+      need(length(unique(new_grouppca()$Grp)) >1, 'You need to select more than one group!')
       )
   
   plot(Scree_plot())
@@ -119,8 +186,8 @@ output$PCA <- renderPlot({
 
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(length(unique(new_group()$Grp)) >0, 'You need to select groups!')%next%
-      need(length(unique(new_group()$Grp)) >1, 'You need to select more than one group!')
+      need(length(unique(new_grouppca()$Grp)) >0, 'You need to select groups!')%next%
+      need(length(unique(new_grouppca()$Grp)) >1, 'You need to select more than one group!')
   )
   
   plot(PCAplot())

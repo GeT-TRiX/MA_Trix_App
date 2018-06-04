@@ -181,11 +181,15 @@ observe({
     else
       met = "P.value_"
     
+   
+    
     mycont = paste0(met, choix_test())
     ordered = csvf()[[3]] %>% filter(ProbeName %in% hmobj$hm$ProbeName)  %>%
       select(ProbeName,  mycont) %>%
       full_join(hmobj$hm[,-1], ., by = "ProbeName") %>%
-      select(ProbeName, GeneName, mycont, cluster)
+      select(ProbeName, GeneName, mycont, cluster) %>%
+      mutate_if(is.numeric, funs(formatC(., format = "E", digits = 2, flag="'")))
+    
     rightor = sort(as.integer(rownames(ordered)), decreasing = T)
     ordered = ordered[match(rightor, rownames(ordered)), ]
     

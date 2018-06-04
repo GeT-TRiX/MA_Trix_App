@@ -65,7 +65,7 @@ tabPanel(
       br(),
       uiOutput("myselvenn"),
       helpText(
-        "Choose your interaction(s)"
+        "Choose your intersection(s)"
       )
     )
   ),
@@ -85,7 +85,6 @@ tabPanel(
                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")
        
         
-        
     ),
     
     br(),br(),br(),
@@ -96,12 +95,14 @@ tabPanel(
     plotOutput(outputId = "myVenn")
     
   ),
-  tabPanel("Visualize the interaction table",
-           h3("Table showing the gene names for the interaction(s) selected"),
-
-           dataTableOutput("vennresinter")
-  
-  
+  tabPanel("Visualize the intersection table",
+           downloadButton('downloadvennset', "Download the filtered data",
+                          style =
+                            "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+           h3("Table showing the gene names for the intersection(s) selected"),
+           DT::dataTableOutput("vennresinter"),
+           helpText("You can directly filtered the table by fold change and save the output table")
+           
   )))
   
 )

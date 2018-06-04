@@ -3,7 +3,6 @@
 #########################################
 
 
-
 #observeEvent(input$vennd, {
   output$myVenn <- renderPlot({
     validate(
@@ -47,10 +46,6 @@ observe({
         res = 100
       )
     else
-      #ggsave(file, device=cairo_ps, fallback_resolution = 600)
-      # eps(file, paper="special", family="Helvetica", fonts=c("serif","Helvetica"),
-      #     width = 12,
-      #     height = 12)
       cairo_ps(filename=file, width=11, height=11,pointsize = 12)
     
     

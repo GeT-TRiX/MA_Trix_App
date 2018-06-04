@@ -190,23 +190,34 @@ shinyServer(server <- function(input, output, session) {
   
   vennfinal <- reactive({
     req(vennchoice())
+    
+    mycont = paste0("logFC_", vennchoice())
+
     reordchoice <- vennchoice() %>%
       factor(levels = names(adjusted()[[1]][,-1] )) %>%
       sort() %>%
       paste(collapse="")
-    res = venninter()[[reordchoice]] %>%
-      as.data.frame()
-    return(res)
+    
+    resfinal= csvf()[[3]] %>% 
+      filter(ProbeName %in% venninter()[[reordchoice]]) %>% 
+      select(ProbeName,GeneName, mycont) %>%
+      mutate_if(is.numeric, funs(formatC(., format = "f")))
+    
+    
+    return(resfinal)
   })
+  
+  
   
 
-  observe({
-    req(vennfinal())
-    #print(vennfinal())
+  output$vennresinter <- DT::renderDataTable(vennfinal(), server=F) 
+  
+  
+  output$downloadvennset = downloadHandler('venns-filtered.csv', content = function(file) {
+    s = input$vennresinter_rows_all
+    write.csv2(vennfinal()[s, , drop = FALSE], file)
   })
   
-  
-  output$vennresinter <- renderDataTable(vennfinal()) 
   
   
   #########################################
@@ -273,14 +284,7 @@ shinyServer(server <- function(input, output, session) {
       return(final)
     })
     
-    
-    # observe({
-    #   req(gores$down)
-    #   print(testad()[[1]])
-    #   print(testad()[[2]])
-    #   
-    # })
-    
+  
     
     slidergoen <- reactive({
       req(testad(), input$cutgo)
