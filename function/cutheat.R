@@ -220,7 +220,9 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
         
         if (nProbes > 2)
           myplots[[i]] <<-
-          (ggbplot + geom_violin(aes(fill = Group),alpha = 0.3,width=0.3)+geom_boxplot(width = 0.1, aes(fill = Group),alpha = 0.3))
+          (ggbplot +
+             geom_violin(aes(fill = Group),alpha = 0.3,width=0.3)+
+             geom_boxplot(width = 0.1, aes(fill = Group),alpha = 0.3))
         else
           myplots[[i]] <<- (ggbplot)
         

@@ -1,23 +1,19 @@
 ##################################
 ##################################
 ##                              ##
-## Shiny application/UI part    ##
+## Shiny app/UI part            ##
 ##################################
 ##                              ##
 ## Author: Franck Soubès        ##
 ##################################
 ##################################
 
-# source("function/formating.R")
-# source("environnement/global.R")
-# source("function/PCA.R")
-# source("css/owncss.R")
-
+#jsCode <- "$('div.dataTables_length select').append( '<option value='500'>500</option>' );"
 
 options(shiny.maxRequestSize = 70 * 1024 ^ 2) # defined the maximum size in Mb that R can load for one file
 shinyUI(
   ui <-bootstrapPage(
-    
+    #extendShinyjs(text = jsCode),
     inlineCSS(appCSS),
     div(id = "loading-content-bar",
         p()),
@@ -29,13 +25,14 @@ shinyUI(
       h2("Please wait MATRiX app is loading...")),
     
     
-    
+  
       # Create a Shiny UI page that loads the CSS and JavaScript for Bootstrap
       navbarPage(
         # divided between the differnt tabPanel
         "MATRiX App",
         # MA for microarray and Trix for the name of the team
         id = "matrixapp",
+        #position = "fixed-top",
         theme = shinytheme("united"),
         
         

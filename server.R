@@ -1,16 +1,13 @@
-###############################
-######## Loading functions    #
-###############################
+##################################
+##################################
+##                              ##
+## Shiny app/server part        ##
+##################################
+##                              ##
+## Author: Franck Soubès        ##
+##################################
+##################################
 
-# source("function/heatmtruncated.R")
-# source("function/formating.R")
-# source("function/PCA.R")
-# source("function/decideTestTrix.R")
-# source("function/vennplot.R")
-# source("function/create_forked_task.R")
-# source("function/cutheat.R")
-# source("function/gosearch.R")
-# source("environnement/global.R")
 
 ###############################
 ######## creating graph log   #
@@ -21,7 +18,10 @@
 # showReactLog(time = TRUE)
 
 
+
+
 shinyServer(server <- function(input, output, session) {
+
   
   hide(id = "loading-content", anim = TRUE, animType = "fade",time=1.5)
   hide(id = "loading-content-bar", anim = TRUE, animType = "fade",time=1.5)
@@ -212,10 +212,26 @@ shinyServer(server <- function(input, output, session) {
     return(resfinal)
   })
   
-  
-  
+  observe({
+    req(vennfinal())
+    print(colnames(vennfinal()))
+    
+    
+  })
 
-  output$vennresinter <- DT::renderDataTable(vennfinal(), server=F) 
+  
+  output$topgenesvenn <- renderUI({
+  req(vennfinal())
+  
+  numericInput('topgenes', 'Top genes', length(vennfinal()$ProbeName),
+                 min = 1, max = length(vennfinal()$ProbeName))
+  })
+  
+  
+  venntopgenes <- reactive({if (is.null (input$topgenes)) return(NULL) else return(input$topgenes)})
+
+  output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal(),list(
+    lengthMenu =  c('5', '15', '50',as.character(venntopgenes()) ))), server=F) 
   
   
   output$downloadvennset = downloadHandler('venns-filtered.csv', content = function(file) {
@@ -223,6 +239,26 @@ shinyServer(server <- function(input, output, session) {
     write.csv2(vennfinal()[s, , drop = FALSE], file)
   })
   
+  
+  plottopgenes <- eventReactive(input$topdegenes,{
+    req(vennfinal())
+    mycont = paste0("logFC_", vennchoice())
+    print(mycont)
+    myplot <- topngenes(vennfinal()[input$vennresinter_rows_all, , drop = FALSE],mycont,venntopgenes())
+    return(myplot)
+    
+  })
+  
+  observeEvent(input$topdegenes,{
+    isolate(
+  output$barplotvenn <- renderPlot({
+    req(plottopgenes())
+    plotOutput(plottopgenes())
+    
+  })
+    )
+  
+  })
   
   
   #########################################

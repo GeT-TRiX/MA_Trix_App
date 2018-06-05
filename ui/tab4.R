@@ -34,7 +34,8 @@ tabPanel(
       )),
       
       
-      br(),
+      br(),br(),
+      fluidRow( column(5,
       sliderInput(
         "pvalvenn",
         "P-value treshold",
@@ -42,8 +43,9 @@ tabPanel(
         max = 0.05,
         value = 0.05,
         step = 0.01
-      ),
-      br(),
+      )),
+      #br(),
+      column(5,
       sliderInput(
         "fcvenn",
         "FC treshold",
@@ -51,8 +53,10 @@ tabPanel(
         max = 10,
         value = 1,
         step = 1
-      ),
+      ))),
+      br(),br(),
       
+      fluidRow( column(5,
       sliderInput(
         "vennsize",
         "Size of the police",
@@ -60,15 +64,15 @@ tabPanel(
         max = 2,
         value = 1,
         step = 0.1
-      ),
+      )),
       
-      br(),
-      uiOutput("myselvenn"),
-      helpText(
-        "Choose your intersection(s)"
-      )
-    )
-  ),
+      #br(),
+      column(5,
+      uiOutput("myselvenn"))
+    ),
+    uiOutput("topgenesvenn")
+    
+  )),
   
   mainPanel(tabsetPanel(id = "mainvenntabset",
     tabPanel("Visualize the Venn diagram",
@@ -100,8 +104,20 @@ tabPanel(
                           style =
                             "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
            h3("Table showing the gene names for the intersection(s) selected"),
+           helpText(
+             "You can directly filtered the table by fold change and save the output table"
+           ),
+           
            DT::dataTableOutput("vennresinter"),
-           helpText("You can directly filtered the table by fold change and save the output table")
+           br(),
+           actionButton(
+             inputId = "topdegenes",
+             label = "Plot top DE genes",
+             style =
+               "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+           ),
+           br(),
+           plotOutput(outputId ="barplotvenn")
            
   )))
   

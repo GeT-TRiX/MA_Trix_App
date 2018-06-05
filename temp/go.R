@@ -18,6 +18,9 @@ adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.", names(pva
 
 require(Biobase)
 
+pval %>% filter(1:50)
+View(pval[1:50,])
+
 formating = function( adj, musmuscu,pval){
   
   passingval = adj %>%
@@ -264,7 +267,7 @@ pwf[,1]
 
 View(pwf)
 pwf_1 <<- pwf[which(pwf[,1] == 1),]
-View(final)
+
 finaled <- goseq(final,"mm9" , "geneSymbol",use_genes_without_cat =T)
 View(finaled)
 print(finaled)
