@@ -13,27 +13,31 @@
 ######## creating graph log   #
 ###############################
 
-
 # options(shiny.reactlog=TRUE)
 # showReactLog(time = TRUE)
 
-
-
+######################################
+######## Define Server Functionality #
+######################################
 
 shinyServer(server <- function(input, output, session) {
-
+  
+  ###############################
+  ######## Loading js           #
+  ###############################
   
   hide(id = "loading-content", anim = TRUE, animType = "fade",time=1.5)
   hide(id = "loading-content-bar", anim = TRUE, animType = "fade",time=1.5)
-  
   
   ###############################
   ######## Load the csv files   #
   ###############################
   
-  
   source(file.path("server", "csvFile.R"), local = TRUE)$value #
   
+  #########################################
+  ######## Example files                  #
+  #########################################
   
   output$downloadData <- downloadHandler(filename <- function() {
     paste("sampleData", ".zip", sep = '')
@@ -47,11 +51,34 @@ shinyServer(server <- function(input, output, session) {
     reset("form")
   })
   
+  #########################################
+  ######## citation packages              #
+  #########################################
+  
+  mypacklist <- reactive({
+    
+    mysess <- sessionInfo()
+    dfpack <- cbind(unlist(lapply(names(mysess$otherPkgs),
+                                  function(x)
+                                    return(paste(mysess$otherPkgs[[x]]$Package, mysess$otherPkgs[[x]]$Version)
+                                    ))),
+                    unlist(lapply(names(mysess$otherPkgs), function(x)
+                      return(paste(mysess$otherPkgs[[x]]$Title))))) %>%
+      as.data.frame()
+    colnames(dfpack) = c('Version', "Title")
+    
+    return(dfpack)
+  })
+  
   
   observeEvent(input$session, {
-    output$SessionInfo <-
-      renderText(paste(capture.output(sessionInfo()), collapse = "<br>"))
+    req(mypacklist())
+    output$sessinfo <- renderDataTable(mypacklist())
   })
+  
+  #########################################
+  ######## Grep project name              #
+  #########################################
   
   observeEvent(input$heatm, {
     print(colnames(adjusted()[[1]]))
@@ -84,8 +111,6 @@ shinyServer(server <- function(input, output, session) {
     print(projectname)
     
   })
-  
-
   
   ##################################
   ######## Hide and modify buttons #
@@ -182,7 +207,7 @@ shinyServer(server <- function(input, output, session) {
   
   output$myselvenn <- renderUI({
     req(adjusted())
-    intscol <- names(adjusted()[[1]][,-1])
+    intscol <- names(user_cont())#names(adjusted()[[1]][,-1])
     selectInput('intscol', 'Specify your interaction(s):', choices = intscol, multiple = TRUE)
   }) 
   
@@ -215,15 +240,13 @@ shinyServer(server <- function(input, output, session) {
   observe({
     req(vennfinal())
     print(colnames(vennfinal()))
-    
-    
   })
 
   
   output$topgenesvenn <- renderUI({
   req(vennfinal())
   
-  numericInput('topgenes', 'Top genes', length(vennfinal()$ProbeName),
+  numericInput('topgenes', 'Top genes', 50, #length(vennfinal()$ProbeName)
                  min = 1, max = length(vennfinal()$ProbeName))
   })
   
@@ -249,16 +272,56 @@ shinyServer(server <- function(input, output, session) {
     
   })
   
-  observeEvent(input$topdegenes,{
-    isolate(
-  output$barplotvenn <- renderPlot({
-    req(plottopgenes())
-    plotOutput(plottopgenes())
+  observeEvent(input$topdegenes, {
+    isolate(output$barplotvenn <- renderPlot({
+      req(plottopgenes())
+      plotOutput(plottopgenes())
+      
+    }))
     
   })
-    )
   
+  
+  observe({
+    
+    validate(
+      need(csvf(), 'You need to import data to visualize this plot!'))
+    
+    output$savebarplot <- downloadHandler(filename <- function() {
+      paste0(basename(tools::file_path_sans_ext(projectname())),
+             '_venn_barplot.',
+             input$formven,
+             sep = '')
+    },
+    content <- function(file) {
+      if (input$formven == "pdf")
+        
+        pdf(
+          file,
+          width = 19,
+          height = 7,
+          pointsize = 12
+        )
+      
+      else if (input$formven == "png")
+        png(
+          file,
+          width = 1600,
+          height = 700,
+          units = "px",
+          pointsize = 12,
+          res = 100
+        )
+      else
+        cairo_ps(filename=file, width=16, height=7,pointsize = 12)
+      
+      print(plottopgenes())
+      
+      dev.off()
+    })
+    
   })
+  
   
   
   #########################################
@@ -348,7 +411,7 @@ shinyServer(server <- function(input, output, session) {
     
     
     observe({
-      req(input$heatmconf)
+      req(input$heatmconf) ### modifier avec ifelse
       heatidsw <- input$heatmconf
       if (grepl("cutpan", heatidsw)) {
         updateTabsetPanel(session, "mainhmtabset",
@@ -360,7 +423,7 @@ shinyServer(server <- function(input, output, session) {
        }
       })
     
-    observe({
+    observe({ ### modifier avec ifelse
       req(input$mainhmtabset)
       heatidswmain <- input$mainhmtabset
       if (grepl("cuthmmainpan", heatidswmain)) {
@@ -509,9 +572,6 @@ shinyServer(server <- function(input, output, session) {
     
   })
   
-  
-  
-  
   #########################################
   ######## KEGG enrichissment             #
   #########################################
@@ -522,6 +582,8 @@ shinyServer(server <- function(input, output, session) {
   ######## graph ???????????              #
   #########################################
   
+  
+
   
 })
 

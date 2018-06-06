@@ -110,12 +110,15 @@ tabPanel(
            
            DT::dataTableOutput("vennresinter"),
            br(),
+           div(style="display:inline-block",
            actionButton(
              inputId = "topdegenes",
              label = "Plot top DE genes",
              style =
                "color: #fff; background-color: #337ab7; border-color: #2e6da4"
            ),
+           downloadButton("savebarplot", "Save your bar plot" , style =
+                            "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
            br(),
            plotOutput(outputId ="barplotvenn")
            

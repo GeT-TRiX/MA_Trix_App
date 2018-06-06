@@ -15,4 +15,4 @@ How to import ?
 You can select a region by handling the left click button if the files are stacked together, if it's not the case you can select the different files by maintening the Ctrl button and clicked on the files.
 
 # Warning
-It his highly recommanded to not modify these files (removed columns, change column names ...) in the aim of not disturbing the well functionning of the application.
+It is highly recommanded to not modify these files (removed columns, change column names ...) in the aim of not disturbing the well functionning of the application.

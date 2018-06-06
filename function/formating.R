@@ -279,16 +279,24 @@ heatmtoclust = function( hmp01_All, exprData, pval, height= 5){
 }
 
 
-
+# 
 # test <- sessionInfo()
-# final <- cbind(lapply(names(test$otherPkgs),
+# final <- cbind(unlist(lapply(names(test$otherPkgs),
 #                       function(x)
 #                         return(
 #                           paste(test$otherPkgs[[x]]$Package, test$otherPkgs[[x]]$Version)
-#                         )),
-#                lapply(names(test$otherPkgs), function(x)
-#                  return(paste(test$otherPkgs[[x]]$Title)))) %>%
+#                         ))),
+#                unlist(lapply(names(test$otherPkgs), function(x)
+#                  return(paste(test$otherPkgs[[x]]$Title)))))%>%
 #   as.data.frame()
 # colnames(final) = c('version', "definition")
-
-
+# View(final)
+# final$version
+# 
+# test = (cbind(unlist(final$version),unlist(final$definition))) %>% as.data.frame()
+# colnames(test) = c('version', "definition")
+# 
+# 
+# View(test)
+# typeof(test$definition)
+# typeof(pval$X)
