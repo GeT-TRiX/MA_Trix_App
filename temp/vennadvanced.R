@@ -8,6 +8,12 @@ fc = pval[,grep("^logFC", names(pval), value=TRUE)]
 mylog = (fc[1:2])
 print(myprob)
 colnames(pval)
+for (i in 1:ncol(adj)){
+  print(i)
+}
+
+lapply(seq(ncol(adj)),function(x)
+  return(x))
 
 
 
@@ -43,7 +49,9 @@ rownames(pval)
 library(dplyr)
 library(gridExtra)
 
-myven = Vennlist(pval, adj, fc,"both", 0.05,1)
+myven = Vennlist(pval, adj, fc,"up", 0.05,1)
+myven <- myven[sapply(myven, sum) > 0]
+sum(sapply(myven,length))
 
 test <- Vennfinal(myven,adj, cex=1, 0.05, 1)
 pval$rownames =rownames(pval)

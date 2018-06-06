@@ -106,12 +106,6 @@ shinyServer(server <- function(input, output, session) {
   })
   
   
-  observe({
-    req(projectname())
-    print(projectname)
-    
-  })
-  
   ##################################
   ######## Hide and modify buttons #
   ##################################
@@ -203,10 +197,12 @@ shinyServer(server <- function(input, output, session) {
   source(file.path("server", "Vennrender.R"), local = TRUE)$value #
   
   
-  vennchoice <- reactive({if (is.null (input$intscol)) return(NULL) else return(input$intscol)})
+  vennchoice <- reactive({
+    #req(user_cont())
+    if (is.null (input$intscol)) return(NULL) else return(input$intscol)})
   
   output$myselvenn <- renderUI({
-    req(adjusted())
+    req(user_cont())
     intscol <- names(user_cont())#names(adjusted()[[1]][,-1])
     selectInput('intscol', 'Specify your interaction(s):', choices = intscol, multiple = TRUE)
   }) 
@@ -221,12 +217,17 @@ shinyServer(server <- function(input, output, session) {
   vennfinal <- reactive({
     req(vennchoice())
     
+    if(is.null(vennchoice))
+      return(NULL)
+    
     mycont = paste0("logFC_", vennchoice())
 
     reordchoice <- vennchoice() %>%
       factor(levels = names(adjusted()[[1]][,-1] )) %>%
       sort() %>%
       paste(collapse="")
+    
+    
     
     resfinal= csvf()[[3]] %>% 
       filter(ProbeName %in% venninter()[[reordchoice]]) %>% 
@@ -236,17 +237,12 @@ shinyServer(server <- function(input, output, session) {
     
     return(resfinal)
   })
-  
-  observe({
-    req(vennfinal())
-    print(colnames(vennfinal()))
-  })
 
-  
+
   output$topgenesvenn <- renderUI({
-  req(vennfinal())
+  req(vennfinal(),vennchoice())
   
-  numericInput('topgenes', 'Top genes', 50, #length(vennfinal()$ProbeName)
+  numericInput('topgenes', 'Top genes', 50, 
                  min = 1, max = length(vennfinal()$ProbeName))
   })
   
@@ -254,7 +250,7 @@ shinyServer(server <- function(input, output, session) {
   venntopgenes <- reactive({if (is.null (input$topgenes)) return(NULL) else return(input$topgenes)})
 
   output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal(),list(
-    lengthMenu =  c('5', '15', '50',as.character(venntopgenes()) ))), server=F) 
+    lengthMenu =  c('5', '15', '50'))), server=F) 
   
   
   output$downloadvennset = downloadHandler('venns-filtered.csv', content = function(file) {
@@ -264,9 +260,8 @@ shinyServer(server <- function(input, output, session) {
   
   
   plottopgenes <- eventReactive(input$topdegenes,{
-    req(vennfinal())
+    req(vennfinal(),vennchoice(),venntopgenes())
     mycont = paste0("logFC_", vennchoice())
-    print(mycont)
     myplot <- topngenes(vennfinal()[input$vennresinter_rows_all, , drop = FALSE],mycont,venntopgenes())
     return(myplot)
     
@@ -277,7 +272,7 @@ shinyServer(server <- function(input, output, session) {
       req(plottopgenes())
       plotOutput(plottopgenes())
       
-    }))
+    }, width = 1100 , height = 600, res = 100))
     
   })
   
@@ -322,7 +317,7 @@ shinyServer(server <- function(input, output, session) {
     
   })
   
-  
+  source(file.path("server", "trackervenn.R"), local = TRUE)$value #
   
   #########################################
   ######## cutheatmap part                #

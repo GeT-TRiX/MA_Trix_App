@@ -20,6 +20,9 @@ print(colnames(dfinter))
 
 
 test = c("logFC_LWT_MCD-LWT_CTRL" , "logFC_LKO_MCD-LKO_CTRL")
+length(test)
+seq(test)
+
 test = c("ProbeName","GeneName","logFC_LWT_MCD-LWT_CTRL","logFC_LKO_MCD-LKO_CTRL"
 )
 
@@ -78,6 +81,13 @@ topngenes <- function(dfinter, mycont, inputtop) {
       value.name = "logFC"
     )
   reshp <- droplevels(reshp)
+  
+  maxval = as.numeric(max(reshp$logFC))
+  minval = as.numeric(min(reshp$logFC))
+  print(maxval)
+  print(minval)
+  
+  
   reshp$GeneName <-factor(reshp$GeneName, levels = unique(as.character(reshp$GeneName)))
   
   p <- ggplot(reshp, aes(
@@ -87,13 +97,16 @@ topngenes <- function(dfinter, mycont, inputtop) {
   )) +
     geom_bar(stat = "identity", position = "dodge") +
     
+    
+    #scale_y_continuous(limits=c(-15,0))+
+    
     # scale_fill_discrete(
-    #   name = "GeneName",
-    #   breaks = c(1, 2,3),
-    #   labels = c("logFC_LWT_MCD.LWT_CTRL", "logFC_LKO_CTRL.LWT_CTRL",) )+
-    # ) +
+    #   name = "Comparisons",
+    #   breaks = c(seq(mycont)),
+    #   labels = c(mycont) )+
+
      
-     scale_fill_manual(values = c("red","blue",'purple',"green","black")) + 
+    scale_fill_manual(values = c("red","blue",'purple',"green","black")) + 
   
 
     xlab("Gene Name") + ylab("Log Fold-Change") +
@@ -118,25 +131,26 @@ topngenes <- function(dfinter, mycont, inputtop) {
     ) 
   
   
-  print(p)
+  print(p+ scale_y_continuous(limits = c(-2, 0)))
+  print(as.numeric(maxval)-1)
+  print(as.numeric(minval)+1)
   
-  return(p)
+  return(p+ scale_y_continuous(breaks = c(seq(maxval),seq(minval))))
 
   }
 
 
 topngenes(dfinter, mycont, 60)
+seq(-20)
+seq(-1)
+
+unique(sort(c(seq(3.1803),seq( -2.3166))))
 
 
+seq(-5,5,by=1)
 
 
-
-
-
-
-
-
-
+seq(-8,-.5+2,by=1)
 
 
 

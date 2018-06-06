@@ -225,10 +225,9 @@ output$downloadvenn <- downloadHandler(
 
 myindex <- reactive ({
   
-  myl = c()
-  for(i in 1:ncol(adjusted()[[1]])){
-    myl[[i]] = which(adjusted()[[1]][[i]] < input$pvalvenn)
-  }
+  myl = lapply(seq(ncol(adjusted()[[1]])),function(x)
+    return(which(adjusted()[[1]][[x]] < 0.05)))
+    
   indexnull = which( sapply(myl ,length) == 0)
   final = colnames(adjusted()[[1]][,-c(indexnull)])
   return(final)

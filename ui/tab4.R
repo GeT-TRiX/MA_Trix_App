@@ -110,6 +110,41 @@ tabPanel(
            
            DT::dataTableOutput("vennresinter"),
            br(),
+           h1("Here's a tracker for your different selections:"),
+           #br(),
+           wellPanel(
+             tags$head(
+               tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
+             ),
+             
+             tags$head(tags$style("
+                                  #container * {
+                                  display: inline;
+                                  }")),
+        
+             div(
+               id = "container",
+               p("You have chosen the following comparisons"),
+               htmlOutput("contvenn"),
+               p("for a total of"),
+               htmlOutput("totalgenes"),
+               p("genes  with a P-value and FC treshold respectively set to "),
+               htmlOutput("myPVALvenn"),
+               p("and"),
+               htmlOutput("myFCvenn")
+               
+             ),
+             div(
+               id = "container",
+               p("There are"),
+               htmlOutput("venngenes"),
+               p("significant genes"),
+               p("for this interaction"),
+               htmlOutput("continter"),
+               p("if you click on the top DE genes button you will plot the top"),
+               htmlOutput("topgenesdf"),
+               p("rows the of the previous table")
+             )),
            div(style="display:inline-block",
            actionButton(
              inputId = "topdegenes",
@@ -123,5 +158,5 @@ tabPanel(
            plotOutput(outputId ="barplotvenn")
            
   )))
-  
+  #plotOutput(outputId ="barplotvenn")
 )
