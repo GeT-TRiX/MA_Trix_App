@@ -55,17 +55,16 @@ shinyServer(server <- function(input, output, session) {
   ######## citation packages              #
   #########################################
   
+
+  
   mypacklist <- reactive({
-    
-    mysess <- sessionInfo()
-    dfpack <- cbind(unlist(lapply(names(mysess$otherPkgs),
-                                  function(x)
-                                    return(paste(mysess$otherPkgs[[x]]$Package, mysess$otherPkgs[[x]]$Version)
-                                    ))),
-                    unlist(lapply(names(mysess$otherPkgs), function(x)
-                      return(paste(mysess$otherPkgs[[x]]$Title))))) %>%
-      as.data.frame()
-    colnames(dfpack) = c('Version', "Title")
+
+    dfpack <- names(sessionInfo()$otherPkgs) %>%
+      lapply(function(x) return(paste(mysess$otherPkgs[[x]]$Package, mysess$otherPkgs[[x]]$Version)))%>%
+      unlist()%>%
+      cbind(.,unlist(lapply(names(mysess$otherPkgs), function(x)return(paste(mysess$otherPkgs[[x]]$Title)))))%>%
+      as.data.frame()%>%
+      setNames( c('Version', "Title"))
     
     return(dfpack)
   })
@@ -82,6 +81,7 @@ shinyServer(server <- function(input, output, session) {
   
   observeEvent(input$heatm, {
     print(colnames(adjusted()[[1]]))
+    cat(colnames(adjusted()[[1]]))
   })
   
   file_name <- reactive({
@@ -197,14 +197,12 @@ shinyServer(server <- function(input, output, session) {
   source(file.path("server", "Vennrender.R"), local = TRUE)$value #
   
   
-  vennchoice <- reactive({
-    #req(user_cont())
-    if (is.null (input$intscol)) return(NULL) else return(input$intscol)})
+  vennchoice <- reactive({if (is.null (input$intscol)) return(NULL) else return(input$intscol)})
   
   output$myselvenn <- renderUI({
     req(user_cont())
-    intscol <- names(user_cont())#names(adjusted()[[1]][,-1])
-    selectInput('intscol', 'Specify your interaction(s):', choices = intscol, multiple = TRUE)
+    #intscol <- names(user_cont())#names(adjusted()[[1]][,-1])
+    selectInput('intscol', 'Specify your interaction(s):', choices = names(user_cont()), multiple = TRUE)
   }) 
   
   venninter <- reactive({
@@ -216,25 +214,18 @@ shinyServer(server <- function(input, output, session) {
   
   vennfinal <- reactive({
     req(vennchoice())
-    
     if(is.null(vennchoice))
       return(NULL)
     
-    mycont = paste0("logFC_", vennchoice())
-
     reordchoice <- vennchoice() %>%
       factor(levels = names(adjusted()[[1]][,-1] )) %>%
       sort() %>%
       paste(collapse="")
     
-    
-    
     resfinal= csvf()[[3]] %>% 
       filter(ProbeName %in% venninter()[[reordchoice]]) %>% 
-      select(ProbeName,GeneName, mycont) %>%
+      select(ProbeName,GeneName, paste0("logFC_", vennchoice())) %>%
       mutate_if(is.numeric, funs(formatC(., format = "f")))
-    
-    
     return(resfinal)
   })
 
@@ -358,6 +349,34 @@ shinyServer(server <- function(input, output, session) {
   
   
   observe({
+    req(input$heatmconf)
+    if (grepl("cutpan", input$heatmconf)) {
+      updateTabsetPanel(session, "mainhmtabset",
+                        selected = "cuthmmainpan")
+    }
+    else if (grepl("hmpan", input$heatmconf)) {
+      updateTabsetPanel(session, "mainhmtabset",
+                        selected = "hmmainpan")
+    }
+  })
+  
+  
+  observe({
+    req(input$mainhmtabset)
+    if (grepl("cuthmmainpan",  input$mainhmtabset)) {
+      updateTabsetPanel(session, "heatmconf",
+                        selected = "cutpan")
+    }
+    else if (grepl("hmmainpan",  input$mainhmtabset)) {
+      #|dfhmclu|maingo
+      updateTabsetPanel(session, "heatmconf",
+                        selected = "hmpan")
+    }
+  })
+  
+  
+  
+  observe({
     testad <- eventReactive(input$GO, {
       req(hmobj$hm)
       gores$obj <- NULL
@@ -378,8 +397,6 @@ shinyServer(server <- function(input, output, session) {
                      })
                      
                    })
-      
-
       return(final)
     })
     
@@ -405,34 +422,6 @@ shinyServer(server <- function(input, output, session) {
     })
     
     
-    observe({
-      req(input$heatmconf) ### modifier avec ifelse
-      heatidsw <- input$heatmconf
-      if (grepl("cutpan", heatidsw)) {
-        updateTabsetPanel(session, "mainhmtabset",
-                          selected = "cuthmmainpan")
-      }
-      else if(grepl("hmpan", heatidsw)) {
-        updateTabsetPanel(session, "mainhmtabset",
-                          selected = "hmmainpan")
-       }
-      })
-    
-    observe({ ### modifier avec ifelse
-      req(input$mainhmtabset)
-      heatidswmain <- input$mainhmtabset
-      if (grepl("cuthmmainpan", heatidswmain)) {
-        updateTabsetPanel(session, "heatmconf",
-                          selected = "cutpan")
-      }
-      else if(grepl("hmmainpan", heatidswmain)) { #|dfhmclu|maingo
-        updateTabsetPanel(session, "heatmconf",
-                          selected = "hmpan")
-      }
-    })
-    
-
-    
     # output$savego <- downloadHandler(
     #   
     #   filename = function() {
@@ -450,19 +439,19 @@ shinyServer(server <- function(input, output, session) {
     clustergrep <- reactive({
       
       req(hmobj$hm, input$cutgo)
-      genlist <- hmobj$hm[!duplicated(hmobj$hm$GeneName), ]
-      genlist <- genlist %>%
+      
+      genlist <- hmobj$hm[!duplicated(hmobj$hm$GeneName),] %>%
         dplyr::select(cluster, GeneName)   %>%
         filter(cluster == input$cutgo)
+      
       mygensymb = genlist$cluster %>%
         length() %>%
         matrix(1, .) %>%
-        as.double()
-      names(mygensymb) = genlist$GeneName
-      mygensymb = as.list(names(mygensymb))
-      mygensymb <-mygensymb[lapply(mygensymb, function(x)
-          length(grep("chr", x, value = FALSE))) == 0] # remove non-annotated genes
-      
+        as.double() %>%
+        setNames(genlist$GeneName) %>%
+        names() %>% as.list() %>%
+        .[lapply(., function(x)
+          length(grep("chr", x, value = FALSE))) == 0]
       
       return(mygensymb)
     })
@@ -477,13 +466,11 @@ shinyServer(server <- function(input, output, session) {
         req(clustergrep())
 
         source_python('./python/add.py')
-        
         enrichmentdav(clustergrep())
         
       })
       
       davidurl()
-      
     })
     
     
@@ -527,8 +514,9 @@ shinyServer(server <- function(input, output, session) {
       else
         print("Sorry, no enriched genes for this cluster")
       
-    })
-    #gores$obj <- NULL
+    })#gores$obj <- NULL
+    
+    
   })
   
   Species <- reactive({

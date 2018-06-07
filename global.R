@@ -30,12 +30,7 @@ list.of.packages <- c("shiny","shinythemes","shinyjs","AnnotationDbi","ggplot2",
 
 #"goseq","GO.db","rbenchmark","heatmaply"
 
-#Warning: Error in py_run_file_impl: ImportError: No module named requests
-# 
-# Detailed traceback: 
-#   File "<string>", line 3, in <module>
-#   
-#   122: <Anonymous>
+
 
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
@@ -53,6 +48,7 @@ lastcol = "red"
 wd_path= getwd()
 firstdim = 1
 secdim = 2
+mysess <- sessionInfo()
 
 `%next%` <- shiny:::`%OR%`
 
