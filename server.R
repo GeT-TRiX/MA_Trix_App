@@ -326,8 +326,24 @@ shinyServer(server <- function(input, output, session) {
   
   #gores <- reactiveValues()
   
-  
+  url <- reactiveValues()
   gores <- reactiveValues()
+  
+  observe({
+    req(url)
+    
+    output$DAVID <- renderUI({
+      shiny::actionButton(
+        inputId = 'DAVID',
+        "Open DAVID",
+        style = "color: #fff; background-color: #337ab7; border-color: #2e6da4",
+        onclick = paste("window.open(", url$myurl)
+      )
+    })
+  })
+  
+  
+  
   
   observe({
     totalclust <- reactive({
@@ -457,21 +473,37 @@ shinyServer(server <- function(input, output, session) {
     })
     
     
-  
     
-    #davidurl <- reactive({
     
-    observeEvent(input$DAVID, {
-      davidurl <- eventReactive(input$DAVID, {
-        req(clustergrep())
+    #davidurl <- reactive( {
+    davidurl <- eventReactive( input$DAVID, {
+      req(clustergrep())
 
-        source_python('./python/add.py')
-        enrichmentdav(clustergrep())
-        
-      })
-      
-      davidurl()
+      source_python('./python/add.py')
+      mydavurl = enrichmentdav(clustergrep())
+      mygloburl <- paste(`mydavurl`,",", "'_blank')")
+
+      return(mygloburl)
     })
+    
+    
+    observe({
+      req(davidurl())
+      url$myurl = davidurl()
+    })
+    
+    
+    # observeEvent(input$DAVID, {
+    #   davidurl <- eventReactive(input$DAVID, {
+    #     req(clustergrep())
+    # 
+    #     source_python('./python/add.py')
+    #     enrichmentdav(clustergrep())
+    #     
+    #   })
+    #   
+    #   davidurl()
+    # })
     
     
     output$clustgo <- renderPrint({
