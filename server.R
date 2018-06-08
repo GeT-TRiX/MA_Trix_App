@@ -474,7 +474,7 @@ shinyServer(server <- function(input, output, session) {
     
     davidwebservice <- eventReactive(input$GO, {
       req(hmobj$hm)
-
+      library(RDAVIDWebService)
       
       withProgress(message = 'Performing GO enrichment:',
                    value = 0, {
@@ -486,7 +486,6 @@ shinyServer(server <- function(input, output, session) {
         mygodavid = probnamtoentrez(hmobj$hm,org.Mm.egALIAS2EG) %>%
           davidquery( input$Species) 
       })
-      #mygodavid = round_df(mygodavid,5)
       
       final = lapply(1:NROW(mygodavid),function(x)
         return(format(mygodavid[[x]], digits = 3)))

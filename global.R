@@ -25,7 +25,7 @@ source("function/gosearch.R")
 
 list.of.packages <- c("shiny","shinythemes","shinyjs","AnnotationDbi","ggplot2","shinyBS","markdown"
                       ,"BH","data.table","DT","readr","colourpicker",
-                      "tools","devEMF","R.devices","FactoMineR","factoextra","gplots","RDAVIDWebService",
+                      "tools","devEMF","R.devices","FactoMineR","factoextra","gplots",
                       "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly","dplyr","reticulate","Hmisc")
 
 #"goseq","GO.db","rbenchmark","heatmaply"
