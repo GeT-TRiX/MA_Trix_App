@@ -7,7 +7,7 @@
 ## Author: Franck Soubès        ##
 ##################################
 ##################################
-
+library("org.Mm.eg.db")
 
 ###############################
 ######## creating graph log   #
@@ -383,8 +383,7 @@ shinyServer(server <- function(input, output, session) {
       updateTabsetPanel(session, "heatmconf",
                         selected = "cutpan")
     }
-    else if (grepl("hmmainpan",  input$mainhmtabset)) {
-      #|dfhmclu|maingo
+    else if (grepl("hmmainpan",  input$mainhmtabset)) {  #|dfhmclu|maingo
       updateTabsetPanel(session, "heatmconf",
                         selected = "hmpan")
     }
@@ -393,49 +392,50 @@ shinyServer(server <- function(input, output, session) {
   
   
   observe({
-    testad <- eventReactive(input$GO, {
-      req(hmobj$hm)
-      gores$obj <- NULL
-      myl <- NULL
-      
-      withProgress(message = 'Performing GO enrichment:',
-                   value = 0, {
-                     n <- NROW(50)
-                     for (i in 1:n) {
-                       incProgress(1 / n, detail = "Please wait...")
-                     }
-                     
-                     final = tryCatch({
-                       gosearch(hmobj$hm, input$Species, "geneSymbol", myl)
-                     },
-                     error = function(e) {
-                       warning("ERROR")
-                     })
-                     
-                   })
-      return(final)
-    })
+    
+    # testad <- eventReactive(input$GO, {
+    #   req(hmobj$hm)
+    #   gores$obj <- NULL
+    #   myl <- NULL
+    #   
+      # withProgress(message = 'Performing GO enrichment:',
+      #              value = 0, {
+      #                n <- NROW(50)
+      #                for (i in 1:n) {
+      #                  incProgress(1 / n, detail = "Please wait...")
+      #                }
+    #                  
+    #                  final = tryCatch({
+    #                    gosearch(hmobj$hm, input$Species, "geneSymbol", myl)
+    #                  },
+    #                  error = function(e) {
+    #                    warning("ERROR")
+    #                  })
+    #                  
+    #                })
+    #   return(final)
+    # })
     
   
     
-    slidergoen <- reactive({
-      req(testad(), input$cutgo)
-      
-      x <- input$cutgo
-      
-      sliderInput(
-        "slidergo",
-        label = "Select (GO) range of observations",
-        min = 1,
-        max = length(testad()[[as.integer(x)]][[1]]),
-        value = c(1, 25)
-      )
-      
-    })
-    
-    output$slidergo <- renderUI({
-      slidergoen()
-    })
+    # slidergoen <- reactive({
+    #   req(testad(), input$cutgo)
+    #   
+    #   x <- input$cutgo
+    #   
+    #   sliderInput(
+    #     "slidergo",
+    #     label = "Select (GO) range of observations",
+    #     min = 1,
+    #     max = length(testad()[[as.integer(x)]][[1]]),
+    #     value = c(1, 25)
+    #   )
+    #   
+    # })
+    # 
+    # output$slidergo <- renderUI({
+    #   slidergoen()
+    # })
     
     
     # output$savego <- downloadHandler(
@@ -472,10 +472,30 @@ shinyServer(server <- function(input, output, session) {
       return(mygensymb)
     })
     
+    davidwebservice <- eventReactive(input$GO, {
+      req(hmobj$hm)
+
+      
+      withProgress(message = 'Performing GO enrichment:',
+                   value = 0, {
+                     n <- NROW(50)
+                     for (i in 1:n) {
+                       incProgress(1 / n, detail = "Please wait...")
+                     }
+        #myentrez = probnamtoentrez(hmobj$hm,org.Mm.egALIAS2EG)
+        mygodavid = probnamtoentrez(hmobj$hm,org.Mm.egALIAS2EG) %>%
+          davidquery( input$Species) 
+      })
+      #mygodavid = round_df(mygodavid,5)
+      
+      final = lapply(1:NROW(mygodavid),function(x)
+        return(format(mygodavid[[x]], digits = 3)))
+      
+      return(final)
+    })
     
     
     
-    #davidurl <- reactive( {
     davidurl <- eventReactive( input$DAVID, {
       req(clustergrep())
 
@@ -491,7 +511,14 @@ shinyServer(server <- function(input, output, session) {
       req(davidurl())
       url$myurl = davidurl()
     })
-    
+
+    # observe({
+    #   req(csvf())
+    #   print(input$Species)
+    #   Species()
+    # 
+    # })
+
     
     # observeEvent(input$DAVID, {
     #   davidurl <- eventReactive(input$DAVID, {
@@ -504,6 +531,19 @@ shinyServer(server <- function(input, output, session) {
     #   
     #   davidurl()
     # })
+    
+    
+    # mydavidshow <- reactive({
+    #   x<- input$cutgo
+    #   print(x)
+    #   mydf = davidwebservice()[[as.numeric(x)]]
+    #   return(mydf)
+    # })
+    
+    
+    output$davidgo <- renderDataTable({
+      davidwebservice()[[as.numeric(input$cutgo)]][, -c(4,6)] 
+    })
     
     
     output$clustgo <- renderPrint({
@@ -549,43 +589,52 @@ shinyServer(server <- function(input, output, session) {
     })#gores$obj <- NULL
     
     
-  })
-  
-  Species <- reactive({
-    if (input$Genome == "hg19") {
-      # human
-      require("org.Hs.eg.db")
-    }
-    else if (input$Genome == "mm9") {
-      # Mouse
-      require("org.Mm.eg.db")
-    }
-    else if (input$Genome == "danRer6") {
-      #Zebra fish
-      require("org.Dr.eg.db")
-    }
-    else if (input$Genome == "galGal3") {
-      # chicken
-      require("org.Gg.eg.db")
-    }
-    else if (input$Genome == "equCab2") {
-      # horse
-      require("org.Gg.eg.db")
-    }
-    else if (input$Genome == "ce6") {
-      # cC elegans
-      require("org.Ce.eg.db")
-    }
-    else if (input$Genome == "rn4") {
-      # Rat
-      require("org.Rn.eg.db")
-    }
-    else if (input$Genome == "susScr3") {
-      # Pig
-      require("org.Ss.eg.db")
-    }
+    Species <- reactive({
+      if (input$Genome == "hg19") {# human
+        library("org.Hs.eg.db")
+        mypack = org.Hs.egALIAS2EG
+        return(mypack)
+      }
+      else if (input$Genome == "Mus musculus") {# Mouse
+        library("org.Mm.eg.db")
+        mypack = org.Mm.egALIAS2EG
+        print(mypack)
+        return(mypack)
+      }
+      else if (input$Genome == "danRer6") {#Zebra fish
+        require("org.Dr.eg.db")
+        return(org.Dr.egALIAS2EG)
+      }
+      else if (input$Genome == "galGal3") {# chicken
+        require("org.Gg.eg.db")
+        return(org.Gg.egALIAS2EG)
+      }
+      else if (input$Genome == "equCab2") {# horse
+        require("org.Gg.eg.db")
+        return(org.Mm.egALIAS2EG)
+      }
+      else if (input$Genome == "ce6") {# cC elegans
+        require("org.Ce.eg.db")
+        return(org.Ce.egALIAS2EG)
+      }
+      else if (input$Genome == "rn4") {# Rat
+        require("org.Rn.eg.db")
+        return(org.Rn.egALIAS2EG)
+      }
+      else if (input$Genome == "susScr3") {# Pig
+        require("org.Ss.eg.db")
+        return(org.Ss.egALIAS2EG)
+      }
+      
+    })
+    
+    
+    
+    
     
   })
+  
+  
   
   #########################################
   ######## KEGG enrichissment             #

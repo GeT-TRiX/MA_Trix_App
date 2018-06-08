@@ -287,10 +287,15 @@ tabPanel(
 
                      fluidRow(column(
                        5,
-                       selectInput("Species", "Choose your Species:", selected = "mm9", 
-                                   c("Mouse" = "mm9", "Human" = "hg19", "Rat" = "rn4", "C. elegans" = "ce6",
-                                     "Zebrafish" = "danRer6",  "Pig" = "susScr3", 
-                                      "Chicken" = "galGal3", "Chimpanzee" = "panTro2" ))),
+                       # selectInput("Species", "Choose your Species:", selected = "mm9", 
+                       #             c("Mouse" = "mm9", "Human" = "hg19", "Rat" = "rn4", "C. elegans" = "ce6",
+                       #               "Zebrafish" = "danRer6",  "Pig" = "susScr3", 
+                       #                "Chicken" = "galGal3", "Chimpanzee" = "panTro2" ))),
+                    
+                       selectInput("Species", "Choose your Species:", selected = "Mus musculus", 
+                                   c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
+                                     "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa", 
+                                     "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" ))),
                      column(
                        5,
                        uiOutput("cutgo"))
@@ -474,7 +479,6 @@ tabPanel(
         )
         )
     ),
-  #),
   
   tabPanel(
     "Heatmap clusters",
@@ -495,9 +499,12 @@ tabPanel(
   
   tabPanel(
     "(GO) enrichment-based cluster analysis",value="maingo",
-    downloadButton("savego", "Save your enrichment" , style =
+    downloadButton("savego", "Save your enrichment clusters" , style =
                      "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-    verbatimTextOutput("clustgo")
+    div(DT::dataTableOutput("davidgo"), style = "font-size: 85%; width: 85%")
+    
+    #,
+    #verbatimTextOutput("clustgo")
   ),
 
   tabPanel

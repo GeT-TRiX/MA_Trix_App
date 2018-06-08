@@ -16,7 +16,6 @@ lapply(seq(ncol(adj)),function(x)
   return(x))
 
 
-
 pval %>% filter(ProbeName %in% myprob) %>% select(ProbeName,GeneName, colnames(mylog))
 
 test %>% mutate_if(is.numeric, funs(formatC(., format = "f")))
@@ -76,11 +75,17 @@ final = lapply(
 
 print(final)
 names(final) = colnames(adj)
+cl <- makeCluster(6)
+stop(cl)
+print(cl)
+benchmark(setvglobalvenn(final,adj))
 
-vennres = setvglobalvenn(final,adj)
+stopCluster(cl)
 
+vennresbef = setvglobalvenn(final,adj)
+print(vennresbef)
 
-View(vennres)
+View(vennresbef)
 
 testaxx = colnames(pval)[26:30]
 print(testaxx)

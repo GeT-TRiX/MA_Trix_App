@@ -3,7 +3,7 @@
 #########################################
 
 source("function/formating.R")
-source("environnement/global.R")
+#source("environnement/global.R")
 source("function/PCA.R")
 source("www/loadingcss.R")
 source("function/heatmtruncated.R")
@@ -25,7 +25,7 @@ source("function/gosearch.R")
 
 list.of.packages <- c("shiny","shinythemes","shinyjs","AnnotationDbi","ggplot2","shinyBS","markdown"
                       ,"BH","data.table","DT","readr","colourpicker",
-                      "tools","devEMF","R.devices","FactoMineR","factoextra","gplots",
+                      "tools","devEMF","R.devices","FactoMineR","factoextra","gplots","RDAVIDWebService",
                       "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly","dplyr","reticulate","Hmisc")
 
 #"goseq","GO.db","rbenchmark","heatmaply"

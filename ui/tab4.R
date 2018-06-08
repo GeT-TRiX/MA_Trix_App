@@ -56,7 +56,6 @@ tabPanel(
       ))),
       br(),br(),
       
-      fluidRow( column(5,
       sliderInput(
         "vennsize",
         "Size of the police",
@@ -64,15 +63,15 @@ tabPanel(
         max = 2,
         value = 1,
         step = 0.1
-      )),
+      ),
       
-      #br(),
-      column(5,
-      uiOutput("myselvenn"))
-    ),
-    uiOutput("topgenesvenn")
+      br(),
+      uiOutput("myselvenn")),
+      uiOutput("topgenesvenn")
     
-  )),
+    #uiOutput("svenn")
+    
+  ),
   
   mainPanel(tabsetPanel(id = "mainvenntabset",
     tabPanel("Visualize the Venn diagram",
@@ -145,6 +144,7 @@ tabPanel(
                htmlOutput("topgenesdf"),
                p("rows the of the previous table")
              )),
+           
            div(style="display:inline-block",
            actionButton(
              inputId = "topdegenes",
@@ -154,6 +154,17 @@ tabPanel(
            ),
            downloadButton("savebarplot", "Save your bar plot" , style =
                             "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+           
+           # fluidRow(column(12,offset=1,br(),actionButton(
+           #   inputId = "topdegenes",
+           #   label = "Plot top DE genes", 
+           #   style =
+           #     "padding:8px; color: #fff; background-color: #337ab7; border-color: #2e6da4; float:left"
+           # )),column(12,offset=2,br(), downloadButton("savebarplot", "Save your bar plot" , style =
+           #                                     "padding:8px; color: #fff; background-color: #337ab7; border-color: #2e6da4; float:right, left: 100%")),
+           # column(12,offset=, uiOutput("topgenesvenn")),style ="padding:5px"),
+           
+           
            br(),
            plotOutput(outputId ="barplotvenn")
            

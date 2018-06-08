@@ -2,11 +2,11 @@ source("function/heatmtruncated.R")
 source("function/cutheat.R")
 source("function/formating.R")
 #source("function/compat.R")
-
+library(gplots)
 source("https://bioconductor.org/biocLite.R")
 biocLite("org.Mm.eg.db")
 require("org.Mm.eg.db") 
-
+library(dplyr)
 
 
 
@@ -58,27 +58,20 @@ hm01 = plotHeatmaps(hmbis[[1]],treated[[1]],groupss$Grp,workingPath=wd_path,mypa
                     gpcol = hmbis[[5]], gpcolr = hmbis[[6]], distfunTRIX = hmbis[[2]],geneSet = hmbis[[7]] , height = hmbis[[8]])
 
 
-View(hm01)
-hm01$ProbeName
-arrange(desc(hm01))
-colnames(adj[-1])
-dplyr::arrange(desc(hm01))
-
-arrange(hm01, desc(rownames(hm01)))
-
-test = sort(as.integer(rownames(hm01)), decreasing = T)
-print(test)
-hm01[match(test, rownames(hm01)), ]
-
-first = "adj.P.Val_"
-test = "LWT_MCD-LWT_CTRL"
-paste0(first, test)
-typeof(colnames(adj[-1]))
+View(hm01[[2]])
+myl=  NULL
+test= gosearch(hm01[[1]],"mm9", "geneSymbol", myl)
+View(test[[1]])
 
 
-filter(hm01$cluster) %>%
-  sort()
+final = tryCatch({
+  gosearch(hm01[[1]],"mm9", "geneSymbol", myl)
+},
+error = function(e) {
+  warning("ERROR")
+})
 
+View(final[[3]])
 
 
 ordered = pval %>% filter(ProbeName %in% hm01$ProbeName)  %>% 
@@ -335,27 +328,7 @@ registerDoParallel(no_cores)
 
 #tested <- lapply(1:4, function(i){
 #system.time({
-for (i in 1:NROW(unique(hm01$cluster))) {
 
-  genlist <- hm01[!duplicated(hm01[2]),]
-  genlist$DEgenes = 1
-  genlist$bias.data = 100
-  genlist$pwf = 0.01
-  row.names(genlist)= genlist$GeneName
-  pwf <-genlist %>% dplyr::select(cluster,GeneName,DEgenes, bias.data,pwf)   %>% filter(cluster == i)
-  row.names(pwf)= pwf$GeneName
-  
-  clusterlist[[i]] <- goseq(pwf[,-1,-2], "mm9" , "geneSymbol", use_genes_without_cat = T)
-  
-  #clusterlist[[i]] = filter(finalons, numInCat >4 ) %>%
-    #arrange(desc(numInCat))
-  #return(clusterlist)
-}
-
-length(test[[1]]$category)
-
-
-test= gosearch(hm01,"mm9", "geneSymbol",5,35)
 
 
 for (i in 1:NROW(unique(hm01$cluster))) {

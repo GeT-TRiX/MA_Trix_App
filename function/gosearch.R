@@ -44,7 +44,7 @@ gosearch <- function(hm01, species, ids, clusterlist) {
     cat(length(row.names(pwf)))
     
     if (!is.null(pwf)) {
-      finalons <- goseq(pwf, species , ids, use_genes_without_cat = F, method = "Hypergeometric")
+      finalons <- goseq(pwf, species , ids, use_genes_without_cat = F)
       clusterlist[[i]] = filter(finalons, numInCat > 1 ) %>%
         arrange(desc(numInCat))
     }
@@ -89,3 +89,55 @@ wclust <- function(clusterlist, filename, min, top)  {
   
   close(con)
 }
+
+
+probnamtoentrez <- function(hm01,  mypack) {
+  
+  lapply(1:NROW(unique((hm01$cluster))), function(x) {
+    entrezids <- hm01 %>%
+      filter(cluster == x) %>%
+      dplyr::select(GeneName) %>%
+      unlist() %>%
+      as.character() %>%
+      mget(x = .,envir = mypack,ifnotfound = NA) %>%
+      unlist() %>%
+      unique() %>%
+      .[!is.na(.)]
+    
+    return(entrezids)
+  })
+}
+
+
+davidquery <- function(entrezids, species) {
+  test = lapply(1:NROW(entrezids), function(x) {
+    david <-
+      DAVIDWebService$new(email = "franck.soubes@inra.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
+    RDAVIDWebService::setTimeOut(david, 100000)
+    result <-
+      addList(
+        david,
+        entrezids[[x]],
+        idType = "ENTREZ_GENE_ID",
+        listName = "testList",
+        listType = "Gene"
+      )
+    selectedSpecie = (species)
+    backgroundLocation = grep(selectedSpecie,
+                              RDAVIDWebService::getBackgroundListNames(david))
+    specieLocation = grep(selectedSpecie, RDAVIDWebService::getSpecieNames(david))
+    setCurrentSpecies(object = david, species = specieLocation)
+    setCurrentBackgroundPosition(object = david, position = backgroundLocation)
+    #getSpecieNames(david)
+    setAnnotationCategories(david, c("GOTERM_MF_ALL"))
+    as.data.frame(cbind(getFunctionalAnnotationChart(object=david, threshold=1, count=0L)))  %>%
+      filter(Count>1) %>% arrange(desc(Count))
+  })
+}
+
+
+
+
+
+
+

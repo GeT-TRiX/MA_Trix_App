@@ -11,13 +11,11 @@ list.of.packages <- c("shiny","shinythemes","shinyjs","AnnotationDbi","ggplot2",
 
 #"goseq","GO.db","rbenchmark","heatmaply"
 
-#Warning: Error in py_run_file_impl: ImportError: No module named requests
-# 
-# Detailed traceback: 
-#   File "<string>", line 3, in <module>
-#   
-#   122: <Anonymous>
-  
+# cl <- makeCluster(detectCores() - 1)
+# clusterEvalQ(cl, {
+#   library(list.of.packages)
+# }) 
+
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)

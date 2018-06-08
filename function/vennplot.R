@@ -137,19 +137,20 @@ myventocsv <- function(myven,adj){
 setvglobalvenn <- function(vennlist,adj){
   
   names(vennlist) = colnames(adj)
-
-  
-  global <- unlist(lapply(1:length(vennlist), 
-                  function(x) combn(names(vennlist), x, simplify = FALSE)),
-           recursive = FALSE)
-  
-  names(global) <- sapply(global, function(p) paste0(p, collapse = ""))
-
-  elements <- 
-    lapply(global, function(i) Setdiff(vennlist[i], vennlist[setdiff(names(vennlist), i)]))
+  elements <- 1:length(vennlist) %>% lapply(function(x)
+      combn(names(vennlist), x, simplify = FALSE)) %>%
+    unlist(recursive = F) %>% setNames(., sapply(., function(p)
+      paste0(p, collapse = ""))) %>%
+    lapply(function(i)
+      Setdiff(vennlist[i], vennlist[setdiff(names(vennlist), i)])) %>% .[sapply(., length) > 0]
   
   
-  elements <- elements[sapply(elements, length) > 0]
+  # global <- unlist(lapply(1:length(vennlist),
+  #                         function(x) combn(names(vennlist), x, simplify = FALSE)),
+  #                  recursive = FALSE)
+  # names(global) <- sapply(global, function(p) paste0(p, collapse = ""))
+  # elements <- lapply(global, function(i) Setdiff(vennlist[i], vennlist[setdiff(names(vennlist), i)]))
+  # elements <- elements[sapply(elements, length) > 0]
   
   return(elements)
 }

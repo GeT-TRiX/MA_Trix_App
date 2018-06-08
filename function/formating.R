@@ -279,6 +279,32 @@ heatmtoclust = function( hmp01_All, exprData, pval, height= 5){
 }
 
 
+#https://stackoverflow.com/questions/9063889/how-to-round-a-data-frame-in-r-that-contains-some-character-variables
+round_df <- function(df, digits) {
+  
+  df = lapply(1:NROW(df), function(x){
+  nums <- vapply(df[[x]], is.numeric, FUN.VALUE = logical(1))
+  df[[x]][,nums] <- round(df[[x]][,nums], digits = digits)
+  })
+  return(df)
+}
+
+## https://www.r-bloggers.com/correctly-reporting-p-values-in-summary-tables-reported-with-xtable/
+fixp <- function(x, dig=3){
+  #x <- as.data.frame(x)
+  if(substr(names(x)[ncol(x)],1,2) != "Pr")
+    warning("The name of the last column didn't start with Pr. This may indicate that p-values weren't in the last row, and thus, that this function is inappropriate.")
+  x[,ncol(x)] <- round(x[,ncol(x)], dig)
+  for(i in 1:nrow(x)){
+    if(x[i,ncol(x)] == 0)
+      x[i,ncol(x)] <- paste0("< .", paste0(rep(0,dig-1), collapse=""), "1")
+  }
+  
+  x
+}
+
+
+
 # 
 # test <- sessionInfo()
 # final <- cbind(unlist(lapply(names(test$otherPkgs),
