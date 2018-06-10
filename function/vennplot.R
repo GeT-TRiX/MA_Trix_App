@@ -177,12 +177,27 @@ rowtoprob <- function(myven,pval,adj) {
 
 
 
-topngenes <- function(dfinter, mycont, inputtop) {
-  dfinter$GeneName = make.names(dfinter$GeneName, unique = T)
+topngenes <- function(dfinter, mycont, inputtop, meandup = F) {
+  
+  
+  if(!meandup)
+    dfinter$GeneName = make.names(dfinter$GeneName, unique = T)
+  else{
+    logval <- "logFC_" %>%
+      grepl(colnames(dfinter))%>%
+      which(.==T)
+    
+    for (i in mycont) {
+      dfinter[[i]] = as.numeric(as.character(dfinter[[i]]))
+    }
+    
+    dfinter <- dfinter[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] 
+    dfinter = as.data.frame(dfinter)
 
-  mycont = gsub("-"," vs " ,mycont)
+  }
 
   
+  mycont = gsub("-"," vs " ,mycont)
   colnames(dfinter)= lapply(colnames(dfinter),function(x){
     
     if(grepl("-",x))
@@ -190,6 +205,7 @@ topngenes <- function(dfinter, mycont, inputtop) {
     
     return(x)})
   
+
   
   reshp <-melt(
     dfinter[1:inputtop, ],
@@ -198,12 +214,13 @@ topngenes <- function(dfinter, mycont, inputtop) {
     variable.name = "Comparisons",
     value.name = "logFC"
   )
+  
   reshp <- droplevels(reshp)
   reshp$GeneName <-factor(reshp$GeneName, levels = unique(as.character(reshp$GeneName)))
   
-  maxval = as.numeric(max(reshp$logFC))
-  minval = as.numeric(min(reshp$logFC))
-  print(c(minval-2,maxval+2))
+  # maxval = as.numeric(max(reshp$logFC))
+  # minval = as.numeric(min(reshp$logFC))
+  # print(c(minval-2,maxval+2))
   
   
   p <- ggplot(reshp, aes(
@@ -214,7 +231,6 @@ topngenes <- function(dfinter, mycont, inputtop) {
     geom_bar(stat = "identity", position = "dodge") +
     
    # coord_cartesian(ylim=c(minval-2,maxval+2))+
-    
     # scale_fill_discrete(
     #   name = "GeneName",
     #   breaks = c(seq(mycont)),
@@ -243,7 +259,7 @@ topngenes <- function(dfinter, mycont, inputtop) {
       legend.position="top"
     ) 
     
-  print(unique(sort(c(seq(as.numeric(maxval)),seq(as.numeric(minval))))))
+  #print(unique(sort(c(seq(as.numeric(maxval)),seq(as.numeric(minval))))))
   
   print(p)
   

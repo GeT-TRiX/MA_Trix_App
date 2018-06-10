@@ -67,7 +67,12 @@ tabPanel(
       
       br(),
       uiOutput("myselvenn")),
-      uiOutput("topgenesvenn")
+      uiOutput("topgenesvenn"),
+    
+      column(5,
+             checkboxInput("meandup",
+                           "Compute the mean for the same duplicated genes",
+                           FALSE))
     
     #uiOutput("svenn")
     

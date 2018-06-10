@@ -7,7 +7,7 @@
 ## Author: Franck Soubès        ##
 ##################################
 ##################################
-library("org.Mm.eg.db")
+
 
 ###############################
 ######## creating graph log   #
@@ -253,7 +253,7 @@ shinyServer(server <- function(input, output, session) {
   plottopgenes <- eventReactive(input$topdegenes,{
     req(vennfinal(),vennchoice(),venntopgenes())
     mycont = paste0("logFC_", vennchoice())
-    myplot <- topngenes(vennfinal()[input$vennresinter_rows_all, , drop = FALSE],mycont,venntopgenes())
+    myplot <- topngenes(vennfinal()[input$vennresinter_rows_all, , drop = FALSE],mycont,venntopgenes(), input$meandup)
     return(myplot)
     
   })
@@ -482,9 +482,10 @@ shinyServer(server <- function(input, output, session) {
                      for (i in 1:n) {
                        incProgress(1 / n, detail = "Please wait...")
                      }
-        #myentrez = probnamtoentrez(hmobj$hm,org.Mm.egALIAS2EG)
-        mygodavid = probnamtoentrez(hmobj$hm,org.Mm.egALIAS2EG) %>%
+                     
+        mygodavid = probnamtoentrez(hmobj$hm,Species()) %>%
           davidquery( input$Species) 
+        
       })
       
       final = lapply(1:NROW(mygodavid),function(x)
@@ -585,53 +586,86 @@ shinyServer(server <- function(input, output, session) {
       else
         print("Sorry, no enriched genes for this cluster")
       
-    })#gores$obj <- NULL
+    })
     
     
-    Species <- reactive({
-      if (input$Genome == "hg19") {# human
-        library("org.Hs.eg.db")
-        mypack = org.Hs.egALIAS2EG
-        return(mypack)
-      }
-      else if (input$Genome == "Mus musculus") {# Mouse
-        library("org.Mm.eg.db")
-        mypack = org.Mm.egALIAS2EG
-        print(mypack)
-        return(mypack)
-      }
-      else if (input$Genome == "danRer6") {#Zebra fish
-        require("org.Dr.eg.db")
-        return(org.Dr.egALIAS2EG)
-      }
-      else if (input$Genome == "galGal3") {# chicken
-        require("org.Gg.eg.db")
-        return(org.Gg.egALIAS2EG)
-      }
-      else if (input$Genome == "equCab2") {# horse
-        require("org.Gg.eg.db")
-        return(org.Mm.egALIAS2EG)
-      }
-      else if (input$Genome == "ce6") {# cC elegans
-        require("org.Ce.eg.db")
-        return(org.Ce.egALIAS2EG)
-      }
-      else if (input$Genome == "rn4") {# Rat
-        require("org.Rn.eg.db")
-        return(org.Rn.egALIAS2EG)
-      }
-      else if (input$Genome == "susScr3") {# Pig
-        require("org.Ss.eg.db")
-        return(org.Ss.egALIAS2EG)
+    output$savego = downloadHandler('go.xlsx', content = function(file) {
+      
+      library(xlsx)
+      
+      for (i in 1:length(davidwebservice())) {
+        if (i == 1)
+          write.xlsx(file = file,
+                     davidwebservice()[[i]],
+                     sheetName = paste("Cluster", i))
+        else
+          write.xlsx(
+            file = file,
+            davidwebservice()[[i]],
+            sheetName = paste("Cluster", i),
+            append = TRUE
+          )
       }
       
+      
+      # write.csv2(vennfinal()[s, , drop = FALSE], file)
+      #davidxlsx()
     })
     
     
     
+  })
+    #gores$obj <- NULL
     
+    #Species <- eventReactive(input$DAVID,{
+  Species <- reactive({
+    if (input$Species == "Homo sapiens") {# human
+      library("org.Hs.eg.db")
+      mypack = org.Hs.egALIAS2EG
+      return(mypack)
+    }
+    else if (input$Species == "Mus musculus") {# Mouse
+      library("org.Mm.eg.db")
+      mypack = org.Mm.egALIAS2EG
+      return(mypack)
+    }
+    else if (input$Species == "Danio rerio") {#Zebra fish
+      library("org.Dr.eg.db")
+      mypack = org.Dr.egALIAS2EG
+      return(mypack)
+    }
+    else if (input$Species == "Gallus gallus") {# chicken
+      library("org.Gg.eg.db")
+      mypack = org.Gg.egALIAS2EG
+      return(mypack)
+    }
+    else if (input$Species == "equCab2") {# horse
+      library("org.Gg.eg.db")
+      mypack = org.Mm.egALIAS2EG
+      return(mypack)
+    }
+    else if (input$Species == "Caenorhabditis elegans") {# cC elegans
+      library("org.Ce.eg.db")
+      mypack = org.Ce.egALIAS2EG
+      return(mypack)
+    }
+    else if (input$Species == "Rattus norvegicus") {# Rat
+      library("org.Rn.eg.db")
+      mypack = org.Rn.egALIAS2EG
+      return(mypack)
+    }
+    else if (input$Species == "Sus scrofa") {# Pig
+      library("org.Ss.eg.db")
+      mypack = org.Ss.egALIAS2EG
+      return(mypack)
+    }
     
   })
+  
+    
+
+  #})
+  
   
   
   

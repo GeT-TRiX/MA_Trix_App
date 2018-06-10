@@ -63,7 +63,7 @@ test = org.Mm.egALIAS2EG
 test
 
   david <- DAVIDWebService$new(email = "franck.soubes@inra.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
-  RDAVIDWebService::setTimeOut(david, 100000)
+  RDAVIDWebService::setTimeOut(david, 90000)
   result<-addList(david, entrezids[[x]], idType="ENTREZ_GENE_ID", listName="testList", listType="Gene")
   selectedSpecie= ("Mus musculus")
   backgroundLocation=grep(selectedSpecie,RDAVIDWebService::getBackgroundListNames(david))
@@ -78,15 +78,31 @@ test
 
 mydavfunc = davidquery(entrezids , "Mus musculus")
 
+format(mygodavid[[3]], digits = 3)
+library(xlsx)
+View(mydavfunc[[1]])
 
 
+final = lapply(1:NROW(mydavfunc),function(x)
+  return(format(mydavfunc[[x]], digits = 3)))
+
+
+for(i in 1:length(mydavfunc)){
+  if(i == 1)
+    write.xlsx(file="test.xlsx",final[[i]], sheetName= paste("Cluster", i))
+  else
+    write.xlsx(file="test.xlsx",final[[i]], sheetName= paste("Cluster", i),  append=TRUE)
+}
+
+
+help("write.xlsx2")
 format(mydavfunc[[1]], digits = 2)
 
 test = lapply(1:NROW(mydavfunc),function(x)
   return(format(mydavfunc[[x]], digits = 3)))
 View(test[[1]])
 
-
+as.data.frame.numeric()
 
 View(mydavfunc[[2]][, -c(4,6)])
 mytestfunc = mydavfunc[[2]]
