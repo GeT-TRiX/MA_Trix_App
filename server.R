@@ -26,8 +26,18 @@ shinyServer(server <- function(input, output, session) {
   ######## Loading js           #
   ###############################
   
-  hide(id = "loading-content", anim = TRUE, animType = "fade",time=1.5)
-  hide(id = "loading-content-bar", anim = TRUE, animType = "fade",time=1.5)
+  hide(
+    id = "loading-content",
+    anim = TRUE,
+    animType = "fade",
+    time = 1.5
+  )
+  hide(
+    id = "loading-content-bar",
+    anim = TRUE,
+    animType = "fade",
+    time = 1.5
+  )
   
   ###############################
   ######## Load the csv files   #
@@ -55,16 +65,19 @@ shinyServer(server <- function(input, output, session) {
   ######## citation packages              #
   #########################################
   
-
+  
   
   mypacklist <- reactive({
-
     dfpack <- names(sessionInfo()$otherPkgs) %>%
-      lapply(function(x) return(paste(mysess$otherPkgs[[x]]$Package, mysess$otherPkgs[[x]]$Version)))%>%
-      unlist()%>%
-      cbind(.,unlist(lapply(names(mysess$otherPkgs), function(x)return(paste(mysess$otherPkgs[[x]]$Title)))))%>%
-      as.data.frame()%>%
-      setNames( c('Version', "Title"))
+      lapply(function(x)
+        return(
+          paste(mysess$otherPkgs[[x]]$Package, mysess$otherPkgs[[x]]$Version)
+        )) %>%
+      unlist() %>%
+      cbind(., unlist(lapply(names(mysess$otherPkgs), function(x)
+        return(paste(mysess$otherPkgs[[x]]$Title))))) %>%
+      as.data.frame() %>%
+      setNames(c('Version', "Title"))
     
     return(dfpack)
   })
@@ -88,18 +101,19 @@ shinyServer(server <- function(input, output, session) {
     inFile <- input$file
     
     if (is.null(inFile))
-      return(NULL) else return (tools::file_path_sans_ext(inFile$name))
-  })     
+      return(NULL)
+    else
+      return (tools::file_path_sans_ext(inFile$name))
+  })
   
-   
+  
   
   projectname <- reactive({
-  
     req(file_name())
     projed <- strsplit(file_name(), "_")
-    proj = grepl("^MA",projed[[1]])
-    index = which(proj==T)
-    myproj = list(projed[[1]][index],proj)
+    proj = grepl("^MA", projed[[1]])
+    index = which(proj == T)
+    myproj = list(projed[[1]][index], proj)
     
     return(myproj)
     
@@ -197,63 +211,90 @@ shinyServer(server <- function(input, output, session) {
   source(file.path("server", "Vennrender.R"), local = TRUE)$value #
   
   
-  vennchoice <- reactive({if (is.null (input$intscol)) return(NULL) else return(input$intscol)})
+  vennchoice <-
+    reactive({
+      if (is.null (input$intscol))
+        return(NULL)
+      else
+        return(input$intscol)
+    })
   
   output$myselvenn <- renderUI({
     req(user_cont())
     #intscol <- names(user_cont())#names(adjusted()[[1]][,-1])
-    selectInput('intscol', 'Specify your interaction(s):', choices = names(user_cont()), multiple = TRUE)
-  }) 
+    selectInput(
+      'intscol',
+      'Specify your interaction(s):',
+      choices = names(user_cont()),
+      multiple = TRUE
+    )
+  })
   
   venninter <- reactive({
     req(vennlist(), user_cont())
-    myelist <- setvglobalvenn(vennlist(),user_cont())
+    myelist <- setvglobalvenn(vennlist(), user_cont())
     return(myelist)
   })
   
   
   vennfinal <- reactive({
     req(vennchoice())
-    if(is.null(vennchoice))
+    if (is.null(vennchoice))
       return(NULL)
     
     reordchoice <- vennchoice() %>%
-      factor(levels = names(adjusted()[[1]][,-1] )) %>%
+      factor(levels = names(adjusted()[[1]][, -1])) %>%
       sort() %>%
-      paste(collapse="")
+      paste(collapse = "")
     
-    resfinal= csvf()[[3]] %>% 
-      filter(ProbeName %in% venninter()[[reordchoice]]) %>% 
-      select(ProbeName,GeneName, paste0("logFC_", vennchoice())) %>%
+    resfinal = csvf()[[3]] %>%
+      filter(ProbeName %in% venninter()[[reordchoice]]) %>%
+      select(ProbeName, GeneName, paste0("logFC_", vennchoice())) %>%
       mutate_if(is.numeric, funs(formatC(., format = "f")))
     return(resfinal)
   })
-
-
+  
+  
   output$topgenesvenn <- renderUI({
-  req(vennfinal(),vennchoice())
-  
-  numericInput('topgenes', 'Top genes', 50, 
-                 min = 1, max = length(vennfinal()$ProbeName))
+    req(vennfinal(), vennchoice())
+    
+    numericInput(
+      'topgenes',
+      'Top genes',
+      50,
+      min = 1,
+      max = length(vennfinal()$ProbeName)
+    )
   })
   
   
-  venntopgenes <- reactive({if (is.null (input$topgenes)) return(NULL) else return(input$topgenes)})
-
-  output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal(),list(
-    lengthMenu =  c('5', '15', '50'))), server=F) 
+  venntopgenes <-
+    reactive({
+      if (is.null (input$topgenes))
+        return(NULL)
+      else
+        return(input$topgenes)
+    })
+  
+  output$vennresinter <-
+    DT::renderDataTable(DT::datatable(vennfinal(), list(lengthMenu =  c('5', '15', '50'))), server =
+                          F)
   
   
-  output$downloadvennset = downloadHandler('venns-filtered.csv', content = function(file) {
-    s = input$vennresinter_rows_all
-    write.csv2(vennfinal()[s, , drop = FALSE], file)
-  })
+  output$downloadvennset = downloadHandler(
+    'venns-filtered.csv',
+    content = function(file) {
+      s = input$vennresinter_rows_all
+      write.csv2(vennfinal()[s, , drop = FALSE], file)
+    }
+  )
   
   
-  plottopgenes <- eventReactive(input$topdegenes,{
-    req(vennfinal(),vennchoice(),venntopgenes())
+  plottopgenes <- eventReactive(input$topdegenes, {
+    req(vennfinal(), vennchoice(), venntopgenes())
     mycont = paste0("logFC_", vennchoice())
-    myplot <- topngenes(vennfinal()[input$vennresinter_rows_all, , drop = FALSE],mycont,venntopgenes(), input$meandup)
+    myplot <-
+      topngenes(vennfinal()[input$vennresinter_rows_all, , drop = FALSE], mycont, venntopgenes(), input$meandup)
     return(myplot)
     
   })
@@ -269,9 +310,7 @@ shinyServer(server <- function(input, output, session) {
   
   
   observe({
-    
-    validate(
-      need(csvf(), 'You need to import data to visualize this plot!'))
+    validate(need(csvf(), 'You need to import data to visualize this plot!'))
     
     output$savebarplot <- downloadHandler(filename <- function() {
       paste0(basename(tools::file_path_sans_ext(projectname())),
@@ -282,12 +321,10 @@ shinyServer(server <- function(input, output, session) {
     content <- function(file) {
       if (input$formven == "pdf")
         
-        pdf(
-          file,
-          width = 19,
-          height = 7,
-          pointsize = 12
-        )
+        pdf(file,
+            width = 19,
+            height = 7,
+            pointsize = 12)
       
       else if (input$formven == "png")
         png(
@@ -299,7 +336,12 @@ shinyServer(server <- function(input, output, session) {
           res = 100
         )
       else
-        cairo_ps(filename=file, width=16, height=7,pointsize = 12)
+        cairo_ps(
+          filename = file,
+          width = 16,
+          height = 7,
+          pointsize = 12
+        )
       
       print(plottopgenes())
       
@@ -342,7 +384,14 @@ shinyServer(server <- function(input, output, session) {
     })
   })
   
-  
+  observe({
+    req(clustergrep())
+    print(length(clustergrep()))
+    
+    if (length(clustergrep()) > 400)
+      shinyjs::disable("DAVID")
+    
+  })
   
   
   observe({
@@ -383,214 +432,214 @@ shinyServer(server <- function(input, output, session) {
       updateTabsetPanel(session, "heatmconf",
                         selected = "cutpan")
     }
-    else if (grepl("hmmainpan",  input$mainhmtabset)) {  #|dfhmclu|maingo
+    else if (grepl("hmmainpan",  input$mainhmtabset)) {
+      #|dfhmclu|maingo
       updateTabsetPanel(session, "heatmconf",
                         selected = "hmpan")
     }
   })
   
+  # testad <- eventReactive(input$GO, {
+  #   req(hmobj$hm)
+  #   gores$obj <- NULL
+  #   myl <- NULL
+  #
+  # withProgress(message = 'Performing GO enrichment:',
+  #              value = 0, {
+  #                n <- NROW(50)
+  #                for (i in 1:n) {
+  #                  incProgress(1 / n, detail = "Please wait...")
+  #                }
+  #
+  #                  final = tryCatch({
+  #                    gosearch(hmobj$hm, input$Species, "geneSymbol", myl)
+  #                  },
+  #                  error = function(e) {
+  #                    warning("ERROR")
+  #                  })
+  #
+  #                })
+  #   return(final)
+  # })
+  
+  
+  
+  # slidergoen <- reactive({
+  #   req(testad(), input$cutgo)
+  #
+  #   x <- input$cutgo
+  #
+  #   sliderInput(
+  #     "slidergo",
+  #     label = "Select (GO) range of observations",
+  #     min = 1,
+  #     max = length(testad()[[as.integer(x)]][[1]]),
+  #     value = c(1, 25)
+  #   )
+  #
+  # })
+  #
+  # output$slidergo <- renderUI({
+  #   slidergoen()
+  # })
+  
+  
+  # output$savego <- downloadHandler(
+  #
+  #   filename = function() {
+  #     paste(basename(file_path_sans_ext(input$filename)),
+  #           'enrichment_clusters',
+  #           '.txt',
+  #           sep = '')
+  #   },
+  #   content = function() {
+  #     write.csv(gores$down[[1]],file,row.names = F)
+  #   }
+  # )
+  
+  
+  clustergrep <- reactive({
+    req(hmobj$hm, input$cutgo)
+    
+    genlist <- hmobj$hm[!duplicated(hmobj$hm$GeneName), ] %>%
+      dplyr::select(cluster, GeneName)   %>%
+      filter(cluster == input$cutgo)
+    
+    mygensymb = genlist$cluster %>%
+      length() %>%
+      matrix(1, .) %>%
+      as.double() %>%
+      setNames(genlist$GeneName) %>%
+      names() %>% as.list() %>%
+      .[lapply(., function(x)
+        length(grep("chr", x, value = FALSE))) == 0]
+    
+    return(mygensymb)
+  })
+  
+  davidwebservice <- eventReactive(input$GO, {
+    req(hmobj$hm)
+    library(RDAVIDWebService)
+    
+    withProgress(message = 'Performing GO enrichment:',
+                 value = 0, {
+                   n <- NROW(50)
+                   for (i in 1:n) {
+                     incProgress(1 / n, detail = "Please wait...")
+                   }
+                   
+                   mygodavid = probnamtoentrez(hmobj$hm, Species()) %>%
+                     davidquery(input$Species)
+                   
+                 })
+    
+    final = lapply(1:NROW(mygodavid), function(x)
+      return(format(mygodavid[[x]], digits = 3)))
+    
+    return(final)
+  })
+  
+  
+  davidurl <- reactive({
+    req(clustergrep())
+    
+    source_python('./python/add.py')
+    mydavurl = enrichmentdav(clustergrep())
+    mygloburl <- paste(`mydavurl`, ",", "'_blank')")
+    
+    return(mygloburl)
+  })
   
   
   observe({
-    
-    # testad <- eventReactive(input$GO, {
-    #   req(hmobj$hm)
-    #   gores$obj <- NULL
-    #   myl <- NULL
-    #   
-      # withProgress(message = 'Performing GO enrichment:',
-      #              value = 0, {
-      #                n <- NROW(50)
-      #                for (i in 1:n) {
-      #                  incProgress(1 / n, detail = "Please wait...")
-      #                }
-    #                  
-    #                  final = tryCatch({
-    #                    gosearch(hmobj$hm, input$Species, "geneSymbol", myl)
-    #                  },
-    #                  error = function(e) {
-    #                    warning("ERROR")
-    #                  })
-    #                  
-    #                })
-    #   return(final)
-    # })
-    
+    req(davidurl())
+    url$myurl = davidurl()
+  })
   
+  
+  # observe({
+  #   req(csvf())
+  #   print(input$Species)
+  #   Species()
+  #
+  # })
+  
+  
+  # observeEvent(input$DAVID, {
+  #   davidurl <- eventReactive(input$DAVID, {
+  #     req(clustergrep())
+  #
+  #     source_python('./python/add.py')
+  #     enrichmentdav(clustergrep())
+  #
+  #   })
+  #
+  #   davidurl()
+  # })
+  
+  
+  # mydavidshow <- reactive({
+  #   x<- input$cutgo
+  #   print(x)
+  #   mydf = davidwebservice()[[as.numeric(x)]]
+  #   return(mydf)
+  # })
+  
+  
+  output$davidgo <- renderDataTable({
+    davidwebservice()[[as.numeric(input$cutgo)]][,-c(4, 6)]
+  })
+  
+  
+  output$clustgo <- renderPrint({
+    validate(
+      need(csvf(), 'You need to import data to visualize the data!') %next%
+        need(
+          input$cutgo,
+          'You need to click on the heatmap button! then on the run GO button'
+        )
+    )
+    gores$obj <- isolate(testad())
     
-    # slidergoen <- reactive({
-    #   req(testad(), input$cutgo)
-    #   
-    #   x <- input$cutgo
-    #   
-    #   sliderInput(
-    #     "slidergo",
-    #     label = "Select (GO) range of observations",
-    #     min = 1,
-    #     max = length(testad()[[as.integer(x)]][[1]]),
-    #     value = c(1, 25)
-    #   )
-    #   
-    # })
-    # 
-    # output$slidergo <- renderUI({
-    #   slidergoen()
-    # })
-    
-    
-    # output$savego <- downloadHandler(
-    #   
-    #   filename = function() {
-    #     paste(basename(file_path_sans_ext(input$filename)),
-    #           'enrichment_clusters',
-    #           '.txt',
-    #           sep = '')
-    #   },
-    #   content = function() {
-    #     write.csv(gores$down[[1]],file,row.names = F)
-    #   }
-    # )
-    
-    
-    clustergrep <- reactive({
-      
-      req(hmobj$hm, input$cutgo)
-      
-      genlist <- hmobj$hm[!duplicated(hmobj$hm$GeneName),] %>%
-        dplyr::select(cluster, GeneName)   %>%
-        filter(cluster == input$cutgo)
-      
-      mygensymb = genlist$cluster %>%
-        length() %>%
-        matrix(1, .) %>%
-        as.double() %>%
-        setNames(genlist$GeneName) %>%
-        names() %>% as.list() %>%
-        .[lapply(., function(x)
-          length(grep("chr", x, value = FALSE))) == 0]
-      
-      return(mygensymb)
-    })
-    
-    davidwebservice <- eventReactive(input$GO, {
-      req(hmobj$hm)
-      library(RDAVIDWebService)
-      
-      withProgress(message = 'Performing GO enrichment:',
-                   value = 0, {
-                     n <- NROW(50)
-                     for (i in 1:n) {
-                       incProgress(1 / n, detail = "Please wait...")
-                     }
-                     
-        mygodavid = probnamtoentrez(hmobj$hm,Species()) %>%
-          davidquery( input$Species) 
-        
-      })
-      
-      final = lapply(1:NROW(mygodavid),function(x)
-        return(format(mygodavid[[x]], digits = 3)))
-      
-      return(final)
-    })
-    
-    
-    
-    davidurl <- eventReactive( input$DAVID, {
-      req(clustergrep())
-
-      source_python('./python/add.py')
-      mydavurl = enrichmentdav(clustergrep())
-      mygloburl <- paste(`mydavurl`,",", "'_blank')")
-
-      return(mygloburl)
-    })
-    
-    
-    observe({
-      req(davidurl())
-      url$myurl = davidurl()
-    })
-
-    # observe({
-    #   req(csvf())
-    #   print(input$Species)
-    #   Species()
-    # 
-    # })
-
-    
-    # observeEvent(input$DAVID, {
-    #   davidurl <- eventReactive(input$DAVID, {
-    #     req(clustergrep())
-    # 
-    #     source_python('./python/add.py')
-    #     enrichmentdav(clustergrep())
-    #     
-    #   })
-    #   
-    #   davidurl()
-    # })
-    
-    
-    # mydavidshow <- reactive({
-    #   x<- input$cutgo
-    #   print(x)
-    #   mydf = davidwebservice()[[as.numeric(x)]]
-    #   return(mydf)
-    # })
-    
-    
-    output$davidgo <- renderDataTable({
-      davidwebservice()[[as.numeric(input$cutgo)]][, -c(4,6)] 
-    })
-    
-    
-    output$clustgo <- renderPrint({
-      validate(
-        need(csvf(), 'You need to import data to visualize the data!') %next%
-          need(input$cutgo, 'You need to click on the heatmap button! then on the run GO button')
-      )
-      gores$obj <- isolate(testad())
-      
-      req(input$cutgo, input$slidergo)
-      x <- input$cutgo
-      if (!is.null(testad()[[as.integer(x)]])) {
-        for (go in input$slidergo[[1]]:input$slidergo[[2]]) {
-          if (Ontology(testad()[[as.integer(x)]][[1]][[go]]) == input$onto) {
-            cat(paste("GOID:", (GOID(
-              gores$obj[[as.integer(x)]][[1]][[go]]
-            ))))
-            cat("\n")
-            cat(paste("Term:", (Term(
-              gores$obj[[as.integer(x)]][[1]][[go]]
-            ))))
-            cat("\n")
-            cat(paste("Ontology:", (Ontology(
-              gores$obj[[as.integer(x)]][[1]][[go]]
-            ))))
-            cat("\n")
-            cat(paste("Definition:", (Definition(
-              gores$obj[[as.integer(x)]][[1]][[go]]
-            ))))
-            cat("\n")
-            cat(paste("Synonym:", (Synonym(
-              gores$obj[[as.integer(x)]][[1]][[go]]
-            ))))
-            cat("\n")
-            
-            cat("--------------------------------------\n")
-          }
+    req(input$cutgo, input$slidergo)
+    x <- input$cutgo
+    if (!is.null(testad()[[as.integer(x)]])) {
+      for (go in input$slidergo[[1]]:input$slidergo[[2]]) {
+        if (Ontology(testad()[[as.integer(x)]][[1]][[go]]) == input$onto) {
+          cat(paste("GOID:", (GOID(
+            gores$obj[[as.integer(x)]][[1]][[go]]
+          ))))
+          cat("\n")
+          cat(paste("Term:", (Term(
+            gores$obj[[as.integer(x)]][[1]][[go]]
+          ))))
+          cat("\n")
+          cat(paste("Ontology:", (Ontology(
+            gores$obj[[as.integer(x)]][[1]][[go]]
+          ))))
+          cat("\n")
+          cat(paste("Definition:", (Definition(
+            gores$obj[[as.integer(x)]][[1]][[go]]
+          ))))
+          cat("\n")
+          cat(paste("Synonym:", (Synonym(
+            gores$obj[[as.integer(x)]][[1]][[go]]
+          ))))
+          cat("\n")
+          
+          cat("--------------------------------------\n")
         }
       }
-      else
-        print("Sorry, no enriched genes for this cluster")
-      
-    })
+    }
+    else
+      print("Sorry, no enriched genes for this cluster")
     
-    
-    output$savego = downloadHandler('go.xlsx', content = function(file) {
-      
+  })
+  
+  
+  output$savego = downloadHandler(
+    'go.xlsx',
+    content = function(file) {
       library(xlsx)
       
       for (i in 1:length(davidwebservice())) {
@@ -610,51 +659,60 @@ shinyServer(server <- function(input, output, session) {
       
       # write.csv2(vennfinal()[s, , drop = FALSE], file)
       #davidxlsx()
-    })
-    
-    
-    
-  })
-    #gores$obj <- NULL
-    
-    #Species <- eventReactive(input$DAVID,{
+      # })
+      
+      
+      
+    }
+  )
+  #gores$obj <- NULL
+  
+  #Species <- eventReactive(input$DAVID,{
   Species <- reactive({
-    if (input$Species == "Homo sapiens") {# human
+    if (input$Species == "Homo sapiens") {
+      # human
       library("org.Hs.eg.db")
       mypack = org.Hs.egALIAS2EG
       return(mypack)
     }
-    else if (input$Species == "Mus musculus") {# Mouse
+    else if (input$Species == "Mus musculus") {
+      # Mouse
       library("org.Mm.eg.db")
       mypack = org.Mm.egALIAS2EG
       return(mypack)
     }
-    else if (input$Species == "Danio rerio") {#Zebra fish
+    else if (input$Species == "Danio rerio") {
+      #Zebra fish
       library("org.Dr.eg.db")
       mypack = org.Dr.egALIAS2EG
       return(mypack)
     }
-    else if (input$Species == "Gallus gallus") {# chicken
+    else if (input$Species == "Gallus gallus") {
+      # chicken
       library("org.Gg.eg.db")
       mypack = org.Gg.egALIAS2EG
       return(mypack)
     }
-    else if (input$Species == "equCab2") {# horse
+    else if (input$Species == "equCab2") {
+      # horse
       library("org.Gg.eg.db")
       mypack = org.Mm.egALIAS2EG
       return(mypack)
     }
-    else if (input$Species == "Caenorhabditis elegans") {# cC elegans
+    else if (input$Species == "Caenorhabditis elegans") {
+      # cC elegans
       library("org.Ce.eg.db")
       mypack = org.Ce.egALIAS2EG
       return(mypack)
     }
-    else if (input$Species == "Rattus norvegicus") {# Rat
+    else if (input$Species == "Rattus norvegicus") {
+      # Rat
       library("org.Rn.eg.db")
       mypack = org.Rn.egALIAS2EG
       return(mypack)
     }
-    else if (input$Species == "Sus scrofa") {# Pig
+    else if (input$Species == "Sus scrofa") {
+      # Pig
       library("org.Ss.eg.db")
       mypack = org.Ss.egALIAS2EG
       return(mypack)
@@ -662,12 +720,7 @@ shinyServer(server <- function(input, output, session) {
     
   })
   
-    
 
-  #})
-  
-  
-  
   
   #########################################
   ######## KEGG enrichissment             #
@@ -680,7 +733,7 @@ shinyServer(server <- function(input, output, session) {
   #########################################
   
   
-
+  
   
 })
 

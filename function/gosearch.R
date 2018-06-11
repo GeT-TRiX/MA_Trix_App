@@ -108,6 +108,11 @@ probnamtoentrez <- function(hm01,  mypack) {
   })
 }
 
+entreztosymb <- function(myentz, mypack){
+lapply(1:NROW(myentz), function(x)
+  as.vector(unlist(mget(myentz[[x]], envir=mypack, ifnotfound=NA))))
+}
+
 
 davidquery <- function(entrezids, species) {
   test = lapply(1:NROW(entrezids), function(x) {
@@ -122,6 +127,7 @@ davidquery <- function(entrezids, species) {
         listName = "testList",
         listType = "Gene"
       )
+    
     selectedSpecie = (species)
     backgroundLocation = grep(selectedSpecie,
                               RDAVIDWebService::getBackgroundListNames(david))
@@ -134,6 +140,8 @@ davidquery <- function(entrezids, species) {
       filter(Count>1) %>% arrange(desc(Count))
   })
 }
+
+
 
 
 

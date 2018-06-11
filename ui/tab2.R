@@ -108,7 +108,8 @@ tabPanel(
       # selectInput("method2", "Choose your matrix distance:", selected = "FDR", 
       #             c("adj.p.val(FDR)" = "FDR", "p.value(raw)" = "None" )),
       
-      
+      div(id = 'center', p("Advanced settings",style = "font-family: 'times'; font-si18pt; font-style: strong; ")),
+      br(),
       shiny::actionButton(
         "toggleAdvanced",
         "Advanced Computational Options",
@@ -255,11 +256,11 @@ tabPanel(
       
       
       br(),
-      
+      div(id = 'center', p("Print Heatmap",style = "font-family: 'times'; font-si18pt; font-style: strong; ")),
+      br(),
       
       fluidRow(column(
         5, uiOutput("button")
-       
       ),
       column(
         5,
@@ -284,31 +285,32 @@ tabPanel(
       # ),
     
     conditionalPanel(condition = 'output.heatmbool',
+    
+    div(id = 'center', p("GO Enrichment",style = "font-family: 'times'; font-si18pt; font-style: strong; ")),
+      br(),
+   
 
-                     fluidRow(column(
-                       5,
-                       # selectInput("Species", "Choose your Species:", selected = "mm9", 
-                       #             c("Mouse" = "mm9", "Human" = "hg19", "Rat" = "rn4", "C. elegans" = "ce6",
-                       #               "Zebrafish" = "danRer6",  "Pig" = "susScr3", 
-                       #                "Chicken" = "galGal3", "Chimpanzee" = "panTro2" ))),
-                    
+                     fluidRow(column( 4,
+ 
                        selectInput("Species", "Choose your Species:", selected = "Mus musculus", 
                                    c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
                                      "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa", 
                                      "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" ))),
                      column(
-                       5,
-                       uiOutput("cutgo"))
-                     ),
-      uiOutput("slidergo"),
-      helpText("GO enrichment are ranked from highest to the lowest, with 1 corresponding to the highest"),
-      fluidRow(column(3, selectInput("onto", "Category", 
-                                     selected ="BP", choices = c("BP", "MF", "CC"))
-      ),
-      
-      column(3,br(),
+                       4,
+                       uiOutput("cutgo")),
+                      column(3, selectInput("onto", "Category", 
+                                                    selected ="BP", choices = c("BP", "MF", "CC")
+                     ))),
+      #uiOutput("slidergo"),
+    
+      # fluidRow(column(3, selectInput("onto", "Category", 
+      #                                selected ="BP", choices = c("BP", "MF", "CC"))
+      # ),
+      fluidRow(
+      column(4,br(),
       actionButton("GO", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-      column(3,br(),
+      column(4,br(),
       #actionButton("DAVID", "Open DAVID",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"))
       uiOutput("DAVID"))
       )),
@@ -415,8 +417,7 @@ tabPanel(
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
       br(),br(),br(),br(),br(),br(),br(),br(),br(),
-      br(),br(),br(),br(),br(),br(),br(),br(),br(),
-      br(),br(),br(),br(),br()),
+      br(),br(),br(),br(),br(),br(),br()),
       
       h1("Here's a tracker for your different selections:"),
       #br(),
