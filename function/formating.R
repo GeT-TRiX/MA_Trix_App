@@ -182,11 +182,11 @@ myfinalfc = function(alltop, pval, testrix) {
   
   whatest  = ifelse(testrix == "FDR", T, F)
   if (whatest)
-    adj = alltop[, grep("X|^adj.P.Val", names(alltop), value = TRUE)]
+    adj = alltop[, grep("^X|^adj.P.Val", names(alltop), value = TRUE)]
   else
-    adj = alltop[, grep("X|^P.value", names(alltop), value = TRUE)]
+    adj = alltop[, grep("^X|^P.value", names(alltop), value = TRUE)]
     
-  logfc = alltop[, grep("X|^logFC", names(alltop), value = TRUE)]
+  logfc = alltop[, grep("^X|^logFC", names(alltop), value = TRUE)]
   myfc = c(1, 1.2, 2, 4, 6, 10)
   fcpval = data.frame(matrix(ncol = length(myfc), nrow = length(adj[, -1])))
   mycolnames = c("FC>1.0", "FC >1.2" , "FC >2", "FC >4", "FC >6", "FC >10")

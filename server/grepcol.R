@@ -12,21 +12,23 @@ adjusted <- reactive({
   if (is.null(df))
     return(NULL)
   
+  print(names(csvf()[[3]]))
+  
   myrpl = c("^adj.P.Val_","^logFC_","^P.value_")
   grepdf = c("X|^adj.P.Val","X|^logFC","X|^P.value")
   
-  adj = csvf()[[3]][, grep("X|^adj.P.Val",
+  adj = csvf()[[3]][, grep("^X|^adj.P.Val_",
                            names(csvf()[[3]]),
                            value = TRUE)]
   
-  logfc = csvf()[[3]][, grep("X|^logFC",
+  logfc = csvf()[[3]][, grep("^X|^logFC_",
                              names(csvf()[[3]]),
                              value = TRUE)]
   
-  pval = csvf()[[3]][, grep("X|^P.value",
+  pval = csvf()[[3]][, grep("^X|^P.value_",
                             names(csvf()[[3]]),
                             value = TRUE)]
-  
+
   
   mygrep = list(adj,logfc,pval)
   
@@ -38,6 +40,10 @@ adjusted <- reactive({
       x = names(mygrep[[i]]),
       perl = T
     )
+  
+  print(colnames(pval))
+  print(colnames(logfc))
+  print(colnames(adj))
   
   return(mygrep)
   
