@@ -38,7 +38,7 @@ tags$head(
       ),
       img(
         src = "Logotype-INRA-transparent.png",
-        height = 49,
+        height = 50,
         width = 180,
         style = "position:absolute;bottom:0;margin:0 0 15px 10px;"
       )    

@@ -201,7 +201,6 @@ user_fc <- reactive({
 })
 
 
-
 output$downloadvenn <- downloadHandler(
   filename = function() {
     paste(basename(file_path_sans_ext(projectname())),
@@ -211,7 +210,7 @@ output$downloadvenn <- downloadHandler(
   },
   content = function(fname) {
     write.table(
-      try(myventocsv(vennlist(), user_cont())),
+      try(myventocsv(vennlist()  , user_cont())),
       fname,
       na = "",
       row.names = F,

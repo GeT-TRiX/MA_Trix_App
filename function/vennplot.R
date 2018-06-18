@@ -181,7 +181,7 @@ rowtoprob <- function(myven,pval,adj) {
       test = pval[pval$rownames %in% myven[[x]],]
       
       what <- test %>%
-        select(GeneName) %>%
+        select(ProbeName) %>%
         unlist() %>%
         as.character()
       

@@ -86,16 +86,20 @@ shinyServer(function(input, output,session) {
     if (is.null(vennchoice))
       return(NULL)
     
+    
     reordchoice <- vennchoice() %>%
       factor(levels = names(adjusted()[[1]][, -1])) %>%
       sort() %>%
       paste(collapse = "")
+    
     
     resfinal = csvf()[[3]] %>%
       filter(ProbeName %in% venninter()[[reordchoice]]) %>%
       select(ProbeName, GeneName, paste0("logFC_", vennchoice())) %>%
       mutate_if(is.numeric, funs(format(., digits = 3)))
       #mutate_if(is.numeric, funs(formatC(., format = "f")))
+
+    
     return(resfinal)
   })
   
@@ -121,8 +125,7 @@ shinyServer(function(input, output,session) {
         return(input$topgenes)
     })
   
-  output$vennresinter <-
-    DT::renderDataTable(DT::datatable(vennfinal(), list(lengthMenu =  c('5', '15', '50'))), server =
+  output$vennresinter <-DT::renderDataTable(DT::datatable(vennfinal(), list(lengthMenu =  c('5', '15', '50'))), server =
                           F)
   
   
@@ -138,8 +141,7 @@ shinyServer(function(input, output,session) {
   plottopgenes <- eventReactive(input$topdegenes, {
     req(vennfinal(), vennchoice(), venntopgenes())
     mycont = paste0("logFC_", vennchoice())
-    myplot <-
-      topngenes(vennfinal()[input$vennresinter_rows_all, , drop = FALSE], mycont, venntopgenes(), input$meandup)
+    myplot <- topngenes(vennfinal()[input$vennresinter_rows_all, , drop = FALSE], mycont, venntopgenes(), input$meandup)
     return(myplot)
     
   })
@@ -382,7 +384,6 @@ shinyServer(function(input, output,session) {
   # })
 
 
-
   clustergrep <- reactive({
     req(hmobj$hm, input$cutgo)
 
@@ -413,9 +414,19 @@ shinyServer(function(input, output,session) {
                      incProgress(1 / n, detail = "Please wait...")
                    }
                    library(RDAVIDWebService)
+                   
+                   timeoutdav <- function(y)
+                     if(any(grepl("Read timed out", y)))
+                       invokeRestart("muffleWarning")
+                   
+                   tryCatch({
                    mygodavid = probnamtoentrez(hmobj$hm, Species()) %>%
-                     davidquery(input$Species)
+                   davidquery(input$Species) %>% withCallingHandlers(error = timeoutdav)}, warning = function(e) {
+                     warning("David's server is busy")
+                     
+                     return(cbind("David's server is busy") %>% as.data.frame() %>% setNames("Error"))
 
+                  })
                  })
 
     final = lapply(1:NROW(mygodavid), function(x)
@@ -453,7 +464,7 @@ shinyServer(function(input, output,session) {
 
 
   output$davidgo <- renderDataTable({
-    davidwebservice()[[as.numeric(input$cutgo)]][,-c(4, 6)]
+    davidwebservice()[[as.numeric(input$cutgo)]][,-9]
   })
 
 
