@@ -82,7 +82,7 @@ output$distPlot <- renderPlot({
       
       
 
-}, width = 800 , height = 1100, res = 100)
+})
 
 
 

@@ -14,6 +14,12 @@ output$boolmark <- reactive({
   showmark
 })
 
+observe({
+  print(showmark)
+})
+
+
+  
 outputOptions(output,"boolmark",suspendWhenHidden=F) 
 
 #' Reactive function in the aim of loading csv files
@@ -25,10 +31,11 @@ outputOptions(output,"boolmark",suspendWhenHidden=F)
 
 
 csvf <- reactive({
-  inFile <- input$file
+
   
+  inFile <- input$file
   if (is.null(inFile)) {
-    createAlert( 
+    createAlert(
       session,
       "alert",
       style = "info",
@@ -36,13 +43,18 @@ csvf <- reactive({
       title = "First Step",
       content = "You need to import 3 csv files in the browser widget",
       dismiss = FALSE
-  
+      
     )
-    #Sys.sleep(2.5)
-    closeAlert(session, "entryalert")
-    
-    return(NULL)
+  
+  #Sys.sleep(1.5)
+  closeAlert(session, "entryalert")
+  return(NULL)
   }
+  
+  req(input$file)
+  print(inFile)
+  
+  
   
   data <- as.list(inFile$datapath)
   csvtest = list()
@@ -59,7 +71,8 @@ csvf <- reactive({
       content = "Are you sure you're importing csv files ?",
       append = FALSE
     )
-    return(NULL)
+    #return(NULL)
+    return()
   }
   
   else{
@@ -136,7 +149,7 @@ csvf <- reactive({
     )
     
     csvord = list()
-    
+    print("ok")
     for (i in 1:length(csv)) {
       if (colnames(csv[[i]][2]) == "Grp") {
         csvord[[2]] = csv[[i]]
@@ -158,11 +171,14 @@ csvf <- reactive({
     
   }
   
-  observe({showmark <<-F}) # modify and lock the bool value to false
+  observe({showmark <<-F
+  print(showmark)
+  }) # modify and lock the bool value to false
   
   output$boolmark <- reactive({
     showmark
   })
+  
   
   
   #' Reactive function returned to the tab1.R 

@@ -50,3 +50,8 @@ PCAplot <- function() {
   
   return(p + scale_color_manual(values = empty()))
 }
+
+
+
+
+

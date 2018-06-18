@@ -146,7 +146,7 @@ observe({
   })
   
   
-  heatid <- input$matrixapp
+  heatid <- input$side
   if (grepl("Heatmap", heatid)) {
     if (input$reactheat == T)
       source(file.path("server", "plotreact.R"), local = TRUE)$value #
@@ -228,17 +228,39 @@ observe({
       select(ProbeName,  mycont) %>%
       full_join(hmobj$hm[,-1], ., by = "ProbeName") %>%
       select(ProbeName, GeneName, mycont, cluster) %>%
-      mutate_if(is.numeric, funs(formatC(., format = "E", digits = 2, flag="'")))
-    
+      mutate_if(is.numeric, funs(format(., digits = 3)))
+
     rightor = sort(as.integer(rownames(ordered)), decreasing = T)
     ordered = ordered[match(rightor, rownames(ordered)), ]
     
     return(ordered)
   })
+ 
+  grouplength <- reactive({
+    req(ordered())
+    
+    mydfhmgen = (subset( hmobj$hm, !duplicated(subset( hmobj$hm, select=GeneName)))) 
+    lengthofmyclust = sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
+      return(length(which(hmobj$hm$cluster ==x)))) %>%  
+      cbind(.,sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
+        return(length(which(mydfhmgen$cluster ==x))))) %>% as.data.frame()%>%
+      setNames(.,c("total number of probes","total number of genes")) 
+    rownames(lengthofmyclust) <- sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)
+      return(paste("cluster", x)))
+    
+    lengthofmyclust <- rbind(lengthofmyclust,c(sum(unlist(lengthofmyclust$`total number of probes`)),sum(unlist(lengthofmyclust$`total number of genes`))))
+    rownames(lengthofmyclust)[length(rownames(lengthofmyclust))]<- "total"
+    
+    return(lengthofmyclust)
+    
+  })
   
-
+  output$totalgenbyc <- renderDataTable(grouplength()) #
+  
+  
   output$clustering <-
-    renderDataTable(ordered()) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)
+    renderDataTable(ordered())
+  
   
 })
 

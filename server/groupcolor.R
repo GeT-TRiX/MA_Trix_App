@@ -32,6 +32,9 @@ cols <- reactive({
 
   if (is.null(mypal()) )
     lapply(seq_along(mycolgrp()), function(i) {
+      
+      # fluidRow(
+      #   column(6,
       colourInput(
         paste("col", i, sep = "_"),
         levels(mycolgrp())[i],
@@ -43,14 +46,16 @@ cols <- reactive({
   
   else 
   lapply(seq_along(mycolgrp()), function(i) {
+    
     colourInput(
       paste("col", i, sep = "_"),
       levels(mycolgrp())[i],
       mypaletA()[i],
       allowedCols =  palette,
       palette = "limited",
-      returnName = T
-    )})
+      returnName = T)
+    })
+  
 })
 
 #' mypaletA is a reactive function which aim is to set colors if the advanced graphical settings are not displays
@@ -81,10 +86,39 @@ mypal <- reactive({
 
 
 
-output$myPanel <- renderUI({
-  fluidRow(
-  cols())
+colorfluidhm <- reactive({
+
+  lapply(1:length(cols()), function(i){
+
+    j = length(cols())
+    if(length(cols()) %%2==0){
+      if (i %% 2 == 0) {
+        fluidRow(column(6, cols()[[i - 1]]), column(6, cols()[[i]]))
+      }
+    }
+    else{
+      if (i %% 2 ==0 && j!=i) {
+        fluidRow(column(6, cols()[[i - 1]]), column(6, cols()[[i]]))
+      }
+      else if (j == i){
+        fluidRow(column(6, cols()[[i]]))
+      }
+    }
+    
+    })
+    
 })
+
+
+output$myPanel <- renderUI({
+  
+  colorfluidhm()
+  
+  
+})
+
+
+
 
 # output$myPanel1 <- renderUI({ # display the colourInput in the UI
 #   cols()[1:2]

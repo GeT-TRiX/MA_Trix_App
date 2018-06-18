@@ -41,7 +41,6 @@ observeEvent(input$noTests, {
 
 #choix_test <- eventReactive(input$heatm, {
 choix_test <- reactive({
-  print(input$test)
   return(input$test)
 })
 #, ignoreNULL = F)

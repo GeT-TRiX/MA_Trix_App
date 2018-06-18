@@ -138,8 +138,8 @@ output$savescre <- downloadHandler(
   content <- function(file) {
     
     png(file,
-        width =1400,
-        height = 1400,
+        width =1200,
+        height = 1200,
         units = "px",
         pointsize= 12,
         res=100
@@ -161,7 +161,7 @@ output$eigpca <- renderPlot({
   
   plot(Scree_plot())
   
-}, width = 1200 , height = 600, res = 100)
+})
 
 
 #' labeled is a reactive function which aim is to display or not the labels in the PCA render plot
@@ -183,7 +183,7 @@ labeled <- reactive({
 
 
 output$PCA <- renderPlot({
-
+  
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
       need(length(unique(new_grouppca()$Grp)) >0, 'You need to select groups!')%next%
@@ -192,24 +192,45 @@ output$PCA <- renderPlot({
   
   plot(PCAplot())
   
-}, width = 1200 , height = 800, res = 100)
+})
 
 
 output$savepca <- downloadHandler(
   
   filename <- function() {
-    paste0(basename(file_path_sans_ext(projectname())), '_pca.png', sep='')    
+    paste0(basename(file_path_sans_ext(projectname())), '_pca.',input$formpca, sep='')    
   },
   content <- function(file) {
+    if (input$formpca == "pdf")
+      
+      pdf(file,
+          width = 12,
+          height = 12,
+          pointsize = 12)
     
+  
+    else if (input$formpca == "png")
+
     png(file,
-        width =1400,
-        height = 1400,
+        width =1200,
+        height = 1200,
         units = "px",
         pointsize= 12,
         res=100
     )
+    else
+      eps(
+        file,
+        width = 12,
+        height = 12,
+        pointsize = 12
+      )
+    
     
     plot(PCAplot())
     dev.off()
   })
+
+
+
+

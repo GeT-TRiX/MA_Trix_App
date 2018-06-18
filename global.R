@@ -1,33 +1,18 @@
-#########################################
-######## Global Environment packages    #
-#########################################
+# Allow to upload 50M files only shaman server
+#if(Sys.info()["nodename"] == "ShinyPro"){
+#  options(shiny.maxRequestSize=1000000000*1024^2)
+#}else{
+# Limit with the raw data submission to 2Gb
+options(shiny.maxRequestSize=2000000000)
+#}
 
 
-
-list.of.packages <- c("shiny","shinythemes","shinyjs","AnnotationDbi","ggplot2","shinyBS","markdown"
-                      ,"BH","data.table","DT","readr","colourpicker",
-                      "tools","devEMF","R.devices","FactoMineR","factoextra","gplots",
-                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly","dplyr","reticulate","Hmisc")
-
-#"goseq","GO.db","rbenchmark","heatmaply"
-
-
-
-
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-lapply(list.of.packages,function(x){library(x,character.only=TRUE)}) 
-
-
-
-#########################################
-######## Source files                   #
-#########################################
-
+source("css/owncss.R")
+source('LoadPackages.R')
 source("function/formating.R")
 #source("environnement/global.R")
 source("function/PCA.R")
-source("www/loadingcss.R")
+#source("www/loadingcss.R")
 source("function/heatmtruncated.R")
 source("function/formating.R")
 source("function/PCA.R")
@@ -38,9 +23,19 @@ source("function/cutheat.R")
 source("function/gosearch.R")
 
 
-#########################################
-######## Global Environment variables   #
-#########################################
+
+# source("function/PCA.R")
+# source('LoadPackages.R')
+# source("css/owncss.R")
+# source("function/formating.R")
+# source("Rfunctions/Data_Management.R")
+# source("Rfunctions/Stat_Model.R")
+# source("Rfunctions/DiagPlot.R")
+# source("Rfunctions/VisuPlot.R")
+# source("Rfunctions/CompPlot.R")
+# source("Rfunctions/DiffTable.R")
+# source('Rfunctions/directoryInput.R')
+# source('Rfunctions/internal_masque.R')
 
 firstcol = "green"
 intercol = "black"
@@ -48,7 +43,7 @@ lastcol = "red"
 wd_path= getwd()
 firstdim = 1
 secdim = 2
-mysess <- sessionInfo()
+#mysess <- sessionInfo()
 
 `%next%` <- shiny:::`%OR%`
 

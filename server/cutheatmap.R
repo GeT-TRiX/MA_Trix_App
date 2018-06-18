@@ -50,9 +50,11 @@ cutfinal <- reactive({
       groups = droplevels(new_group()$Grp),
       DEGres =  rownamtoX()[, -1],
       num = input$cutcluster,
-      type = input$cutinfo
+      type = input$cutinfo,
+      mypal = unlist(colors())
     )
 })
+
 
 
 # render to the ui the number of clusted for a define height in function of the current heatmap object
@@ -84,8 +86,43 @@ observe({
   }
   else{
     output$cutheatmap <- renderPlotly({
-      ggplotly(cutfinal(), height = 800, width = 1200)
+      ggplotly(cutfinal())
 
     })
   }
 })
+
+
+output$savecut <- downloadHandler(
+  
+  filename <- function() {
+    paste0(basename(file_path_sans_ext(projectname())), '_cutheat.',input$formcut, sep='')    
+  },
+  content <- function(file) {
+    if (input$formcut == "pdf")
+      
+      pdf(file,
+          width = 10,
+          height = 10,
+          pointsize = 12)
+    
+    
+    else if (input$formcut == "png")
+      
+      png(file,
+          width =1000,
+          height = 1000,
+          units = "px",
+          pointsize= 12,
+          res=100
+      )
+    else
+      cairo_ps(filename=file, width=10, height=10,pointsize = 12)
+
+    
+    plot(cutfinal())
+    #plot(PCAplot())
+    dev.off()
+  })
+
+

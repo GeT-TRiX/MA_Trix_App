@@ -25,7 +25,7 @@
 #' @export
 
 cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,labrow = T,
-                       fileType = "png",scale = "row",meanGrp = F,
+                       fileType = "png",scale = "row",meanGrp = F,mypal = NULL,
                        col.hm = maPalette(low = "green",high = "red",mid = "black",k = 75),
                        type = "None",las = 2,distfun = "cor",palette.col = NULL,num = 4,...)
 {
@@ -40,34 +40,46 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
   hmp.plot = ifelse(type == "Heatmap", T, F)
   probes.boxplot = ifelse(type == "WB", T, F)
   
+  if(is.null(mypal))
+    mypal = brewer.pal(8,"Dark2") %>%
+    list(brewer.pal(10,"Paired")) %>%
+    unlist()
   
-  if (!is.null(palette.col)) {
-    cl = palette(palette.col)
+  if(!is.null(palette.col)){
+    palette(palette.col);
+  }else  palette(mypal)
+  
+  cl=palette(mypal);
+  
+  
+  
+  # if (!is.null(palette.col)) {
+  #   cl = palette(palette.col)
     
     #		}else cl=palette(c("black", "blue", "cyan", "magenta",   "darkgray", "darkgoldenrod", "violet",  "orange", "lightgreen","lightblue", "darkorchid", "darkred","darkslateblue", "darkslategray", "maroon", "burlywood1" , "darkolivegreen"));
-  } else
-    cl =  palette(
-      c(
-        "#000000",
-        "#0072c2",
-        "#D55E00",
-        "#999999",
-        "#56B4E9",
-        "#E69F00",
-        "#CC79A7",
-        "lightblue",
-        "#F0E442",
-        "lightgreen",
-        "deepskyblue4",
-        "darkred",
-        "#009E73",
-        "maroon3",
-        "darkslategray",
-        "burlywood1",
-        "darkkhaki",
-        "#CC0000"
-      )
-    )
+  # } else
+  #   cl =  palette(
+  #     c(
+  #       "#000000",
+  #       "#0072c2",
+  #       "#D55E00",
+  #       "#999999",
+  #       "#56B4E9",
+  #       "#E69F00",
+  #       "#CC79A7",
+  #       "lightblue",
+  #       "#F0E442",
+  #       "lightgreen",
+  #       "deepskyblue4",
+  #       "darkred",
+  #       "#009E73",
+  #       "maroon3",
+  #       "darkslategray",
+  #       "burlywood1",
+  #       "darkkhaki",
+  #       "#CC0000"
+  #     )
+  #   )
   
   
   colid = colnames(exprData)
@@ -192,7 +204,8 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
           ) +
           theme(axis.line = element_line(colour = "#888888")) +
           #geom_violin(aes(fill=Group)) +
-          scale_fill_manual(values = cl[(1:length(levels(groups))) + 1]) +
+         #scale_fill_manual(values = cl[(1:length(levels(groups))) + 1]) +
+          scale_fill_manual(values = cl[(1:length(levels(groups)))]) +
           geom_jitter(
             position = position_jitter(0.16) ,
             colour = "#888888",

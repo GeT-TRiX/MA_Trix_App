@@ -80,7 +80,7 @@ observeEvent(input$heatm, {
                      })
       })
       
-    }, width = 800 , height = 1100, res = 100)
+    })
 })
   
 

@@ -32,7 +32,7 @@ vennlist <- reactive({
     return(NULL)
   mycont = Vennlist(pval = csvf()[[3]], user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
   probven = rowtoprob(mycont,csvf()[[3]], user_cont() )
-  
+  #colnames(probven) = names(user_cont())
   return(probven)
 })
 
@@ -63,7 +63,7 @@ Vennplot <- reactive({
     
   if(length(user_cont()) <= 5){
   #g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
-    g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
+    g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn)
   
 
    observe({value <<-T}) # listen inside the reactive expression 
@@ -182,9 +182,14 @@ choix_cont <- reactive({
 #'
 
 user_cont <- reactive({
-
-  mysel = (subset(adjusted()[[1]],
+  
+  
+  if (input$methodforvenn == "FDR")
+    mysel = (subset(adjusted()[[1]],
                   select = choix_cont()))
+  else 
+    mysel = (subset(adjusted()[[3]],
+                    select = choix_cont()))
   return(mysel)
 })
 
@@ -196,6 +201,7 @@ user_fc <- reactive({
 })
 
 
+
 output$downloadvenn <- downloadHandler(
   filename = function() {
     paste(basename(file_path_sans_ext(projectname())),
@@ -205,7 +211,7 @@ output$downloadvenn <- downloadHandler(
   },
   content = function(fname) {
     write.table(
-      try(myventocsv(vennlist())),
+      try(myventocsv(vennlist(), user_cont())),
       fname,
       na = "",
       row.names = F,

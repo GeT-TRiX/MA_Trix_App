@@ -52,6 +52,8 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de
   if(is.null(pval)) 
     return(NULL)
   
+  
+  
   reguser = ifelse(regulation == "up", T, F)
   reguserboth = ifelse(regulation == "both", T, F)
   lapply(1:ncol(adj), FUN = function(x){
@@ -67,7 +69,6 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de
 
 
 
-
 #' Vennfinal is a function which aim is to return an object containing a venn diagram 
 #' 
 #' @param myl a list of genes for the different contrasts
@@ -77,27 +78,41 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de
 #' @return \final draw on the current device
 #' 
 
-Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc){
-  
+Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet){ 
   if(is.null(myl))
     return(NULL)
   
   
+  metuse = ifelse(statimet == "FDR","DEG BH ", "DEG RAW ")
+  
   indexnull = which( sapply(myl ,length) == 0)
   myl <- myl[sapply(myl, length) > 0]
   final = length(myl)-1
-  test = sum(sapply(myl,length))
-  mynumb = paste("total genes", test , collapse = ":")
+  totgenes = sum(sapply(myl,length))
+  mynumb = paste("total genes", totgenes , collapse = ":")
   futile.logger::flog.threshold(futile.logger::ERROR, name = "VennDiagramLogger")
-  mytresh = paste0("DEG BH ", cutoffpval, " and FC " , cutofffc)
-  if(length(indexnull)>0)
-    g = venn.diagram(x = myl, filename = NULL, scaled = F, 
+  #mytresh = paste0("DEG BH ", cutoffpval, " and FC " , cutofffc)
+  mytresh = paste0(metuse, cutoffpval, " and FC " , cutofffc)
+  if(length(indexnull)>0){
+    if(length(myl)==5)
+      g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1, cat.just= list(c(0.6,1) , c(0,0) , c(0,0) , c(1,1) , c(1,0)),
                    category.names = colnames(adj[,-c(indexnull)]),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
                    fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
-  else
-    g = venn.diagram(x = myl, filename = NULL, scaled = F, 
+    else
+      g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,
+                     category.names = colnames(adj[,-c(indexnull)]),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                     fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
+  }
+  else{
+      if(length(myl)==5)
+      g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,cat.just=  list(c(0.6,1) , c(0,0) , c(0,0) , c(1,1) , c(1,0)) ,
                      category.names = colnames(adj),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
                      fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
+      else
+        g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,
+                         category.names = colnames(adj),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                         fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
+  }
   
   final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom= mytresh)
   
@@ -123,13 +138,13 @@ Vennsev <- function(myl, adj){
 #' @return
 #' 
 
-myventocsv <- function(myven,adj){
+myventocsv <- function(myven, adj){
   
-
+  
   max.length <- max(sapply(myven, length))
   myven %>%
     lapply(function(v){ c(v, rep("", max.length-length(v)))}) %>%
-    setNames(names(myven)) %>%
+    setNames(names(adj)) %>%
     as.data.frame()
 
 }
@@ -166,7 +181,7 @@ rowtoprob <- function(myven,pval,adj) {
       test = pval[pval$rownames %in% myven[[x]],]
       
       what <- test %>%
-        select(ProbeName) %>%
+        select(GeneName) %>%
         unlist() %>%
         as.character()
       

@@ -29,9 +29,36 @@ colspca <- reactive({
 })
 
 
-output$myPanelpca <- renderUI({ # display the colourInput in the UI
-  colspca()
+colorfluidpca <- reactive({
+  
+  lapply(1:length(colspca()), function(i){
+    
+    j = length(colspca())
+    if(length(colspca()) %%2==0){
+      if (i %% 2 == 0) {
+        fluidRow(column(6, colspca()[[i - 1]]), column(6, colspca()[[i]]))
+      }
+    }
+    else{
+      if (i %% 2 ==0 && j!=i) {
+        fluidRow(column(6, colspca()[[i - 1]]), column(6, colspca()[[i]]))
+      }
+      else if (j == i){
+        fluidRow(column(6, colspca()[[i]]))
+      }
+    }
+    
+  })
+  
 })
+
+
+
+output$myPanelpca <- renderUI({ # display the colourInput in the UI
+  #colspca()
+  colorfluidpca()
+})
+
 
 
 #' colorspca is a reactive function which aim is to create as many variables as groups

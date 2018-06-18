@@ -1,52 +1,21 @@
-##################################
-##################################
-##                              ##
-## Shiny app/server part        ##
-##################################
-##                              ##
-## Author: Franck Soubès        ##
-##################################
-##################################
-
-
-###############################
-######## creating graph log   #
-###############################
-
-# options(shiny.reactlog=TRUE)
-# showReactLog(time = TRUE)
-
-######################################
-######## Define Server Functionality #
-######################################
-
-shinyServer(server <- function(input, output, session) {
+shinyServer(function(input, output,session) {
   
-  ###############################
-  ######## Loading js           #
-  ###############################
+  hide(id = "loading-content", anim = TRUE, animType = "fade",time=2)
+  hide(id = "loading-content-bar", anim = TRUE, animType = "fade",time=2)
   
-  hide(
-    id = "loading-content",
-    anim = TRUE,
-    animType = "fade",
-    time = 1.5
-  )
-  hide(
-    id = "loading-content-bar",
-    anim = TRUE,
-    animType = "fade",
-    time = 1.5
-  )
+  #####################################################
+  ##
+  ##                    LOAD FILES
+  ##
+  #####################################################
   
-  ###############################
-  ######## Load the csv files   #
-  ###############################
+  
   
   source(file.path("server", "csvFile.R"), local = TRUE)$value #
   
+  
   #########################################
-  ######## Example files                  #
+  ######## HOME page                      #
   #########################################
   
   output$downloadData <- downloadHandler(filename <- function() {
@@ -61,158 +30,33 @@ shinyServer(server <- function(input, output, session) {
     reset("form")
   })
   
-  #########################################
-  ######## citation packages              #
-  #########################################
+  source(file.path("server", "datasummary.R"), local = TRUE)$value #
+  source(file.path("server", "renderertable.R"), local = TRUE)$value #
+  source(file.path("server", "checkboxgrp.R"), local = TRUE)$value #
   
-  
-  
-  mypacklist <- reactive({
-    dfpack <- names(sessionInfo()$otherPkgs) %>%
-      lapply(function(x)
-        return(
-          paste(mysess$otherPkgs[[x]]$Package, mysess$otherPkgs[[x]]$Version)
-        )) %>%
-      unlist() %>%
-      cbind(., unlist(lapply(names(mysess$otherPkgs), function(x)
-        return(paste(mysess$otherPkgs[[x]]$Title))))) %>%
-      as.data.frame() %>%
-      setNames(c('Version', "Title"))
-    
-    return(dfpack)
-  })
-  
-  
-  observeEvent(input$session, {
-    req(mypacklist())
-    output$sessinfo <- renderDataTable(mypacklist())
-  })
-  
-  #########################################
-  ######## Grep project name              #
-  #########################################
-  
-  observeEvent(input$heatm, {
-    print(colnames(adjusted()[[1]]))
-    cat(colnames(adjusted()[[1]]))
-  })
-  
-  file_name <- reactive({
-    inFile <- input$file
-    
-    if (is.null(inFile))
-      return(NULL)
-    else
-      return (tools::file_path_sans_ext(inFile$name))
-  })
-  
-  
-  
-  projectname <- reactive({
-    req(file_name())
-    projed <- strsplit(file_name(), "_")
-    proj = grepl("^MA", projed[[1]])
-    index = which(proj == T)
-    myproj = list(projed[[1]][index], proj)
-    
-    return(myproj)
-    
-  })
-  
-  
-  ##################################
-  ######## Hide and modify buttons #
-  ##################################
-  
-  source(file.path("server", "changeheatmbut.R"), local = TRUE)$value #
-  source(file.path("server", "hidevent.R"), local = TRUE)$value #
-  
-  #################################
-  ######## Plot in the renderView #
-  #################################
-  
-  source(file.path("server", "heatmapshiny.R"), local = TRUE)$value #
   
   ###############################
-  ######## tracker              #
-  ###############################
-  
-  source(file.path("server", "tracker.R"), local = TRUE)$value #
-  
-  ###############################
-  ######## Plot&save heatm PCA  #
+  ######## PCA page             #
   ###############################
   
   source(file.path("server", "PCAshiny.R"), local = TRUE)$value #
   source(file.path("server", "plotandsave.R"), local = TRUE)$value #
   
-  ###############################
-  ######## Adding mean by group #
-  ###############################
-  
-  source(file.path("server", "computemean.R"), local = TRUE)$value #
-  
-  #################################
-  ######## Select the individuals #
-  #################################
-  
-  source(file.path("server", "checkboxgrp.R"), local = TRUE)$value #
-  
-  #################################
-  ######## Select the comparisons #
-  #################################
-  
-  source(file.path("server", "checkboxcontrast.R"), local = TRUE)$value #
-  
-  #################################
-  ######## Format the data frame  #
-  #################################
-  
-  source(file.path("server", "grepcol.R"), local = TRUE)$value #
-  source(file.path("server", "indexselected.R"), local = TRUE)$value #
-  source(file.path("server", "datasummary.R"), local = TRUE)$value #
-  
-  #################################
-  ### Selected group and contrast #
-  #################################
-  
-  source(file.path("server", "selgroupandcont.R"), local = TRUE)$value #
-  
-  #########################################
-  ######## Updating a colourInput         #
-  #########################################
-  
-  source(file.path("server", "backgroundcolor.R"), local = TRUE)$value #
-  
-  #########################################
-  ######## Colors for the  groups         #
-  #########################################
-  
-  source(file.path("server", "groupcolor.R"), local = TRUE)$value #
-  
-  #########################################
-  ######## Plot the data frame wiht input #
-  #########################################
-  
-  source(file.path("server", "renderertable.R"), local = TRUE)$value #
-  
-  #########################################
-  ######## PCA part                       #
-  #########################################
-  
   source(file.path("server", "PCAsandp.R"), local = TRUE)$value #
   source(file.path("server", "colforpca.R"), local = TRUE)$value #
   
-  #########################################
-  ######## Venn part                      #
-  #########################################
+  
+  
+  ###############################
+  ######## Venn page           #
+  ###############################
   
   source(file.path("server", "Venn.R"), local = TRUE)$value #
   source(file.path("server", "Vennrender.R"), local = TRUE)$value #
+  source(file.path("server", "grepcol.R"), local = TRUE)$value # adjusted
   
   
-  vennchoice <-
-    reactive({
+  vennchoice <- reactive({
       if (is.null (input$intscol))
         return(NULL)
       else
@@ -250,7 +94,8 @@ shinyServer(server <- function(input, output, session) {
     resfinal = csvf()[[3]] %>%
       filter(ProbeName %in% venninter()[[reordchoice]]) %>%
       select(ProbeName, GeneName, paste0("logFC_", vennchoice())) %>%
-      mutate_if(is.numeric, funs(formatC(., format = "f")))
+      mutate_if(is.numeric, funs(format(., digits = 3)))
+      #mutate_if(is.numeric, funs(formatC(., format = "f")))
     return(resfinal)
   })
   
@@ -304,9 +149,29 @@ shinyServer(server <- function(input, output, session) {
       req(plottopgenes())
       plotOutput(plottopgenes())
       
-    }, width = 1100 , height = 600, res = 100))
+    }))
     
   })
+  
+ 
+  observe({
+  
+    if (input$fcvenn <=2)
+      updateSliderInput(session, "fcvenn", label = "FC treshold", value = NULL,
+                        min = 1, max = 10, step = .1)
+    else
+      updateSliderInput(session, "fcvenn", label = "FC treshold", value = NULL,
+                        min = 1, max = 10, step = 1)
+    
+    if (input$fc <=2)
+      updateSliderInput(session, "fc", label = "FC treshold", value = NULL,
+                        min = 1, max = 10, step = .1)
+    else
+      updateSliderInput(session, "fc", label = "FC treshold", value = NULL,
+                        min = 1, max = 10, step = 1)
+    
+  })
+  
   
   
   observe({
@@ -315,18 +180,18 @@ shinyServer(server <- function(input, output, session) {
     output$savebarplot <- downloadHandler(filename <- function() {
       paste0(basename(tools::file_path_sans_ext(projectname())),
              '_venn_barplot.',
-             input$formven,
+             input$formvenbar,
              sep = '')
     },
     content <- function(file) {
-      if (input$formven == "pdf")
+      if (input$formvenbar == "pdf")
         
         pdf(file,
-            width = 19,
+            width = 16,
             height = 7,
             pointsize = 12)
       
-      else if (input$formven == "png")
+      else if (input$formvenbar == "png")
         png(
           file,
           width = 1600,
@@ -336,8 +201,8 @@ shinyServer(server <- function(input, output, session) {
           res = 100
         )
       else
-        cairo_ps(
-          filename = file,
+        eps(
+          file,
           width = 16,
           height = 7,
           pointsize = 12
@@ -349,31 +214,104 @@ shinyServer(server <- function(input, output, session) {
     })
     
   })
-  
   source(file.path("server", "trackervenn.R"), local = TRUE)$value #
   
+  
   #########################################
-  ######## cutheatmap part                #
+  ######## Grep project name              #
   #########################################
   
+  observeEvent(input$heatm, {
+    print(colnames(adjusted()[[1]]))
+    cat(colnames(adjusted()[[1]]))
+  })
+  
+  file_name <- reactive({
+    inFile <- input$file
+    
+    if (is.null(inFile))
+      return(NULL)
+    else
+      return (tools::file_path_sans_ext(inFile$name))
+  })
+  
+  
+  
+  projectname <- reactive({
+    req(file_name())
+    projed <- strsplit(file_name(), "_")
+    proj = grepl("^MA", projed[[1]])
+    index = which(proj == T)
+    myproj = list(projed[[1]][index], proj)
+    
+    return(myproj)
+    
+  })
+  
+  
+  #########################################
+  ######## citation packages              #
+  #########################################
+  
+  
+  
+  mypacklist <- reactive({
+    mysess <- sessionInfo()
+    dfpack <- names(sessionInfo()$otherPkgs) %>%
+      lapply(function(x)
+        return(
+          paste(mysess$otherPkgs[[x]]$Package, mysess$otherPkgs[[x]]$Version)
+        )) %>%
+      unlist() %>%
+      cbind(., unlist(lapply(names(mysess$otherPkgs), function(x)
+        return(paste(mysess$otherPkgs[[x]]$Title))))) %>%
+      as.data.frame() %>%
+      setNames(c('Version', "Title"))
+    
+    return(dfpack)
+  })
+  
+  
+  observeEvent(input$session, {
+    req(mypacklist())
+    output$sessinfo <- renderDataTable(mypacklist())
+  })
+  
+
+  ###############################
+  ######## Heatmap page         #
+  ###############################
+  
+  
+  
+  source(file.path("server", "checkboxcontrast.R"), local = TRUE)$value #
+  source(file.path("server", "changeheatmbut.R"), local = TRUE)$value #
+  source(file.path("server", "hidevent.R"), local = TRUE)$value #
+  source(file.path("server", "heatmapshiny.R"), local = TRUE)$value #
+  source(file.path("server", "tracker.R"), local = TRUE)$value #
+  source(file.path("server", "computemean.R"), local = TRUE)$value #
+  source(file.path("server", "grepcol.R"), local = TRUE)$value #
+  source(file.path("server", "indexselected.R"), local = TRUE)$value #
+  source(file.path("server", "selgroupandcont.R"), local = TRUE)$value #
+  source(file.path("server", "backgroundcolor.R"), local = TRUE)$value #
+  source(file.path("server", "groupcolor.R"), local = TRUE)$value #
+  source(file.path("server", "renderertable.R"), local = TRUE)$value #
   source(file.path("server", "cutheatmap.R"), local = TRUE)$value #
-  
-  
-  #########################################
-  ######## GO enrichissment               #
-  #########################################
-  
-  
-  #obsC <- observe(quote({ print(hmobj$hm) }), quoted = TRUE)
-  
-  #gores <- reactiveValues()
-  
+#   
+#   #########################################
+#   ######## GO enrichissment               #
+#   #########################################
+#   
+#   #obsC <- observe(quote({ print(hmobj$hm) }), quoted = TRUE)
+#   
+#   #gores <- reactiveValues()
+#   
   url <- reactiveValues()
   gores <- reactiveValues()
-  
+
   observe({
     req(url)
-    
+
     output$DAVID <- renderUI({
       shiny::actionButton(
         inputId = 'DAVID',
@@ -383,128 +321,71 @@ shinyServer(server <- function(input, output, session) {
       )
     })
   })
-  
-  observe({
-    req(clustergrep())
-    print(length(clustergrep()))
-    
-    if (length(clustergrep()) > 400)
-      shinyjs::disable("DAVID")
-    
-  })
-  
-  
+
+  # observe({
+  #   req(clustergrep())
+  #   print(length(clustergrep()))
+  #
+  #   if (length(clustergrep()) > 400)
+  #     shinyjs::disable("DAVID")
+  #
+  # })
+
+
   observe({
     totalclust <- reactive({
       req(hmobj$hm)
-      
+
       n <- unique(hmobj$hm$cluster)
       selectInput("cutgo",
                   "Choose your cluster",
                   choices =  seq(1, NROW(n) , by = 1))
-      
+
     })
-    
-    
+
+
     output$cutgo <- renderUI({
       totalclust()
     })
-    
+
   })
-  
-  
+
+
   observe({
-    req(input$heatmconf)
-    if (grepl("cutpan", input$heatmconf)) {
-      updateTabsetPanel(session, "mainhmtabset",
-                        selected = "cuthmmainpan")
-    }
-    else if (grepl("hmpan", input$heatmconf)) {
+    req(input$tabset25)
+    if (grepl("hmpan", input$tabset25)) {
       updateTabsetPanel(session, "mainhmtabset",
                         selected = "hmmainpan")
     }
-  })
-  
-  
-  observe({
-    req(input$mainhmtabset)
-    if (grepl("cuthmmainpan",  input$mainhmtabset)) {
-      updateTabsetPanel(session, "heatmconf",
-                        selected = "cutpan")
-    }
-    else if (grepl("hmmainpan",  input$mainhmtabset)) {
-      #|dfhmclu|maingo
-      updateTabsetPanel(session, "heatmconf",
-                        selected = "hmpan")
+    else if (grepl("cutpan", input$tabset25)) {
+      updateTabsetPanel(session, "mainhmtabset",
+                        selected = "cuthmmainpan")
     }
   })
-  
-  # testad <- eventReactive(input$GO, {
-  #   req(hmobj$hm)
-  #   gores$obj <- NULL
-  #   myl <- NULL
-  #
-  # withProgress(message = 'Performing GO enrichment:',
-  #              value = 0, {
-  #                n <- NROW(50)
-  #                for (i in 1:n) {
-  #                  incProgress(1 / n, detail = "Please wait...")
-  #                }
-  #
-  #                  final = tryCatch({
-  #                    gosearch(hmobj$hm, input$Species, "geneSymbol", myl)
-  #                  },
-  #                  error = function(e) {
-  #                    warning("ERROR")
-  #                  })
-  #
-  #                })
-  #   return(final)
-  # })
-  
-  
-  
-  # slidergoen <- reactive({
-  #   req(testad(), input$cutgo)
-  #
-  #   x <- input$cutgo
-  #
-  #   sliderInput(
-  #     "slidergo",
-  #     label = "Select (GO) range of observations",
-  #     min = 1,
-  #     max = length(testad()[[as.integer(x)]][[1]]),
-  #     value = c(1, 25)
-  #   )
-  #
-  # })
-  #
-  # output$slidergo <- renderUI({
-  #   slidergoen()
-  # })
-  
-  
-  # output$savego <- downloadHandler(
-  #
-  #   filename = function() {
-  #     paste(basename(file_path_sans_ext(input$filename)),
-  #           'enrichment_clusters',
-  #           '.txt',
-  #           sep = '')
-  #   },
-  #   content = function() {
-  #     write.csv(gores$down[[1]],file,row.names = F)
+
+
+  # observe({ TODOOOO
+  #   req(input$mainhmtabset)
+  #   if (grepl("hmmainpan",  input$mainhmtabset)) {
+  #     updateTabsetPanel(session, "tabset25",
+  #                       selected = "hmpan")
   #   }
-  # )
-  
-  
+  #   else if (grepl("cuthmmainpan",  input$mainhmtabset)) {
+  #     #|dfhmclu|maingo
+  #     updateTabsetPanel(session, "tabset25",
+  #                       selected = "cutpan")
+  #   }
+  # })
+
+
+
   clustergrep <- reactive({
     req(hmobj$hm, input$cutgo)
-    
+
     genlist <- hmobj$hm[!duplicated(hmobj$hm$GeneName), ] %>%
       dplyr::select(cluster, GeneName)   %>%
       filter(cluster == input$cutgo)
-    
+
     mygensymb = genlist$cluster %>%
       length() %>%
       matrix(1, .) %>%
@@ -513,84 +394,65 @@ shinyServer(server <- function(input, output, session) {
       names() %>% as.list() %>%
       .[lapply(., function(x)
         length(grep("chr", x, value = FALSE))) == 0]
-    
+
     return(mygensymb)
   })
-  
-  davidwebservice <- eventReactive(input$GO, {
+
+  davidwebservice <- eventReactive(input$GO, { #Warning: Error in .jcall: org.apache.axis2.AxisFault: Read timed out
+
     req(hmobj$hm)
-    library(RDAVIDWebService)
-    
+
     withProgress(message = 'Performing GO enrichment:',
                  value = 0, {
                    n <- NROW(50)
                    for (i in 1:n) {
                      incProgress(1 / n, detail = "Please wait...")
                    }
-                   
+                   library(RDAVIDWebService)
                    mygodavid = probnamtoentrez(hmobj$hm, Species()) %>%
                      davidquery(input$Species)
-                   
+
                  })
-    
+
     final = lapply(1:NROW(mygodavid), function(x)
       return(format(mygodavid[[x]], digits = 3)))
-    
+
     return(final)
   })
   
   
+  observe({
+    req(davidwebservice())
+    print(colnames(davidwebservice()))
+          
+    
+  })
+  
+
   davidurl <- reactive({
     req(clustergrep())
-    
+
     source_python('./python/add.py')
     mydavurl = enrichmentdav(clustergrep())
     mygloburl <- paste(`mydavurl`, ",", "'_blank')")
-    
+
     return(mygloburl)
   })
-  
-  
+
+
   observe({
     req(davidurl())
     url$myurl = davidurl()
   })
-  
-  
-  # observe({
-  #   req(csvf())
-  #   print(input$Species)
-  #   Species()
-  #
-  # })
-  
-  
-  # observeEvent(input$DAVID, {
-  #   davidurl <- eventReactive(input$DAVID, {
-  #     req(clustergrep())
-  #
-  #     source_python('./python/add.py')
-  #     enrichmentdav(clustergrep())
-  #
-  #   })
-  #
-  #   davidurl()
-  # })
-  
-  
-  # mydavidshow <- reactive({
-  #   x<- input$cutgo
-  #   print(x)
-  #   mydf = davidwebservice()[[as.numeric(x)]]
-  #   return(mydf)
-  # })
-  
-  
+
+
+
+
   output$davidgo <- renderDataTable({
     davidwebservice()[[as.numeric(input$cutgo)]][,-c(4, 6)]
   })
-  
-  
+
+
   output$clustgo <- renderPrint({
     validate(
       need(csvf(), 'You need to import data to visualize the data!') %next%
@@ -600,7 +462,7 @@ shinyServer(server <- function(input, output, session) {
         )
     )
     gores$obj <- isolate(testad())
-    
+
     req(input$cutgo, input$slidergo)
     x <- input$cutgo
     if (!is.null(testad()[[as.integer(x)]])) {
@@ -626,22 +488,21 @@ shinyServer(server <- function(input, output, session) {
             gores$obj[[as.integer(x)]][[1]][[go]]
           ))))
           cat("\n")
-          
+
           cat("--------------------------------------\n")
         }
       }
     }
     else
       print("Sorry, no enriched genes for this cluster")
-    
+
   })
-  
-  
-  output$savego = downloadHandler(
-    'go.xlsx',
+
+
+  output$savego = downloadHandler( 'go.xlsx',
     content = function(file) {
       library(xlsx)
-      
+
       for (i in 1:length(davidwebservice())) {
         if (i == 1)
           write.xlsx(file = file,
@@ -655,19 +516,13 @@ shinyServer(server <- function(input, output, session) {
             append = TRUE
           )
       }
-      
-      
-      # write.csv2(vennfinal()[s, , drop = FALSE], file)
-      #davidxlsx()
-      # })
-      
-      
-      
-    }
-  )
-  #gores$obj <- NULL
-  
-  #Species <- eventReactive(input$DAVID,{
+
+
+
+  })
+#gores$obj <- NULL
+
+#Species <- eventReactive(input$DAVID,{
   Species <- reactive({
     if (input$Species == "Homo sapiens") {
       # human
@@ -717,24 +572,11 @@ shinyServer(server <- function(input, output, session) {
       mypack = org.Ss.egALIAS2EG
       return(mypack)
     }
-    
-  })
-  
 
-  
-  #########################################
-  ######## KEGG enrichissment             #
-  #########################################
-  
-  
-  
-  #########################################
-  ######## graph ???????????              #
-  #########################################
-  
-  
-  
+  })
+
+
   
 })
 
-#shinyApp(ui = ui , server = server)
+

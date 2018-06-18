@@ -5,14 +5,17 @@
 
 #observeEvent(input$vennd, {
   output$myVenn <- renderPlot({
+    #div( id="validatacss",  
+          
+    
     validate(
       need(csvf(), 'You need to import data to visualize this plot!') %next%
       need(length(user_cont()) >0,  'You need to  select your p-value and then some groups!'))
-    
+   # )
     req(Vennplot())
     
     Vennplot()
-  }, width = 1200 , height = 800, res = 100)
+  })
   
  
 observe({
@@ -31,7 +34,7 @@ observe({
       
       pdf(
         file,
-        width = 12,
+        width = 12.5,
         height = 12,
         pointsize = 12
       )
@@ -39,7 +42,7 @@ observe({
     else if (input$formven == "png")
       png(
         file,
-        width = 1200,
+        width = 1250,
         height = 1200,
         units = "px",
         pointsize = 12,
