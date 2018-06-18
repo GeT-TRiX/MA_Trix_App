@@ -5,13 +5,12 @@
 
 #observeEvent(input$vennd, {
   output$myVenn <- renderPlot({
-    #div( id="validatacss",  
-          
+ 
     
     validate(
       need(csvf(), 'You need to import data to visualize this plot!') %next%
       need(length(user_cont()) >0,  'You need to  select your p-value and then some groups!'))
-   # )
+
     req(Vennplot())
     
     Vennplot()

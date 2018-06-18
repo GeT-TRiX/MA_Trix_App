@@ -240,13 +240,17 @@ shinyServer(function(input, output,session) {
   projectname <- reactive({
     req(file_name())
     projed <- strsplit(file_name(), "_")
-    proj = grepl("^MA", projed[[1]])
+    proj = grepl("^MA", projed[[2]])
     index = which(proj == T)
-    myproj = list(projed[[1]][index], proj)
-    
-    return(myproj)
+    myproj = list(projed[[2]][index], proj)
+    if(length(myproj[[1]]) == 0){
+      return(Sys.Date())
+    }
+    else
+      return(myproj)
     
   })
+  
   
   
   #########################################
