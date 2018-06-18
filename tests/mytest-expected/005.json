@@ -1,0 +1,695 @@
+{
+  "input": {
+    "allCont": 0,
+    "allIndividus": 0,
+    "allIndividuspca": 0,
+    "allTests": 0,
+    "clusters": 3,
+    "col1": "green",
+    "col3": "red",
+    "colname": "show",
+    "colpca_1": "#1B9E77",
+    "colpca_2": "#D95F02",
+    "colpca_3": "#7570B3",
+    "colpca_4": "#E7298A",
+    "colsize": 0.9,
+    "cont": [
+      "LKO_CTRL-LWT_CTRL",
+      "(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)"
+    ],
+    "cutgo": "1",
+    "cutinfo": "Boxplot",
+    "data_summary_cell_clicked": {
+
+    },
+    "data_summary_rows_all": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "data_summary_rows_current": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "data_summary_rows_selected": null,
+    "data_summary_search": "",
+    "data_summary_state": null,
+    "DAVID": 0,
+    "dim1": "1",
+    "dim2": "2",
+    "dist": "correlation",
+    "ellipse": false,
+    "fc": 1,
+    "fcvenn": 1,
+    "file": {
+      "name": [
+        "All_topTableAll.csv",
+        "TOXA_HEGU_MA0191_AllChip_pData.csv",
+        "TOXA_HEGU_MA0191_AllChip_WorkingSet.csv"
+      ],
+      "size": [
+        20667511,
+        549,
+        12456592
+      ],
+      "type": [
+        "text/csv",
+        "text/csv",
+        "text/csv"
+      ],
+      "datapath": [
+        "0.csv",
+        "1.csv",
+        "2.csv"
+      ]
+    },
+    "formcut": "pdf",
+    "formhm": "png",
+    "formpca": "png",
+    "formven": "png",
+    "formvenbar": "png",
+    "GO": 0,
+    "heatm": 0,
+    "indiv": [
+      "LKO_CTRL",
+      "LKO_MCD ",
+      "LWT_CTRL",
+      "LWT_MCD "
+    ],
+    "indivpca": [
+      "LKO_CTRL",
+      "LKO_MCD ",
+      "LWT_CTRL",
+      "LWT_MCD "
+    ],
+    "intscol": null,
+    "jitter": false,
+    "label": true,
+    "labelsiize": 3,
+    "legsize": 0.8,
+    "mainhmtabset": "hmmainpan",
+    "maxgen": null,
+    "meandup": false,
+    "meangrp": false,
+    "method": "FDR",
+    "method2": "FDR",
+    "methodforvenn": "FDR",
+    "new_data_cell_clicked": {
+
+    },
+    "new_data_rows_all": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "new_data_rows_current": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "new_data_rows_selected": null,
+    "new_data_search": "",
+    "new_data_state": null,
+    "new_test_cell_clicked": {
+
+    },
+    "new_test_rows_all": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24
+    ],
+    "new_test_rows_current": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "new_test_rows_selected": null,
+    "new_test_search": "",
+    "new_test_state": null,
+    "noCont": 0,
+    "noIndividus": 0,
+    "noIndividuspca": 0,
+    "noTests": 0,
+    "onto": "BP",
+    "pointsiize": 2,
+    "pval": 0.05,
+    "pval1": 0.01,
+    "pvalvenn": 0.05,
+    "reactheat": false,
+    "regulation": "both",
+    "resetAll": 0,
+    "rowname": "hide",
+    "rowsize": 0.9,
+    "scalcol": false,
+    "session": 0,
+    "side": "Heatmap",
+    "sidebarCollapsed": false,
+    "sidebarItemExpanded": null,
+    "Species": "Mus musculus",
+    "tabset25": "hmpan",
+    "test": "LKO_CTRL-LWT_CTRL",
+    "toggleAdvanced": 0,
+    "toggleAdvancedcolors": 0,
+    "topdegenes": 0,
+    "vennsize": 0.3
+  },
+  "output": {
+    "bool": true,
+    "boolmark": false,
+    "button": {
+      "html": "<button id=\"heatm\" type=\"button\" class=\"btn btn-default action-button\" style=\"color: #fff; background-color: #b77033; border-color: #b77033\">\n  <i class=\"fa fa-repeat\"><\/i>\n  Update Heatmap\n<\/button>",
+      "deps": [
+        {
+          "name": "font-awesome",
+          "version": "4.7.0",
+          "src": {
+            "href": "shared/font-awesome"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "css/font-awesome.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "contout": {
+      "html": "<div id=\"cont\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <label class=\"control-label\" for=\"cont\">Choose your comparison<\/label>\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"LWT_MCD-LWT_CTRL\"/>\n        <span>LWT_MCD-LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"LKO_MCD-LKO_CTRL\"/>\n        <span>LKO_MCD-LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"LKO_CTRL-LWT_CTRL\"/>\n        <span>LKO_CTRL-LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)\"/>\n        <span>(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+
+      ]
+    },
+    "cutgo": {
+      "html": "<div class=\"form-group shiny-input-container\">\n  <label class=\"control-label\" for=\"cutgo\">Choose your cluster<\/label>\n  <div>\n    <select id=\"cutgo\"><option value=\"1\" selected>1<\/option>\n<option value=\"2\">2<\/option>\n<option value=\"3\">3<\/option><\/select>\n    <script type=\"application/json\" data-for=\"cutgo\" data-nonempty=\"\">{}<\/script>\n  <\/div>\n<\/div>",
+      "deps": [
+        {
+          "name": "selectize",
+          "version": "0.11.2",
+          "src": {
+            "href": "shared/selectize"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "css/selectize.bootstrap3.css",
+          "head": "<!--[if lt IE 9]>\n<script src=\"shared/selectize/js/es5-shim.min.js\"><\/script>\n<![endif]-->\n<script src=\"shared/selectize/js/selectize.min.js\"><\/script>",
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "data_summary": {
+      "x": {
+        "filter": "none",
+        "container": "<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>FC&gt;1.0<\/th>\n      <th>FC &gt;1.2<\/th>\n      <th>FC &gt;2<\/th>\n      <th>FC &gt;4<\/th>\n      <th>FC &gt;6<\/th>\n      <th>FC &gt;10<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "options": {
+          "columnDefs": [
+            {
+              "className": "dt-right",
+              "targets": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            {
+              "orderable": false,
+              "targets": 0
+            }
+          ],
+          "order": [
+
+          ],
+          "autoWidth": false,
+          "orderClasses": false,
+          "ajax": {
+            "type": "POST",
+            "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = true;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
+          },
+          "serverSide": true,
+          "processing": true
+        },
+        "selection": {
+          "mode": "multiple",
+          "selected": null,
+          "target": "row"
+        }
+      },
+      "evals": [
+        "options.ajax.data"
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+        {
+          "name": "dt-core",
+          "version": "1.10.16",
+          "src": {
+            "href": "dt-core-1.10.16"
+          },
+          "meta": null,
+          "script": "js/jquery.dataTables.min.js",
+          "stylesheet": [
+            "css/jquery.dataTables.min.css",
+            "css/jquery.dataTables.extra.css"
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "jquery",
+          "version": "1.11.3",
+          "src": {
+            "href": "jquery-1.11.3"
+          },
+          "meta": null,
+          "script": "jquery.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.0.0",
+          "src": {
+            "href": "crosstalk-1.0.0"
+          },
+          "meta": null,
+          "script": "js/crosstalk.min.js",
+          "stylesheet": "css/crosstalk.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "DAVID": {
+      "html": "<button id=\"DAVID\" type=\"button\" class=\"btn btn-default action-button\" style=\"color: #fff; background-color: #337ab7; border-color: #2e6da4\" onclick=\"window.open( &#39;http://david.abcc.ncifcrf.gov/api.jsp?type=OFFICIAL_GENE_SYMBOL&amp;ids=D130043K22Rik,Fads2,Mif,NAP062858-1,Tead2,Fam82a1,Cyp4a14,Acot4,Aldh3a2,Caprin1,A_55_P2090394,Mfsd2a,Fut1,Dntt,Wdr67,Gm10639,Map4k4,Mtap4,Lipa,Hamp2,Gsta2,Mgst3,A_55_P2093770,Slc50a1,Nipal1,Cyp2b10,Mal,Dhrs7,Timp3,Esyt2,Aldob,Ppia,Spc25,Ak2,Rpl10,Gm5623,Fabp2,A_55_P2128224,Lrrn3,Ugp2,Htra2,Atp5g2,Fam13a,Zfp385b,C2cd2l,Gm1673,Gale,Ccdc50,Gpam,Pnpla7,NAP065441-1,Vwf,NAP057964-1,Tkt,Ccdc80,A_55_P1993121,Ces2c,Ces2b,Gsta3,Fbln2,Notch3,Myl9,Mmrn1,Gpm6b,Pgm5,Ddt,Gstt3,Rab9,Abhd6,Gstt2,Hsdl2,4931406C07Rik,Akr1c19,Apol7a,Txnl4b,Mest,Sox17,Bmper,Rdh16,Cryl1,AI451831,1810059H22Rik,Fam151b,Clec11a,Impa2,Abcd3,Aldh7a1,Ces1e,Slc17a8,Arhgap26,Fabp1,Lactb2,Egln3,Tm7sf2,Ccdc30,Mrpl49,Acsl5,Ces2e,Haus7,Chrna4,Scd3,NAP001637-001,Me1,Khk,Uox,Ctf1,Pdk1,Inmt,Gstt1,Hpgd,Esrrg,Mtap,Acot1,Agxt2l1,Ces1f,Acaa1b,4930525G20Rik,Dab1,Elovl5,Spc24,2410087M07Rik,Pgrmc2,Gm6195,Rpa3,Slc39a10,1700011H14Rik,Usp14,Slc13a2,Rsrc1,4930430F08Rik,Cycs,BC025829,&amp;tool=summary&amp;annot=GOTERM_BP_ALL,GOTERM_CC_ALL,GOTERM_MF_ALL,&#39; , &#39;_blank&#39;)\">Open DAVID<\/button>",
+      "deps": [
+
+      ]
+    },
+    "distPlot": {
+      "src": "[image data sha1: 7be09e8c0d8fbcfb06d8276e4d3dcba5caedaaa2]",
+      "width": 406,
+      "height": 1200,
+      "coordmap": [
+        {
+          "domain": {
+            "left": -18.16,
+            "right": 499.16,
+            "bottom": -0.939151895889841,
+            "top": 19.6064281797892
+          },
+          "range": {
+            "left": 72,
+            "right": 390.16,
+            "bottom": 1127,
+            "top": 13.3999999999999
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "mapping": {
+
+          }
+        }
+      ]
+    },
+    "eigpca": {
+      "src": "[image data sha1: b5e228e9f4bb3b45315ac761baad0cfb563cf9fe]",
+      "width": 542,
+      "height": 700,
+      "coordmap": [
+        {
+          "domain": {
+            "left": -0.04,
+            "right": 1.04,
+            "bottom": -0.04,
+            "top": 1.04
+          },
+          "range": {
+            "left": 0,
+            "right": 542,
+            "bottom": 699,
+            "top": -1
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "mapping": {
+
+          }
+        }
+      ]
+    },
+    "heatmbool": true,
+    "indivcol": "LKO_CTRL, LKO_MCD , LWT_CTRL, LWT_MCD ,",
+    "individusel": {
+      "html": "<div id=\"indiv\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <label class=\"control-label\" for=\"indiv\">Choose your group to visualize<\/label>\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indiv\" value=\"LKO_CTRL\" checked=\"checked\"/>\n        <span>LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indiv\" value=\"LKO_MCD \" checked=\"checked\"/>\n        <span>LKO_MCD <\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indiv\" value=\"LWT_CTRL\" checked=\"checked\"/>\n        <span>LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indiv\" value=\"LWT_MCD \" checked=\"checked\"/>\n        <span>LWT_MCD <\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+
+      ]
+    },
+    "individuselpca": {
+      "html": "<div id=\"indivpca\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <label class=\"control-label\" for=\"indivpca\">Choose your group to visualize<\/label>\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LKO_CTRL\" checked=\"checked\"/>\n        <span>LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LKO_MCD \" checked=\"checked\"/>\n        <span>LKO_MCD <\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LWT_CTRL\" checked=\"checked\"/>\n        <span>LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LWT_MCD \" checked=\"checked\"/>\n        <span>LWT_MCD <\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+
+      ]
+    },
+    "myCLUST": "3",
+    "myCOL": "0.9",
+    "myFC": "1",
+    "myLEG": "0.8",
+    "myMAT": "correlation",
+    "myMET": "FDR",
+    "myNUM": "480",
+    "myPAL": "#1B9E77 #D95F02 #7570B3 #E7298A",
+    "myPanelpca": {
+      "html": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_1\">LKO_CTRL<\/label>\n      <input id=\"colpca_1\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#1B9E77\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_2\">LKO_MCD <\/label>\n      <input id=\"colpca_2\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#D95F02\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>\n<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_3\">LWT_CTRL<\/label>\n      <input id=\"colpca_3\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#7570B3\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_4\">LWT_MCD <\/label>\n      <input id=\"colpca_4\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#E7298A\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+        {
+          "name": "colourpicker-binding",
+          "version": "0.1.0",
+          "src": {
+            "href": "colourpicker-binding"
+          },
+          "meta": null,
+          "script": "input_binding_colour.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "colourpicker-lib",
+          "version": "0.1.0",
+          "src": {
+            "href": "colourpicker-lib"
+          },
+          "meta": null,
+          "script": "js/colourpicker.min.js",
+          "stylesheet": "css/colourpicker.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "myPVAL": "0.05",
+    "myROW": "0.9",
+    "myselvenn": {
+      "html": "<div class=\"form-group shiny-input-container\">\n  <label class=\"control-label\" for=\"intscol\">Specify your interaction(s):<\/label>\n  <div>\n    <select id=\"intscol\" multiple=\"multiple\"><option value=\"LKO_CTRL-LWT_CTRL\">LKO_CTRL-LWT_CTRL<\/option>\n<option value=\"(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)\">(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/option><\/select>\n    <script type=\"application/json\" data-for=\"intscol\">{}<\/script>\n  <\/div>\n<\/div>",
+      "deps": [
+        {
+          "name": "selectize",
+          "version": "0.11.2",
+          "src": {
+            "href": "shared/selectize"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "css/selectize.bootstrap3.css",
+          "head": "<!--[if lt IE 9]>\n<script src=\"shared/selectize/js/es5-shim.min.js\"><\/script>\n<![endif]-->\n<script src=\"shared/selectize/js/selectize.min.js\"><\/script>",
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "myVenn": {
+      "src": "[image data sha1: 19de4ce21bd0f320c35080eb9f51494474166ece]",
+      "width": 542,
+      "height": 800,
+      "coordmap": [
+        {
+          "domain": {
+            "left": -0.04,
+            "right": 1.04,
+            "bottom": -0.04,
+            "top": 1.04
+          },
+          "range": {
+            "left": 0,
+            "right": 542,
+            "bottom": 799,
+            "top": -1
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "mapping": {
+
+          }
+        }
+      ]
+    },
+    "new_data": {
+      "x": {
+        "filter": "none",
+        "container": "<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>LWT_Ctrl2<\/th>\n      <th>LWT_MCD5<\/th>\n      <th>LKO_Ctrl3<\/th>\n      <th>LKO_MCD1<\/th>\n      <th>LKO_MCD4<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "options": {
+          "columnDefs": [
+            {
+              "className": "dt-right",
+              "targets": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "orderable": false,
+              "targets": 0
+            }
+          ],
+          "order": [
+
+          ],
+          "autoWidth": false,
+          "orderClasses": false,
+          "ajax": {
+            "type": "POST",
+            "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = true;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
+          },
+          "serverSide": true,
+          "processing": true
+        },
+        "selection": {
+          "mode": "multiple",
+          "selected": null,
+          "target": "row"
+        }
+      },
+      "evals": [
+        "options.ajax.data"
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+        {
+          "name": "dt-core",
+          "version": "1.10.16",
+          "src": {
+            "href": "dt-core-1.10.16"
+          },
+          "meta": null,
+          "script": "js/jquery.dataTables.min.js",
+          "stylesheet": [
+            "css/jquery.dataTables.min.css",
+            "css/jquery.dataTables.extra.css"
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "jquery",
+          "version": "1.11.3",
+          "src": {
+            "href": "jquery-1.11.3"
+          },
+          "meta": null,
+          "script": "jquery.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.0.0",
+          "src": {
+            "href": "crosstalk-1.0.0"
+          },
+          "meta": null,
+          "script": "js/crosstalk.min.js",
+          "stylesheet": "css/crosstalk.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "new_group": [
+      "",
+      "NULL",
+      "c(\"shiny.silent.error\", \"validation\")"
+    ],
+    "new_test": {
+      "x": {
+        "filter": "none",
+        "container": "<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>X<\/th>\n      <th>Grp<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "options": {
+          "order": [
+
+          ],
+          "autoWidth": false,
+          "orderClasses": false,
+          "columnDefs": [
+            {
+              "orderable": false,
+              "targets": 0
+            }
+          ],
+          "ajax": {
+            "type": "POST",
+            "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = true;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
+          },
+          "serverSide": true,
+          "processing": true
+        },
+        "selection": {
+          "mode": "multiple",
+          "selected": null,
+          "target": "row"
+        }
+      },
+      "evals": [
+        "options.ajax.data"
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+        {
+          "name": "dt-core",
+          "version": "1.10.16",
+          "src": {
+            "href": "dt-core-1.10.16"
+          },
+          "meta": null,
+          "script": "js/jquery.dataTables.min.js",
+          "stylesheet": [
+            "css/jquery.dataTables.min.css",
+            "css/jquery.dataTables.extra.css"
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "jquery",
+          "version": "1.11.3",
+          "src": {
+            "href": "jquery-1.11.3"
+          },
+          "meta": null,
+          "script": "jquery.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.0.0",
+          "src": {
+            "href": "crosstalk-1.0.0"
+          },
+          "meta": null,
+          "script": "js/crosstalk.min.js",
+          "stylesheet": "css/crosstalk.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "testout": {
+      "html": "<div id=\"test\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <label class=\"control-label\" for=\"test\">Choose your comparison<\/label>\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"test\" value=\"LWT_MCD-LWT_CTRL\"/>\n        <span>LWT_MCD-LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"test\" value=\"LKO_MCD-LKO_CTRL\"/>\n        <span>LKO_MCD-LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"test\" value=\"LKO_MCD-LWT_MCD\"/>\n        <span>LKO_MCD-LWT_MCD<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"test\" value=\"LKO_CTRL-LWT_CTRL\"/>\n        <span>LKO_CTRL-LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"test\" value=\"(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)\"/>\n        <span>(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+
+      ]
+    },
+    "testtt": "LKO_CTRL-LWT_CTRL,",
+    "warningsheat": ""
+  },
+  "export": {
+
+  }
+}

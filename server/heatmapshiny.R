@@ -15,7 +15,6 @@ output$heatmbool <- reactive({
 
 outputOptions(output, "heatmbool", suspendWhenHidden = F)
 
-
 observe({
   req(csvf(),length(choix_test()) >0,input$reactheat == T| global$clicked)
   
@@ -255,7 +254,7 @@ observe({
     
   })
   
-  output$totalgenbyc <- renderDataTable(grouplength()) #
+  #output$totalgenbyc <- renderDataTable(grouplength()) #
   
   
   output$clustering <-

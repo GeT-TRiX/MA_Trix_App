@@ -265,12 +265,12 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = F) {
       axis.title.x = element_text(size = 10),
       axis.title.y = element_text(size = 10) ,
       axis.text.x = element_text(
-        size = 8,
-        colour = "#000000",
+        size = 11,
+        colour = "#808080",
         angle = 80,
         hjust = 1
       ),
-      axis.text.y = element_text(size = 8, colour = "#000000"),
+      axis.text.y = element_text(size = 8, colour = "#808080"),
       legend.position="top"
     ) 
     

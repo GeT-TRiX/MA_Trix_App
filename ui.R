@@ -142,7 +142,7 @@ body <- dashboardBody(
                    )
               #)
               )
-            ),
+            ),  
             div(id="pass",style = "word-wrap: break-word;",
             column(
             width = 3,
@@ -314,8 +314,8 @@ body <- dashboardBody(
                     column(5,
                            verbatimTextOutput("valuelab")),
                     column(5,
-                           checkboxInput("ellipse", "Add ellipses", FALSE)),
-                    verbatimTextOutput("ellipse")
+                           checkboxInput("ellipse", "Add ellipses", FALSE))#,
+                   # verbatimTextOutput("ellipse")
                   ),
 
                   
@@ -700,7 +700,7 @@ body <- dashboardBody(
                             htmlOutput("myNUM"),
                             p("significant genes"),
                             p("for the following comparison(s)"),
-                            htmlOutput("test")
+                            htmlOutput("testtt")
                           ),
                           #br(),
                           div(

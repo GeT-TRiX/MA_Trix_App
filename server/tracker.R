@@ -11,7 +11,7 @@ output$indivcol <-  renderText({ # Groups selected
 })
 
 
-output$test <- renderText({ #Contrast selected
+output$testtt <- renderText({ #Contrast selected
   my_final <<- paste(choix_test(),as.character(),  sep=",") 
 })
 
