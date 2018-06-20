@@ -133,12 +133,31 @@ davidquery <- function(entrezids, species) {
     setCurrentSpecies(object = david, species = specieLocation)
     setCurrentBackgroundPosition(object = david, position = backgroundLocation)
     #getSpecieNames(david)
-    setAnnotationCategories(david, c("GOTERM_MF_ALL"))
+    setAnnotationCategories(david, c("GOTERM_MF_ALL", "GOTERM_CC_ALL", "GOTERM_BP_ALL")) # "KEGG_PATHWAY"
     as.data.frame(cbind(getFunctionalAnnotationChart(object=david, threshold=1, count=0L)))  %>%
       filter(Count>1) %>% arrange(desc(Count))  %>% select( Category:Count, List.Total:Pop.Total,PValue,everything())
   })
 }
 
+
+davidqueryvenn <- function(entrezids, species){
+  
+  david <- DAVIDWebService$new(email = "franck.soubes@inra.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
+  RDAVIDWebService::setTimeOut(david, 90000)
+  
+  addList(
+    david,
+    entrezids,
+    idType = "ENTREZ_GENE_ID",
+    listName = "myqueryvenn",
+    listType = "Gene"
+  )
+  # get the cluster report for the upload
+  getClusterReport(david, type = "Term")
+  
+}
+
+  
 
 
 

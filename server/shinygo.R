@@ -101,7 +101,7 @@ davidwebservice <-
                        invokeRestart("muffleWarning")
                    
                    tryCatch({
-                     mygodavid = probnamtoentrez(hmobj$hm, Species()) %>%
+                     mygodavid = probnamtoentrez(hmobj$hm, Species()[[1]]) %>%
                        davidquery(input$Species) %>% withCallingHandlers(error = timeoutdav)
                    }, warning = function(e) {
                      warning("David's server is busy")
@@ -121,8 +121,6 @@ davidwebservice <-
 observe({
   req(davidwebservice())
   print(colnames(davidwebservice()))
-  
-  
 })
 
 
@@ -189,8 +187,59 @@ output$clustgo <- renderPrint({
 })
 
 
-output$savego = downloadHandler(
-  'go.xlsx',
+
+mytransf <- reactive({
+  req( davidwebservice())
+  
+    
+  myselectedrows = (davidwebservice()[[as.numeric(input$cutgo)]][input$davidgo_rows_selected, c("Genes", "Term"),  drop = FALSE]) 
+
+  if(length(myselectedrows["Genes"][[1]])>0){
+    
+    myentreztosymb = lapply(1:NROW(myselectedrows),function(x){
+      myselectedrows$Genes[[x]] %>% strsplit( ", ") %>% unlist() %>% mget(x= .,envir = Species()[[2]],ifnotfound = NA) %>%  unlist() %>%
+        unique() %>% cbind(myselectedrows$Term[[x]]) %>% as.data.frame() %>% setNames(., c("Genes", "Term"))
+    
+    })
+    
+    return(myentreztosymb)
+  }
+  else{
+
+    return(NULL)
+  }
+  
+})
+
+output$printmessage <- renderPrint({
+  req(davidwebservice())
+  cat("You can select the rows in the table above in order to display the gene names")
+  cat("\n")
+  cat("\n")
+  
+})
+
+
+output$printselected <- renderPrint({
+  
+  req(mytransf())  
+  # cat("You can select the rows in the table above in order to display the gene names")
+  # cat("\n")
+  # cat("\n")
+    for(i in 1:length(mytransf())){
+      cat(paste("GOID and Term: " , unique(mytransf()[[i]]$Term)))
+      cat("\n")
+      cat("Genes: ")
+      cat(paste( mytransf()[[i]]$Genes, collapse = " ,"))
+      cat("\n")
+      cat("\n")
+    }
+
+})
+
+
+
+output$savego = downloadHandler( 'go.xlsx',
   content = function(file) {
     library(xlsx)
     
@@ -215,29 +264,31 @@ output$savego = downloadHandler(
 #gores$obj <- NULL
 
 #Species <- eventReactive(input$DAVID,{
+
+
 Species <- reactive({
   if (input$Species == "Homo sapiens") {
     # human
     library("org.Hs.eg.db")
-    mypack = org.Hs.egALIAS2EG
+    mypack = list(org.Hs.egALIAS2EG, org.Hs.egSYMBOL)
     return(mypack)
   }
   else if (input$Species == "Mus musculus") {
     # Mouse
     library("org.Mm.eg.db")
-    mypack = org.Mm.egALIAS2EG
+    mypack = list(org.Mm.egALIAS2EG, org.Mm.egSYMBOL)
     return(mypack)
   }
   else if (input$Species == "Danio rerio") {
     #Zebra fish
     library("org.Dr.eg.db")
-    mypack = org.Dr.egALIAS2EG
+    mypack = list(org.Dr.egALIAS2EG, org.Dr.egSYMBOL)
     return(mypack)
   }
   else if (input$Species == "Gallus gallus") {
     # chicken
     library("org.Gg.eg.db")
-    mypack = org.Gg.egALIAS2EG
+    mypack = list(org.Gg.egALIAS2EG, org.Gg.egSYMBOL)
     return(mypack)
   }
   else if (input$Species == "equCab2") {
@@ -249,19 +300,19 @@ Species <- reactive({
   else if (input$Species == "Caenorhabditis elegans") {
     # cC elegans
     library("org.Ce.eg.db")
-    mypack = org.Ce.egALIAS2EG
+    mypack = list(org.Ce.egALIAS2EG, org.Ce.egSYMBOL)
     return(mypack)
   }
   else if (input$Species == "Rattus norvegicus") {
     # Rat
     library("org.Rn.eg.db")
-    mypack = org.Rn.egALIAS2EG
+    mypack = list(org.Rn.egALIAS2EG, org.Rn.egSYMBOL )
     return(mypack)
   }
   else if (input$Species == "Sus scrofa") {
     # Pig
     library("org.Ss.eg.db")
-    mypack = org.Ss.egALIAS2EG
+    mypack = list(org.Ss.egALIAS2EG, org.Ss.egSYMBOL)
     return(mypack)
   }
   

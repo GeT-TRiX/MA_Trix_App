@@ -51,8 +51,7 @@ observe({
       cairo_ps(filename=file, width=11, height=11,pointsize = 12)
     
     
-    plot(Vennplot())
-
+    grid.draw(Vennplot())
     dev.off()
   })
   

@@ -11,6 +11,12 @@ library(dplyr)
 
 
 musmuscu <- read.csv2("data/TOXA_HEGU_MA0191_AllChip_WorkingSet.csv")
+test = c(1,2,3)
+musmuscu[2](test)
+filter(musmuscu$X %in% test)
+musmuscu[test,c("X")]
+musmuscu
+
 pval <- read.csv2("data/All_topTableAll.csv")
 groupss <- read.csv2("data/TOXA_HEGU_MA0191_AllChip_pData.csv", sep= ";" , dec = ",",header= T)
 adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|^adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]

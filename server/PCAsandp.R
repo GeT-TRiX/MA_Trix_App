@@ -190,7 +190,7 @@ output$PCA <- renderPlot({
       need(length(unique(new_grouppca()$Grp)) >1, 'You need to select more than one group!')
   )
   
-  plot(PCAplot())
+  plot(PCAplot()+ theme_minimal())
   
 })
 

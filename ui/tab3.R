@@ -57,15 +57,19 @@ tabPanel(
         )
       )),
       fluidRow(column(
-        5,
+        4,
       checkboxInput("label", "Add labbels names", TRUE)),
+      column(3,
+      checkboxInput("meanpoint", "Add mean points", TRUE)),
+      
+      # column(
+      #   5,
+      # verbatimTextOutput("valuelab")),
       column(
-        5,
-      verbatimTextOutput("valuelab")),
-      column(
-        5,
-      checkboxInput("ellipse", "Add ellipses", FALSE)),
-      verbatimTextOutput("ellipse")),
+        3,
+      checkboxInput("ellipse", "Add ellipses", FALSE))
+      #verbatimTextOutput("ellipse")
+      ),
       # ),
       
       

@@ -309,17 +309,16 @@ body <- dashboardBody(
                     )
                   )),
                   fluidRow(
-                    column(5,
+                    column(4,
                            checkboxInput("label", "Add labbels names", TRUE)),
-                    column(5,
-                           verbatimTextOutput("valuelab")),
-                    column(5,
+                    column(4,
+                           checkboxInput("meanpoint", "Add mean points", TRUE)),
+                    column(4,
                            checkboxInput("ellipse", "Add ellipses", FALSE))#,
-                   # verbatimTextOutput("ellipse")
                   ),
 
-                  
-                  checkboxInput("jitter", "Avoid overlap between points", FALSE),
+                  fluidRow(column(3),
+                  column(8,checkboxInput("jitter", "Avoid overlap between points", FALSE))),
                   verbatimTextOutput("valued"),
                   
                   sliderInput(
@@ -539,6 +538,14 @@ body <- dashboardBody(
                     br(),
                     plotOutput(outputId ="barplotvenn", height = 700)
                   )
+                 
+                 #, tabPanel("Venn GO enrichment",
+                 #         
+                 #          
+                 #          plotOutput("clusterPlot"),
+                 #          verbatimTextOutput("debug")
+                 # )
+                          
                   
                 )
               )
@@ -623,6 +630,15 @@ body <- dashboardBody(
                               checkboxInput("meandup",
                                             "Compute the mean for the same duplicated genes",
                                             FALSE))
+                      # ,
+                      # sliderInput(
+                      #   "clusterNumber",
+                      #   label = "Cluster",
+                      #   value = 1,
+                      #   min = 1,
+                      #   max = 5
+                      # )
+                      
                        )))),
     #id="rawdatatab",
   ###############################
@@ -768,7 +784,10 @@ body <- dashboardBody(
                     strong("(GO) enrichment-based cluster analysis"),value="maingo",
                     downloadButton("savego", "Save your enrichment clusters" , style =
                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-                    div(DT::dataTableOutput("davidgo"), style = "font-size: 85%; width: 85%")
+                    div(DT::dataTableOutput("davidgo"), style = "font-size: 85%; width: 85%"), 
+                    verbatimTextOutput("printmessage"),
+                    verbatimTextOutput("printselected")
+                    
                     
                     #,
                     #verbatimTextOutput("clustgo")

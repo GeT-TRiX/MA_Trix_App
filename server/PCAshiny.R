@@ -45,7 +45,8 @@ PCAplot <- function() {
     repel = input$jitter,
     axes = c(as.integer(input$dim1), as.integer(input$dim2)),
     labelsize = input$labelsiize,
-    pointsize = input$pointsiize
+    pointsize = input$pointsiize,
+    mean.point = input$meanpoint
   )
   
   return(p + scale_color_manual(values = empty()))

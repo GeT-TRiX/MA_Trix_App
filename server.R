@@ -41,7 +41,7 @@ shinyServer(function(input, output,session) {
   source(file.path("server", "colforpca.R"), local = TRUE)$value #
   
   ###############################
-  ######## Venn page           #
+  ######## Venn page            #
   ###############################
   
   source(file.path("server", "Venn.R"), local = TRUE)$value #
@@ -49,6 +49,11 @@ shinyServer(function(input, output,session) {
   source(file.path("server", "grepcol.R"), local = TRUE)$value # adjusted
   source(file.path("server", "Venninter.R"), local = TRUE)$value # adjusted
   source(file.path("server", "trackervenn.R"), local = TRUE)$value #
+  
+  ###############################
+  ######## Venn GO              #
+  ###############################
+  
   
   
   #########################################
@@ -104,7 +109,7 @@ shinyServer(function(input, output,session) {
   #########################################
   
   source(file.path("server", "shinygo.R"), local = TRUE)$value #
-
+  
   
   ###############################
   ######## cutheatmap page      #
