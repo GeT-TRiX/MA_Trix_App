@@ -14,4 +14,4 @@ output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal(), list(lengt
 
 output$davidgo <- renderDataTable({ davidwebservice()[[as.numeric(input$cutgo)]][, -9] })
 
-output$totalgenbyc <- renderDataTable(grouplength())
+#output$totalgenbyc <- renderDataTable(grouplength())

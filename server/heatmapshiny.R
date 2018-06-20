@@ -254,7 +254,7 @@ observe({
     
   })
   
-  #output$totalgenbyc <- renderDataTable(grouplength()) #
+  output$totalgenbyc <- renderDataTable(grouplength()) #
   
   
   output$clustering <-
