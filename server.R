@@ -48,6 +48,7 @@ shinyServer(function(input, output,session) {
   source(file.path("server", "Vennrender.R"), local = TRUE)$value #
   source(file.path("server", "grepcol.R"), local = TRUE)$value # adjusted
   source(file.path("server", "Venninter.R"), local = TRUE)$value # adjusted
+  source(file.path("server", "vennquery.R"), local = TRUE)$value # adjusted
   source(file.path("server", "trackervenn.R"), local = TRUE)$value #
   
   ###############################

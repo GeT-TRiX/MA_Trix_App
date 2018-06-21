@@ -114,17 +114,26 @@ observe({
   validate(
     need(csvf(), 'You need to import data to visualize this plot!'))
   #req(csvf())
+
   
+  
+observe({
+    
+   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
+    
 output$contout <- renderUI(
   ##validate
-  
+
   checkboxGroupInput(
     inputId = "cont" ,
     label =  "Choose your comparison",
-    choices = colnames(adjusted()[[1]][,-1][myindex()])
+    choices = colnames(adjusted()[[1]][,-1][myindex()]),
     #selected = colnames(adjusted()[[1]][,-1][myindex()])
+    inline = groupinline
   )
 )
+})
+
 })
 
 observeEvent(input$allCont, {

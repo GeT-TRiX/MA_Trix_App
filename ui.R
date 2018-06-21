@@ -11,7 +11,7 @@ sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptom
   inlineCSS(appCSS),#background #EFEFEF
   
   tags$style(type="text/css", Errorcss),
-
+  
   
 tags$head(
      tags$script(src = "custom.js")),
@@ -55,8 +55,8 @@ tags$head(
   ############################### 
 
 body <- dashboardBody(
-
   tags$style(type="text/css", Errorcss),
+  tags$style(type="text/css", tweaks),
   #tags$head(tags$style(HTML("div.col-sm-10 {padding:1px}"))),
   #tags$head(tags$style(HTML("div.col-sm-2 {padding:0px}"))),
   useShinyjs(),
@@ -259,7 +259,8 @@ body <- dashboardBody(
                 column(width=3,
                        box(id="boxpasspca",title = strong("PCA settings",style="font-size:25px;"), width = NULL, background = "light-blue",
                            inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
-                  uiOutput("individuselpca"),
+                           strong("Choose your group to visualize"),
+                          uiOutput("individuselpca"),
                   actionButton(
                     inputId = "allIndividuspca",
                     label = "Select all",
@@ -361,21 +362,6 @@ body <- dashboardBody(
                 #   width = NULL,
                   tabPanel(
                     strong("Visualize the Venn diagram"),
-                  #   div(style="display:inline-block div.col-sm-4 {padding:0px}; width: 36.333%",
-                  #     fluidRow(column(4,
-                  # 
-                  #       downloadButton('downloadvenn', "Download the data",
-                  #                      style =
-                  #                        "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                  #       column(3, style = "width: 27.5%;",
-                  #       downloadButton("savevenn", "Save your plot" , style =
-                  #                        "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                  #       div(style="display:inline-block div.col-sm-4 {padding:0px}; width: 100.33%%",
-                  #       column(4,  selectInput(
-                  #                           "formven",label = NULL,
-                  #                           choices = c("png", "eps", "pdf"))))
-                  #   )),
-                  
                   
                     div(style="display:inline-block",
                         fluidRow(column(4, style= "width:24%;",
@@ -391,25 +377,6 @@ body <- dashboardBody(
                                        choices = c("png", "eps", "pdf")))
                         )),
                     
-                  
-                 #  fluidRow( column(8, style= "padding:0px", column(2,
-                 #  #div(style="display:inline-block; width:33%;",
-                 #        
-                 #                      downloadButton('downloadvenn', "Download the data",
-                 #                                     style =
-                 #                           "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                 #  column(2, 
-                 # # div(style="display:inline-block; width:33%; padding:0px",
-                 #               #column(4,
-                 #                      downloadButton("savevenn", "Save your plot" , style =
-                 #                                       "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                 #  column(2,
-                 #  #div(style="display:inline-block; width:33%;",
-                 #              # column(4,
-                 #                      selectInput(
-                 #                 "formven",label = NULL,
-                 #                 choices = c("png", "eps", "pdf")))
-                 #   )),
                     
                     br(),br(),
                     conditionalPanel(condition = '!output.bool',
@@ -491,60 +458,17 @@ body <- dashboardBody(
                         )),
                     
                     
-                    
-                    # div(style="display:inline-block",
-                    #     fluidRow(column(4, style= "width:24%;",
-                    #                     
-                    #                     downloadButton('downloadvenn', "Download the data",
-                    #                                    style =
-                    #                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                    #              column(4, style="width:20%;",
-                    #                     downloadButton("savevenn", "Save your plot" , style =
-                    #                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                    #              column(4,style="width:19%;", selectInput(
-                    #                "formven",label = NULL,
-                    #                choices = c("png", "eps", "pdf")))
-                    #     )),
-                    # 
-                    
-                    
-                    # div(style="display:inline-block",
-                    #     fluidRow(column(3,br(),
-                    #                     actionButton(
-                    #                       inputId = "topdegenes",
-                    #                       label = "Plot top DE genes",
-                    #                       style =
-                    #                         "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                    #                     )),
-                    #              column(3,
-                    #                     br(),
-                    #                     downloadButton("savebarplot", "Save your barplot" , style =
-                    #                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                    #              column(3,
-                    #                     uiOutput("topgenesvenn"))
-                    #     )),
-                    
-                    
-                    # fluidRow(column(12,offset=1,br(),actionButton(
-                    #   inputId = "topdegenes",
-                    #   label = "Plot top DE genes", 
-                    #   style =
-                    #     "padding:8px; color: #fff; background-color: #337ab7; border-color: #2e6da4; float:left"
-                    # )),column(12,offset=2,br(), downloadButton("savebarplot", "Save your bar plot" , style =
-                    #                                     "padding:8px; color: #fff; background-color: #337ab7; border-color: #2e6da4; float:right, left: 100%")),
-                    # column(12,offset=, uiOutput("topgenesvenn")),style ="padding:5px"),
-                    
-                    
+                 
                     br(),
                     plotOutput(outputId ="barplotvenn", height = 700)
                   )
                  
-                 #, tabPanel("Venn GO enrichment",
-                 #         
-                 #          
-                 #          plotOutput("clusterPlot"),
-                 #          verbatimTextOutput("debug")
-                 # )
+                 , tabPanel(strong("Venn GO enrichment"),
+
+
+                          plotOutput("clusterPlot"),
+                          verbatimTextOutput("debug")
+                 )
                           
                   
                 )
@@ -629,17 +553,19 @@ body <- dashboardBody(
 
                               checkboxInput("meandup",
                                             "Compute the mean for the same duplicated genes",
-                                            FALSE))
-                      # ,
-                      # sliderInput(
-                      #   "clusterNumber",
-                      #   label = "Cluster",
-                      #   value = 1,
-                      #   min = 1,
-                      #   max = 5
-                      # )
+                                            FALSE),
+                      fluidRow(column(8,
+                      sliderInput(
+                        "clusterNumber",
+                        label = "Cluster",
+                        value = 1,
+                        min = 1,
+                        max = 5
+                      )), 
+                      column(4,br(), br(),
+                      actionButton("GOvenn", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")))
                       
-                       )))),
+                       ))))),
     #id="rawdatatab",
   ###############################
   ######## Heatmap Page         #

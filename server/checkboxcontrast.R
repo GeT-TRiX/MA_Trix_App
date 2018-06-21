@@ -3,15 +3,20 @@
 #################################
 
 # Render in the UI.R the levels for the pData Group 
+observe({
+  
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
+
 output$testout <- renderUI(
   checkboxGroupInput(
     inputId = "test" ,
     label =  "Choose your comparison",
-    choices =  colnames(adjusted()[[1]][,-1])
+    choices =  colnames(adjusted()[[1]][,-1]),
     #,selected = colnames(adjusted()[, -1])
-    
+    inline = groupinline
   )
 )
+})
 
 #Select all the contrasts
 observeEvent(input$allTests, {

@@ -3,15 +3,6 @@
 library(dplyr)
 
 
-# enrichment_empty <- function () {
-#   data.frame(category=numeric(0),
-#              over_represented_pvalue=numeric(0),
-#              under_represented_pvalue=numeric(0),
-#              num_in_subset=numeric(0),
-#              num_total=numeric(0),
-#              over_represented_pvalue_adj=numeric(0),
-#              under_represented_pvalue_adj=numeric(0))
-# }
 
 gosearch <- function(hm01, species, ids, clusterlist) {
   #clusterlist = NULL
@@ -108,6 +99,19 @@ probnamtoentrez <- function(hm01,  mypack) {
   })
 }
 
+probnamtoentrezvenn <- function(venngenes, mypack){
+  
+  entrezids <- venngenes %>%
+    unlist() %>%
+    as.character() %>%
+    mget(x = .,envir = mypack,ifnotfound = NA) %>%
+    unlist() %>%
+    unique() %>%
+    .[!is.na(.)]
+  
+}
+
+
 entreztosymb <- function(myentz, mypack){
 lapply(1:NROW(myentz), function(x)
   as.vector(unlist(mget(myentz[[x]], envir=mypack, ifnotfound=NA))))
@@ -158,7 +162,15 @@ davidqueryvenn <- function(entrezids, species){
 }
 
   
-
+# Functional Annotation Clustering: new!
+# Due to the redundant nature of annotations, Functional Annotation Chart presents similar/relevant annotations repeatedly. 
+# It dilutes the focus of the biology in the report.  To reduce the redundancy, the newly developed Functional Annotation Clustering report groups/displays similar annotations together which makes the biology clearer and more focused to be read vs. traditional chart report. 
+# The grouping algorithm is based on the hypothesis that similar annotations should have similar gene members.  
+# The Functional Annotation Clustering integrates the same techniques of  Kappa statistics to measure the degree of the common genes between two annotations, and  fuzzy heuristic clustering (used in Gene Functional Classification Tool ) to classify the groups of similar annotations according kappa values. 
+# In this sense, the more common genes annotations share, the higher chance they will be grouped together.
+# The p-values associated with each annotation terms inside each clusters are exactly the same meaning/values as p-values (Fisher Exact/EASE Score) shown in the regular chart report for the same terms.
+# The Group Enrichment Score new! , the geometric mean (in -log scale) of member's p-values in a corresponding annotation cluster, is used to rank their biological significance. 
+# Thus, the top ranked annotation groups most likely have consistent lower p-values for their annotation members.
 
 
 

@@ -27,6 +27,16 @@ content: 'An error occurred. Please contact us at franck.soubes@inra.fr'; }
 "
 
 
+tweaks <- " .multicol { height: 150px;
+-webkit-column-count: 5; /* Chrome, Safari, Opera */ 
+-moz-column-count: 5;    /* Firefox */
+column-count: 5; 
+-moz-column-fill: auto;
+-column-fill: auto;
+} 
+"
+
+
 
 appCSS <- "
 #loading-content {

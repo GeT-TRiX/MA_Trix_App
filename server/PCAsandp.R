@@ -2,15 +2,26 @@
 ######## PCA part                       #
 #########################################
 
+
+
+observe({
+
+groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
+
+
 output$individuselpca <- renderUI( 
   checkboxGroupInput(
     inputId = "indivpca" ,
-    label =  "Choose your group to visualize",
+    label = NULL,
+    #label =  "Choose your group to visualize",
     choices =  levels(csvf()[[2]]$Grp),
-    selected = levels(csvf()[[2]]$Grp)
+    selected = levels(csvf()[[2]]$Grp),
+    inline   = groupinline
     
   )
 )
+
+})
 # Select all groups
 observeEvent(input$allIndividuspca, {
   updateCheckboxGroupInput(
