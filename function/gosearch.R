@@ -3,7 +3,6 @@
 library(dplyr)
 
 
-
 gosearch <- function(hm01, species, ids, clusterlist) {
   #clusterlist = NULL
   library(goseq)
@@ -132,10 +131,10 @@ davidquery <- function(entrezids, species) {
       )
     
     selectedSpecie = (species)
-    backgroundLocation = grep(selectedSpecie,RDAVIDWebService::getBackgroundListNames(david))
+    #backgroundLocation = grep(selectedSpecie,RDAVIDWebService::getBackgroundListNames(david))
     specieLocation = grep(selectedSpecie, RDAVIDWebService::getSpecieNames(david))
     setCurrentSpecies(object = david, species = specieLocation)
-    setCurrentBackgroundPosition(object = david, position = backgroundLocation)
+    #setCurrentBackgroundPosition(object = david, position = backgroundLocation)
     #getSpecieNames(david)
     setAnnotationCategories(david, c("GOTERM_MF_ALL", "GOTERM_CC_ALL", "GOTERM_BP_ALL")) # "KEGG_PATHWAY"
     as.data.frame(cbind(getFunctionalAnnotationChart(object=david, threshold=1, count=0L)))  %>%
@@ -156,6 +155,12 @@ davidqueryvenn <- function(entrezids, species){
     listName = "myqueryvenn",
     listType = "Gene"
   )
+  
+  selectedSpecie = (species)
+  #backgroundLocation = grep(selectedSpecie,RDAVIDWebService::getBackgroundListNames(david))
+  specieLocation = grep(selectedSpecie, RDAVIDWebService::getSpecieNames(david))
+  setCurrentSpecies(object = david, species = specieLocation)
+  
   # get the cluster report for the upload
   getClusterReport(david, type = "Term")
   

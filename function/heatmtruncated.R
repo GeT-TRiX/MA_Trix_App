@@ -2,6 +2,7 @@ require(dplyr)
 require(RColorBrewer)
 
 
+
 ## Add jackknife correlation good for false positives with the pval methods add citation ....
 
 
@@ -67,7 +68,6 @@ require("marray")
 num2cols=function(numVector,colp=palette()){
   
   gpcol=as.data.frame(numVector)
-  
   numCols=length(unique(gpcol[,1]))
   mycol <- sort(unique(gpcol$numVector))
   if(length(colp) <numCols) warning("number of color names < number of levels! Give a color palette with at least ",numCols," terms to 'col' argument")
@@ -308,7 +308,7 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
                       RowSideColor=c("gray25","gray75") ,palette.col=NULL, 
                       margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75)
                       ,mycex = 0.6,mypal=test,colid = NULL, showcol = T ,showrow =F,
-                       notplot = F, geneSet= list7,genename = csvf, height = list8){
+                       notplot = F, geneSet= list7,genename = csvf, height = list8,rastering= myras ){
   
   
   #RowSideColor: color palette to be used for rowSide cluster colors
@@ -354,7 +354,6 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   ##-----------------------##
   
   cat("\n -> Plotting HeatMap... \n")
-  
   par("mar")
   
   par(mar=c(5,5,1,1.10))
@@ -362,9 +361,9 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   #pdf(NULL)
   hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
-                    Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=T,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), 
+                    Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=rastering,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), 
                                                                                                               lwid = c(0.1,1)),col=my_palette,key.par = list(cex=0.6))
-  mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
+  #mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
   
   if(notplot)
     dev.off()

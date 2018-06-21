@@ -98,7 +98,7 @@ observe({
   #' @export
   #' 
   
-  heatmapfinal <- function(isplot  = F) {
+  heatmapfinal <- function(isplot  = F, israstering = T) {
     if (is.null(my_intermediate()))
       mypal = (colorRampPalette(c("green", "black", "red"))(n = 75))
     else
@@ -128,7 +128,8 @@ observe({
       gpcol = hmbis()[[5]],
       gpcolr = hmbis()[[6]],
       distfunTRIX = isolate(hmbis()[[2]]),
-      height = hmbis()[[8]]
+      height = hmbis()[[8]], 
+      rastering = israstering
     )
     
   }
@@ -162,12 +163,14 @@ observe({
            sep = '')
   },
   content <- function(file) {
+    myras = ifelse(input$formhm == "emf", F, T)
+    
     if (input$formhm == "emf")
       
       emf(
         file,
-        width = 7,
-        height = 7,
+        width = 9,
+        height = 12,
         pointsize = 12,
         coordDPI = 300
       )
@@ -193,7 +196,7 @@ observe({
                      for (i in 1:n) {
                        incProgress(1 / n, detail = "Please wait...")
                      }
-                     heatmapfinal(isplot = F)
+                     heatmapfinal(isplot = F,israstering =myras)
                    })
     dev.off()
     

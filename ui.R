@@ -38,8 +38,8 @@ tags$head(
       ),
       img(
         src = "Logotype-INRA-transparent.png",
-        height = 50,
-        width = 180,
+        height = 43,
+        width = 168,
         style = "position:absolute;bottom:0;margin:0 0 15px 10px;"
       )    
       
@@ -56,7 +56,7 @@ tags$head(
 
 body <- dashboardBody(
   tags$style(type="text/css", Errorcss),
-  tags$style(type="text/css", tweaks),
+  
   #tags$head(tags$style(HTML("div.col-sm-10 {padding:1px}"))),
   #tags$head(tags$style(HTML("div.col-sm-2 {padding:0px}"))),
   useShinyjs(),
@@ -550,10 +550,20 @@ body <- dashboardBody(
                            br(),
                            uiOutput("myselvenn"),
                       # uiOutput("topgenesvenn"),
-
+                      
+                      strong("Functional Annotation Clustering",style = "font-family: 'times'; font-size:20px; font-style: strong; "),
+                      
+                      br(),br(),
+                      fluidRow(column(8, br(),
                               checkboxInput("meandup",
                                             "Compute the mean for the same duplicated genes",
-                                            FALSE),
+                                            FALSE)),
+                      column(4,
+                      selectInput("Speciesvenn", "Choose your Species:", selected = "Mus musculus", 
+                                  c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
+                                    "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa", 
+                                    "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" )))),
+                      
                       fluidRow(column(8,
                       sliderInput(
                         "clusterNumber",

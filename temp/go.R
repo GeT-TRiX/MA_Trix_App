@@ -63,6 +63,21 @@ hm01 = plotHeatmaps(hmbis[[1]],treated[[1]],groupss$Grp,workingPath=wd_path,mypa
                     showcol = F, showrow = T,genename=pval, rowv = hmbis[[4]], ColvOrd = hmbis[[3]],
                     gpcol = hmbis[[5]], gpcolr = hmbis[[6]], distfunTRIX = hmbis[[2]],geneSet = hmbis[[7]] , height = hmbis[[8]])
 
+hm01[[2]]
+devEMF::emf(
+  "test2.emf",
+  width = 7,
+  height = 12,
+  pointsize = 10,
+  coordDPI = 100
+)
+plotHeatmaps(hmbis[[1]],treated[[1]],groupss$Grp,workingPath=wd_path,mypal = testos,
+             showcol = F, showrow = T,genename=pval, rowv = hmbis[[4]], ColvOrd = hmbis[[3]],
+             gpcol = hmbis[[5]], gpcolr = hmbis[[6]], distfunTRIX = hmbis[[2]],geneSet = hmbis[[7]] , height = hmbis[[8]])
+dev.off()
+
+
+devEMF::emf("test.emf", hm01)
 
 View(hm01[[2]])
 myl=  NULL

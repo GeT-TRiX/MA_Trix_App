@@ -267,49 +267,49 @@ output$savego = downloadHandler( 'go.xlsx',
 
 
 Species <- reactive({
-  if (input$Species == "Homo sapiens") {
+  if (input$Species == "Homo sapiens" || input$Speciesvenn == "Homo sapiens") {
     # human
     library("org.Hs.eg.db")
     mypack = list(org.Hs.egALIAS2EG, org.Hs.egSYMBOL)
     return(mypack)
   }
-  else if (input$Species == "Mus musculus") {
+  else if (input$Species == "Mus musculus" || input$Speciesvenn == "Mus musculus" ) {
     # Mouse
     library("org.Mm.eg.db")
     mypack = list(org.Mm.egALIAS2EG, org.Mm.egSYMBOL)
     return(mypack)
   }
-  else if (input$Species == "Danio rerio") {
+  else if (input$Species == "Danio rerio" || input$Speciesvenn == "Danio rerio") {
     #Zebra fish
     library("org.Dr.eg.db")
     mypack = list(org.Dr.egALIAS2EG, org.Dr.egSYMBOL)
     return(mypack)
   }
-  else if (input$Species == "Gallus gallus") {
+  else if (input$Species == "Gallus gallus" || input$Speciesvenn == "Gallus gallus") {
     # chicken
     library("org.Gg.eg.db")
     mypack = list(org.Gg.egALIAS2EG, org.Gg.egSYMBOL)
     return(mypack)
   }
-  else if (input$Species == "equCab2") {
+  else if (input$Species == "equCab2" || input$Speciesvenn == "equCab2") {
     # horse
     library("org.Gg.eg.db")
     mypack = org.Mm.egALIAS2EG
     return(mypack)
   }
-  else if (input$Species == "Caenorhabditis elegans") {
+  else if (input$Species == "Caenorhabditis elegans" || input$Speciesvenn == "Caenorhabditis elegans") {
     # cC elegans
     library("org.Ce.eg.db")
     mypack = list(org.Ce.egALIAS2EG, org.Ce.egSYMBOL)
     return(mypack)
   }
-  else if (input$Species == "Rattus norvegicus") {
+  else if (input$Species == "Rattus norvegicus" || input$Speciesvenn == "Rattus norvegicus") {
     # Rat
     library("org.Rn.eg.db")
     mypack = list(org.Rn.egALIAS2EG, org.Rn.egSYMBOL )
     return(mypack)
   }
-  else if (input$Species == "Sus scrofa") {
+  else if (input$Species == "Sus scrofa" || input$Speciesvenn == "Sus scrofa") {
     # Pig
     library("org.Ss.eg.db")
     mypack = list(org.Ss.egALIAS2EG, org.Ss.egSYMBOL)
