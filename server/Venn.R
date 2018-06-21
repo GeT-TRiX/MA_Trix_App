@@ -136,6 +136,15 @@ output$contout <- renderUI(
 
 })
 
+observe({
+  
+  req(myindex())
+  print("check")
+  print(colnames(adjusted()[[1]][,-1][myindex()]))
+  
+})
+
+
 observeEvent(input$allCont, {
   updateCheckboxGroupInput(
     session,
@@ -237,7 +246,7 @@ output$downloadvenn <- downloadHandler(
 
 ################# TO DO commented
 
-myindex <- reactive ({
+myindex<- reactive({
   
   myl = lapply(seq(ncol(adjusted()[[1]])),function(x)
     return(which(adjusted()[[1]][[x]] < 0.05)))

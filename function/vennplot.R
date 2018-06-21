@@ -79,6 +79,7 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de
 #' 
 
 Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet){ 
+  
   if(is.null(myl))
     return(NULL)
   
@@ -89,29 +90,48 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet){
   myl <- myl[sapply(myl, length) > 0]
   final = length(myl)-1
   totgenes = sum(sapply(myl,length))
-  mynumb = paste("total genes", totgenes , collapse = ":")
+  mynumb = paste("total probes:", totgenes , collapse = ":")
   futile.logger::flog.threshold(futile.logger::ERROR, name = "VennDiagramLogger")
-  #mytresh = paste0("DEG BH ", cutoffpval, " and FC " , cutofffc)
   mytresh = paste0(metuse, cutoffpval, " and FC " , cutofffc)
+  
+  
+  if(length(myl)==2){
+     if (length(myl[[2]])> length(myl[[1]]))
+       mynames = rev(colnames(adj))
+     else
+       mynames = colnames(adj)
+  }
+  else
+    mynames = colnames(adj)
+
+  
+  
   if(length(indexnull)>0){
-    if(length(myl)==5)
+    if(length(myl)==5){
+      print(colnames(adj[,-c(indexnull)]))
       g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1, cat.just= list(c(0.6,1) , c(0,0) , c(0,0) , c(1,1) , c(1,0)),
-                   category.names = colnames(adj[,-c(indexnull)]),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                   category.names = mynames[,-c(indexnull)],fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
                    fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
-    else
+    }
+    else{
+      print(colnames(adj[,-c(indexnull)]))
       g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,
-                     category.names = colnames(adj[,-c(indexnull)]),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                     category.names = mynames[,-c(indexnull)],fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
                      fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
+    }
   }
   else{
-      if(length(myl)==5)
+      if(length(myl)==5){
       g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,cat.just=  list(c(0.6,1) , c(0,0) , c(0,0) , c(1,1) , c(1,0)) ,
-                     category.names = colnames(adj),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
-                     fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
-      else
+                     category.names = mynames,fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                     fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop4
+      }
+      else{
+
         g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,
-                         category.names = colnames(adj),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                         category.names = mynames,fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
                          fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
+      }
   }
   
   final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom= mytresh)
