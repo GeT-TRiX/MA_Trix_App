@@ -7,6 +7,14 @@ options(shiny.maxRequestSize=2000000000)
 #}
 
 
+cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"), 
+                     Stripchart=c(`Without boxplot`="LB", `With boxplot` = "WB"))
+
+
+categoerygen = c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY")
+
+
+
 source("css/owncss.R")
 source('LoadPackages.R')
 source("function/formating.R")
@@ -48,11 +56,6 @@ secdim = 2
 `%next%` <- shiny:::`%OR%`
 
 
-cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"), 
-                     Stripchart=c(`Without boxplot`="LB", `With boxplot` = "WB"))
-
-
-categoerygen = c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY")
 
 
 
