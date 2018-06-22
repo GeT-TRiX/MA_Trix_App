@@ -1068,20 +1068,16 @@ body <- dashboardBody(
                                                        4,
                                                        uiOutput("cutgo")),
                                                      column(3, 
-                                                            
+                                                          
                                                             selectInput(
                                                               'catinfo',
                                                               'Category: ',
-                                                              choices = categoerygen,
-                                                              selected=  categoerygen,
+                                                              choices =  c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY"),
+                                                              selected=  c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY"),
                                                               multiple = TRUE
                                                             )
                                                      )),
-                                            #uiOutput("slidergo"),
-                                            
-                                            # fluidRow(column(3, selectInput("onto", "Category", 
-                                            #                                selected ="BP", choices = c("BP", "MF", "CC"))
-                                            # ),
+
                                             fluidRow(
                                               column(4,br(),
                                                      actionButton("GO", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")),

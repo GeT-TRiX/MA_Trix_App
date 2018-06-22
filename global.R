@@ -56,9 +56,6 @@ secdim = 2
 `%next%` <- shiny:::`%OR%`
 
 
-
-
-
 palette = brewer.pal(8,"Dark2") %>%
   list(brewer.pal(10,"Paired")) %>%
   unlist()
