@@ -42,6 +42,8 @@ rownamtoX <- reactive({
 #'
 
 cutfinal <- reactive({
+    req(hmobj$obj)
+  
     pdf(NULL)
     cutHeatmaps(
       hmobj$obj,
@@ -59,7 +61,7 @@ cutfinal <- reactive({
 
 # render to the ui the number of clusted for a define height in function of the current heatmap object
 output$cutcluster <- renderUI({ 
-  
+  req(hmobj$obj)
   cut02 = cut( hmobj$obj$rowDendrogram, h = hmsize$cut)
   selectInput("cutcluster",
               "Choose your cluster",
@@ -78,6 +80,7 @@ output$event <- renderPrint({ # interactive cursor that shows the selected point
 })
 
 observe({ 
+  req(hmobj$obj)
   if (req(input$cutinfo) == "Heatmap") {
     output$cutheatmap <- renderPlotly({ # Plot/Render an object of class plotly
        cutfinal()

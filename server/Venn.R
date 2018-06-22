@@ -205,7 +205,7 @@ choix_cont <- reactive({
 #'
 
 user_cont <- reactive({
-  
+  req(adjusted())
   
   if (input$methodforvenn == "FDR")
     mysel = (subset(adjusted()[[1]],

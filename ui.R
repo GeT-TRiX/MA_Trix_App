@@ -128,20 +128,21 @@ body <- dashboardBody(
                             column(12,
                               h3("This table shows the samples with the corresponding groups"),
                               dataTableOutput("new_test")
-                            ),
-                            column(12,
-                              h3("This table shows the head of the working set"),
-                              dataTableOutput("new_data")
-                            ),
-                            
-                            column(12,
-                              h3("Show the actual data frame with the columns selected"),
-                              helpText(
-                                "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-                              ),
-                              dataTableOutput("new_group")
                             )
-                            #)
+                            # ,
+                            # column(12,
+                            #   h3("This table shows the head of the working set"),
+                            #   dataTableOutput("new_data")
+                            # )
+                            
+                            # column(12,
+                            #   h3("Show the actual data frame with the columns selected"),
+                            #   helpText(
+                            #     "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+                            #   ),
+                            #   dataTableOutput("new_group")
+                            # )
+                            # )
                    )
               #)
               )
@@ -196,7 +197,18 @@ body <- dashboardBody(
                 
               )
             )
-            ))),
+            ),
+            conditionalPanel(condition = '!output.boolmark',
+            column(12,
+                    h3("Show the actual data frame with the columns selected"),
+                    helpText(
+                      "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
+                    ),
+                    dataTableOutput("new_group")
+            ))
+          
+            
+            )),
     
   ###############################
   ######## PCA page             #
@@ -721,7 +733,7 @@ body <- dashboardBody(
                     )),
                   tabPanel(
                     strong("(GO) enrichment-based cluster analysis"),value="maingo",
-                    downloadButton("savego", "Save your enrichment clusters" , style =
+                    downloadButton("savegohmdav", "Save your enrichment clusters" , style =
                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
                     DT::dataTableOutput("davidgo"), 
                     verbatimTextOutput("printmessage"),

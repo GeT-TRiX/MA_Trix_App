@@ -239,10 +239,7 @@ output$printselected <- renderPrint({
 
 
 
-output$savego = downloadHandler( paste0(basename(file_path_sans_ext(projectname())),
-                                        '_go.',
-                                        "xlsx",
-                                        sep = ''),
+output$savegohmdav = downloadHandler( paste0(basename(file_path_sans_ext(projectname())), '_go.',"xlsx", sep = ''),
   content = function(file) {
     
     withProgress(message = 'Creation of the xlsx table:',

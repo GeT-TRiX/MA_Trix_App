@@ -43,7 +43,8 @@ Errorcss <-
 .shiny-output-error:before {
 color: #3c8dbc;
 visibility: visible;
-content: 'An error occurred. Please contact us at franck.soubes@inra.fr'; }
+#content: 'An error occurred. Please contact us at franck.soubes@inra.fr'; }
+content: 'ok'; }
 }
 "
 
