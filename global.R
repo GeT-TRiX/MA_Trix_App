@@ -52,13 +52,9 @@ cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatm
                      Stripchart=c(`Without boxplot`="LB", `With boxplot` = "WB"))
 
 
-# catgegoryl = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"), 
-#                      Stripchart=c(`Without boxplot`="LB", `With boxplot` = "WB"))
+categoerygen = c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY")
 
 
-# palette = c("#0072C2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442",
-#              "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray",
-#              "burlywood1","darkkhaki", "#CC0000" )
 
 palette = brewer.pal(8,"Dark2") %>%
   list(brewer.pal(10,"Paired")) %>%

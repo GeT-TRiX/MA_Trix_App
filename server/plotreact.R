@@ -79,8 +79,6 @@ output$distPlot <- renderPlot({
       NULL
     }
       
-      
-      
 
 })
 

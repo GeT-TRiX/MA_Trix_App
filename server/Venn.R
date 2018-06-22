@@ -63,7 +63,8 @@ Vennplot <- reactive({
     
   if(length(user_cont()) <= 5){
   #g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
-    g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn)
+    
+  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn)
   
 
    observe({value <<-T}) # listen inside the reactive expression 
@@ -146,22 +147,26 @@ observe({
 
 
 observeEvent(input$allCont, {
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(
     session,
     "cont",
     label = "Choose your comparison",
 
     choices = colnames(adjusted()[[1]][,-1][myindex()]),
-    selected = colnames(adjusted()[[1]][,-1][myindex()])
+    selected = colnames(adjusted()[[1]][,-1][myindex()]),
+    inline = groupinline
   )
 })
 
 observeEvent(input$noCont, {
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(session,
                            "cont",
                            label = "Choose your comparison",
                            #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())])
-                           choices = colnames(adjusted()[[1]][,-1][myindex()])
+                           choices = colnames(adjusted()[[1]][,-1][myindex()]),
+                           inline=groupinline
   )
 })
 

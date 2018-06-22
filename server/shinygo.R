@@ -102,7 +102,7 @@ davidwebservice <-
                    
                    tryCatch({
                      mygodavid = probnamtoentrez(hmobj$hm, Species()[[1]]) %>%
-                       davidquery(input$Species) %>% withCallingHandlers(error = timeoutdav)
+                       davidquery(input$Species, input$catinfo) %>% withCallingHandlers(error = timeoutdav)
                    }, warning = function(e) {
                      warning("David's server is busy")
                      
@@ -239,8 +239,20 @@ output$printselected <- renderPrint({
 
 
 
-output$savego = downloadHandler( 'go.xlsx',
+output$savego = downloadHandler( paste0(basename(file_path_sans_ext(projectname())),
+                                        '_go.',
+                                        "xlsx",
+                                        sep = ''),
   content = function(file) {
+    
+    withProgress(message = 'Creation of the xlsx table:',
+                 value = 0, {
+                   n <- NROW(50)
+                   for (i in 1:n) {
+                     incProgress(1 / n, detail = "Please wait...")
+                   }
+    
+    
     library(xlsx)
     
     for (i in 1:length(davidwebservice())) {
@@ -255,12 +267,60 @@ output$savego = downloadHandler( 'go.xlsx',
           sheetName = paste("Cluster", i),
           append = TRUE
         )
-    }
+      }
+    })
     
     
     
   }
 )
+
+# output$savegofiltered = downloadHandler( paste0(basename(file_path_sans_ext(projectname())),
+#                                         '_go_filtered.',
+#                                         "xlsx",
+#                                         sep = ''),
+#                                  content = function(file) {
+#                                    
+#                                    withProgress(message = 'Creation of the xlsx table:',
+#                                                 value = 0, {
+#                                                   n <- NROW(50)
+#                                                   for (i in 1:n) {
+#                                                     incProgress(1 / n, detail = "Please wait...")
+#                                                   }
+#                                                   
+#                                                   
+#                                                   library(xlsx)
+#                                                   
+#                                                   for (i in 1:length(davidwebservice())) {
+#                                                     if (i == 1)
+#                                                       write.xlsx(file = file,
+#                                                                  davidwebservice()[[i]],
+#                                                                  sheetName = paste("Cluster", i))
+#                                                     else
+#                                                       write.xlsx(
+#                                                         file = file,
+#                                                         davidwebservice()[[i]],
+#                                                         sheetName = paste("Cluster", i),
+#                                                         append = TRUE
+#                                                       )
+#                                                   }
+#                                                 })
+#                                    
+#                                    
+#                                    
+#                                  }
+# )
+# 
+# 
+# output$downloadvennset = downloadHandler(
+#   'venns-filtered.csv',
+#   content = function(file) {
+#     s = input$davidgo_rows_all
+#     write.csv2(vennfinal()[s, , drop = FALSE], file)
+#   }
+# )
+
+
 #gores$obj <- NULL
 
 #Species <- eventReactive(input$DAVID,{

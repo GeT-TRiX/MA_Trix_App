@@ -19,22 +19,28 @@ output$testout <- renderUI(
 })
 
 #Select all the contrasts
+
 observeEvent(input$allTests, {
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(
     session,
     "test",
     label = "Choose your comparison",
     choices = colnames(adjusted()[[1]][,-1]),
-    selected = colnames(adjusted()[[1]][,-1])
+    selected = colnames(adjusted()[[1]][,-1]),
+    inline = groupinline
   )
 })
 
 #Unselect all the contrasts
 observeEvent(input$noTests, {
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(session,
                            "test",
                            label = "Choose your comparison",
-                           choices = colnames(adjusted()[[1]][, -1]))
+                           choices = colnames(adjusted()[[1]][, -1]),
+                           inline= groupinline
+                           )
 })
 
 #' choix_test is a reactive function in the aim of selecting different comparison 

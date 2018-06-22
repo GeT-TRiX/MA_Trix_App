@@ -12,6 +12,8 @@ output$data_summary <- renderDataTable(data_summary()) # Summary of the signific
 
 output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal(), list(lengthMenu =  c('5', '15', '50'))), server = F)
 
-output$davidgo <- renderDataTable({ davidwebservice()[[as.numeric(input$cutgo)]][, -9] })
+output$davidgo <- DT::renderDataTable(DT::datatable(davidwebservice()[[as.numeric(input$cutgo)]][, -9] , options = list(scrollX = TRUE) ) )
 
 #output$totalgenbyc <- renderDataTable(grouplength())
+
+#opuput$resumetopgoandkegg <- 

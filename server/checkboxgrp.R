@@ -3,47 +3,57 @@
 #################################
 
 
-# Render in the UI.R the levels for the pData Group 
+# Render in the UI.R the levels for the pData Group
 
 
 observe({
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   
-  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
-
-output$individusel <- renderUI( 
-  checkboxGroupInput(
-    inputId = "indiv" ,
-    label =  "Choose your group to visualize",
-    # choices =  colnames(csvf()[[1]][,-1]),
-    # selected = colnames(csvf()[[1]][,-1])
-    choices =  levels(csvf()[[2]]$Grp),
-    selected = levels(csvf()[[2]]$Grp),
-    inline= groupinline
+  output$individusel <- renderUI(
+    checkboxGroupInput(
+      inputId = "indiv" ,
+      label =  "Choose your group to visualize",
+      # choices =  colnames(csvf()[[1]][,-1]),
+      # selected = colnames(csvf()[[1]][,-1])
+      choices =  levels(csvf()[[2]]$Grp),
+      selected = levels(csvf()[[2]]$Grp),
+      inline = groupinline
+    )
   )
-)
-
+  
 })
+
 # Select all groups
-observeEvent(input$allIndividus, {
-  updateCheckboxGroupInput(
-    session,
-    "indiv",
-    label = "Choose your group to visualize",
-    #choices = colnames(csvf()[[1]][,-1]),
-    #selected = colnames(csvf()[[1]][,-1])
-    choices =  levels(csvf()[[2]]$Grp),
-    selected = levels(csvf()[[2]]$Grp)
-  )
-})
 
-# Unselect all groups
-observeEvent(input$noIndividus, {
-  updateCheckboxGroupInput(session,
-                           "indiv",
-                           label = "Choose your group to visualize",
-                           #choices = colnames(csvf()[[1]][,-1]))
-                           choices =  levels(csvf()[[2]]$Grp))
-})
+  
+observeEvent(input$allIndividus, {
+    
+    groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
+    
+    updateCheckboxGroupInput(
+      session,
+      "indiv",
+      label = "Choose your group to visualize",
+      #choices = colnames(csvf()[[1]][,-1]),
+      #selected = colnames(csvf()[[1]][,-1])
+      choices =  levels(csvf()[[2]]$Grp),
+      selected = levels(csvf()[[2]]$Grp),
+      inline = groupinline
+    )
+  })
+
+
+  # Unselect all groups
+  observeEvent(input$noIndividus, {
+    groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
+    updateCheckboxGroupInput(session,
+                             "indiv",
+                             label = "Choose your group to visualize",
+                             #choices = colnames(csvf()[[1]][,-1]))
+                             choices =  levels(csvf()[[2]]$Grp),
+                             inline = groupinline )
+    
+  })
 
 #' choix_grp is a reactive function which aim is to select/unselect groups
 #'
@@ -90,7 +100,7 @@ new_group <- reactive({
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)
-  csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
+  csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
 })
 #}, ignoreNULL = F)
 
@@ -113,4 +123,3 @@ new_data <- reactive({
   #subset(csvf()[[1]],select = choix_individus())
   select(csvf()[[1]], as.character(factor(new_group()$X)))
 })
-

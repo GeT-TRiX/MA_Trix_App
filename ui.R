@@ -720,7 +720,7 @@ body <- dashboardBody(
                     strong("(GO) enrichment-based cluster analysis"),value="maingo",
                     downloadButton("savego", "Save your enrichment clusters" , style =
                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-                    div(DT::dataTableOutput("davidgo"), style = "font-size: 85%; width: 85%"), 
+                    DT::dataTableOutput("davidgo"), 
                     verbatimTextOutput("printmessage"),
                     verbatimTextOutput("printselected")
                     
@@ -1067,9 +1067,16 @@ body <- dashboardBody(
                                                      column(
                                                        4,
                                                        uiOutput("cutgo")),
-                                                     column(3, selectInput("onto", "Category", 
-                                                                           selected ="BP", choices = c("BP", "MF", "CC")
-                                                     ))),
+                                                     column(3, 
+                                                            
+                                                            selectInput(
+                                                              'catinfo',
+                                                              'Category: ',
+                                                              choices = categoerygen,
+                                                              selected=  categoerygen,
+                                                              multiple = TRUE
+                                                            )
+                                                     )),
                                             #uiOutput("slidergo"),
                                             
                                             # fluidRow(column(3, selectInput("onto", "Category", 

@@ -257,11 +257,11 @@ observe({
     
   })
   
-  output$totalgenbyc <- renderDataTable(grouplength()) #
+  output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength() )) #
   
   
-  output$clustering <-
-    renderDataTable(ordered())
+  output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))
+
   
   
 })

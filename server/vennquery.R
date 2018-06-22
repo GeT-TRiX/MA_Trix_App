@@ -5,6 +5,8 @@ observe({
 
 output$clusterPlot <- renderPlot({
   req(Venncluster())
+  if(input$clusterNumber == 1)
+    shinyjs::alert("There's not enough genes in your interaction(s)")
   plot2D(Venncluster(), input$clusterNumber)
 })
 
@@ -34,8 +36,9 @@ Venncluster <- eventReactive(input$GOvenn, {
                      mygodavid = probnamtoentrezvenn(vennfinal()$GeneName , Species()[[1]]) %>%
                      davidqueryvenn(input$Speciesvenn) %>% withCallingHandlers(error = timeoutdav)
                    }, warning = function(e) {
-                     warning("David's server is busy")
                      
+                     shinyjs::alert("David's server is busy")
+                     warning("David's server is busy")
                      return(cbind("David's server is busy") %>% as.data.frame() %>% setNames("Error"))
                      
                    })
