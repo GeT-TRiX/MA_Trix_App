@@ -11,9 +11,11 @@ sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptom
   inlineCSS(appCSS),#background #EFEFEF
   
   tags$style(type="text/css", Errorcss),
+  tags$style(type="text/css", inactivity),
   
   
 tags$head(
+     #tags$script(src = inactivity),   
      tags$script(src = "custom.js")),
   div(id = "loading-content-bar",
       p()),
@@ -55,6 +57,7 @@ tags$head(
   ############################### 
 
 body <- dashboardBody(
+  tags$style(type="text/css", inactivity),
   tags$style(type="text/css", Errorcss),
   
   #tags$head(tags$style(HTML("div.col-sm-10 {padding:1px}"))),
