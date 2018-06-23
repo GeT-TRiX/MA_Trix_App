@@ -47,9 +47,9 @@ Setdiff <- function (x, y) {
 #' @return \myl a list
 #' 
 
-Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de foreach parallel
+Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de foreach parallel
   
-  if(is.null(pval)) 
+  if(is.null(adj)) 
     return(NULL)
   
   
@@ -80,20 +80,29 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de
 #' @return \final draw on the current device
 #' 
 
-Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet){ 
+Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = F, pval){ 
   
   if(is.null(myl))
     return(NULL)
   
+  
+  if(meandup){
+    myl = lapply(seq(length(myl)), function(x){pval %>% select(GeneName, ProbeName) %>% filter( ProbeName %in% myl[[x]]) %>% 
+        distinct( GeneName)}) %>%
+      as.matrix()
+    myl = lapply(1:length(myl),FUN = function(i) as.character(myl[[i]]$GeneName))  #D14Ertd668e doublons pour LWT_MCD.LWT_CTRL (si genesymbol -1 perte d'info) avec une probe nom partagée avec LKO_MCD.LKO_CTRL  et une probe partagée
+  
+  }
   
   metuse = ifelse(statimet == "FDR","DEG BH ", "DEG RAW ")
   
   indexnull = which( sapply(myl ,length) == 0)
   myl <- myl[sapply(myl, length) > 0]
   final = length(myl)-1
-
+  totgenes =  sum(sapply(myl,length))
   totprobes=  totalvenn(myl, adj)
-  mynumb = paste("total probes:", totprobes , collapse = ":")
+  mynumb = paste("total probes:", totgenes ,"and total probe crossings:",totprobes, collapse = "")
+
   futile.logger::flog.threshold(futile.logger::ERROR, name = "VennDiagramLogger")
   mytresh = paste0(metuse, cutoffpval, " and FC " , cutofffc)
   
@@ -139,6 +148,8 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet){
   
   final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom= mytresh)
   
+  
+  
   return(final)
 }
 
@@ -183,8 +194,7 @@ totalvenn <- function(vennlist,adj){
       Setdiff(vennlist[i], vennlist[setdiff(names(vennlist), i)])) %>% .[sapply(., length) > 0]
   
   n.elements <- sapply(elements, length)
-  print(n.elements)
-  print(sum(n.elements))
+
   
   return(sum(n.elements))
 }
@@ -234,11 +244,11 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = F) {
     dfinter$GeneName = make.names(dfinter$GeneName, unique = T)
 
   
-  mycont = gsub("-"," vs " ,mycont)
+  mycont = gsub("-"," vs logFC_" ,mycont)
   colnames(dfinter)= lapply(colnames(dfinter),function(x){
     
     if(grepl("-",x))
-      x = gsub("-"," vs " ,x)
+      x = gsub("-"," vs logFC_" ,x)
     
     return(x)})
   

@@ -30,10 +30,10 @@ vennlist <- reactive({
   
   if (is.null(csvf()))
     return(NULL)
-  mycont = Vennlist(pval = csvf()[[3]], user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
-  print(mycont)
-  probven = rowtoprob(mycont,csvf()[[3]], user_cont() )
+  mycont = Vennlist(user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
+  probven = rowtoprob(mycont,csvf()[[3]], user_cont())
   #colnames(probven) = names(user_cont())
+  #return(mycont)
   return(probven)
 })
 
@@ -65,7 +65,7 @@ Vennplot <- reactive({
   if(length(user_cont()) <= 5){
   #g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
     
-  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn)
+  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn, input$meandup , csvf()[[3]])
   
 
    observe({value <<-T}) # listen inside the reactive expression 

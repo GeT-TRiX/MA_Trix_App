@@ -1914,7 +1914,7 @@ PCAplot <- function(PCAres, myax = c(1,2), elips = T , rep = T , mylevel = group
 
 require(VennDiagram)
 
-#Intersect, Union and Setdiff (https://stackoverflow.com/questions/34130233/give-name-to-list-variable)
+#Intersect, Union and Setdiff (https://stackoverflow.com/questions/23559371/how-to-get-the-list-of-items-in-venn-diagram-in-r)
 
 Intersect <- function (x) {  
   # Multiple set version of intersect
@@ -1961,9 +1961,9 @@ Setdiff <- function (x, y) {
 #' @return \myl a list
 #' 
 
-Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de foreach parallel
+Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de foreach parallel
   
-  if(is.null(pval)) 
+  if(is.null(adj)) 
     return(NULL)
   
   
@@ -1978,6 +1978,8 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de
     else
       return(as.character(which(adj[[x]] < cutoffpval & abs(fc[[x]]) > log2(cutofffc))))
   })
+  
+  #slice(my_data, 1:6)
 
 }
 
@@ -1992,19 +1994,29 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de
 #' @return \final draw on the current device
 #' 
 
-Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet){ 
+Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = F, pval){ 
   
   if(is.null(myl))
     return(NULL)
   
+  
+  if(meandup){
+    myl = lapply(seq(length(myl)), function(x){pval %>% select(GeneName, ProbeName) %>% filter( ProbeName %in% myl[[x]]) %>% 
+        distinct( GeneName)}) %>%
+      as.matrix()
+    myl = lapply(1:length(myl),FUN = function(i) as.character(myl[[i]]$GeneName))  #D14Ertd668e doublons pour LWT_MCD.LWT_CTRL (si genesymbol -1 perte d'info) avec une probe nom partagée avec LKO_MCD.LKO_CTRL  et une probe partagée
+  
+  }
   
   metuse = ifelse(statimet == "FDR","DEG BH ", "DEG RAW ")
   
   indexnull = which( sapply(myl ,length) == 0)
   myl <- myl[sapply(myl, length) > 0]
   final = length(myl)-1
-  totgenes = sum(sapply(myl,length))
-  mynumb = paste("total probes:", totgenes , collapse = ":")
+  totgenes =  sum(sapply(myl,length))
+  totprobes=  totalvenn(myl, adj)
+  mynumb = paste("total probes:", totgenes ,"and total probe crossings:",totprobes, collapse = "")
+
   futile.logger::flog.threshold(futile.logger::ERROR, name = "VennDiagramLogger")
   mytresh = paste0(metuse, cutoffpval, " and FC " , cutofffc)
   
@@ -2050,6 +2062,8 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet){
   
   final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom= mytresh)
   
+  
+  
   return(final)
 }
 
@@ -2083,7 +2097,7 @@ myventocsv <- function(myven, adj){
 
 }
 
-setvglobalvenn <- function(vennlist,adj){
+totalvenn <- function(vennlist,adj){
   
   names(vennlist) = colnames(adj)
   elements <- 1:length(vennlist) %>% lapply(function(x)
@@ -2093,16 +2107,27 @@ setvglobalvenn <- function(vennlist,adj){
     lapply(function(i)
       Setdiff(vennlist[i], vennlist[setdiff(names(vennlist), i)])) %>% .[sapply(., length) > 0]
   
+  n.elements <- sapply(elements, length)
+
   
-  # global <- unlist(lapply(1:length(vennlist),
-  #                         function(x) combn(names(vennlist), x, simplify = FALSE)),
-  #                  recursive = FALSE)
-  # names(global) <- sapply(global, function(p) paste0(p, collapse = ""))
-  # elements <- lapply(global, function(i) Setdiff(vennlist[i], vennlist[setdiff(names(vennlist), i)]))
-  # elements <- elements[sapply(elements, length) > 0]
+  return(sum(n.elements))
+}
+
+
+setvglobalvenn <- function(vennlist,adj){
+  
+  names(vennlist) = colnames(adj)
+  elements <- 1:length(vennlist) %>% lapply(function(x)
+    combn(names(vennlist), x, simplify = FALSE)) %>%
+    unlist(recursive = F) %>% setNames(., sapply(., function(p)
+      paste0(p, collapse = ""))) %>%
+    lapply(function(i)
+      Setdiff(vennlist[i], vennlist[setdiff(names(vennlist), i)])) %>% .[sapply(., length) > 0]
+  
   
   return(elements)
 }
+
 
 
 rowtoprob <- function(myven,pval,adj) {
@@ -2131,26 +2156,13 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = F) {
   
   if(!meandup)
     dfinter$GeneName = make.names(dfinter$GeneName, unique = T)
-  else{
-    logval <- "logFC_" %>%
-      grepl(colnames(dfinter))%>%
-      which(.==T)
-    
-    for (i in mycont) {
-      dfinter[[i]] = as.numeric(as.character(dfinter[[i]]))
-    }
-    
-    dfinter <- dfinter[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] 
-    dfinter = as.data.frame(dfinter)
-
-  }
 
   
-  mycont = gsub("-"," vs " ,mycont)
+  mycont = gsub("-"," vs logFC_" ,mycont)
   colnames(dfinter)= lapply(colnames(dfinter),function(x){
     
     if(grepl("-",x))
-      x = gsub("-"," vs " ,x)
+      x = gsub("-"," vs logFC_" ,x)
     
     return(x)})
   
@@ -2217,64 +2229,5 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = F) {
 }
 
 
-
-
-
-
-
-# topngenes <- function(dfinter, mycont, inputtop) {
-#   dfinter$GeneName = make.names(dfinter$GeneName, unique = T)
-#   
-#   reshp <-
-#     melt(
-#       dfinter[1:inputtop, ],
-#       id.vars = "GeneName",
-#       measure.vars = c (mycont),
-#       variable.name = "Source",
-#       value.name = "logFC"
-#     )
-#   reshp <- droplevels(reshp)
-#   reshp$GeneName <-factor(reshp$GeneName, levels = unique(as.character(reshp$GeneName)))
-#   
-#   
-#   
-#   p <- ggplot(reshp, aes(
-#     x = GeneName,
-#     y = as.numeric(as.character(formatC(as.double(logFC), digits = 1, format = "f"))),
-#     fill = factor(Source)
-#   )) +
-#     geom_bar(stat = "identity", position = "dodge") +
-#     scale_fill_discrete(
-#       name = "GeneName",
-#       breaks = c(1, 2),
-#       labels = c(mycont)
-#     ) +
-#     scale_fill_manual(values = c("red","blue")) + 
-#     
-#     
-#     xlab("Gene Name") + ylab("Log Fold-Change") +
-#     theme(
-#       panel.grid.major = element_blank(),
-#       panel.grid.minor = element_blank(),
-#       panel.background = element_blank(),
-#       axis.line = element_line(colour = "white"),
-#       plot.title = element_text(size = 20, hjust = 0.5),
-#       plot.caption = element_text(size = 10, hjust = 0.5),
-#       axis.title.x = element_text(size = 10),
-#       axis.title.y = element_text(size = 10) ,
-#       axis.text.x = element_text(
-#         size = 8,
-#         colour = "#888888",
-#         angle = 80,
-#         hjust = 1
-#       ),
-#       axis.text.y = element_text(size = 8, colour = "#888888")
-#     )
-#   
-#   
-#   print(p)
-# 
-#   return(p)
-# }
 
 

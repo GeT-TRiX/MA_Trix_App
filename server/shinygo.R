@@ -127,7 +127,7 @@ observe({
 davidurl <- reactive({
   req(clustergrep())
   
-  source_python('./python/add.py')
+  source_python('./python/enrichmurl.py')
   mydavurl = enrichmentdav(clustergrep())
   mygloburl <- paste(`mydavurl`, ",", "'_blank')")
   

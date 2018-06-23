@@ -18,7 +18,12 @@ output$myselvenn <- renderUI({
 
 venninter <- reactive({
   req(vennlist(), user_cont())
+  
+  
   myelist <- setvglobalvenn(vennlist(), user_cont())
+  print(myelist)
+  
+  
   return(myelist)
 })
 

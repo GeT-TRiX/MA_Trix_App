@@ -11,13 +11,147 @@ library(dplyr)
 
 
 musmuscu <- read.csv2("data/TOXA_HEGU_MA0191_AllChip_WorkingSet.csv")
+pval <- read.csv2("data/All_topTableAll.csv")
+
+
 test = c(1,2,3)
 musmuscu[2](test)
 filter(musmuscu$X %in% test)
 musmuscu[test,c("X")]
 musmuscu
+colnames(pval)
+
+filter(pval, ProbeName %in% test[[1]])
+test[[2]]
+
+test
+seq(length(pval))
+View(test)
+
+pval$ProbeName
+
+pval %>% select(GeneName) %>% slice(as.integer(test[[1]])) %>% 
+  distinct( GeneName)
 
 pval <- read.csv2("data/All_topTableAll.csv")
+adj = pval[,grep("^adj.P.Val", names(pval), value=TRUE)]
+View(adj)
+names(adj)
+fc = pval[,grep("^logFC", names(pval), value=TRUE)]
+
+verify = Vennlist(adj,fc, "both", 0.05, 1) ## ajout de foreach parallel
+
+
+verify = rowtoprob(verify,pval,adj)
+verify[[1]]
+rowtoprob()
+test = setvglobalvenn(verify, adj)
+
+View(test)
+
+length(test[[2]])
+
+
+osef = pval %>% select(GeneName, ProbeName) %>% filter(ProbeName %in% test[[2]])
+View(osef)
+length(osef$GeneName)
+length(unique(osef$GeneName))
+
+
+osef = pval %>% select(GeneName, ProbeName) %>% filter( ProbeName %in% verify[[x]]) %>% 
+  distinct( GeneName)  
+
+
+length(test[[1]])
+length(verify[[1]])  
+
+sum(sapply(verify,length))
+sum(sapply(testfin,length))
+
+
+
+testfin = lapply(seq(length(verify)), function(x){pval %>% select(GeneName, ProbeName) %>% filter( ProbeName %in% verify[[x]]) %>% 
+  distinct( GeneName)  }) %>%
+  as.matrix()
+
+testfin
+
+testfin = lapply(1:length(testfin),FUN = function(i) as.character(testfin[[i]]$GeneName)) 
+
+
+length(testfin[[5]])
+testfin[[2]]
+
+
+for (i in colnames(adj)) {
+  verify[[i]] = as.numeric(as.character(verify[[i]]))
+}
+
+typeof(testfin[[1]])
+
+verify
+testfin <- testfin[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] 
+testfin = as.data.frame(testfin)
+
+
+resfinal = pval %>%
+  filter(ProbeName %in% test[[paste0(names(adj[1]), names(adj[2]))]]) %>%
+  select(ProbeName, GeneName, paste0( colnames(fc))) %>%
+  mutate_if(is.numeric, funs(format(., digits = 3)))
+
+length(unique(resfinal$GeneName))
+length(unique(resfinal$GeneName))
+
+
+
+select(ProbeName, GeneName, paste0("logFC_", vennchoice())) %>%
+paste0(names(adj[1]), names(adj[2]))
+
+
+colnames(adj[[1]])
+
+test[[paste0(names(adj[1]), names(adj[2]))]]
+
+test[[adj]]
+
+View(testfin)
+
+final = as.matrix(testfin)
+
+lapply(1:length(final), FUN = function(x) as.character(final[[x]]$GeneName))
+
+
+typeof(final)
+
+final[[1]]$GeneName
+
+myl= list()
+for(i in 1:seq(length(test))){
+  print(i)
+  myl[[i]] = pval %>% select(GeneName) %>% slice(as.integer(test[[i]])) %>% distinct( GeneName)
+}
+typeof(testfin[[1]]$GeneName)
+
+as.character(testfin[[1]]$GeneName)
+test[[1]]
+
+
+
+View(testfin)
+class(testfin[[1]]$GeneName)
+test[[1]]
+typeof(test[[1]])
+typeof(testfin[[1]])
+print(unlist(testfin[[1]]))
+print(test[[1]])
+View(testfin)
+
+pval <- read.csv2("data/All_topTableAll.csv")
+
+View(pval)
+
+
+
 groupss <- read.csv2("data/TOXA_HEGU_MA0191_AllChip_pData.csv", sep= ";" , dec = ",",header= T)
 adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.|^adj.P.Val_LKO_CTRL.LWT_CTRL", names(pval), value=TRUE)]
 adj = pval[,grep("X|^adj.P.Val_.LWT_MCD.LWT_CTRL...LKO_MCD.LKO_CTRL.", names(pval), value=TRUE)]

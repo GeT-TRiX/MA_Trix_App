@@ -2275,7 +2275,7 @@ observe({
 davidurl <- reactive({
   req(clustergrep())
   
-  source_python('./python/add.py')
+  source_python('./python/enrichmurl.py')
   mydavurl = enrichmentdav(clustergrep())
   mygloburl <- paste(`mydavurl`, ",", "'_blank')")
   
@@ -2633,7 +2633,12 @@ output$myselvenn <- renderUI({
 
 venninter <- reactive({
   req(vennlist(), user_cont())
+  
+  
   myelist <- setvglobalvenn(vennlist(), user_cont())
+  print(myelist)
+  
+  
   return(myelist)
 })
 
@@ -2654,6 +2659,16 @@ vennfinal <- reactive({
     filter(ProbeName %in% venninter()[[reordchoice]]) %>%
     select(ProbeName, GeneName, paste0("logFC_", vennchoice())) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
+  
+  mycont = paste0("logFC_", vennchoice())
+  if(input$meandup){
+    for (i in mycont) {
+      resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
+    }
+  
+    resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] 
+    resfinal = as.data.frame(resfinal)
+  }
   #mutate_if(is.numeric, funs(formatC(., format = "f")))
   
   
@@ -2826,9 +2841,10 @@ vennlist <- reactive({
   
   if (is.null(csvf()))
     return(NULL)
-  mycont = Vennlist(pval = csvf()[[3]], user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
-  probven = rowtoprob(mycont,csvf()[[3]], user_cont() )
+  mycont = Vennlist(user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
+  probven = rowtoprob(mycont,csvf()[[3]], user_cont())
   #colnames(probven) = names(user_cont())
+  #return(mycont)
   return(probven)
 })
 
@@ -2860,7 +2876,7 @@ Vennplot <- reactive({
   if(length(user_cont()) <= 5){
   #g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
     
-  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn)
+  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn, input$meandup , csvf()[[3]])
   
 
    observe({value <<-T}) # listen inside the reactive expression 
@@ -3073,6 +3089,7 @@ myindex<- reactive({
     req(Vennplot())
     
     Vennplot()
+    
   })
   
  

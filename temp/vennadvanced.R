@@ -12,6 +12,9 @@ for (i in 1:ncol(adj)){
   print(i)
 }
 
+length(pval$ProbeName)
+length(unique(pval$GeneName))
+
 lapply(seq(ncol(adj)),function(x)
   return(x))
 
