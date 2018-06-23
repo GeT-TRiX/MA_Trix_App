@@ -39,6 +39,16 @@ vennfinal <- reactive({
     filter(ProbeName %in% venninter()[[reordchoice]]) %>%
     select(ProbeName, GeneName, paste0("logFC_", vennchoice())) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
+  
+  mycont = paste0("logFC_", vennchoice())
+  if(input$meandup){
+    for (i in mycont) {
+      resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
+    }
+  
+    resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] 
+    resfinal = as.data.frame(resfinal)
+  }
   #mutate_if(is.numeric, funs(formatC(., format = "f")))
   
   

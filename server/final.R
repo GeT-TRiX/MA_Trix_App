@@ -110,33 +110,44 @@ output$button <-  renderUI({ # if button is clicked changed his style.css
 #################################
 
 # Render in the UI.R the levels for the pData Group 
+observe({
+  
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
+
 output$testout <- renderUI(
   checkboxGroupInput(
     inputId = "test" ,
     label =  "Choose your comparison",
-    choices =  colnames(adjusted()[[1]][,-1])
+    choices =  colnames(adjusted()[[1]][,-1]),
     #,selected = colnames(adjusted()[, -1])
-    
+    inline = groupinline
   )
 )
+})
 
 #Select all the contrasts
+
 observeEvent(input$allTests, {
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(
     session,
     "test",
     label = "Choose your comparison",
     choices = colnames(adjusted()[[1]][,-1]),
-    selected = colnames(adjusted()[[1]][,-1])
+    selected = colnames(adjusted()[[1]][,-1]),
+    inline = groupinline
   )
 })
 
 #Unselect all the contrasts
 observeEvent(input$noTests, {
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(session,
                            "test",
                            label = "Choose your comparison",
-                           choices = colnames(adjusted()[[1]][, -1]))
+                           choices = colnames(adjusted()[[1]][, -1]),
+                           inline= groupinline
+                           )
 })
 
 #' choix_test is a reactive function in the aim of selecting different comparison 
@@ -171,39 +182,57 @@ choix_test <- reactive({
 #################################
 
 
-# Render in the UI.R the levels for the pData Group 
-output$individusel <- renderUI( 
-  checkboxGroupInput(
-    inputId = "indiv" ,
-    label =  "Choose your group to visualize",
-    # choices =  colnames(csvf()[[1]][,-1]),
-    # selected = colnames(csvf()[[1]][,-1])
-    choices =  levels(csvf()[[2]]$Grp),
-    selected = levels(csvf()[[2]]$Grp)
-    
+# Render in the UI.R the levels for the pData Group
+
+
+observe({
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
+  
+  output$individusel <- renderUI(
+    checkboxGroupInput(
+      inputId = "indiv" ,
+      label =  "Choose your group to visualize",
+      # choices =  colnames(csvf()[[1]][,-1]),
+      # selected = colnames(csvf()[[1]][,-1])
+      choices =  levels(csvf()[[2]]$Grp),
+      selected = levels(csvf()[[2]]$Grp),
+      inline = groupinline
+    )
   )
-)
-# Select all groups
-observeEvent(input$allIndividus, {
-  updateCheckboxGroupInput(
-    session,
-    "indiv",
-    label = "Choose your group to visualize",
-    #choices = colnames(csvf()[[1]][,-1]),
-    #selected = colnames(csvf()[[1]][,-1])
-    choices =  levels(csvf()[[2]]$Grp),
-    selected = levels(csvf()[[2]]$Grp)
-  )
+  
 })
 
-# Unselect all groups
-observeEvent(input$noIndividus, {
-  updateCheckboxGroupInput(session,
-                           "indiv",
-                           label = "Choose your group to visualize",
-                           #choices = colnames(csvf()[[1]][,-1]))
-                           choices =  levels(csvf()[[2]]$Grp))
-})
+# Select all groups
+
+  
+observeEvent(input$allIndividus, {
+    
+    groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
+    
+    updateCheckboxGroupInput(
+      session,
+      "indiv",
+      label = "Choose your group to visualize",
+      #choices = colnames(csvf()[[1]][,-1]),
+      #selected = colnames(csvf()[[1]][,-1])
+      choices =  levels(csvf()[[2]]$Grp),
+      selected = levels(csvf()[[2]]$Grp),
+      inline = groupinline
+    )
+  })
+
+
+  # Unselect all groups
+  observeEvent(input$noIndividus, {
+    groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
+    updateCheckboxGroupInput(session,
+                             "indiv",
+                             label = "Choose your group to visualize",
+                             #choices = colnames(csvf()[[1]][,-1]))
+                             choices =  levels(csvf()[[2]]$Grp),
+                             inline = groupinline )
+    
+  })
 
 #' choix_grp is a reactive function which aim is to select/unselect groups
 #'
@@ -250,7 +279,7 @@ new_group <- reactive({
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)
-  csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
+  csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
 })
 #}, ignoreNULL = F)
 
@@ -273,7 +302,6 @@ new_data <- reactive({
   #subset(csvf()[[1]],select = choix_individus())
   select(csvf()[[1]], as.character(factor(new_group()$X)))
 })
-
 #########################################
 ######## Colors for the  PCA groups     #
 #########################################
@@ -644,6 +672,8 @@ rownamtoX <- reactive({
 #'
 
 cutfinal <- reactive({
+    req(hmobj$obj)
+  
     pdf(NULL)
     cutHeatmaps(
       hmobj$obj,
@@ -661,7 +691,7 @@ cutfinal <- reactive({
 
 # render to the ui the number of clusted for a define height in function of the current heatmap object
 output$cutcluster <- renderUI({ 
-  
+  req(hmobj$obj)
   cut02 = cut( hmobj$obj$rowDendrogram, h = hmsize$cut)
   selectInput("cutcluster",
               "Choose your cluster",
@@ -680,6 +710,7 @@ output$event <- renderPrint({ # interactive cursor that shows the selected point
 })
 
 observe({ 
+  req(hmobj$obj)
   if (req(input$cutinfo) == "Heatmap") {
     output$cutheatmap <- renderPlotly({ # Plot/Render an object of class plotly
        cutfinal()
@@ -1029,7 +1060,7 @@ observe({
   #' @export
   #' 
   
-  heatmapfinal <- function(isplot  = F) {
+  heatmapfinal <- function(isplot  = F, israstering = T) {
     if (is.null(my_intermediate()))
       mypal = (colorRampPalette(c("green", "black", "red"))(n = 75))
     else
@@ -1059,7 +1090,8 @@ observe({
       gpcol = hmbis()[[5]],
       gpcolr = hmbis()[[6]],
       distfunTRIX = isolate(hmbis()[[2]]),
-      height = hmbis()[[8]]
+      height = hmbis()[[8]], 
+      rastering = israstering
     )
     
   }
@@ -1093,12 +1125,14 @@ observe({
            sep = '')
   },
   content <- function(file) {
+    myras = ifelse(input$formhm == "emf", F, T)
+    
     if (input$formhm == "emf")
       
       emf(
         file,
-        width = 7,
-        height = 7,
+        width = 9,
+        height = 12,
         pointsize = 12,
         coordDPI = 300
       )
@@ -1124,7 +1158,7 @@ observe({
                      for (i in 1:n) {
                        incProgress(1 / n, detail = "Please wait...")
                      }
-                     heatmapfinal(isplot = F)
+                     heatmapfinal(isplot = F,israstering =myras)
                    })
     dev.off()
     
@@ -1185,11 +1219,11 @@ observe({
     
   })
   
-  #output$totalgenbyc <- renderDataTable(grouplength()) #
+  output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength() )) #
   
   
-  output$clustering <-
-    renderDataTable(ordered())
+  output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))
+
   
   
 })
@@ -1365,32 +1399,46 @@ observeEvent(input$session, {
 ######## PCA part                       #
 #########################################
 
+observe({
+
+groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
+
+
 output$individuselpca <- renderUI( 
   checkboxGroupInput(
     inputId = "indivpca" ,
-    label =  "Choose your group to visualize",
+    label = NULL,
+    #label =  "Choose your group to visualize",
     choices =  levels(csvf()[[2]]$Grp),
-    selected = levels(csvf()[[2]]$Grp)
+    selected = levels(csvf()[[2]]$Grp),
+    inline   = groupinline
     
   )
 )
+
+})
 # Select all groups
 observeEvent(input$allIndividuspca, {
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(
     session,
     "indivpca",
     label = "Choose your group to visualize",
     choices =  levels(csvf()[[2]]$Grp),
-    selected = levels(csvf()[[2]]$Grp)
+    selected = levels(csvf()[[2]]$Grp),
+    inline= groupinline
   )
 })
 
 # Unselect all groups
 observeEvent(input$noIndividuspca, {
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(session,
                            "indivpca",
                            label = "Choose your group to visualize",
-                           choices =  levels(csvf()[[2]]$Grp))
+                           choices =  levels(csvf()[[2]]$Grp),
+                           inline = groupinline
+                           )
 })
 
 
@@ -1553,7 +1601,7 @@ output$PCA <- renderPlot({
       need(length(unique(new_grouppca()$Grp)) >1, 'You need to select more than one group!')
   )
   
-  plot(PCAplot())
+  plot(PCAplot()+ theme_minimal())
   
 })
 
@@ -1644,7 +1692,8 @@ PCAplot <- function() {
     repel = input$jitter,
     axes = c(as.integer(input$dim1), as.integer(input$dim2)),
     labelsize = input$labelsiize,
-    pointsize = input$pointsiize
+    pointsize = input$pointsiize,
+    mean.point = input$meanpoint
   )
   
   return(p + scale_color_manual(values = empty()))
@@ -2014,8 +2063,6 @@ output$distPlot <- renderPlot({
       NULL
     }
       
-      
-      
 
 })
 
@@ -2029,17 +2076,32 @@ output$distPlot <- renderPlot({
 
 output$new_test <- renderDataTable(csvf()[[2]]) # Data frame corresponding to the pData
 
-output$new_data <- renderDataTable(head(csvf()[[1]][2:6])) # Head of the WorkingSet data 
+#output$new_data <- renderDataTable(head(csvf()[[1]][2:6])) # Head of the WorkingSet data 
 
-output$new_group <- renderDataTable(new_group()) # a data frame corresponding to the selected groups
+#output$new_group <- renderDataTable(new_group()) # a data frame corresponding to the selected groups
 
 output$data_summary <- renderDataTable(data_summary()) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)
 
 output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal(), list(lengthMenu =  c('5', '15', '50'))), server = F)
 
-output$davidgo <- renderDataTable({ davidwebservice()[[as.numeric(input$cutgo)]][, -9] })
+output$davidgo <- DT::renderDataTable(DT::datatable(davidwebservice()[[as.numeric(input$cutgo)]][, -9] , options = list(scrollX = TRUE) ) )
 
-output$totalgenbyc <- renderDataTable(grouplength())#' Reactive function that return a list of data frame depending on the comparisons
+#output$totalgenbyc <- renderDataTable(grouplength())
+
+#opuput$resumetopgoandkegg <- 
+
+myrenderedtop <- reactive({
+  req(csvf())
+
+  select( csvf()[[3]], ProbeName:SystematicName, everything() ) %>%
+    mutate_if(is.numeric, funs(format(., digits = 3)))
+
+
+})
+
+output$new_group <- DT::renderDataTable(DT::datatable(myrenderedtop()[,-c(4:9)] , options = list(scrollX = TRUE) ) )
+
+#' Reactive function that return a list of data frame depending on the comparisons
 #'
 #' @param adjusted list of three data frame corresponding to the grep of respectively Adj.pval, P.val and logFC columns
 #' @param choix_test character corresponding to the defined contrast set by the user
@@ -2187,8 +2249,8 @@ davidwebservice <-
                        invokeRestart("muffleWarning")
                    
                    tryCatch({
-                     mygodavid = probnamtoentrez(hmobj$hm, Species()) %>%
-                       davidquery(input$Species) %>% withCallingHandlers(error = timeoutdav)
+                     mygodavid = probnamtoentrez(hmobj$hm, Species()[[1]]) %>%
+                       davidquery(input$Species, input$catinfo) %>% withCallingHandlers(error = timeoutdav)
                    }, warning = function(e) {
                      warning("David's server is busy")
                      
@@ -2207,8 +2269,6 @@ davidwebservice <-
 observe({
   req(davidwebservice())
   print(colnames(davidwebservice()))
-  
-  
 })
 
 
@@ -2275,9 +2335,69 @@ output$clustgo <- renderPrint({
 })
 
 
-output$savego = downloadHandler(
-  'go.xlsx',
+
+mytransf <- reactive({
+  req( davidwebservice())
+  
+    
+  myselectedrows = (davidwebservice()[[as.numeric(input$cutgo)]][input$davidgo_rows_selected, c("Genes", "Term"),  drop = FALSE]) 
+
+  if(length(myselectedrows["Genes"][[1]])>0){
+    
+    myentreztosymb = lapply(1:NROW(myselectedrows),function(x){
+      myselectedrows$Genes[[x]] %>% strsplit( ", ") %>% unlist() %>% mget(x= .,envir = Species()[[2]],ifnotfound = NA) %>%  unlist() %>%
+        unique() %>% cbind(myselectedrows$Term[[x]]) %>% as.data.frame() %>% setNames(., c("Genes", "Term"))
+    
+    })
+    
+    return(myentreztosymb)
+  }
+  else{
+
+    return(NULL)
+  }
+  
+})
+
+output$printmessage <- renderPrint({
+  req(davidwebservice())
+  cat("You can select the rows in the table above in order to display the gene names")
+  cat("\n")
+  cat("\n")
+  
+})
+
+
+output$printselected <- renderPrint({
+  
+  req(mytransf())  
+  # cat("You can select the rows in the table above in order to display the gene names")
+  # cat("\n")
+  # cat("\n")
+    for(i in 1:length(mytransf())){
+      cat(paste("GOID and Term: " , unique(mytransf()[[i]]$Term)))
+      cat("\n")
+      cat("Genes: ")
+      cat(paste( mytransf()[[i]]$Genes, collapse = " ,"))
+      cat("\n")
+      cat("\n")
+    }
+
+})
+
+
+
+output$savegohmdav = downloadHandler( paste0(basename(file_path_sans_ext(projectname())), '_go.',"xlsx", sep = ''),
   content = function(file) {
+    
+    withProgress(message = 'Creation of the xlsx table:',
+                 value = 0, {
+                   n <- NROW(50)
+                   for (i in 1:n) {
+                     incProgress(1 / n, detail = "Please wait...")
+                   }
+    
+    
     library(xlsx)
     
     for (i in 1:length(davidwebservice())) {
@@ -2292,62 +2412,112 @@ output$savego = downloadHandler(
           sheetName = paste("Cluster", i),
           append = TRUE
         )
-    }
+      }
+    })
     
     
     
   }
 )
+
+# output$savegofiltered = downloadHandler( paste0(basename(file_path_sans_ext(projectname())),
+#                                         '_go_filtered.',
+#                                         "xlsx",
+#                                         sep = ''),
+#                                  content = function(file) {
+#                                    
+#                                    withProgress(message = 'Creation of the xlsx table:',
+#                                                 value = 0, {
+#                                                   n <- NROW(50)
+#                                                   for (i in 1:n) {
+#                                                     incProgress(1 / n, detail = "Please wait...")
+#                                                   }
+#                                                   
+#                                                   
+#                                                   library(xlsx)
+#                                                   
+#                                                   for (i in 1:length(davidwebservice())) {
+#                                                     if (i == 1)
+#                                                       write.xlsx(file = file,
+#                                                                  davidwebservice()[[i]],
+#                                                                  sheetName = paste("Cluster", i))
+#                                                     else
+#                                                       write.xlsx(
+#                                                         file = file,
+#                                                         davidwebservice()[[i]],
+#                                                         sheetName = paste("Cluster", i),
+#                                                         append = TRUE
+#                                                       )
+#                                                   }
+#                                                 })
+#                                    
+#                                    
+#                                    
+#                                  }
+# )
+# 
+# 
+# output$downloadvennset = downloadHandler(
+#   'venns-filtered.csv',
+#   content = function(file) {
+#     s = input$davidgo_rows_all
+#     write.csv2(vennfinal()[s, , drop = FALSE], file)
+#   }
+# )
+
+
 #gores$obj <- NULL
 
 #Species <- eventReactive(input$DAVID,{
+
+
 Species <- reactive({
-  if (input$Species == "Homo sapiens") {
+  if (input$Species == "Homo sapiens" || input$Speciesvenn == "Homo sapiens") {
     # human
     library("org.Hs.eg.db")
-    mypack = org.Hs.egALIAS2EG
+    mypack = list(org.Hs.egALIAS2EG, org.Hs.egSYMBOL)
     return(mypack)
   }
-  else if (input$Species == "Mus musculus") {
+  else if (input$Species == "Mus musculus" || input$Speciesvenn == "Mus musculus" ) {
     # Mouse
     library("org.Mm.eg.db")
-    mypack = org.Mm.egALIAS2EG
+    mypack = list(org.Mm.egALIAS2EG, org.Mm.egSYMBOL)
     return(mypack)
   }
-  else if (input$Species == "Danio rerio") {
+  else if (input$Species == "Danio rerio" || input$Speciesvenn == "Danio rerio") {
     #Zebra fish
     library("org.Dr.eg.db")
-    mypack = org.Dr.egALIAS2EG
+    mypack = list(org.Dr.egALIAS2EG, org.Dr.egSYMBOL)
     return(mypack)
   }
-  else if (input$Species == "Gallus gallus") {
+  else if (input$Species == "Gallus gallus" || input$Speciesvenn == "Gallus gallus") {
     # chicken
     library("org.Gg.eg.db")
-    mypack = org.Gg.egALIAS2EG
+    mypack = list(org.Gg.egALIAS2EG, org.Gg.egSYMBOL)
     return(mypack)
   }
-  else if (input$Species == "equCab2") {
+  else if (input$Species == "equCab2" || input$Speciesvenn == "equCab2") {
     # horse
     library("org.Gg.eg.db")
     mypack = org.Mm.egALIAS2EG
     return(mypack)
   }
-  else if (input$Species == "Caenorhabditis elegans") {
+  else if (input$Species == "Caenorhabditis elegans" || input$Speciesvenn == "Caenorhabditis elegans") {
     # cC elegans
     library("org.Ce.eg.db")
-    mypack = org.Ce.egALIAS2EG
+    mypack = list(org.Ce.egALIAS2EG, org.Ce.egSYMBOL)
     return(mypack)
   }
-  else if (input$Species == "Rattus norvegicus") {
+  else if (input$Species == "Rattus norvegicus" || input$Speciesvenn == "Rattus norvegicus") {
     # Rat
     library("org.Rn.eg.db")
-    mypack = org.Rn.egALIAS2EG
+    mypack = list(org.Rn.egALIAS2EG, org.Rn.egSYMBOL )
     return(mypack)
   }
-  else if (input$Species == "Sus scrofa") {
+  else if (input$Species == "Sus scrofa" || input$Speciesvenn == "Sus scrofa") {
     # Pig
     library("org.Ss.eg.db")
-    mypack = org.Ss.egALIAS2EG
+    mypack = list(org.Ss.egALIAS2EG, org.Ss.egSYMBOL)
     return(mypack)
   }
   
@@ -2365,7 +2535,7 @@ output$indivcol <-  renderText({ # Groups selected
 })
 
 
-output$test <- renderText({ #Contrast selected
+output$testtt <- renderText({ #Contrast selected
   my_final <<- paste(choix_test(),as.character(),  sep=",") 
 })
 
@@ -2575,7 +2745,56 @@ observe({
     dev.off()
   })
   
-})#########################################
+})observe({
+  req(Venncluster())
+  updateSliderInput(session, "clusterNumber", max = nrow(summary(Venncluster())))
+})
+
+output$clusterPlot <- renderPlot({
+  req(Venncluster())
+  if(input$clusterNumber == 1)
+    shinyjs::alert("There's not enough genes in your interaction(s)")
+  plot2D(Venncluster(), input$clusterNumber)
+})
+
+output$debug <- renderPrint({
+  req(Venncluster())
+  summary(Venncluster())
+})
+
+
+Venncluster <- eventReactive(input$GOvenn, {
+    
+    req(vennfinal())
+    
+    withProgress(message = 'Performing GO enrichment:',
+                 value = 0, {
+                   n <- NROW(50)
+                   for (i in 1:n) {
+                     incProgress(1 / n, detail = "Please wait...")
+                   }
+                   library(RDAVIDWebService)
+                   
+                   timeoutdav <- function(y)
+                     if (any(grepl("Read timed out", y)))
+                       invokeRestart("muffleWarning")
+                   
+                   tryCatch({
+                     mygodavid = probnamtoentrezvenn(vennfinal()$GeneName , Species()[[1]]) %>%
+                     davidqueryvenn(input$Speciesvenn) %>% withCallingHandlers(error = timeoutdav)
+                   }, warning = function(e) {
+                     
+                     shinyjs::alert("David's server is busy")
+                     warning("David's server is busy")
+                     return(cbind("David's server is busy") %>% as.data.frame() %>% setNames("Error"))
+                     
+                   })
+                 })
+    
+    
+    return(mygodavid)
+  })
+#########################################
 ######## Venn diagram                   #
 #########################################
 
@@ -2640,7 +2859,8 @@ Vennplot <- reactive({
     
   if(length(user_cont()) <= 5){
   #g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
-    g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn)
+    
+  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn)
   
 
    observe({value <<-T}) # listen inside the reactive expression 
@@ -2691,36 +2911,58 @@ observe({
   validate(
     need(csvf(), 'You need to import data to visualize this plot!'))
   #req(csvf())
+
   
+  
+observe({
+    
+   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
+    
 output$contout <- renderUI(
   ##validate
-  
+
   checkboxGroupInput(
     inputId = "cont" ,
     label =  "Choose your comparison",
-    choices = colnames(adjusted()[[1]][,-1][myindex()])
+    choices = colnames(adjusted()[[1]][,-1][myindex()]),
     #selected = colnames(adjusted()[[1]][,-1][myindex()])
+    inline = groupinline
   )
 )
 })
 
+})
+
+observe({
+  
+  req(myindex())
+  print("check")
+  print(colnames(adjusted()[[1]][,-1][myindex()]))
+  
+})
+
+
 observeEvent(input$allCont, {
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(
     session,
     "cont",
     label = "Choose your comparison",
 
     choices = colnames(adjusted()[[1]][,-1][myindex()]),
-    selected = colnames(adjusted()[[1]][,-1][myindex()])
+    selected = colnames(adjusted()[[1]][,-1][myindex()]),
+    inline = groupinline
   )
 })
 
 observeEvent(input$noCont, {
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(session,
                            "cont",
                            label = "Choose your comparison",
                            #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())])
-                           choices = colnames(adjusted()[[1]][,-1][myindex()])
+                           choices = colnames(adjusted()[[1]][,-1][myindex()]),
+                           inline=groupinline
   )
 })
 
@@ -2759,7 +3001,7 @@ choix_cont <- reactive({
 #'
 
 user_cont <- reactive({
-  
+  req(adjusted())
   
   if (input$methodforvenn == "FDR")
     mysel = (subset(adjusted()[[1]],
@@ -2805,7 +3047,7 @@ output$downloadvenn <- downloadHandler(
 
 ################# TO DO commented
 
-myindex <- reactive ({
+myindex<- reactive({
   
   myl = lapply(seq(ncol(adjusted()[[1]])),function(x)
     return(which(adjusted()[[1]][[x]] < 0.05)))
@@ -2868,8 +3110,7 @@ observe({
       cairo_ps(filename=file, width=11, height=11,pointsize = 12)
     
     
-    plot(Vennplot())
-
+    grid.draw(Vennplot())
     dev.off()
   })
   

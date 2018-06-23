@@ -1269,16 +1269,6 @@ fixp <- function(x, dig=3){
 library(dplyr)
 
 
-# enrichment_empty <- function () {
-#   data.frame(category=numeric(0),
-#              over_represented_pvalue=numeric(0),
-#              under_represented_pvalue=numeric(0),
-#              num_in_subset=numeric(0),
-#              num_total=numeric(0),
-#              over_represented_pvalue_adj=numeric(0),
-#              under_represented_pvalue_adj=numeric(0))
-# }
-
 gosearch <- function(hm01, species, ids, clusterlist) {
   #clusterlist = NULL
   library(goseq)
@@ -1374,13 +1364,26 @@ probnamtoentrez <- function(hm01,  mypack) {
   })
 }
 
+probnamtoentrezvenn <- function(venngenes, mypack){
+  
+  entrezids <- venngenes %>%
+    unlist() %>%
+    as.character() %>%
+    mget(x = .,envir = mypack,ifnotfound = NA) %>%
+    unlist() %>%
+    unique() %>%
+    .[!is.na(.)]
+  
+}
+
+
 entreztosymb <- function(myentz, mypack){
 lapply(1:NROW(myentz), function(x)
   as.vector(unlist(mget(myentz[[x]], envir=mypack, ifnotfound=NA))))
 }
 
 
-davidquery <- function(entrezids, species) {
+davidquery <- function(entrezids, species, mycat) {
   test = lapply(1:NROW(entrezids), function(x) {
     david <- DAVIDWebService$new(email = "franck.soubes@inra.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
     RDAVIDWebService::setTimeOut(david, 90000)
@@ -1394,18 +1397,53 @@ davidquery <- function(entrezids, species) {
       )
     
     selectedSpecie = (species)
-    backgroundLocation = grep(selectedSpecie,RDAVIDWebService::getBackgroundListNames(david))
+    #backgroundLocation = grep(selectedSpecie,RDAVIDWebService::getBackgroundListNames(david))
     specieLocation = grep(selectedSpecie, RDAVIDWebService::getSpecieNames(david))
     setCurrentSpecies(object = david, species = specieLocation)
-    setCurrentBackgroundPosition(object = david, position = backgroundLocation)
+    #setCurrentBackgroundPosition(object = david, position = backgroundLocation)
     #getSpecieNames(david)
-    setAnnotationCategories(david, c("GOTERM_MF_ALL"))
-    as.data.frame(cbind(getFunctionalAnnotationChart(object=david, threshold=1, count=0L)))  %>%
-      filter(Count>1) %>% arrange(desc(Count))  %>% select( Category:Count, List.Total:Pop.Total,PValue,everything())
+    setAnnotationCategories(david, mycat) #c("GOTERM_MF_ALL", "GOTERM_CC_ALL", "GOTERM_BP_ALL")) # "KEGG_PATHWAY"
+    mydav = as.data.frame(cbind(getFunctionalAnnotationChart(object=david, threshold=1, count=0L)))  %>%
+      filter(Count>1) %>% arrange(desc(Count))  %>% select( Category:Count, List.Total:Pop.Total,X.,PValue,Genes,Fold.Enrichment, Bonferroni, Benjamini)
+    colnames(mydav)[[7]] = "percent"
+    return(mydav)
   })
 }
 
 
+davidqueryvenn <- function(entrezids, species){
+  
+  david <- DAVIDWebService$new(email = "franck.soubes@inra.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
+  RDAVIDWebService::setTimeOut(david, 90000)
+  
+  addList(
+    david,
+    entrezids,
+    idType = "ENTREZ_GENE_ID",
+    listName = "myqueryvenn",
+    listType = "Gene"
+  )
+  
+  selectedSpecie = (species)
+  #backgroundLocation = grep(selectedSpecie,RDAVIDWebService::getBackgroundListNames(david))
+  specieLocation = grep(selectedSpecie, RDAVIDWebService::getSpecieNames(david))
+  setCurrentSpecies(object = david, species = specieLocation)
+  
+  # get the cluster report for the upload
+  getClusterReport(david, type = "Term")
+  
+}
+
+  
+# Functional Annotation Clustering: new!
+# Due to the redundant nature of annotations, Functional Annotation Chart presents similar/relevant annotations repeatedly. 
+# It dilutes the focus of the biology in the report.  To reduce the redundancy, the newly developed Functional Annotation Clustering report groups/displays similar annotations together which makes the biology clearer and more focused to be read vs. traditional chart report. 
+# The grouping algorithm is based on the hypothesis that similar annotations should have similar gene members.  
+# The Functional Annotation Clustering integrates the same techniques of  Kappa statistics to measure the degree of the common genes between two annotations, and  fuzzy heuristic clustering (used in Gene Functional Classification Tool ) to classify the groups of similar annotations according kappa values. 
+# In this sense, the more common genes annotations share, the higher chance they will be grouped together.
+# The p-values associated with each annotation terms inside each clusters are exactly the same meaning/values as p-values (Fisher Exact/EASE Score) shown in the regular chart report for the same terms.
+# The Group Enrichment Score new! , the geometric mean (in -log scale) of member's p-values in a corresponding annotation cluster, is used to rank their biological significance. 
+# Thus, the top ranked annotation groups most likely have consistent lower p-values for their annotation members.
 
 
 
@@ -1415,6 +1453,7 @@ davidquery <- function(entrezids, species) {
 
 require(dplyr)
 require(RColorBrewer)
+
 
 
 ## Add jackknife correlation good for false positives with the pval methods add citation ....
@@ -1482,7 +1521,6 @@ require("marray")
 num2cols=function(numVector,colp=palette()){
   
   gpcol=as.data.frame(numVector)
-  
   numCols=length(unique(gpcol[,1]))
   mycol <- sort(unique(gpcol$numVector))
   if(length(colp) <numCols) warning("number of color names < number of levels! Give a color palette with at least ",numCols," terms to 'col' argument")
@@ -1723,7 +1761,7 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
                       RowSideColor=c("gray25","gray75") ,palette.col=NULL, 
                       margins=c(8,8),my_palette=colorRampPalette(c("green", "black", "red"))(n = 75)
                       ,mycex = 0.6,mypal=test,colid = NULL, showcol = T ,showrow =F,
-                       notplot = F, geneSet= list7,genename = csvf, height = list8){
+                       notplot = F, geneSet= list7,genename = csvf, height = list8,rastering= myras ){
   
   
   #RowSideColor: color palette to be used for rowSide cluster colors
@@ -1769,7 +1807,6 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   ##-----------------------##
   
   cat("\n -> Plotting HeatMap... \n")
-  
   par("mar")
   
   par(mar=c(5,5,1,1.10))
@@ -1777,9 +1814,9 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   #pdf(NULL)
   hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
-                    Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=T,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), 
+                    Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=rastering,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), 
                                                                                                               lwid = c(0.1,1)),col=my_palette,key.par = list(cex=0.6))
-  mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
+  #mtext(side=3,sort(levels(groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(groups))),col=cl[(1:length(levels(groups)))],cex=mycex,line=-1)
   
   if(notplot)
     dev.off()
@@ -1956,6 +1993,7 @@ Vennlist <- function(pval,adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de
 #' 
 
 Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet){ 
+  
   if(is.null(myl))
     return(NULL)
   
@@ -1966,29 +2004,48 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet){
   myl <- myl[sapply(myl, length) > 0]
   final = length(myl)-1
   totgenes = sum(sapply(myl,length))
-  mynumb = paste("total genes", totgenes , collapse = ":")
+  mynumb = paste("total probes:", totgenes , collapse = ":")
   futile.logger::flog.threshold(futile.logger::ERROR, name = "VennDiagramLogger")
-  #mytresh = paste0("DEG BH ", cutoffpval, " and FC " , cutofffc)
   mytresh = paste0(metuse, cutoffpval, " and FC " , cutofffc)
+  
+  
+  if(length(myl)==2){
+     if (length(myl[[2]])> length(myl[[1]]))
+       mynames = rev(colnames(adj))
+     else
+       mynames = colnames(adj)
+  }
+  else
+    mynames = colnames(adj)
+
+  
+  
   if(length(indexnull)>0){
-    if(length(myl)==5)
+    if(length(myl)==5){
+      print(colnames(adj[,-c(indexnull)]))
       g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1, cat.just= list(c(0.6,1) , c(0,0) , c(0,0) , c(1,1) , c(1,0)),
-                   category.names = colnames(adj[,-c(indexnull)]),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                   category.names = mynames[,-c(indexnull)],fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
                    fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
-    else
+    }
+    else{
+      print(colnames(adj[,-c(indexnull)]))
       g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,
-                     category.names = colnames(adj[,-c(indexnull)]),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                     category.names = mynames[,-c(indexnull)],fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
                      fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
+    }
   }
   else{
-      if(length(myl)==5)
+      if(length(myl)==5){
       g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,cat.just=  list(c(0.6,1) , c(0,0) , c(0,0) , c(1,1) , c(1,0)) ,
-                     category.names = colnames(adj),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
-                     fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
-      else
+                     category.names = mynames,fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                     fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop4
+      }
+      else{
+
         g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,
-                         category.names = colnames(adj),fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                         category.names = mynames,fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
                          fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
+      }
   }
   
   final = grid.arrange(gTree(children=g), top="Venn Diagram", bottom= mytresh)
