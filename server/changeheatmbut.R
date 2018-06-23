@@ -3,12 +3,16 @@
 ##################################
 
 
-#' ReactiveValues function 
+
+#' global is a ReactiveValues function
 #'
 #' @param clicked bool set to FALSE
+#' @param heatm input triggered by click event
 #'
-#' @return \bool TRUE or FALSE
+#' @return clicked a boolean which can be TRUE or FALSE
 #'
+#' @export
+
 global <- reactiveValues(clicked = FALSE)
 
 observe({

@@ -16,10 +16,11 @@ output$value <- renderText({
 
 #' mean_grp is a reactive function which aim is to return the output user in order to show this input in the UI
 #'
-#' @param ouput$value character depending on the user's choice
+#' @param ouput character depending on the user's choice
 #'
-#' @return \mean_grp a reactive value of type character depending on the user's input
+#' @return mean_grp a reactive value of type character depending on the user's input
 #'
+#' @export
 
 mean_grp <- reactive({
   return(output$value)

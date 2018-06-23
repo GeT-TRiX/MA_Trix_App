@@ -3,6 +3,7 @@
 #################################
 
 # Render in the UI.R the levels for the pData Group 
+
 observe({
   
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
@@ -43,29 +44,22 @@ observeEvent(input$noTests, {
                            )
 })
 
-#' choix_test is a reactive function in the aim of selecting different comparison 
-#'
-#'
-#' @return \input`$test` a reactive value of type character for the different comparisons selected 
-#'
 
+#' choix_test is an eventreactive function in the aim of selecting different comparison after a clickable event
+#'
+#' @param test input id corresponding to the checkboxgroup for the different comparisons
+#'
+#' @return  a reactive value of type character for the different comparisons selected
+#'
+#' @export
 
-#choix_test <- eventReactive(input$heatm, {
 choix_test <- reactive({
   return(input$test)
 })
 #, ignoreNULL = F)
 
 
-# choix_test <- reactive({
-#   return(input$test)
-# })
 
-  
-# output$test <- renderText({
-#   my_final <<- paste(choix_test(),as.character(),  sep=",") 
-# 
-# })
 
 
 

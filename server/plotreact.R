@@ -15,6 +15,7 @@ shinyjs::disable("heatm")
 #' @param Rowdistfun a function used to compute the distance for the rows
 #' @param Coldistfun a function used to compute the distance for the columns
 #' @param meanGrp a boolean value to computes the mean for each groups; default = F
+#' @param genename a data frame
 #'
 #' @return  a list of objects which aim is to being passed as argument in the plotHeatmaps function
 #' 
@@ -78,7 +79,6 @@ output$distPlot <- renderPlot({
       )
       NULL
     }
-      
 
 })
 

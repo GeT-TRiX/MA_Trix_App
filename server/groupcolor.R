@@ -2,12 +2,13 @@
 ######## Colors for the  groups         #
 #########################################
 
-#' mycolgrp is a reactive function which aim is to display the number of groups selected 
+#' mycolgrp is a reactive function which aim is to display the number of groups selected
 #'
-#' @param new_group a derivate data frame of the pData
+#' @param new_group a subset data frame of the pData
 #'
-#' @return \mycolgrp a reactive data frame 
+#' @return mycolgrp a reactive data frame
 #'
+#' @export
 
 mycolgrp <- reactive  ({
   mygrpcol <- new_group()$Grp %>%
@@ -23,10 +24,11 @@ mycolgrp <- reactive  ({
 #'
 #' @param palette a local list defined in the environment
 #' @param mycolgrp a dataframe representing the selected groups
-#' @mypaletA a list which contaings the colors values corresponding to the different groups
+#' @param mypaletA a list which contaings the colors values corresponding to the different groups
 #'
-#' @return \cols a reactive number of widget-s
+#' @return cols a reactive number of widget-s
 #'
+#' @export
 
 cols <- reactive({
 
@@ -62,8 +64,9 @@ cols <- reactive({
 #'
 #' @param colors a list of input for the different user's choice
 #'
-#' @return \mypaletA a reactive list of colors attributed by ranking order to the different groups
+#' @return mypaletA a reactive list of colors attributed by ranking order to the different groups
 #'
+#' @export
 
 mypaletA <- reactive  ({
   if (is.null(mypal))
@@ -77,13 +80,25 @@ mypaletA <- reactive  ({
 #'
 #' @param colors a list of input for the different user's choice
 #'
-#' @return \mypal a reactive  that unlist the colors attributed to the different groups
+#' @return mypal a reactive  that unlist the colors attributed to the different groups
 #'
+#' @export
 
 mypal <- reactive({
   unlist(colors())
 })
 
+
+#' colorfluidhm is a reactive function wich aim is to group colors side by side
+#' depending of the number of groups odd or even for  the gui.
+#' 
+#'
+#' @param cols a reactive number of widget-s
+#'
+#' @return html code interpreted by shiny
+#' 
+#' @export
+#'
 
 
 colorfluidhm <- reactive({
@@ -113,11 +128,7 @@ colorfluidhm <- reactive({
 output$myPanel <- renderUI({
   
   colorfluidhm()
-  
-  
 })
-
-
 
 
 # output$myPanel1 <- renderUI({ # display the colourInput in the UI
@@ -130,10 +141,12 @@ output$myPanel <- renderUI({
 
 #' colors is a reactive function which aim is to create as many variables as groups
 #'
-#' @param mycolgrp  a reactive data frame 
+#' @param mycolgrp  a reactive data frame
 #'
-#' @return \colors a reactive  list containing the different variable names
+#' @return colors a reactive  list containing the different variable names
 #'
+#' @export
+#' 
 
 colors <- reactive({
   lapply(seq_along(mycolgrp()), function(i) {

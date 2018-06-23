@@ -3,22 +3,27 @@
 #########################################
 
 
-#' p is a reactive function that return an heatmap gplots object
+#' p is a reactive function that return a heatmap gplots object
 #'
-#' @param heatmapfinal a function
+#' @param updateheatm  clickable input button
+#' @param hmobj$obj a reactive value object
 #'
-#' @return \p an object
+#' @return p an heatmap object isolate
+#'
+#' @export
 #'
 
 p <- eventReactive(input$updateheatm,{
   isolate(hmobj$obj)
 })
 
-#' PCAres is a reactive function that change the rownames values
+#' rownametoX is a reactive function that change the rownames values
 #'
-#' @param csvf a data frame 
+#' @param csvf a data frame
 #'
-#' @return \rownamtoX a data frame with the row.names index corresponding to the first column index
+#' @return rownametoX a reactive data frame
+#'
+#' @export
 #'
 
 rownamtoX <- reactive({
@@ -28,18 +33,20 @@ rownamtoX <- reactive({
   return(rownamtoX)
 })
 
-#' cutfinal is a reactive function that ....
+#' cutfinal is a reactive function that return heatmap or ggplot2 object
 #'
-#' @param p an heatmap object
-#' @param input$cutheight a numeric value to cut the dendogram 
+#' @param hmobj$obj heatmap object
+#' @param cut a numeric input corresponding to the height where the dendogram is cut
 #' @param new_data a data frame with specific columns depending on the user's choices
 #' @param rownamtoX a data frame
 #' @param groups a data frame of the choosen groups
-#' @param input$cutcluster an heatmap object
-#' @param input$cutinfo a character to select the plot to display heatmap, boxplot or stripchart
+#' @param cutcluster a numeric input corresponding to the selected cluster to display
+#' @param cutinfo a character input to select the plot to display heatmap, boxplot or stripchart
 #'
-#' @return \cutfinal a ggplot object or heatmapply object
+#' @return a ggplot object or heatmapply object
 #'
+#' @export
+#' 
 
 cutfinal <- reactive({
     req(hmobj$obj)
@@ -124,7 +131,6 @@ output$savecut <- downloadHandler(
 
     
     plot(cutfinal())
-    #plot(PCAplot())
     dev.off()
   })
 

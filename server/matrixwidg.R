@@ -11,6 +11,7 @@ observe({
 })
 
 observe({
+  
   if (input$fcvenn <= 2)
     updateSliderInput(
       session,
@@ -71,6 +72,16 @@ observeEvent(input$resetAll, {
 #########################################
 ######## citation packages              #
 #########################################
+
+#' mypacklist is a reactive function which aim is to display the different packages used in the current session
+#'
+#' @param sessionInfo version information about R, the OS and attached or loaded packages. 
+#'
+#' @return a data frame
+#'
+#' @export
+#' 
+
 
 mypacklist <- reactive({
   mysess <- sessionInfo()

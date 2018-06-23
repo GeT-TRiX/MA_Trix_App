@@ -1,6 +1,6 @@
-#########################################
-######## Plot the data frame wiht input #
-#########################################
+##########################################
+######## Plot the data frame wiht input ##
+##########################################
 
 output$new_test <- renderDataTable(csvf()[[2]]) # Data frame corresponding to the pData
 
@@ -16,15 +16,22 @@ output$davidgo <- DT::renderDataTable(DT::datatable(davidwebservice()[[as.numeri
 
 #output$totalgenbyc <- renderDataTable(grouplength())
 
-#opuput$resumetopgoandkegg <- 
+
+
+#' myrenderedtop is a reactive function which aim is to display or not the labels in the PCA render plot
+#'
+#' @param csvf a data frame
+#'
+#' @return  a reactive data frame
+#'
+#' @export
+
 
 myrenderedtop <- reactive({
   req(csvf())
-
   select( csvf()[[3]], ProbeName:SystematicName, everything() ) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
-
-
+  
 })
 
 output$new_group <- DT::renderDataTable(DT::datatable(myrenderedtop()[,-c(4:9)] , options = list(scrollX = TRUE) ) )

@@ -26,50 +26,56 @@ colourpicker::updateColourInput(
   returnName = T
 )
 
-#' Reactive function that return a character color
+#' col_choice1 is a reactive function that return a character color
 #'
-#' @param choix_col1 character color for the lowest values
+#' @param col1 input character color for the highest values
 #'
-#' @return \choix_col1 a reactive value
+#' @return col_choice1  a reactive value
+#'
+#' @export
 #'
 
-choix_col1 <- reactive({
+col_choice1 <- reactive({
   return(input$col1)
 })
 
-#' Reactive function that return a character color
+#' col_choice3 is a reactive function that return a character color
 #'
-#' @param choix_col3 character color for the lowest values
+#' @param col3 input character color for the lowest values
 #'
-#' @return \choix_col3 a reactive value   
-#' 
+#' @return  col_choice3 reactive value
+#'
+#' @export
+#'
 
-choix_col3 <- reactive({
+col_choice3 <- reactive({
   return(input$col3)
 })
 
 
-#' Reactive function that return a character color
+#' my_intermediate is a reactive function that return a character color
 #'
-#' @param choix_col1 character color for the lowest values 
-#' @param choix_col2 character color for the highest values
+#' @param col_choice1 character color for the lowest values
+#' @param col_choice3 character color for the highest values
 #'
-#' @return \my_intermediata a reactive character intermediate color between the lowest and the highest values
+#' @return inter a reactive character intermediate color between the lowest and the highest values
+#'
+#' @export
 #'
 
 
 my_intermediate <- reactive({
   
-  if (choix_col1() == "green" & choix_col3() == "red")
+  if (col_choice1() == "green" & col_choice3() == "red")
     inter = "black"
   
-  else if (choix_col1() == "orange" & choix_col3() == "red")
+  else if (col_choice1() == "orange" & col_choice3() == "red")
     inter = "yellow"
   
-  else if (choix_col1() == "blue" & choix_col3() == "red")
+  else if (col_choice1() == "blue" & col_choice3() == "red")
     inter = "white"
   
-  else if (choix_col1() == "blue" & choix_col3() == "yellow")
+  else if (col_choice1() == "blue" & col_choice3() == "yellow")
     inter = "black"
   
   else

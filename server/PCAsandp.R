@@ -3,22 +3,21 @@
 #########################################
 
 observe({
-
-groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
-
-
-output$individuselpca <- renderUI( 
-  checkboxGroupInput(
-    inputId = "indivpca" ,
-    label = NULL,
-    #label =  "Choose your group to visualize",
-    choices =  levels(csvf()[[2]]$Grp),
-    selected = levels(csvf()[[2]]$Grp),
-    inline   = groupinline
-    
+  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
+  
+  
+  output$individuselpca <- renderUI(
+    checkboxGroupInput(
+      inputId = "indivpca" ,
+      label = NULL,
+      #label =  "Choose your group to visualize",
+      choices =  levels(csvf()[[2]]$Grp),
+      selected = levels(csvf()[[2]]$Grp),
+      inline   = groupinline
+      
+    )
   )
-)
-
+  
 })
 # Select all groups
 observeEvent(input$allIndividuspca, {
@@ -29,29 +28,31 @@ observeEvent(input$allIndividuspca, {
     label = "Choose your group to visualize",
     choices =  levels(csvf()[[2]]$Grp),
     selected = levels(csvf()[[2]]$Grp),
-    inline= groupinline
+    inline = groupinline
   )
 })
 
 # Unselect all groups
 observeEvent(input$noIndividuspca, {
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
-  updateCheckboxGroupInput(session,
-                           "indivpca",
-                           label = "Choose your group to visualize",
-                           choices =  levels(csvf()[[2]]$Grp),
-                           inline = groupinline
-                           )
+  updateCheckboxGroupInput(
+    session,
+    "indivpca",
+    label = "Choose your group to visualize",
+    choices =  levels(csvf()[[2]]$Grp),
+    inline = groupinline
+  )
 })
 
 
 
-#' choix_grp is a reactive function which aim is to select/unselect groups
+#' choix_grpca is a reactive function in the aim of selecting different groups
 #'
-#' @param input'$indiv' specific of the individuals data frame
+#' @param indivpca a vector input corresponding to the selected groups
 #'
-#' @return a reactive  character value for the different individuals selected
+#' @return  a reactive value of type character for the different groups selected
 #'
+#' @export
 
 choix_grpca <- reactive({
   req(input$indivpca)
@@ -71,6 +72,7 @@ choix_grpca <- reactive({
 #'
 #' @return a reactive list for the different individuals selected
 #'
+#' @export
 
 
 list_ind <- reactive({
@@ -79,35 +81,39 @@ list_ind <- reactive({
 
 
 
-#' new_group is an eventreactive function that select specific groups in the data frame
+#' new_grouppca is a reactive function that select specific groups in the data frame
+#' @param heatm  a clickable input button
+#' @param csvf a Data frame corresponding to the pData table
 #'
-#' @param csvf Data frame corresponding to the pData table
+#' @return new_grouppca a reactive factor with the corresponding groups selected
 #'
-#' @return \newgroup an eventreactive factor with the corresponding groups selected
-#'
+#' @export
 
-#new_group <- eventReactive(input$heatm, {
+
 new_grouppca <- reactive({
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)
-  csvf()[[2]][csvf()[[2]]$Grp %in% choix_grpca(),]
+  csvf()[[2]][csvf()[[2]]$Grp %in% choix_grpca(), ]
 })
 
 
 #' PCAres is a reactive function that computed a PCA of non-normalized data
 #'
 #' @param csvf a data frame corresponding to the WorkingSet
+#' @param new_datapca a reactive data frame
 #'
-#' @return \PCAres a reactive data frame with PCA attributes
+#' @return PCAres a reactive data frame with PCA attributes
 #'
+#' @export
+
 
 PCAres <- reactive({
   req(csvf())
   if (is.null(csvf()[[1]]))
     return(NULL)
-
-  mypca = res.pca(new_datapca(), scale =F)
+  
+  mypca = res.pca(new_datapca(), scale = F)
   return(mypca)
 })
 
@@ -116,22 +122,26 @@ PCAres <- reactive({
 #'
 #' @param PCAres a reactive data frame with PCA attributes
 #'
-#' @return \Screeplot a reactive plot
+#' @return Screeplot a reactive plot
 #'
+#' @export
 
 Scree_plot <- reactive({
   req(PCAres())
   mybar = eboulis(PCAres())
-  return(mybar+theme_classic())
+  return(mybar + theme_classic())
+  
 })
 
 
 
-#' new_data is a reactive function that aim is to select specific individuals in the data frame
+#' new_datapca is a reactive function that aim is to select specific individuals in the data frame
 #'
-#' @param \csvf Data frame corresponding to the Workingset
+#' @param csvf Data frame corresponding to the Workingset
 #'
-#' @return \newdata a reactive data frame with specific columns depending on the user's choices
+#' @return new_datapca a reactive data frame
+#'
+#' @export
 #'
 
 
@@ -144,34 +154,34 @@ new_datapca <- reactive({
 })
 
 
-output$savescre <- downloadHandler(
+output$savescre <- downloadHandler(filename <- function() {
+  paste0(basename(file_path_sans_ext(projectname())), '_screeplot.png', sep =
+           '')
+},
+content <- function(file) {
+  png(
+    file,
+    width = 1200,
+    height = 1200,
+    units = "px",
+    pointsize = 12,
+    res = 100
+  )
   
-  filename <- function() {
-    paste0(basename(file_path_sans_ext(projectname())), '_screeplot.png', sep='')    
-  },
-  content <- function(file) {
-    
-    png(file,
-        width =1200,
-        height = 1200,
-        units = "px",
-        pointsize= 12,
-        res=100
-    )
-    
-    plot(Scree_plot())
-    dev.off()
-  })
+  plot(Scree_plot())
+  dev.off()
+})
 
 
 
 output$eigpca <- renderPlot({
-  
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(length(new_grouppca()) >0, 'You need to select groups!')%next%
-      need(length(unique(new_grouppca()$Grp)) >1, 'You need to select more than one group!')
-      )
+      need(length(new_grouppca()) > 0, 'You need to select groups!') %next%
+      need(length(unique(
+        new_grouppca()$Grp
+      )) > 1, 'You need to select more than one group!')
+  )
   
   plot(Scree_plot())
   
@@ -180,16 +190,16 @@ output$eigpca <- renderPlot({
 
 #' labeled is a reactive function which aim is to display or not the labels in the PCA render plot
 #'
-#' @param input$label a boolean
+#' @param label a boolean input
 #'
-#' @return \labeled a reactive  boolean depending of the user's choice to display or not the labels
+#' @return Labeled a reactive  boolean depending of the user's choice to display or not the labels
 #'
+#' @export
 
 labeled <- reactive({
-  
-  if(input$label == T)
+  if (input$label == T)
     showlab = "all"
-  else 
+  else
     showlab = "none"
   
   return (showlab)
@@ -197,54 +207,51 @@ labeled <- reactive({
 
 
 output$PCA <- renderPlot({
-  
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(length(unique(new_grouppca()$Grp)) >0, 'You need to select groups!')%next%
-      need(length(unique(new_grouppca()$Grp)) >1, 'You need to select more than one group!')
+      need(length(unique(
+        new_grouppca()$Grp
+      )) > 0, 'You need to select groups!') %next%
+      need(length(unique(
+        new_grouppca()$Grp
+      )) > 1, 'You need to select more than one group!')
   )
   
-  plot(PCAplot()+ theme_minimal())
+  plot(PCAplot() + theme_minimal())
   
 })
 
 
-output$savepca <- downloadHandler(
-  
-  filename <- function() {
-    paste0(basename(file_path_sans_ext(projectname())), '_pca.',input$formpca, sep='')    
-  },
-  content <- function(file) {
-    if (input$formpca == "pdf")
-      
-      pdf(file,
-          width = 12,
-          height = 12,
-          pointsize = 12)
+output$savepca <- downloadHandler(filename <- function() {
+  paste0(basename(file_path_sans_ext(projectname())), '_pca.', input$formpca, sep =
+           '')
+},
+content <- function(file) {
+  if (input$formpca == "pdf")
     
-  
-    else if (input$formpca == "png")
-
-    png(file,
-        width =1200,
-        height = 1200,
-        units = "px",
-        pointsize= 12,
-        res=100
-    )
-    else
-      eps(
-        file,
+    pdf(file,
         width = 12,
         height = 12,
-        pointsize = 12
-      )
+        pointsize = 12)
+  
+  
+  else if (input$formpca == "png")
     
-    
-    plot(PCAplot())
-    dev.off()
-  })
-
-
-
-
+    png(
+      file,
+      width = 1200,
+      height = 1200,
+      units = "px",
+      pointsize = 12,
+      res = 100
+    )
+  else
+    eps(file,
+        width = 12,
+        height = 12,
+        pointsize = 12)
+  
+  
+  plot(PCAplot())
+  dev.off()
+})

@@ -55,12 +55,13 @@ observeEvent(input$allIndividus, {
     
   })
 
-#' choix_grp is a reactive function which aim is to select/unselect groups
+#' choix_test is a reactive function in the aim of selecting different groups
+#' 
+#' @param indiv input id corresponding to the checkboxgroup for the different groups
 #'
-#' @param input'$indiv' specific of the individuals data frame
+#' @return  a reactive value of type character for the different groups selected
 #'
-#' @return a reactive  character value for the different individuals selected
-#'
+#' @export
 
 choix_grp <- reactive({
   req(input$indiv)
@@ -76,10 +77,11 @@ choix_grp <- reactive({
 
 #' list_ind is a reactive function in the aim of having selected groups in a list
 #'
-#' @param input specific of the individuals data frame
+#' @param indiv input id corresponding to the checkboxgroup for the different groups
 #'
 #' @return a reactive list for the different individuals selected
 #'
+#' @export
 
 
 list_ind <- reactive({
@@ -89,20 +91,21 @@ list_ind <- reactive({
 
 
 #' new_group is an eventreactive function that select specific groups in the data frame
+#' 
+#' @param csvf a Data frame corresponding to the pData table
+#' @param choix_grp a reactive value of type character for the different groups selected
 #'
-#' @param csvf Data frame corresponding to the pData table
+#' @return new_group an eventreactive factor with the corresponding groups selected
 #'
-#' @return \newgroup an eventreactive factor with the corresponding groups selected
-#'
+#' @export
 
-#new_group <- eventReactive(input$heatm, {
+
 new_group <- reactive({
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)
   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
 })
-#}, ignoreNULL = F)
 
 
 
@@ -110,10 +113,12 @@ new_group <- reactive({
 
 #' new_data is a reactive function that aim is to select specific individuals in the data frame
 #'
-#' @param \csvf Data frame corresponding to the Workingset
+#' @param csvf Data frame corresponding to the Workingset
+#' @param new_group a reactive factor with the corresponding groups selected
 #'
-#' @return \newdata a reactive data frame with specific columns depending on the user's choices
+#' @return new_data a reactive data frame with specific columns depending on the user's choices
 #'
+#' @export
 
 
 new_data <- reactive({

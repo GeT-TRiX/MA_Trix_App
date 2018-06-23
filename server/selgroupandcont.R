@@ -1,10 +1,11 @@
-#' Reactive function that return a list of data frame depending on the comparisons
+# user_group is a reactive function that summarise the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)#' Reactive function that return a list of data frame depending on the comparisons
 #'
 #' @param adjusted list of three data frame corresponding to the grep of respectively Adj.pval, P.val and logFC columns
 #' @param choix_test character corresponding to the defined contrast set by the user
 #'
-#' @return \usergroup a reactive list containing three data frame for each contrast selected
+#' @return usergroup a reactive list containing three data frame for each contrast selected
 #'
+#' @export
 
 user_group <- reactive({ 
   
@@ -24,13 +25,14 @@ user_group <- reactive({
 
 
 
-#' Reactive function that select specific groups in the data frame
+#' new group is a reactive function that select specific groups in the data frame
 #'
-#' @param csvf Data frame of the pData
-#' @param choix_grp() character corresponding to the defined groups set by the user
-#' 
-#' @return \new_group a reactive new factor with the corresponding groups 
+#' @param csvf a data frame of the pData
+#' @param choix_grp a vector character corresponding to the defined groups set by the user
 #'
+#' @return new_group a reactive new factor with the corresponding groups
+#'
+#' @export
 
 
 new_group <- reactive({ 

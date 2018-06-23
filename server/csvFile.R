@@ -5,10 +5,11 @@
 showmark <- T # Boolean uses to hide or show the mardkwon serving to load data
 
 
-#' Reactive function returned to the tab1.R 
+#' boolmark is a reactive function returned to the tab1.R
 #'
-#' @return \showmark a reactive value of type boolean corresponding to the loading status by default it is set to True
+#' @return showmark a reactive value of type boolean corresponding to the loading status by default it is set to True
 #'
+#' @export
 
 output$boolmark <- reactive({
   showmark
@@ -24,10 +25,11 @@ outputOptions(output,"boolmark",suspendWhenHidden=F)
 
 #' Reactive function in the aim of loading csv files
 #'
-#' @param inFile loaded files
+#' @param file html id for files loaded in csv format
 #'
-#' @return \csvf a reactive value of type list containing three data frames toptable and workingset and the pData 
+#' @return csvf a reactive value of type list containing three data frames toptable, workingset and the pData
 #'
+#' @export
 
 
 csvf <- reactive({
@@ -124,10 +126,12 @@ csvf <- reactive({
     csv <- lapply(
       csvtest,
       
-      #' apply the fread method for each element in the csvtest list
-      #'
-      #' @return \csv a data frame object
-      #'
+        #' apply the fread method for each element in the csvtest list
+        #'
+        #' @return list of data frame objects
+        #'
+        #' @export
+
       FUN = function (x)
         
         # read.table( # benchmark read.table
@@ -171,23 +175,20 @@ csvf <- reactive({
     
   }
   
-  observe({showmark <<-F
-  print(showmark)
-  }) # modify and lock the bool value to false
+  observe({showmark <<-F }) # modify and lock the bool value to false
+  
+  
+  #' Reactive function returned to the tab1.R
+  #'
+  #' @return a reactive value of type boolean set to False
+  #'
   
   output$boolmark <- reactive({
     showmark
   })
   
   
-  
-  #' Reactive function returned to the tab1.R 
-  #'
-  #' @return \showmark a reactive value of type boolean set to False
-  #'
-  
-  
-  
+
   createAlert(
     session,
     "alert",
@@ -204,4 +205,5 @@ csvf <- reactive({
   
 
   return (csvord)
+  
 })

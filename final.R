@@ -365,9 +365,51 @@ colorspca <- function(mycolgrppca) {
   return(colorspca)
 }
 
+
+#' colorfluidpca is a reactive function wich aim is to group colors side by side
+#' depending of the number of groups odd or even for  the gui.
+#' 
+#' 
+#'
+#' @param colspca 
+#'
+#' @return
+#' @export
+#'
+
+
+colorfluidpca <- function(colspca ) {
+
+colorfluidpca <- reactive({
+  
+  lapply(1:length(colspca()), function(i){
+    
+    j = length(colspca())
+    if(length(colspca()) %%2==0){
+      if (i %% 2 == 0) {
+        fluidRow(column(6, colspca()[[i - 1]]), column(6, colspca()[[i]]))
+      }
+    }
+    else{
+      if (i %% 2 ==0 && j!=i) {
+        fluidRow(column(6, colspca()[[i - 1]]), column(6, colspca()[[i]]))
+      }
+      else if (j == i){
+        fluidRow(column(6, colspca()[[i]]))
+      }
+    }
+    
+  })
+  
+})
+
+}
+
+
 #' mycolgrppca is a reactive function which aim is to display the total number of groups
 #'
 #' @param csvf a dataframe
+#' @param new_grouppca a reactive factor with the corresponding groups selected
 #'
 #' @return mycolgrppca a reactive reorder dataframe
 #'
@@ -378,7 +420,8 @@ mycolgrppca <- function(csvf) {
     mygrpcol <- csvf()[[2]]$Grp %>%
       sort() %>%
       unique()
-
+    
+  
     return(mygrpcol)
   })
   return(mycolgrppca)
@@ -441,10 +484,11 @@ outputOptions(output,"boolmark",suspendWhenHidden=F)
 
 #' Reactive function in the aim of loading csv files
 #'
-#' @param input loaded files of csv format
+#' @param file html id for files loaded in csv format
 #'
-#' @return csvf a reactive value of type list containing three data frames toptable and workingset and the pData
+#' @return csvf a reactive value of type list containing three data frames toptable, workingset and the pData
 #'
+#' @export
 
 
 csvf <- function (input) {
@@ -537,8 +581,10 @@ csvf <- function (input) {
 
         #' apply the fread method for each element in the csvtest list
         #'
-        #' @return \csv a data frame object
+        #' @return list of data frame objects
         #'
+        #' @export
+        
         FUN = function (x)
 
           # read.table( # benchmark read.table
@@ -622,10 +668,10 @@ csvf <- function (input) {
 
 #' p is a reactive function that return a heatmap gplots object
 #'
-#' @param input updateheatm a clickable button
-#' @param heatmapfinal a function
+#' @param updateheatm  clickable input button
+#' @param hmobj$obj a reactive value object
 #'
-#' @return p heatmap object
+#' @return p an heatmap object isolate
 #'
 #' @export
 #'
@@ -1014,6 +1060,49 @@ colname <- function(input) {
   })
   return(colname)
 }
+
+ordered <- reactive({
+  
+  req(hmobj$hm)
+  
+  if (input$method2 == "FDR")
+    met = "adj.P.Val_"
+  else
+    met = "P.value_"
+  
+  mycont = paste0(met, choix_test())
+  ordered = csvf()[[3]] %>% filter(ProbeName %in% hmobj$hm$ProbeName)  %>%
+    select(ProbeName,  mycont) %>%
+    full_join(hmobj$hm[,-1], ., by = "ProbeName") %>%
+    select(ProbeName, GeneName, mycont, cluster) %>%
+    mutate_if(is.numeric, funs(format(., digits = 3)))
+  
+  rightor = sort(as.integer(rownames(ordered)), decreasing = T)
+  ordered = ordered[match(rightor, rownames(ordered)), ]
+  
+  return(ordered)
+})
+
+grouplength <- reactive({
+  req(ordered())
+  
+  mydfhmgen = (subset( hmobj$hm, !duplicated(subset( hmobj$hm, select=GeneName)))) 
+  lengthofmyclust = sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
+    return(length(which(hmobj$hm$cluster ==x)))) %>%  
+    cbind(.,sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
+      return(length(which(mydfhmgen$cluster ==x))))) %>% as.data.frame()%>%
+    setNames(.,c("total number of probes","total number of genes")) 
+  rownames(lengthofmyclust) <- sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)
+    return(paste("cluster", x)))
+  
+  lengthofmyclust <- rbind(lengthofmyclust,c(sum(unlist(lengthofmyclust$`total number of probes`)),sum(unlist(lengthofmyclust$`total number of genes`))))
+  rownames(lengthofmyclust)[length(rownames(lengthofmyclust))]<- "total"
+  
+  return(lengthofmyclust)
+  
+})
+
+
 
 ###############################
 ######## Hide buttons         #

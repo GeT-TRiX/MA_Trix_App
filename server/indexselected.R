@@ -1,21 +1,21 @@
-#' a reactive function that return the indexes for the signficant genes
+#' formated is a reactive function that return the indexes for the signficant genes
 #'
-#' @param user_group list of three data frame with rows selected according to the contrasts selected
-#' @param intput$fc numeric FC selected
-#' @param input$method2 character method, default = BH
-#' @param input$pval numeric pvalue
-#' @param input$maxgen numeric maxgen, default = NULL
+#' @param user_group a list of three data frame with rows selected according to the contrasts selected
+#' @param intput$fc a numeric FC selected
+#' @param input$method2 a character method, default = BH
+#' @param input$pval a numeric pvalue
+#' @param input$maxgen a numeric maxgen, default = NULL
 #'
-#' @return \formated a reactive data frame with the indexes corresponding to the sigificant genes
+#' @return formated a reactive data frame with the indexes corresponding to the sigificant genes
 #'
+#' @export
+#' 
 
 
 formated <- reactive({
   
   req(user_group())
-  
-  #print(intput$method2)
-  
+
   df <- csvf()
   if (is.null(df))
     return(NULL)
@@ -31,8 +31,6 @@ formated <- reactive({
       maxDE = input$maxgen
       
     )
-  
-
   
   return(treated)
   

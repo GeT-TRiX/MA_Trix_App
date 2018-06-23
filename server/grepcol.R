@@ -1,10 +1,12 @@
-#' Reactive function that return a list containing multiple data frames
+#' adjusted is a reactive function that return a list containing multiple data frames
 #' with the adj.P.val, logFC and P.value selected for the corresponding groups
 #'
 #' @param csvf Data frame corresponding to the Alltoptable
 #'
-#' @return \adjusted a reactive list of data frames 
+#' @return adjusted a reactive list of data frames
 #'
+#' @export
+
 
 adjusted <- reactive({
   

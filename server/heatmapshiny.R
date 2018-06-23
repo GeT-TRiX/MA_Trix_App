@@ -31,8 +31,9 @@ observe({
 #'
 #' @param input$rowname  a boolean radio button input
 #'
-#' @return \rowname a reactive boolean value
+#' @return rowname a reactive boolean value
 #'
+#' @export
 
 rowname <- reactive({
   rowname <- switch(input$rowname,
@@ -46,8 +47,9 @@ rowname <- reactive({
 #'
 #' @param input$colname  a boolean radio button input
 #'
-#' @return \colname a reactive  reactive boolean value
+#' @return colname a reactive  reactive boolean value
 #'
+#' @export
 
 colname <- reactive({
   colname <- switch(input$colname,
@@ -70,7 +72,7 @@ observe({
   
   #' heatmapfinal is an isolate function that only react to a user's click on the heatmap button 
   #' 
-  #' @param heatmapobj[[1]] a data frame with all the individuals selected
+  #' @param hmbis[[1]] a data frame with all the individuals selected
   #' @param formated  a data frame with the indexes corresponding to the sigificant genes
   #' @param new_group  a data frame with the corresponding groups 
   #' @param workingPath the current user's repository 
@@ -92,6 +94,9 @@ observe({
   #' @param gpcol  matrix with colors associated to each groups 
   #' @param gpcolr  matrix with gray color depending on the clusters
   #' @param distfunTRIX function that computes whether euclidian or pearson for Hierarchical Clustering
+  #' @param height a numeric object corresponding to the selected cluster to display
+  #' @param rastering a graphical boolean
+  #' @param geneSet 
   #'
   #' @return  a data frame with the cluster and the corresponding genes 
   #' 
@@ -103,7 +108,7 @@ observe({
       mypal = (colorRampPalette(c("green", "black", "red"))(n = 75))
     else
       mypal = (colorRampPalette(c(
-        choix_col1(), my_intermediate(), choix_col3()
+        col_choice1(), my_intermediate(), col_choice3()
       ))(n = 75))
     
     
@@ -113,7 +118,7 @@ observe({
       droplevels(new_group()$Grp),
       workingPath = wd_path,
       my_palette = (colorRampPalette(
-        c(choix_col1(), my_intermediate(), choix_col3())
+        c(col_choice1(), my_intermediate(), col_choice3())
       )(n = 75)),
       mycex = input$legsize ,
       cexrow = input$rowsize ,
@@ -133,7 +138,6 @@ observe({
     )
     
   }
-  
   
   
   output$warningsheat <- renderPrint({#renderPlot({
@@ -216,14 +220,13 @@ observe({
   )
   
   ordered <- reactive({
+    
     req(hmobj$hm)
     
     if (input$method2 == "FDR")
       met = "adj.P.Val_"
     else
       met = "P.value_"
-    
-   
     
     mycont = paste0(met, choix_test())
     ordered = csvf()[[3]] %>% filter(ProbeName %in% hmobj$hm$ProbeName)  %>%
@@ -266,20 +269,3 @@ observe({
   
 })
 
-
-
-
-# cutedhm <- reactive({
-#   req(hm())
-#   cut02 = cut(hm()$rowDendrogram, h = input$cutheatm)
-#   return(cut02)
-# })
-
-
-# cluster <-  reactive({
-
-#cut02 = cut(hm()$rowDendrogram, h = input$cutheatm)
-#   dfclust = heatmtoclust( hm(), formated(), data.matrix(new_data()), csvf()[[3]], input$cutheatm)
-#
-#   return(dfclust)
-# })
