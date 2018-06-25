@@ -27,8 +27,17 @@ observe({
 #
 # })
 
-
 observe({
+  
+  #' totaclust is a reactive function which aim is to dynamically return a widget object of selectinput type ranging from 1 to the maximum number of cluster
+  #'
+  #' @param hmobj data frame of the significant genes associated with the corresponding cluster index
+  #'
+  #' @return selectInput widget
+  #' @export
+  #'
+  
+  
   totalclust <- reactive({
     req(hmobj$hm)
     
@@ -63,6 +72,16 @@ observe({
 # })
 
 
+#' clustergrep is a reactive function which aim is to return a list of genes for the selected cluster without the non-annotated genes
+#'
+#' @param hm data frame of the significant genes associated with the corresponding cluster index
+#' @param cutgo a numeric input 
+#'
+#' @return list of genes
+#' @export
+#'
+#' 
+
 clustergrep <- reactive({
   req(hmobj$hm, input$cutgo)
   
@@ -81,6 +100,19 @@ clustergrep <- reactive({
   
   return(mygensymb)
 })
+
+#' davidwebservice is an eventreactive function which aim is to querrying the DWS to return a dataframe summary 
+#'
+#' @param GO clickable event
+#' @param hm data frame of the significant genes associated with the corresponding cluster index
+#' @param Species list of annotated elements 
+#' @param catinfo vector of enrichment categories, BP, CC, MF, Kegg
+#'
+#' @return data frame 
+#' @export
+#' 
+#' 
+
 
 davidwebservice <-
   eventReactive(input$GO, {
@@ -123,6 +155,14 @@ observe({
   print(colnames(davidwebservice()))
 })
 
+
+#' davidurl is a reactive function that aim is to return an url of grouped genes 
+#'
+#' @param clustergrep list of genes
+#'
+#' @return character 
+#' @export
+#'
 
 davidurl <- reactive({
   req(clustergrep())
@@ -186,6 +226,17 @@ output$clustgo <- renderPrint({
   
 })
 
+
+#' mytransf is a reactive function which aim is to convert entrez ID to GENE  the selected rows in the output data table
+#'
+#' @param davidwebservice data frame 
+#' @param cutgo a numeric input 
+#' @param davidgo_rows_selected selected rows
+#' @param Species list of annotated elements 
+#'
+#' @return a data frame
+#' @export
+#'
 
 
 mytransf <- reactive({
@@ -272,55 +323,15 @@ output$savegohmdav = downloadHandler( paste0(basename(file_path_sans_ext(project
   }
 )
 
-# output$savegofiltered = downloadHandler( paste0(basename(file_path_sans_ext(projectname())),
-#                                         '_go_filtered.',
-#                                         "xlsx",
-#                                         sep = ''),
-#                                  content = function(file) {
-#                                    
-#                                    withProgress(message = 'Creation of the xlsx table:',
-#                                                 value = 0, {
-#                                                   n <- NROW(50)
-#                                                   for (i in 1:n) {
-#                                                     incProgress(1 / n, detail = "Please wait...")
-#                                                   }
-#                                                   
-#                                                   
-#                                                   library(xlsx)
-#                                                   
-#                                                   for (i in 1:length(davidwebservice())) {
-#                                                     if (i == 1)
-#                                                       write.xlsx(file = file,
-#                                                                  davidwebservice()[[i]],
-#                                                                  sheetName = paste("Cluster", i))
-#                                                     else
-#                                                       write.xlsx(
-#                                                         file = file,
-#                                                         davidwebservice()[[i]],
-#                                                         sheetName = paste("Cluster", i),
-#                                                         append = TRUE
-#                                                       )
-#                                                   }
-#                                                 })
-#                                    
-#                                    
-#                                    
-#                                  }
-# )
-# 
-# 
-# output$downloadvennset = downloadHandler(
-#   'venns-filtered.csv',
-#   content = function(file) {
-#     s = input$davidgo_rows_all
-#     write.csv2(vennfinal()[s, , drop = FALSE], file)
-#   }
-# )
 
-
-#gores$obj <- NULL
-
-#Species <- eventReactive(input$DAVID,{
+#' Species is a reactive function which aim is to return annotated packages for a specific genome
+#'
+#' @param Species character input
+#' @param Speciesvenn character input
+#'
+#' @return
+#' @export
+#'
 
 
 Species <- reactive({

@@ -80,16 +80,16 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
 #' @return \final draw on the current device
 #' 
 
-Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = F, pval){ 
+Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = "probes", pval){ 
   
   if(is.null(myl))
     return(NULL)
   
   
-  if(meandup){
+  if(meandup == "genes"){
     myl = lapply(seq(length(myl)), function(x){pval %>% select(GeneName, ProbeName) %>% filter( ProbeName %in% myl[[x]]) %>% 
         distinct( GeneName)}) %>%
-      as.matrix()
+        as.matrix()
     myl = lapply(1:length(myl),FUN = function(i) as.character(myl[[i]]$GeneName))  #D14Ertd668e doublons pour LWT_MCD.LWT_CTRL (si genesymbol -1 perte d'info) avec une probe nom partagée avec LKO_MCD.LKO_CTRL  et une probe partagée
   
   }
@@ -101,7 +101,7 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = 
   final = length(myl)-1
   totgenes =  sum(sapply(myl,length))
   totprobes=  totalvenn(myl, adj)
-  mynumb = paste("total probes:", totgenes ,"and total probe crossings:",totprobes, collapse = "")
+  mynumb = paste("total ", meandup,  ":", totgenes ,"and total ", meandup,  "crossings :",totprobes, collapse = "")
 
   futile.logger::flog.threshold(futile.logger::ERROR, name = "VennDiagramLogger")
   mytresh = paste0(metuse, cutoffpval, " and FC " , cutofffc)
@@ -237,12 +237,29 @@ rowtoprob <- function(myven,pval,adj) {
 
 
 
-topngenes <- function(dfinter, mycont, inputtop, meandup = F) {
+topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F) {
   
   
-  if(!meandup)
+  if(meandup == "probes")
     dfinter$GeneName = make.names(dfinter$GeneName, unique = T)
-
+  
+  if(mean == T){
+    
+    logval <- "logFC_" %>%
+      grepl(colnames(dfinter))%>%
+      which(.==T)
+    
+    for (i in mycont) {
+      dfinter[[i]] = as.numeric(as.character(dfinter[[i]]))
+    }
+    
+    dfinter <- dfinter[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] 
+    dfinter = as.data.frame(dfinter)
+    
+    }
+    
+  
+  
   
   mycont = gsub("-"," vs logFC_" ,mycont)
   colnames(dfinter)= lapply(colnames(dfinter),function(x){

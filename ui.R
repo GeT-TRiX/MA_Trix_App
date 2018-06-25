@@ -403,15 +403,70 @@ body <- dashboardBody(
                   ),
                   tabPanel(
                     strong("Visualize the intersection table"),
+                    fluidRow( 
+                      # tags$head(
+                      #   tags$style(type="text/css", " #topgenes .label {display: inline-block;max-width: 100%;margin-bottom: 0px;font-weight: 700;}")),
+                      column(6,br(),
                     downloadButton('downloadvennset', "Download the filtered data",
                                    style =
                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-                    h3("Table showing the gene names for the intersection(s) selected"),
+                    div(class= "dfvenn" , style="font-size:24px; margin-top: 17px;",
+                        htmlOutput("dfvenn")),
                     helpText(
                       "You can directly filtered the table by fold change and save the output table"
                     ),
                     
-                    DT::dataTableOutput("vennresinter"),
+                    DT::dataTableOutput("vennresinter"),br(),br(),br(),
+                    conditionalPanel(condition = "input$dispvenn == 'genes'", 
+                                     div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; ",
+                                         htmlOutput("dfvennbef")),
+                                     DT::dataTableOutput("vennresintergen"))
+                    ),
+                    
+                    column(6,
+                    div(style="display:inline-block",
+                        fluidRow(
+                          tags$head(
+                            tags$style(type="text/css", ".topgeness label{ display: table-cell; text-align: left; vertical-align: middle; } 
+                 .inline .form-group{display: table-row;} ")
+                          ),
+                          
+                          
+                          column(4,br(),style= "width:22%;",
+                                        actionButton(
+                                          inputId = "topdegenes",
+                                          label = "Plot top DE genes",
+                                          style =
+                                            "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+                                        )),
+                                 column(3, style= "width:24.5%;",br(),
+                                        
+                                        downloadButton("savebarplot", "Save your barplot" , style =
+                                                         "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                                 column(2 ,br(),style= "width:16.5%; , padding: 0%;",
+                                        selectInput( "formvenbar",label = NULL,
+                                                     choices = c("png", "eps", "pdf"))),
+                                 
+                                 column(2,style= "width:12%; padding: 0%;", 
+
+                                        uiOutput("topgenesvenn", style= "padding: 0px;"))
+                        )),
+                    
+                    div(class= "highvenn" , style="font-size:24px; margin-top: -8px;",
+                        htmlOutput("venntitle")),
+                    br(),br(),
+
+                    plotOutput(outputId ="barplotvenn", height = 700),
+                    
+                    
+                    br(),br(),
+                    conditionalPanel(condition = "input$dispvenn == 'genes'",  
+                                    # DT::dataTableOutput("vennresintergen"),
+                                    div(class= "beforedf" , style="font-size:24px; margin-top: -8px;",
+                                        htmlOutput("venngenesbef")),
+                                     plotOutput(outputId ="barplotvennmean", height = 700)))),
+                    
+                  
                     br(),
                     h1("Here's a tracker for your different selections:"),
                     #br(),
@@ -451,31 +506,34 @@ body <- dashboardBody(
                       ),
                       #)),
                     
-                    br(),br(),
+                    br(),br()
                     #div.col-sm-4 {padding:0px};
                     #fluidRow(column(4),column(3,strong("top genes"))),
-                    div(style="display:inline-block",
-                        fluidRow(column(4,br(),style= "width:14%;",
-                                        actionButton(
-                                          inputId = "topdegenes",
-                                          label = "Plot top DE genes",
-                                          style =
-                                            "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                        )),
-                                 column(3, style= "width:15.5%;",br(),
-                                        
-                                        downloadButton("savebarplot", "Save your barplot" , style =
-                                                         "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                 column(2 ,br(),style= "width:15.5%; , padding: 0%;",
-                                 selectInput( "formvenbar",label = NULL,
-                                   choices = c("png", "eps", "pdf"))),
-                                  column(2,style= "width:12%; padding: 0%;", uiOutput("topgenesvenn", style= "padding: 0px;"))
-                        )),
-                    
-                    
-                 
-                    br(),
-                    plotOutput(outputId ="barplotvenn", height = 700)
+                    # div(style="display:inline-block",
+                    #     fluidRow(column(4,br(),style= "width:14%;",
+                    #                     actionButton(
+                    #                       inputId = "topdegenes",
+                    #                       label = "Plot top DE genes",
+                    #                       style =
+                    #                         "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+                    #                     )),
+                    #              column(3, style= "width:15.5%;",br(),
+                    #                     
+                    #                     downloadButton("savebarplot", "Save your barplot" , style =
+                    #                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                    #              column(2 ,br(),style= "width:15.5%; , padding: 0%;",
+                    #              selectInput( "formvenbar",label = NULL,
+                    #                choices = c("png", "eps", "pdf"))),
+                    #               column(2,style= "width:12%; padding: 0%;", uiOutput("topgenesvenn", style= "padding: 0px;"))
+                    #     )),
+                    # 
+                    # 
+                    # br(),
+                    # #column(6,
+                    # plotOutput(outputId ="barplotvenn", height = 700),
+                    # conditionalPanel(condition = "input$dispvenn == 'genes'",  
+                    #                  DT::dataTableOutput("vennresintergen"),
+                    #                  plotOutput(outputId ="barplotvennmean", height = 700))
                   )
                  
                  , tabPanel(strong("Venn GO enrichment"),
@@ -553,6 +611,7 @@ body <- dashboardBody(
                                             ))),
                            br(),br(),
                            
+                           fluidRow( column(6,
                            sliderInput(
                              "vennsize",
                              "Size of the police",
@@ -560,7 +619,11 @@ body <- dashboardBody(
                              max = 2,
                              value = 1,
                              step = 0.1
-                           ),
+                           )),
+                           column(6,
+                                  selectInput("dispvenn", #  Create a select list that can be used to choose a single or multiple items from a list of values.
+                                              "Choose if you want to display probes or genes",
+                                              choices = c("probes", "genes")))),
                            
                            br(),
                            uiOutput("myselvenn"),

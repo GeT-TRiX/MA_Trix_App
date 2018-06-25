@@ -4,12 +4,13 @@
 
 value=T # boolean at t=0
 
-#' output$bool is a reactive function that return the bool value in the local environment
+#' bool is a reactive function that return the bool value in the local environment
 #'
 #' @value a boolean
 #'
-#' @return \bool a reactive boolean outside the reactive environment
+#' @return bool a reactive boolean outside the reactive environment
 #'
+#' @export
 
 output$bool <- reactive({
   value
@@ -17,13 +18,18 @@ output$bool <- reactive({
 
 outputOptions(output,"bool",suspendWhenHidden=F)
 
-#' vennlist is a reactive function which aim is to return a list of signficant genes for a treshold pvalue of 5%
+#' vennlist is a reactive function which aim is to return a list of signficant probenames 
+#' 
+#' @param csvf a data frame
+#' @param user_cont a subset data frame with the selected comparisons for the adj.p.val or p.val
+#' @param user_fc a subset data frame with the selected comparisons for the logfc
+#' @param regulation vector input 
+#' @param pvalvenn numeric input for the p value cutoff
+#' @param fcvenn numeric input for the logfc value cutoff
 #'
-#' @csvf a data frame
-#' @user_cont a data frame with the contrast selected
+#' @return probven a reactive list of probenames
 #'
-#' @return \vennlist a reactive list
-#'
+#' @export
 
 vennlist <- reactive({
   req(user_cont() > 0)
@@ -41,8 +47,9 @@ vennlist <- reactive({
 #'
 #' @param Vennploted a reactive object
 #'
-#' @return \Vennplot a reactive object to be plot
-#'
+#' @return Vennplot a reactive object to be plot
+#' 
+#' @export
 
 Vennplot <- reactive({
   
@@ -50,13 +57,19 @@ Vennplot <- reactive({
   
   #' Vennplot is a reactive function that return an object of type venn if the number of set is stricly inferior to 6
   #' or a link to a website if it's not
-  #' 
-  #' @param user_cont a reactive data frame with the selected contrast
+  #'
+  #' @param user_cont a subset data frame with the selected comparisons for the adj.p.val or p.val
   #' @param input$vennsize the police size for the contrasts
-  #' @param vennlist a list
+  #' @param vennlist a list of probenames
+  #' @param pvalvenn numeric input for the p value cutoff
+  #' @param fcvenn  numeric input for the logfc value cutoff
+  #' @param methodforvenn character input
+  #' @param dispvenn character input for plot a venn diagram with probes or genes
+  #' @param csvf data frame corresponding to the alltoptable
   #'
-  #' @return \Vennploted a reactive object to be plot
+  #' @return Vennploted a reactive object to be plot
   #'
+  #' @export
   
   Vennploted <- reactive({
     
@@ -65,17 +78,18 @@ Vennplot <- reactive({
   if(length(user_cont()) <= 5){
   #g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
     
-  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn, input$meandup , csvf()[[3]])
+  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn, input$dispvenn , csvf()[[3]])
   
 
    observe({value <<-T}) # listen inside the reactive expression 
     
-   #' output$bool is a reactive function that set the bool value to T 
+   #' output$bool is a reactive function that set the bool value to T
    #'
    #' @value a boolean
    #'
-   #' @return \bool a reactive boolean inside the reactive environment 
-   #'
+   #' @return bool a reactive boolean inside the reactive environment
+   #' 
+   #' @export
     
     output$bool <- reactive({ 
       value
@@ -90,7 +104,7 @@ Vennplot <- reactive({
     #'
     #' @value a boolean
     #'
-    #' @return \bool a reactive boolean inside the reactive environment 
+    #' @return bool a reactive boolean inside the reactive environment
     #'
     
     output$bool <- reactive({
@@ -175,8 +189,9 @@ observeEvent(input$noCont, {
 #'
 #' @param vennlist a list
 #'
-#' @return \indnull a reactive vector 
+#' @return indnull a reactive vector
 #'
+#' @export
 
 indnull <- reactive({
 
@@ -187,9 +202,11 @@ indnull <- reactive({
 
 #' choix_cont is a reactive function that return the contrast selected by the user
 #'
-#' @param input$cont a set of contrasts selected by the user
+#' @param cont a set of contrasts selected by the user
 #'
-#' @return \choix_cont a set of characters input
+#' @return choix_cont a set of characters input
+#'
+#' @export
 #'
 
 choix_cont <- reactive({
@@ -199,10 +216,12 @@ choix_cont <- reactive({
 
 #' user_cont is a reactive function that  return the contrast selected by the user
 #'
-#' @param adjusted a data frame corresponding to the contrasts selected
-#' @param choix_cont a set of character 
+#' @param adjusted data frame corresponding to the pvalue or adjusted pvalue
+#' @param choix_cont a set of contrasts selected by the user
 #'
-#' @return \user_cont a reactive data frame with the contrast selected
+#' @return user_cont a reactive data frame with the contrast selected
+#'
+#' @export
 #'
 
 user_cont <- reactive({
@@ -216,6 +235,17 @@ user_cont <- reactive({
                     select = choix_cont()))
   return(mysel)
 })
+
+
+#' user_cont is a reactive function that  return the contrast selected by the user
+#'
+#' @param adjusted data frame corresponding to the logfc value
+#' @param choix_cont a set of contrasts selected by the user
+#'
+#' @return user_cont a reactive data frame with the contrast selected
+#'
+#' @export
+#'
 
 user_fc <- reactive({
   
@@ -251,6 +281,16 @@ output$downloadvenn <- downloadHandler(
 # })
 
 ################# TO DO commented
+
+#' myindex is a reactive function returning the column indices for which there's more than one significant genes
+#'
+#' @param adjusted data frame corresponding to the adjusted.pval
+#'
+#' @return myindex a numeric vector
+#'  
+#' @export
+#'
+ 
 
 myindex<- reactive({
   
