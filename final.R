@@ -42,7 +42,7 @@ col_choice1 <- function(input) {
   col_choice1 <- reactive({
     return(input$col1)
   })
-
+  
 }
 
 #' col_choice3 is a reactive function that return a character color
@@ -74,19 +74,19 @@ my_intermediate <- function(col_choice1, col_choice3) {
   my_intermediate <- reactive({
     if (col_choice1() == "green" & col_choice3() == "red")
       inter = "black"
-
+    
     else if (col_choice1() == "orange" & col_choice3() == "red")
       inter = "yellow"
-
+    
     else if (col_choice1() == "blue" & col_choice3() == "red")
       inter = "white"
-
+    
     else if (col_choice1() == "blue" & col_choice3() == "yellow")
       inter = "green"
-
-
+    
+    
     return(inter)
-
+    
   })
 }
 
@@ -102,7 +102,7 @@ my_intermediate <- function(col_choice1, col_choice3) {
 #' @return clicked a boolean which can be TRUE or FALSE
 #'
 
-global <- function(clicked){
+global <- function(clicked) {
   global <- reactiveValues(clicked = FALSE)
 }
 
@@ -116,8 +116,7 @@ global <- function(clicked){
 #' @export
 
 
-transfheatm <- function(input, global){
-
+transfheatm <- function(input, global) {
   observe({
     if (length(input$heatm)) {
       # giving a length once it's clicked
@@ -125,20 +124,25 @@ transfheatm <- function(input, global){
         global$clicked <- TRUE
     }
   })
-
+  
   return(global)
 }
 
 
-output$button <-  renderUI({ # if button is clicked changed his style.css
-  if(!is.null(input$heatm) & global$clicked){
-    shiny::actionButton("heatm", "Update Heatmap", icon = icon("repeat"), style = "color: #fff; background-color: #b77033; border-color: #b77033")
-  }
-  else{
-    shiny::actionButton("heatm", "Print Heatmap", style = "color: #fff; background-color: #337ab7; border-color: #337ab7")
-  }
-
-})
+output$button <-
+  renderUI({
+    # if button is clicked changed his style.css
+    if (!is.null(input$heatm) & global$clicked) {
+      shiny::actionButton("heatm",
+                          "Update Heatmap",
+                          icon = icon("repeat"),
+                          style = "color: #fff; background-color: #b77033; border-color: #b77033")
+    }
+    else{
+      shiny::actionButton("heatm", "Print Heatmap", style = "color: #fff; background-color: #337ab7; border-color: #337ab7")
+    }
+    
+  })
 #################################
 ######## Select the comparisons #
 #################################
@@ -148,9 +152,9 @@ output$testout <- renderUI(
   checkboxGroupInput(
     inputId = "test" ,
     label =  "Choose your comparison",
-    choices =  colnames(adjusted()[[1]][,-1])
+    choices =  colnames(adjusted()[[1]][, -1])
     #,selected = colnames(adjusted()[, -1])
-
+    
   )
 )
 
@@ -160,8 +164,8 @@ observeEvent(input$allTests, {
     session,
     "test",
     label = "Choose your comparison",
-    choices = colnames(adjusted()[[1]][,-1]),
-    selected = colnames(adjusted()[[1]][,-1])
+    choices = colnames(adjusted()[[1]][, -1]),
+    selected = colnames(adjusted()[[1]][, -1])
   )
 })
 
@@ -170,7 +174,7 @@ observeEvent(input$noTests, {
   updateCheckboxGroupInput(session,
                            "test",
                            label = "Choose your comparison",
-                           choices = colnames(adjusted()[[1]][, -1]))
+                           choices = colnames(adjusted()[[1]][,-1]))
 })
 
 #' choix_test is an eventreactive function in the aim of selecting different comparison after a clickable event
@@ -181,12 +185,11 @@ observeEvent(input$noTests, {
 #'
 #' @export
 
-choix_test <- function(input){
-
-choix_test <- eventReactive(input$heatm, {
-  return(input$test)
-}, ignoreNULL = F)
-
+choix_test <- function(input) {
+  choix_test <- eventReactive(input$heatm, {
+    return(input$test)
+  }, ignoreNULL = F)
+  
   return(choix_test)
 }
 
@@ -205,7 +208,7 @@ output$individusel <- renderUI(
     # selected = colnames(csvf()[[1]][,-1])
     choices =  levels(csvf()[[2]]$Grp),
     selected = levels(csvf()[[2]]$Grp)
-
+    
   )
 )
 # Select all groups
@@ -239,14 +242,13 @@ observeEvent(input$noIndividus, {
 #' @export
 
 choix_grp <- function(input) {
-
   choix_grp <- reactive({
     inFile <- input$file
     if (is.null(inFile))
       return(NULL)
     return(input$indiv)
   })
-
+  
 }
 
 
@@ -273,14 +275,13 @@ list_ind <- reactive({
 #' @export
 
 new_group <- function(input, csvf) {
-
   new_group <- eventReactive(input$heatm, {
     inFile <- input$file
     if (is.null(inFile))
       return(NULL)
-    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
+    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
   }, ignoreNULL = F)
-
+  
   return(new_group)
 }
 
@@ -295,7 +296,6 @@ new_group <- function(input, csvf) {
 #' @export
 
 new_data <- function(csvf) {
-
   new_data <- reactive({
     inFile <- input$file
     if (is.null(inFile))
@@ -303,7 +303,7 @@ new_data <- function(csvf) {
     #subset(csvf()[[1]],select = choix_individus())
     select(csvf()[[1]], as.character(factor(new_group()$X)))
   })
-
+  
   return(new_data)
 }
 #########################################
@@ -319,15 +319,13 @@ new_data <- function(csvf) {
 #'
 #' @export
 
-colspca <- function(brewer.pal,mycolgrppca ){
-
-
+colspca <- function(brewer.pal, mycolgrppca) {
   colspca <- reactive({
     pcapal = brewer.pal(8, "Dark2") %>%
       list(brewer.pal(10, "Paired")) %>%
-        unlist()
-
-
+      unlist()
+    
+    
     lapply(seq_along(unique(mycolgrppca())), function(x) {
       colourInput(
         paste("colpca", x, sep = "_"),
@@ -342,7 +340,8 @@ colspca <- function(brewer.pal,mycolgrppca ){
   return(colspca)
 }
 
-output$myPanelpca <- renderUI({ # display the colourInput in the UI
+output$myPanelpca <- renderUI({
+  # display the colourInput in the UI
   colspca()
 })
 
@@ -368,41 +367,38 @@ colorspca <- function(mycolgrppca) {
 
 #' colorfluidpca is a reactive function wich aim is to group colors side by side
 #' depending of the number of groups odd or even for  the gui.
-#' 
-#' 
 #'
-#' @param colspca 
+#'
+#'
+#' @param colspca
 #'
 #' @return
 #' @export
 #'
 
 
-colorfluidpca <- function(colspca ) {
-
-colorfluidpca <- reactive({
-  
-  lapply(1:length(colspca()), function(i){
-    
-    j = length(colspca())
-    if(length(colspca()) %%2==0){
-      if (i %% 2 == 0) {
-        fluidRow(column(6, colspca()[[i - 1]]), column(6, colspca()[[i]]))
+colorfluidpca <- function(colspca) {
+  colorfluidpca <- reactive({
+    lapply(1:length(colspca()), function(i) {
+      j = length(colspca())
+      if (length(colspca()) %% 2 == 0) {
+        if (i %% 2 == 0) {
+          fluidRow(column(6, colspca()[[i - 1]]), column(6, colspca()[[i]]))
+        }
       }
-    }
-    else{
-      if (i %% 2 ==0 && j!=i) {
-        fluidRow(column(6, colspca()[[i - 1]]), column(6, colspca()[[i]]))
+      else{
+        if (i %% 2 == 0 && j != i) {
+          fluidRow(column(6, colspca()[[i - 1]]), column(6, colspca()[[i]]))
+        }
+        else if (j == i) {
+          fluidRow(column(6, colspca()[[i]]))
+        }
       }
-      else if (j == i){
-        fluidRow(column(6, colspca()[[i]]))
-      }
-    }
+      
+    })
     
   })
   
-})
-
 }
 
 
@@ -421,7 +417,7 @@ mycolgrppca <- function(csvf) {
       sort() %>%
       unique()
     
-  
+    
     return(mygrpcol)
   })
   return(mycolgrppca)
@@ -451,12 +447,11 @@ output$value <- renderText({
 #'
 #' @export
 
-mean_grp <- function(output){
-
+mean_grp <- function(output) {
   mean_grp <- reactive({
     return(output$value)
   })
-return(mean_grp)
+  return(mean_grp)
 }
 
 
@@ -464,7 +459,8 @@ return(mean_grp)
 ######## Load the csv files   #
 ###############################
 
-showmark <- T # Boolean uses to hide or show the mardkwon serving to load data
+showmark <-
+  T # Boolean uses to hide or show the mardkwon serving to load data
 
 
 #' boolmark is a reactive function returned to the tab1.R
@@ -474,13 +470,12 @@ showmark <- T # Boolean uses to hide or show the mardkwon serving to load data
 #' @export
 
 boolmark <- function() {
-
   output$boolmark <- reactive({
     showmark
   })
 }
 
-outputOptions(output,"boolmark",suspendWhenHidden=F)
+outputOptions(output, "boolmark", suspendWhenHidden = F)
 
 #' Reactive function in the aim of loading csv files
 #'
@@ -494,7 +489,7 @@ outputOptions(output,"boolmark",suspendWhenHidden=F)
 csvf <- function (input) {
   csvf <- reactive({
     inFile <- input$file
-
+    
     if (is.null(inFile)) {
       createAlert(
         session,
@@ -504,19 +499,19 @@ csvf <- function (input) {
         title = "First Step",
         content = "You need to import 3 csv files in the browser widget",
         dismiss = FALSE
-
+        
       )
       #Sys.sleep(2.5)
       closeAlert(session, "entryalert")
-
+      
       return(NULL)
     }
-
+    
     data <- as.list(inFile$datapath)
     csvtest = list()
     name = inFile$datapath
     iscsv = grep(pattern = '.csv$', name, value = T)
-
+    
     if (length(iscsv) == 0) {
       createAlert(
         session,
@@ -529,7 +524,7 @@ csvf <- function (input) {
       )
       return(NULL)
     }
-
+    
     else{
       if (length(data) > 3)
       {
@@ -544,10 +539,10 @@ csvf <- function (input) {
           Tips: Use ctrl+left click then choose your files ",
           append = FALSE
         )
-
+        
         return (NULL)
       }
-
+      
       else if (length(data) < 3) {
         createAlert(
           session,
@@ -559,12 +554,12 @@ csvf <- function (input) {
           3 files, you need to import 3 csv files
           Tips: Use ctrl+left click then choose your files ",
           append = FALSE
-
+          
         )
-
+        
         return (NULL)
       }
-
+      
       else{
         for (i in 1:length(data)) {
           for (elem in input$file[[i, 'datapath']]) {
@@ -573,12 +568,12 @@ csvf <- function (input) {
           csvtest[i] = elem
         }
       }
-
+      
       #csv <- lapply(csvtest, read.csv2, check.names = F) # benchmark read.csv wrapper
-
+      
       csv <- lapply(
         csvtest,
-
+        
         #' apply the fread method for each element in the csvtest list
         #'
         #' @return list of data frame objects
@@ -586,7 +581,7 @@ csvf <- function (input) {
         #' @export
         
         FUN = function (x)
-
+          
           # read.table( # benchmark read.table
           #   x,
           #   sep = ";" ,
@@ -594,7 +589,7 @@ csvf <- function (input) {
           #   header = T,
           #   check.names = F # good col names
           # )
-
+          
           fread(
             x,
             data.table = F,
@@ -604,43 +599,43 @@ csvf <- function (input) {
             dec = ","
           ) #benchmark fread memory speed
       )
-
+      
       csvord = list()
-
+      
       for (i in 1:length(csv)) {
         if (colnames(csv[[i]][2]) == "Grp") {
           csvord[[2]] = csv[[i]]
-
+          
         }
         else if (any(grepl("adj.P.Val" , colnames(csv[[i]]))))
         {
           csvord[[3]] = csv[[i]]
-
+          
         }
         else
           csvord[[1]] = csv[[i]]
       }
-
+      
       csvord[[2]] = chartofa(csvord[[2]]) # transform dataframe containing characters to factors
       row.names(csvord[[1]]) = csvord[[1]][, 1]
       colnames(csvord[[3]])[1] = "X"
       colnames(csvord[[2]])[1] = "X"
-
+      
     }
-
+    
     observe({
       showmark <<- F
     }) # modify and lock the bool value to false
-
+    
     #' Reactive function returned to the tab1.R
     #'
     #' @return \showmark a reactive value of type boolean set to False
     #'
-
+    
     output$boolmark <- reactive({
       showmark
     })
-
+    
     createAlert(
       session,
       "alert",
@@ -649,13 +644,13 @@ csvf <- function (input) {
       title = "Sucess",
       content = " Your files have been loaded, you can choose your data now",
       append = FALSE
-
+      
     )
-
+    
     Sys.sleep(1)
     closeAlert(session, "succeeded")
-
-
+    
+    
     return (csvord)
   })
   return(csvf)
@@ -696,7 +691,7 @@ rownamtoX <- function(csvf) {
   rownamtoX <- reactive({
     mycsv = csvf()[[3]]
     row.names(mycsv) = mycsv$X
-
+    
     return(rownamtoX)
   })
 }
@@ -715,25 +710,31 @@ rownamtoX <- function(csvf) {
 #'
 #' @export
 
-cutfinal <- function(p, input, new_data, rownamtoX, groups, input2 , input3){
-
-  cutfinal <- reactive({
-    cutHeatmaps(
-      p(),
-      height = input$cutheight ,
-      exprData = data.matrix(new_data()),
-      groups = droplevels(new_group()$Grp),
-      DEGres =  rownamtoX()[,-1],
-      num = input$cutcluster,
-      type = input$cutinfo
-    )
-  })
-}
+cutfinal <-
+  function(p,
+           input,
+           new_data,
+           rownamtoX,
+           groups,
+           input2 ,
+           input3) {
+    cutfinal <- reactive({
+      cutHeatmaps(
+        p(),
+        height = input$cutheight ,
+        exprData = data.matrix(new_data()),
+        groups = droplevels(new_group()$Grp),
+        DEGres =  rownamtoX()[, -1],
+        num = input$cutcluster,
+        type = input$cutinfo
+      )
+    })
+  }
 
 # render to the ui the number of clusted for a define height in function of the current heatmap object
 output$cutcluster <- renderUI({
   req(p())
-
+  
   cut02 = cut(p()$rowDendrogram, h = input$cutheight)
   selectInput("cutcluster",
               "Choose your cluster",
@@ -741,15 +742,17 @@ output$cutcluster <- renderUI({
 })
 
 
-output$event <- renderPrint({ # interactive cursor that shows the selected points
-  d <- event_data("plotly_hover")
-  if (is.null(d))
-    "Hover on a point!"
-  else
-    cat("Average expression Z-score over replicates; ",
-        length(d$pointNumber),
-        " probes")
-})
+output$event <-
+  renderPrint({
+    # interactive cursor that shows the selected points
+    d <- event_data("plotly_hover")
+    if (is.null(d))
+      "Hover on a point!"
+    else
+      cat("Average expression Z-score over replicates; ",
+          length(d$pointNumber),
+          " probes")
+  })
 
 
 ### Add function
@@ -757,15 +760,17 @@ output$event <- renderPrint({ # interactive cursor that shows the selected point
 
 observe({
   if (req(input$cutinfo) == "Heatmap") {
-    output$cutheatmap <- renderPlotly({ # Plot/Render an object of class plotly
-       cutfinal()
-
-    })
+    output$cutheatmap <-
+      renderPlotly({
+        # Plot/Render an object of class plotly
+        cutfinal()
+        
+      })
   }
   else{
     output$cutheatmap <- renderPlotly({
       ggplotly(cutfinal(), height = 800, width = 1200)
-
+      
     })
   }
 })
@@ -785,16 +790,15 @@ observe({
 #' @export
 
 data_summary <- function(csvf, input) {
-
   data_summary <- reactive({
     inFile <- input$file
     if (is.null(inFile))
       return(NULL)
     myfinalfc(csvf()[[3]], input$pval1)
   })
-
+  
   return(data_summary)
-
+  
 }
 
 #' adjusted is a reactive function that return a list containing multiple data frames
@@ -807,31 +811,30 @@ data_summary <- function(csvf, input) {
 #' @export
 
 adjusted <- function(csvf) {
-
   adjusted <- reactive({
     df <- csvf()
     if (is.null(df))
       return(NULL)
-
+    
     myrpl = c("^adj.P.Val_", "^logFC_", "^P.value_")
     grepdf = c("X|^adj.P.Val", "X|^logFC", "X|^P.value")
-
+    
     adj = csvf()[[3]][, grep("X|^adj.P.Val",
                              names(csvf()[[3]]),
                              value = TRUE)]
-
+    
     logfc = csvf()[[3]][, grep("X|^logFC",
                                names(csvf()[[3]]),
                                value = TRUE)]
-
+    
     pval = csvf()[[3]][, grep("X|^P.value",
                               names(csvf()[[3]]),
                               value = TRUE)]
-
-
+    
+    
     mygrep = list(adj, logfc, pval)
-
-
+    
+    
     for (i in 1:length(mygrep))
       names(mygrep[[i]]) = gsub(
         pattern = myrpl[i],
@@ -839,13 +842,13 @@ adjusted <- function(csvf) {
         x = names(mygrep[[i]]),
         perl = T
       )
-
+    
     return(mygrep)
-
+    
   })
-
+  
   return(adjusted)
-
+  
 }
 
 #########################################
@@ -866,7 +869,7 @@ mycolgrp <- function(new_group) {
       sort() %>%
       unique() %>%
       droplevels()
-
+    
     return(mygrpcol)
   })
   return(mycolgrp)
@@ -896,7 +899,7 @@ cols <- function(palette, mycolgrp, mypaletA) {
           returnName = T
         )
       })
-
+    
     else
       lapply(seq_along(mycolgrp()), function(i) {
         colourInput(
@@ -909,7 +912,7 @@ cols <- function(palette, mycolgrp, mypaletA) {
         )
       })
   })
-
+  
 }
 #' mypaletA is a reactive function which aim is to set colors if the advanced graphical settings are not displays
 #'
@@ -919,7 +922,7 @@ cols <- function(palette, mycolgrp, mypaletA) {
 #'
 #' @export
 
-mypaletA <- function(colors){
+mypaletA <- function(colors) {
   mypaletA <- reactive  ({
     if (is.null(mypal))
       return(NULL)
@@ -946,7 +949,8 @@ mypal <- function(colors) {
 }
 
 
-output$myPanel <- renderUI({ # display the colourInput in the UI
+output$myPanel <- renderUI({
+  # display the colourInput in the UI
   cols()
 })
 
@@ -997,7 +1001,6 @@ colors <- function(mycolgrp) {
 
 
 heatmapfinal <- function() {
-
   isolate({
     plotHeatmaps(
       data.matrix(new_data()),
@@ -1019,7 +1022,7 @@ heatmapfinal <- function() {
       showrow = rowname(),
       genename = csvf()[[3]]$GeneName
     )
-
+    
   })
 }
 
@@ -1062,7 +1065,6 @@ colname <- function(input) {
 }
 
 ordered <- reactive({
-  
   req(hmobj$hm)
   
   if (input$method2 == "FDR")
@@ -1073,12 +1075,12 @@ ordered <- reactive({
   mycont = paste0(met, choix_test())
   ordered = csvf()[[3]] %>% filter(ProbeName %in% hmobj$hm$ProbeName)  %>%
     select(ProbeName,  mycont) %>%
-    full_join(hmobj$hm[,-1], ., by = "ProbeName") %>%
+    full_join(hmobj$hm[, -1], ., by = "ProbeName") %>%
     select(ProbeName, GeneName, mycont, cluster) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
   
   rightor = sort(as.integer(rownames(ordered)), decreasing = T)
-  ordered = ordered[match(rightor, rownames(ordered)), ]
+  ordered = ordered[match(rightor, rownames(ordered)),]
   
   return(ordered)
 })
@@ -1086,17 +1088,28 @@ ordered <- reactive({
 grouplength <- reactive({
   req(ordered())
   
-  mydfhmgen = (subset( hmobj$hm, !duplicated(subset( hmobj$hm, select=GeneName)))) 
-  lengthofmyclust = sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
-    return(length(which(hmobj$hm$cluster ==x)))) %>%  
-    cbind(.,sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
-      return(length(which(mydfhmgen$cluster ==x))))) %>% as.data.frame()%>%
-    setNames(.,c("total number of probes","total number of genes")) 
-  rownames(lengthofmyclust) <- sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)
-    return(paste("cluster", x)))
+  mydfhmgen = (subset(hmobj$hm,!duplicated(subset(hmobj$hm, select = GeneName))))
+  lengthofmyclust = sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)
+    return(length(which(
+      hmobj$hm$cluster == x
+    )))) %>%
+    cbind(., sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)
+      return(length(
+        which(mydfhmgen$cluster == x)
+      )))) %>% as.data.frame() %>%
+    setNames(., c("total number of probes", "total number of genes"))
+  rownames(lengthofmyclust) <-
+    sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)
+      return(paste("cluster", x)))
   
-  lengthofmyclust <- rbind(lengthofmyclust,c(sum(unlist(lengthofmyclust$`total number of probes`)),sum(unlist(lengthofmyclust$`total number of genes`))))
-  rownames(lengthofmyclust)[length(rownames(lengthofmyclust))]<- "total"
+  lengthofmyclust <-
+    rbind(lengthofmyclust, c(sum(
+      unlist(lengthofmyclust$`total number of probes`)
+    ), sum(
+      unlist(lengthofmyclust$`total number of genes`)
+    )))
+  rownames(lengthofmyclust)[length(rownames(lengthofmyclust))] <-
+    "total"
   
   return(lengthofmyclust)
   
@@ -1142,7 +1155,7 @@ formated <- function (user_group, input, input2, input3, input4) {
       FC = input$fc,
       cutoff_meth = input$method2,
       maxDE = input$maxgen
-
+      
     )
     return(treated)
   })
@@ -1168,11 +1181,11 @@ data_sign <- function(adjusted) {
     if (is.null(inFile))
       return(NULL)
     ptv <- c(.01, .05)
-    cbind.data.frame("FDR<1%" = colSums(adjusted()[,-1] < ptv[1]),
-                     "FDR<5%" = colSums(adjusted()[,-1] < ptv[2]))
-
+    cbind.data.frame("FDR<1%" = colSums(adjusted()[, -1] < ptv[1]),
+                     "FDR<5%" = colSums(adjusted()[, -1] < ptv[2]))
+    
   })
-
+  
 }
 
 # data_sign <- reactive({
@@ -1228,8 +1241,8 @@ PCAres <- function(csvf) {
   PCAres <- reactive({
     if (is.null(csvf()[[1]]))
       return(NULL)
-
-    mypca = res.pca(csvf()[[1]][, -1], scale = F)
+    
+    mypca = res.pca(csvf()[[1]][,-1], scale = F)
     return(mypca)
   })
   return(PCAres)
@@ -1252,7 +1265,7 @@ Scree_plot <- function(PCAres) {
 
 output$eigpca <- renderPlot({
   plot(Scree_plot())
-
+  
 }, width = 1200 , height = 600, res = 100)
 
 
@@ -1270,37 +1283,34 @@ labeled <- function(input) {
       showlab = "all"
     else
       showlab = "none"
-
+    
     return (showlab)
   })
   return(labeled)
 }
 
 output$PCA <- renderPlot({
-
   plot(PCAplot())
-
+  
 }, width = 1200 , height = 800, res = 100)
 
 
-output$savepca <- downloadHandler(
-
-  filename <- function() {
-    paste0(basename(file_path_sans_ext("myfile")), '_pca.png', sep='')
-  },
-  content <- function(file) {
-
-    png(file,
-        width =1400,
-        height = 1400,
-        units = "px",
-        pointsize= 12,
-        res=100
-    )
-
-    plot(PCAplot())
-    dev.off()
-  })
+output$savepca <- downloadHandler(filename <- function() {
+  paste0(basename(file_path_sans_ext("myfile")), '_pca.png', sep = '')
+},
+content <- function(file) {
+  png(
+    file,
+    width = 1400,
+    height = 1400,
+    units = "px",
+    pointsize = 12,
+    res = 100
+  )
+  
+  plot(PCAplot())
+  dev.off()
+})
 
 ###############################
 ########  PCA function        #
@@ -1325,11 +1335,10 @@ output$savepca <- downloadHandler(
 
 
 PCAplot <- function() {
-
   pcapal = brewer.pal(10, "Paired") %>%
     list(brewer.pal(8, "Dark2")) %>%
     unlist()
-
+  
   empty <- reactive ({
     if (is.null(colorspca()[[1]])) {
       palpca = pcapal
@@ -1337,9 +1346,9 @@ PCAplot <- function() {
     else
       palpca = unlist(colorspca())
     return(palpca)
-
+    
   })
-
+  
   p <- fviz_mca_ind(
     PCAres(),
     label = labeled(),
@@ -1351,7 +1360,7 @@ PCAplot <- function() {
     labelsize = input$labelsiize,
     pointsize = input$pointsiize
   )
-
+  
   return(p + scale_color_manual(values = empty()))
 }
 
@@ -1363,7 +1372,7 @@ observeEvent(input$heatm, {
                      value = 0,
                      {
                        n <- NROW(formated()) #number of row in the formated dataframe
-
+                       
                        for (i in 1:n) {
                          incProgress(1 / n, detail = "Please wait...")
                        }
@@ -1371,8 +1380,8 @@ observeEvent(input$heatm, {
                      })
     })
   }, width = 900 , height = 1200, res = 100)
-
-
+  
+  
   output$save <- downloadHandler(filename <- function() {
     paste0(basename(file_path_sans_ext("myfile")),
            '_heatmap.',
@@ -1381,7 +1390,7 @@ observeEvent(input$heatm, {
   },
   content <- function(file) {
     if (input$form == "emf")
-
+      
       emf(
         file,
         width = 7,
@@ -1389,7 +1398,7 @@ observeEvent(input$heatm, {
         pointsize = 12,
         coordDPI = 300
       )
-
+    
     else if (input$form == "png")
       png(
         file,
@@ -1403,21 +1412,21 @@ observeEvent(input$heatm, {
       eps(file,
           width = 7,
           height = 7)
-
+    
     if (!is.null(formated()))
       withProgress(message = 'Plotting heatmap:',
                    value = 0,
                    {
                      n <- NROW(formated())
-
+                     
                      for (i in 1:n) {
                        incProgress(1 / n, detail = "Please wait...")
                      }
-
+                     
                      heatmapfinal()
                    })
     dev.off()
-
+    
   })
 })
 
@@ -1425,11 +1434,14 @@ observeEvent(input$heatm, {
 ######## Plot the data frame wiht input #
 #########################################
 
-output$new_test <- renderDataTable(csvf()[[2]]) # Data frame corresponding to the pData
+output$new_test <-
+  renderDataTable(csvf()[[2]]) # Data frame corresponding to the pData
 
-output$new_data <- renderDataTable(head(csvf()[[1]][2:6])) # Head of the WorkingSet data
+output$new_data <-
+  renderDataTable(head(csvf()[[1]][2:6])) # Head of the WorkingSet data
 
-output$new_group <- renderDataTable(new_group()) # a data frame corresponding to the selected groups
+output$new_group <-
+  renderDataTable(new_group()) # a data frame corresponding to the selected groups
 
 output$data_summary <- renderDataTable(data_summary())
 
@@ -1444,17 +1456,16 @@ output$data_summary <- renderDataTable(data_summary())
 #' @export
 
 user_group <- function(adjusted, choix_test) {
-
   user_group <- reactive({
     inFile <- input$file
     if (is.null(inFile))
       return(NULL)
-
+    
     myfinal = list()
     for (i in 1:3)
       myfinal[[i]] = (subset(adjusted()[[i]],
                              select = choix_test()))
-
+    
     return(myfinal)
   })
   return(user_group)
@@ -1476,7 +1487,7 @@ new_group <- function(csvf, choix_grp) {
     inFile <- input$file
     if (is.null(inFile))
       return(NULL)
-    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
+    csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
   })
   return(new_group)
 }
@@ -1485,60 +1496,77 @@ new_group <- function(csvf, choix_grp) {
 #new_group <-reactive(csvf()[[2]][csvf()[[2]]$X %in% choix_individus(),])
 
 
-output$myNUM <- renderPrint({ # number of signficant genes in the heatmap produced
-  if(is.null(formated()))
-    return("X")
-  else
-    cat(length(formated()))
+output$myNUM <-
+  renderPrint({
+    # number of signficant genes in the heatmap produced
+    if (is.null(formated()))
+      return("X")
+    else
+      cat(length(formated()))
+  })
+
+
+output$indivcol <-  renderText({
+  # Groups selected
+  my_final <<- paste(choix_grp(), as.character(),  sep = ",")
 })
 
 
-output$indivcol <-  renderText({ # Groups selected
-  my_final <<- paste(choix_grp(),as.character(),  sep=",")
+output$test <- renderText({
+  #Contrast selected
+  my_final <<- paste(choix_test(), as.character(),  sep = ",")
 })
 
 
-output$test <- renderText({ #Contrast selected
-  my_final <<- paste(choix_test(),as.character(),  sep=",")
-})
-
-
-output$myPVAL <- renderText({ #pvalue selected
+output$myPVAL <- renderText({
+  #pvalue selected
   input$pval
 })
 
 
-output$myFC <- renderText({ #Fold change value selected, default =1
+output$myFC <- renderText({
+  #Fold change value selected, default =1
   input$fc
 })
 
-output$myMET <- renderText({ #Method for choosing the signficant genes, default = FDR (BH method)
-  input$method2
-})
+output$myMET <-
+  renderText({
+    #Method for choosing the signficant genes, default = FDR (BH method)
+    input$method2
+  })
 
-output$myCLUST <- renderText({ #number of clusted selected, default = 3
-  input$clusters
-})
+output$myCLUST <-
+  renderText({
+    #number of clusted selected, default = 3
+    input$clusters
+  })
 
-output$myMAT <- renderText({ #Method for the matrix distance, default = correlation method (pearson)
-  input$dist
-})
+output$myMAT <-
+  renderText({
+    #Method for the matrix distance, default = correlation method (pearson)
+    input$dist
+  })
 
-output$myPAL <- renderText({ #Colors selected for the different groups, default see palette in the global environment
-  if(is.null(mypal()))
-    palette[1:length(choix_grp())]
-  else
-    paste(mypal(),as.character(),  sep=",")
-})
+output$myPAL <-
+  renderText({
+    #Colors selected for the different groups, default see palette in the global environment
+    if (is.null(mypal()))
+      palette[1:length(choix_grp())]
+    else
+      paste(mypal(), as.character(),  sep = ",")
+  })
 
-output$myLEG <- renderText({ #Legend size, default = 0.8
+output$myLEG <- renderText({
+  #Legend size, default = 0.8
   input$legsize
 })
 
-output$myROW <- renderText({#Row size, default = 0.9
+output$myROW <- renderText({
+  #Row size, default = 0.9
   input$rowsize
 })
-output$myCOL <- renderText({#Col size, default = 0.9
+output$myCOL <- renderText({
+  #Col size, default = 0.9
   input$colsize
 })
 
@@ -1547,7 +1575,7 @@ output$myCOL <- renderText({#Col size, default = 0.9
 ######## Venn diagram                   #
 #########################################
 
-value=T # boolean at t=0
+value = T # boolean at t=0
 
 #' bool is a reactive function that return the bool value in the local environment
 #'
@@ -1558,14 +1586,13 @@ value=T # boolean at t=0
 #' @export
 
 bool <- function(value) {
-
   output$bool <- reactive({
     value
   })
-
+  
 }
 
-outputOptions(output,"bool",suspendWhenHidden=F)
+outputOptions(output, "bool", suspendWhenHidden = F)
 
 #' vennlist is a reactive function which aim is to return a list of signficant genes for a treshold pvalue of 5%
 #'
@@ -1605,47 +1632,47 @@ Vennplot <- function (Vennploted) {
     #' @return Vennploted a reactive object to be plot
     #'
     #' @export
-
+    
     Vennploted <- function(user_cont, input, vennlist) {
       Vennploted <- reactive({
         if (length(user_cont()) <= 5) {
           g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize)
-
-
+          
+          
           observe({
             value <<- T
           }) # listen inside the reactive expression
-
+          
           #' output$bool is a reactive function that set the bool value to T
           #'
           #' @value a boolean
           #'
           #' @return bool a reactive boolean inside the reactive environment
-          #' 
+          #'
           #' @export
-
+          
           output$bool <- reactive({
             value
           })
-
+          
           return(g)
         }
         else {
           observe({
             value <<- F
           }) # listen inside the reactive expression
-
+          
           #' output$bool is a reactive function that set the bool value to F
           #'
           #' @value a boolean
           #'
           #' @return bool a reactive boolean inside the reactive environment
           #'
-
+          
           output$bool <- reactive({
             value
           })
-
+          
           output$image <- renderUI({
             tags$img(src = "https://i.imgur.com/lB5wmMp.png")
           })
@@ -1658,13 +1685,13 @@ Vennplot <- function (Vennploted) {
                 url
               )
             })
-
+          
         }
       })
     }
     return(Vennploted())
   })
-
+  
 }
 
 
@@ -1672,8 +1699,8 @@ output$contout <- renderUI(
   checkboxGroupInput(
     inputId = "cont" ,
     label =  "Choose your comparison",
-    choices = colnames(adjusted()[[1]][,-1]),
-    selected = colnames(adjusted()[[1]][,-1])
+    choices = colnames(adjusted()[[1]][, -1]),
+    selected = colnames(adjusted()[[1]][, -1])
     #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())]),
     #selected = colnames(adjusted()[[1]][,-1][,-c(indnull())])
   )
@@ -1686,8 +1713,8 @@ observeEvent(input$allCont, {
     label = "Choose your comparison",
     #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())]),
     #selected = colnames(adjusted()[[1]][,-1][,-c(indnull())])
-    choices = colnames(adjusted()[[1]][,-1]),
-    selected = colnames(adjusted()[[1]][,-1])
+    choices = colnames(adjusted()[[1]][, -1]),
+    selected = colnames(adjusted()[[1]][, -1])
   )
 })
 
@@ -1696,8 +1723,7 @@ observeEvent(input$noCont, {
                            "cont",
                            label = "Choose your comparison",
                            #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())])
-                           choices = colnames(adjusted()[[1]][,-1])
-  )
+                           choices = colnames(adjusted()[[1]][, -1]))
 })
 
 #' indnull is a reactive function that return a vector for the contrasts with 0 genes significant at a treshold set to 5%
@@ -1725,7 +1751,7 @@ indnull <- function(vennlist) {
 #' @export
 #'
 
-choix_cont <- function(input){
+choix_cont <- function(input) {
   choix_cont <- reactive({
     return(input$cont)
   })
@@ -1778,26 +1804,24 @@ output$downloadvenn <- downloadHandler(
 
 #' Title
 #'
-#' @param adjusted 
+#' @param adjusted
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' 
+#'
 
-myindex <-function(adjusted){
-
-myindex<- reactive({
-  
-  myl = lapply(seq(ncol(adjusted()[[1]])),function(x)
-    return(which(adjusted()[[1]][[x]] < 0.05)))
-  
-  indexnull = which( sapply(myl ,length) == 0)
-  final = colnames(adjusted()[[1]][,-c(indexnull)])
-  return(final)
-  
-})
+myindex <- function(adjusted) {
+  myindex <- reactive({
+    myl = lapply(seq(ncol(adjusted()[[1]])), function(x)
+      return(which(adjusted()[[1]][[x]] < 0.05)))
+    
+    indexnull = which(sapply(myl , length) == 0)
+    final = colnames(adjusted()[[1]][, -c(indexnull)])
+    return(final)
+    
+  })
 }
 
 
@@ -1811,8 +1835,8 @@ observeEvent(input$vennd, {
   output$myVenn <- renderPlot({
     Vennplot()
   }, width = 1200 , height = 800, res = 100)
-
-
+  
+  
   output$savevenn <- downloadHandler(filename <- function() {
     paste0(basename(file_path_sans_ext("myfile")),
            '_venn_diagram.',
@@ -1822,7 +1846,7 @@ observeEvent(input$vennd, {
   content <- function(file) {
     print(input$formven)
     if (input$formven == "emf")
-
+      
       emf(
         file,
         width = 7,
@@ -1830,7 +1854,7 @@ observeEvent(input$vennd, {
         pointsize = 12,
         coordDPI = 300
       )
-
+    
     else if (input$formven == "png")
       png(
         file,
@@ -1844,12 +1868,12 @@ observeEvent(input$vennd, {
       eps(file,
           width = 7,
           height = 7)
-
-
+    
+    
     plot(Vennplot())
     dev.off()
   })
-
+  
 })
 
 
@@ -1887,27 +1911,24 @@ observe({
 
 
 observe({
+  #' totaclust is a reactive function which aim is to dynamically return a widget object of selectinput type ranging from 1 to the maximum number of cluster
+  #'
+  #' @param hmobj data frame of the significant genes associated with the corresponding cluster index
+  #'
+  #' @return selectInput widget
+  #' @export
+  #'
   
-  
-#' totaclust is a reactive function which aim is to dynamically return a widget object of selectinput type ranging from 1 to the maximum number of cluster
-#'
-#' @param hmobj data frame of the significant genes associated with the corresponding cluster index
-#'
-#' @return selectInput widget
-#' @export
-#'
-
-  totalclust <- function( cluster ){
-  
-  totalclust <- reactive({
-    req(hmobj$hm)
-    
-    n <- unique(hmobj$hm$cluster)
-    selectInput("cutgo",
-                "Choose your cluster",
-                choices =  seq(1, NROW(n) , by = 1))
-    
-  })
+  totalclust <- function(cluster) {
+    totalclust <- reactive({
+      req(hmobj$hm)
+      
+      n <- unique(hmobj$hm$cluster)
+      selectInput("cutgo",
+                  "Choose your cluster",
+                  choices =  seq(1, NROW(n) , by = 1))
+      
+    })
   }
   
   
@@ -1933,51 +1954,49 @@ observe({
 #' clustergrep is a reactive function which aim is to return a list of genes for the selected cluster without the non-annotated genes
 #'
 #' @param hm data frame of the significant genes associated with the corresponding cluster index
-#' @param cutgo a numeric input 
+#' @param cutgo a numeric input
 #'
 #' @return list of genes
 #' @export
 #'
-#' 
+#'
 
-clustergrep <- function(hm,  cutgo){
-
-clustergrep <- reactive({
-  req(hmobj$hm, input$cutgo)
-  
-  genlist <- hmobj$hm[!duplicated(hmobj$hm$GeneName),] %>%
-    dplyr::select(cluster, GeneName)   %>%
-    filter(cluster == input$cutgo)
-  
-  mygensymb = genlist$cluster %>%
-    length() %>%
-    matrix(1, .) %>%
-    as.double() %>%
-    setNames(genlist$GeneName) %>%
-    names() %>% as.list() %>%
-    .[lapply(., function(x)
-      length(grep("chr", x, value = FALSE))) == 0]
-  
-  return(mygensymb)
-})
+clustergrep <- function(hm,  cutgo) {
+  clustergrep <- reactive({
+    req(hmobj$hm, input$cutgo)
+    
+    genlist <- hmobj$hm[!duplicated(hmobj$hm$GeneName), ] %>%
+      dplyr::select(cluster, GeneName)   %>%
+      filter(cluster == input$cutgo)
+    
+    mygensymb = genlist$cluster %>%
+      length() %>%
+      matrix(1, .) %>%
+      as.double() %>%
+      setNames(genlist$GeneName) %>%
+      names() %>% as.list() %>%
+      .[lapply(., function(x)
+        length(grep("chr", x, value = FALSE))) == 0]
+    
+    return(mygensymb)
+  })
 }
 
-#' davidwebservice is an eventreactive function which aim is to querrying the DWS to return a dataframe summary 
+#' davidwebservice is an eventreactive function which aim is to querrying the DWS to return a dataframe summary
 #'
 #' @param GO clickable event
 #' @param hm data frame of the significant genes associated with the corresponding cluster index
-#' @param Species list of annotated elements 
+#' @param Species list of annotated elements
 #' @param catinfo vector of enrichment categories, BP, CC, MF, Kegg
 #'
-#' @return data frame 
+#' @return data frame
 #' @export
-#' 
-#' 
+#'
+#'
 
 
-davidwebservice <- function(GO, hm, Species, catinfo){
-
-davidwebservice <- eventReactive(input$GO, {
+davidwebservice <- function(GO, hm, Species, catinfo) {
+  davidwebservice <- eventReactive(input$GO, {
     #Warning: Error in .jcall: org.apache.axis2.AxisFault: Read timed out
     
     req(hmobj$hm)
@@ -2019,18 +2038,18 @@ observe({
 })
 
 
-#' davidurl is a reactive function that aim is to return an url of grouped genes 
+#' davidurl is a reactive function that aim is to return an url of grouped genes
 #'
 #' @param clustergrep list of genes
 #'
-#' @return character 
+#' @return character
 #' @export
 #'
 
 davidurl <- function(clustergrep) {
   davidurl <- reactive({
     req(clustergrep())
-  
+    
     source_python('./python/enrichmurl.py')
     mydavurl = enrichmentdav(clustergrep())
     mygloburl <- paste(`mydavurl`, ",", "'_blank')")
@@ -2094,40 +2113,44 @@ output$clustgo <- renderPrint({
 
 #' mytransf is a reactive function which aim is to convert entrez ID to GENE  the selected rows in the output data table
 #'
-#' @param davidwebservice data frame 
-#' @param cutgo a numeric input 
+#' @param davidwebservice data frame
+#' @param cutgo a numeric input
 #' @param davidgo_rows_selected selected rows
-#' @param Species list of annotated elements 
+#' @param Species list of annotated elements
 #'
 #' @return a data frame
 #' @export
 #'
 
 
-mytransf <- function(davidwebservice, cutgo, davidgo_rows_selected, Species) {
-  mytransf <- reactive({
-    req(davidwebservice())
-    
-    
-    myselectedrows = (davidwebservice()[[as.numeric(input$cutgo)]][input$davidgo_rows_selected, c("Genes", "Term"),  drop = FALSE])
-    
-    if (length(myselectedrows["Genes"][[1]]) > 0) {
-      myentreztosymb = lapply(1:NROW(myselectedrows), function(x) {
-        myselectedrows$Genes[[x]] %>% strsplit(", ") %>% unlist() %>% mget(x = .,
-                                                                           envir = Species()[[2]],
-                                                                           ifnotfound = NA) %>%  unlist() %>%
-          unique() %>% cbind(myselectedrows$Term[[x]]) %>% as.data.frame() %>% setNames(., c("Genes", "Term"))
-        
-      })
+mytransf <-
+  function(davidwebservice,
+           cutgo,
+           davidgo_rows_selected,
+           Species) {
+    mytransf <- reactive({
+      req(davidwebservice())
       
-      return(myentreztosymb)
-    }
-    else{
-      return(NULL)
-    }
-    
-  })
-}
+      
+      myselectedrows = (davidwebservice()[[as.numeric(input$cutgo)]][input$davidgo_rows_selected, c("Genes", "Term"),  drop = FALSE])
+      
+      if (length(myselectedrows["Genes"][[1]]) > 0) {
+        myentreztosymb = lapply(1:NROW(myselectedrows), function(x) {
+          myselectedrows$Genes[[x]] %>% strsplit(", ") %>% unlist() %>% mget(x = .,
+                                                                             envir = Species()[[2]],
+                                                                             ifnotfound = NA) %>%  unlist() %>%
+            unique() %>% cbind(myselectedrows$Term[[x]]) %>% as.data.frame() %>% setNames(., c("Genes", "Term"))
+          
+        })
+        
+        return(myentreztosymb)
+      }
+      else{
+        return(NULL)
+      }
+      
+    })
+  }
 
 output$printmessage <- renderPrint({
   req(davidwebservice())
@@ -2139,16 +2162,15 @@ output$printmessage <- renderPrint({
 
 
 output$printselected <- renderPrint({
-  
-  req(mytransf())  
+  req(mytransf())
   # cat("You can select the rows in the table above in order to display the gene names")
   # cat("\n")
   # cat("\n")
-  for(i in 1:length(mytransf())){
+  for (i in 1:length(mytransf())) {
     cat(paste("GOID and Term: " , unique(mytransf()[[i]]$Term)))
     cat("\n")
     cat("Genes: ")
-    cat(paste( mytransf()[[i]]$Genes, collapse = " ,"))
+    cat(paste(mytransf()[[i]]$Genes, collapse = " ,"))
     cat("\n")
     cat("\n")
   }
@@ -2157,37 +2179,38 @@ output$printselected <- renderPrint({
 
 
 
-output$savegohmdav = downloadHandler( paste0(basename(file_path_sans_ext(projectname())), '_go.',"xlsx", sep = ''),
-                                      content = function(file) {
-                                        
-                                        withProgress(message = 'Creation of the xlsx table:',
-                                                     value = 0, {
-                                                       n <- NROW(50)
-                                                       for (i in 1:n) {
-                                                         incProgress(1 / n, detail = "Please wait...")
-                                                       }
-                                                       
-                                                       
-                                                       library(xlsx)
-                                                       
-                                                       for (i in 1:length(davidwebservice())) {
-                                                         if (i == 1)
-                                                           write.xlsx(file = file,
-                                                                      davidwebservice()[[i]],
-                                                                      sheetName = paste("Cluster", i))
-                                                         else
-                                                           write.xlsx(
-                                                             file = file,
-                                                             davidwebservice()[[i]],
-                                                             sheetName = paste("Cluster", i),
-                                                             append = TRUE
-                                                           )
-                                                       }
-                                                     })
-                                        
-                                        
-                                        
-                                      }
+output$savegohmdav = downloadHandler(
+  paste0(basename(file_path_sans_ext(projectname(
+  ))), '_go.', "xlsx", sep = ''),
+  content = function(file) {
+    withProgress(message = 'Creation of the xlsx table:',
+                 value = 0, {
+                   n <- NROW(50)
+                   for (i in 1:n) {
+                     incProgress(1 / n, detail = "Please wait...")
+                   }
+                   
+                   
+                   library(xlsx)
+                   
+                   for (i in 1:length(davidwebservice())) {
+                     if (i == 1)
+                       write.xlsx(file = file,
+                                  davidwebservice()[[i]],
+                                  sheetName = paste("Cluster", i))
+                     else
+                       write.xlsx(
+                         file = file,
+                         davidwebservice()[[i]],
+                         sheetName = paste("Cluster", i),
+                         append = TRUE
+                       )
+                   }
+                 })
+    
+    
+    
+  }
 )
 
 
@@ -2203,10 +2226,6 @@ output$savegohmdav = downloadHandler( paste0(basename(file_path_sans_ext(project
 #'
 
 Species <- function(Species, Speciesvenn) {
-  
-  
-  
-  
   Species <- reactive({
     if (input$Species == "Homo sapiens" ||
         input$Speciesvenn == "Homo sapiens") {
@@ -2268,4 +2287,425 @@ Species <- function(Species, Speciesvenn) {
   })
   
 }
+############################################################
+
+
+#' vennchoice is a reactive function that return user's selected comparisons
+#'
+#' @param intscol character input
+#'
+#' @return character vector
+#' @export
+#'
+
+vennchoice <- function(intscol) {
+  vennchoice <- reactive({
+    if (is.null (input$intscol))
+      return(NULL)
+    else
+      return(input$intscol)
+  })
+}
+
+output$myselvenn <- renderUI({
+  req(user_cont())
+  #intscol <- names(user_cont())#names(adjusted()[[1]][,-1])
+  selectInput(
+    'intscol',
+    'Specify your interaction(s):',
+    choices = names(user_cont()),
+    multiple = TRUE
+  )
+})
+
+
+
+#' venninter is a reactive function which aim is to return a set of lists for each possible logical relations between a finite collection of different sets
+#'
+#' @param vennlist list of probenames
+#' @param user_cont character vector
+#'
+#' @return multiple lists
+#' @export
+#'
+
+
+venninter <- function(vennlist, user_cont) {
+  venninter <- reactive({
+    req(vennlist(), user_cont())
+    
+    myelist <- setvglobalvenn(vennlist(), user_cont())
+    #print(myelist)
+    
+    
+    return(myelist)
+  })
+}
+
+#' vennfinal is a reactive function which return a list of data frame corresponding to the computationnal mean of each logFC for the possible logical relations between a finite collection of different sets
+#' and a data frame with as primary key the probenames associated with the corresponding gene names and logFC
+#' 
+#'
+#' @param vennchoice reactive character vector
+#' @param adjusted dataframe subset of the alltoptable
+#' @param dispvenn character input between probes and genes
+#' @param venninter multiple lists of probenames
+#'
+#' @return a list of two data frames
+#' @export
+#'
+
+
+vennfinal <- function(vennchoice, adjusted, dispvenn, venninter) {
+  vennfinal <- reactive({
+    req(vennchoice())
+    if (is.null(vennchoice))
+      return(NULL)
+    
+    reslist = list()
+    reordchoice <- vennchoice() %>%
+      factor(levels = names(adjusted()[[1]][, -1])) %>%
+      sort() %>%
+      paste(collapse = "")
+    
+    
+    resfinal = csvf()[[3]] %>%
+      filter(ProbeName %in% venninter()[[reordchoice]]) %>%
+      select(ProbeName, GeneName, paste0("logFC_", vennchoice())) %>%
+      mutate_if(is.numeric, funs(format(., digits = 3)))
+    
+    reslist[[1]] = resfinal
+    
+    mycont = paste0("logFC_", vennchoice())
+    if (input$dispvenn == "genes") {
+      for (i in mycont) {
+        resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
+      }
+      
+      resfinal <-
+        resfinal[, -1] %>% as.data.table() %>% .[, lapply(.SD, mean), "GeneName"]
+      resfinal = as.data.frame(resfinal)
+      reslist[[2]] = resfinal
+    }
+    #mutate_if(is.numeric, funs(formatC(., format = "f")))
+    
+    return(reslist)
+  })
+  
+}
+
+# label {
+#   display: inline-block;
+#   max-width: 100%;
+#   margin-bottom: 0px;
+#   font-weight: 700;
+# }
+
+output$topgenesvenn <- renderUI({
+  req(vennfinal(), vennchoice())
+  
+  tags$div(class = "topgeness",
+           numericInput(
+             'topgenes',
+             'Top genes',
+             value = 50,
+             min = 1,
+             max = length(vennfinal()[[1]]$ProbeName)
+           ))
+})
+
+
+output$venntitle <- renderText({
+  req(input$topgenes)
+  if (input$dispvenn == "probes")
+    mytitlevenn <<-
+      print(paste("Barplot showing the top ", input$topgenes , " genes"))
+  else
+    mytitlevenn <<-
+      print(
+        paste(
+          "Barplot showing the computationnal logFC mean of the top " ,
+          input$topgenes ,
+          " genes before the rendering table"
+        )
+      )
+})
+
+
+output$venngenesbef <- renderText({
+  req(input$topgenes)
+  if (input$dispvenn == "genes")
+    mytitlevenn <<-
+      print(
+        paste(
+          "Barplot showing the computationnal logFC mean of the top " ,
+          input$topgenes ,
+          " genes after the rendering table"
+        )
+      )
+  
+})
+
+
+output$dfvenn <- renderText({
+  req(input$topgenes)
+  if (input$dispvenn == "probes")
+    mytitlevenn <<-
+      print(
+        paste(
+          "Table showing the ProbeNames and GeneNames associated with their respective logFC for the intersection(s) selected"
+        )
+      )
+  else
+    mytitlevenn <<-
+      print(
+        paste(
+          "Table showing the GeneNames associated with the average logFC for the intersection(s) selected"
+        )
+      )
+  
+  
+})
+
+output$dfvennbef <- renderText({
+  req(input$topgenes)
+  if (input$dispvenn == "genes")
+    mytitlevenn <<-
+      print(
+        paste(
+          "Table showing the GeneNames associated with their respective logFC for the intersection(s) selected"
+        )
+      )
+  
+})
+
+
+
+#' venntopgenes is a reactive function which aim is to return the user's input top n genes
+#'
+#' @param topgenes numeric input
+#'
+#' @return numeric input
+#' @export
+#'
+
+
+venntopgenes <- function(topgenes) {
+  venntopgenes <- reactive({
+    if (is.null (input$topgenes))
+      return(NULL)
+    else
+      return(input$topgenes)
+  })
+}
+
+output$downloadvennset = downloadHandler(
+  'venns-filtered.csv',
+  content = function(file) {
+    s = input$vennresinter_rows_all
+    if (input$dispvenn == "probes")
+      write.csv2(vennfinal()[[1]][s, , drop = FALSE], file)
+    else
+      write.csv2(vennfinal()[[2]][s, , drop = FALSE], file)
+  }
+)
+
+
+#' plottopgenes is an event reactive function which aim is to plot the top n genes selected by the user from the rendering data table
+#'
+#' @param topdegenes clickable event button
+#' @param venntopgenes numeric input
+#' @param vennchoice reactive character vector
+#' @param vennfinal a list of two data frames
+#' @param dispvenn character input between probes and genes
+#'
+#' @return ggplot object
+#' @export
+#'
+
+
+plottopgenes <- function(topdegenes,venntopgenes,vennchoice,vennfinal,dispvenn) {
+  
+    plottopgenes <- eventReactive(input$topdegenes, {
+      req(vennfinal(), vennchoice(), venntopgenes())
+      mycont = paste0("logFC_", vennchoice())
+      if (input$dispvenn == "probes")
+        myplot <-
+        topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE], mycont, venntopgenes(), input$dispvenn)
+      else
+        myplot <-
+        topngenes(vennfinal()[[2]][input$vennresinter_rows_all, , drop = FALSE], mycont, venntopgenes(), input$dispvenn)
+      
+      
+      return(myplot)
+    })
+    
+  }
+
+
+#' plottopgenesmean is an event reactive function which aim is to plot the top n genes selected by the user from the rendering data table with the average logFC
+#'
+#' @param topdegenes clickable event button
+#' @param venntopgenes numeric input
+#' @param vennchoice reactive character vector
+#' @param vennfinal a list of two data frames
+#'
+#' @return ggplot object
+#' @export
+#'
+
+
+plottopgenesmean <-
+  function(topdegenes,
+           venntopgenes,
+           vennchoice,
+           vennfinal) {
+    plottopgenesmean <- eventReactive(input$topdegenes, {
+      req(vennfinal(), vennchoice(), venntopgenes())
+      mycont = paste0("logFC_", vennchoice())
+      myplot <-
+        topngenes(vennfinal()[[1]][input$vennresintergen_rows_all, , drop = FALSE],
+                  mycont,
+                  venntopgenes(),
+                  input$dispvenn,
+                  mean = T)
+      
+      return(myplot)
+    })
+  }
+
+
+
+observeEvent(input$topdegenes, {
+  isolate(output$barplotvenn <- renderPlot({
+    req(plottopgenes())
+    plotOutput(plottopgenes())
+    
+  }))
+  
+})
+
+
+observeEvent(input$topdegenes, {
+  isolate(output$barplotvennmean <- renderPlot({
+    req(plottopgenesmean(), input$dispvenn == "genes")
+    plotOutput(plottopgenesmean())
+    
+  }))
+  
+})
+
+
+
+observe({
+  validate(need(csvf(), 'You need to import data to visualize this plot!'))
+  
+  output$savebarplot <- downloadHandler(filename <- function() {
+    paste0(
+      basename(tools::file_path_sans_ext(projectname())),
+      '_venn_barplot.',
+      input$formvenbar,
+      sep = ''
+    )
+  },
+  content <- function(file) {
+    if (input$formvenbar == "pdf")
+      
+      pdf(file,
+          width = 16,
+          height = 7,
+          pointsize = 12)
+    
+    else if (input$formvenbar == "png")
+      png(
+        file,
+        width = 1600,
+        height = 700,
+        units = "px",
+        pointsize = 12,
+        res = 100
+      )
+    else
+      eps(file,
+          width = 16,
+          height = 7,
+          pointsize = 12)
+    
+    print(plottopgenes())
+    
+    dev.off()
+  })
+  
+})
+
+######################################
+
+
+observe({
+  req(Venncluster())
+  updateSliderInput(session, "clusterNumber", max = nrow(summary(Venncluster())))
+})
+
+output$clusterPlot <- renderPlot({
+  req(Venncluster())
+  if(input$clusterNumber == 1)
+    shinyjs::alert("There's not enough genes in your interaction(s)")
+  plot2D(Venncluster(), input$clusterNumber)
+})
+
+output$debug <- renderPrint({
+  req(Venncluster())
+  summary(Venncluster())
+})
+
+#' Venncluster is an event reactive function which aim is to interogate David web services database to collect relevant information about the list of genes for a specific intersection
+#'
+#' @param GOvenn clickable event button 
+#' @param vennfinal a list of two data frames
+#' @param Species list of annotated elements
+#' @param Speciesvenn character input
+#'
+#' @return david enrichment object
+#' @export
+#'
+
+Venncluster <- function(GOvenn,vennfinal, Species, Speciesvenn ){
+
+  
+Venncluster <- eventReactive(input$GOvenn, {
+  
+  req(vennfinal())
+  
+  withProgress(message = 'Performing GO enrichment:',
+               value = 0, {
+                 n <- NROW(50)
+                 for (i in 1:n) {
+                   incProgress(1 / n, detail = "Please wait...")
+                 }
+                 library(RDAVIDWebService)
+                 
+                 timeoutdav <- function(y)
+                   if (any(grepl("Read timed out", y)))
+                     invokeRestart("muffleWarning")
+                 
+                 tryCatch({
+                   mygodavid = probnamtoentrezvenn(vennfinal()$GeneName , Species()[[1]]) %>%
+                     davidqueryvenn(input$Speciesvenn) %>% withCallingHandlers(error = timeoutdav)
+                 }, warning = function(e) {
+                   
+                   shinyjs::alert("David's server is busy")
+                   warning("David's server is busy")
+                   return(cbind("David's server is busy") %>% as.data.frame() %>% setNames("Error"))
+                   
+                 })
+               })
+  
+  
+  return(mygodavid)
+})
+
+}
+
+
+
 

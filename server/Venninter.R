@@ -1,3 +1,12 @@
+#' vennchoice is a reactive function that return user's selected comparisons
+#'
+#' @param intscol character input
+#'
+#' @return character vector
+#' @export
+#'
+
+
 vennchoice <- reactive({
   if (is.null (input$intscol))
     return(NULL)
@@ -16,6 +25,15 @@ output$myselvenn <- renderUI({
   )
 })
 
+#' venninter is a reactive function which aim is to return a set of lists for each possible logical relations between a finite collection of different sets
+#'
+#' @param vennlist list of probenames
+#' @param user_cont character vector
+#'
+#' @return multiple lists
+#' @export
+#'
+
 venninter <- reactive({
   req(vennlist(), user_cont())
   
@@ -26,6 +44,19 @@ venninter <- reactive({
   return(myelist)
 })
 
+
+#' vennfinal is a reactive function which return a list of data frame corresponding to the computationnal mean of each logFC for the possible logical relations between a finite collection of different sets
+#' and a data frame with as primary key the probenames associated with the corresponding gene names and logFC
+#' 
+#'
+#' @param vennchoice reactive character vector
+#' @param adjusted dataframe subset of the alltoptable
+#' @param dispvenn character input between probes and genes
+#' @param venninter multiple lists of probenames
+#'
+#' @return a list of two data frames
+#' @export
+#'
 
 vennfinal <- reactive({
   req(vennchoice())
@@ -102,7 +133,7 @@ output$venngenesbef <- renderText({
 output$dfvenn <- renderText({
   req(input$topgenes)
   if(input$dispvenn == "probes")
-    mytitlevenn <<- print(paste("Table showing the ProbeNames and GeneNames associated with the respective logFC for the intersection(s) selected"))
+    mytitlevenn <<- print(paste("Table showing the ProbeNames and GeneNames associated with their respective logFC for the intersection(s) selected"))
   else
     mytitlevenn <<- print(paste("Table showing the GeneNames associated with the average logFC for the intersection(s) selected"))
     
@@ -112,12 +143,18 @@ output$dfvenn <- renderText({
 output$dfvennbef <- renderText({
   req(input$topgenes)
   if(input$dispvenn == "genes")
-    mytitlevenn <<- print(paste("Table showing the GeneNames associated with the respective logFC for the intersection(s) selected"))
+    mytitlevenn <<- print(paste("Table showing the GeneNames associated with their respective logFC for the intersection(s) selected"))
   
 })
 
 
-
+#' venntopgenes is a reactive function which aim is to return the user's input top n genes
+#'
+#' @param topgenes numeric input
+#'
+#' @return numeric input
+#' @export
+#'
 
 venntopgenes <- reactive({
     if (is.null (input$topgenes))
@@ -137,6 +174,17 @@ output$downloadvennset = downloadHandler(
   }
 )
 
+#' plottopgenes is an event reactive function which aim is to plot the top n genes selected by the user from the rendering data table
+#'
+#' @param topdegenes clickable event button
+#' @param venntopgenes numeric input
+#' @param vennchoice reactive character vector
+#' @param vennfinal a list of two data frames
+#' @param dispvenn character input between probes and genes
+#'
+#' @return ggplot object
+#' @export
+#'
 
 plottopgenes <- eventReactive(input$topdegenes, {
   req(vennfinal(), vennchoice(), venntopgenes())
@@ -150,6 +198,17 @@ plottopgenes <- eventReactive(input$topdegenes, {
   return(myplot)
 })
 
+
+#' plottopgenesmean is an event reactive function which aim is to plot the top n genes selected by the user from the rendering data table with the average logFC
+#'
+#' @param topdegenes clickable event button
+#' @param venntopgenes numeric input
+#' @param vennchoice reactive character vector
+#' @param vennfinal a list of two data frames
+#'
+#' @return ggplot object
+#' @export
+#'
 
 plottopgenesmean <- eventReactive(input$topdegenes, {
   req(vennfinal(), vennchoice(), venntopgenes())

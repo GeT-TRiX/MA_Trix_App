@@ -16,6 +16,17 @@ output$debug <- renderPrint({
 })
 
 
+#' Venncluster is an event reactive function which aim is to interogate David web services database to collect relevant information about the list of genes for a specific intersection
+#'
+#' @param GOvenn clickable event button 
+#' @param vennfinal a list of two data frames
+#' @param Species list of annotated elements
+#' @param Speciesvenn character input
+#'
+#' @return david enrichment object
+#' @export
+#'
+
 Venncluster <- eventReactive(input$GOvenn, {
     
     req(vennfinal())
