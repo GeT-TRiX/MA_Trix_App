@@ -12,6 +12,10 @@ output$heatmbool <- reactive({
   boolhm
 })
 
+observe({
+  print(boolhm)
+  
+})
 
 outputOptions(output, "heatmbool", suspendWhenHidden = F)
 

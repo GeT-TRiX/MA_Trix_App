@@ -298,19 +298,34 @@ rowtoprob <- function(myven,pval,adj) {
   
   pval$rownames = rownames(pval)
   names(myven) = colnames(adj)
-  final = lapply(
+  probesel = lapply(
+    names(myven),
+    FUN = function(x) {
+      test = pval[pval$rownames %in% myven[[x]],]
+      probesel <- test %>%
+        select(ProbeName) %>%
+        unlist() %>%
+        as.character()
+      return(probesel)
+    }
+  )
+  
+  genesel = lapply(
     names(myven),
     FUN = function(x) {
       test = pval[pval$rownames %in% myven[[x]],]
       
-      what <- test %>%
-        select(ProbeName) %>%
+      genesel <- test %>%
+        select(GeneName) %>%
         unlist() %>%
         as.character()
       
-      return(what)
+      
+      return(genesel)
     }
   )
+
+  return(list(probesel, genesel))
 }
 
 #' topngenes is a function to plot the top n genes for a defined intersection between comparison.s

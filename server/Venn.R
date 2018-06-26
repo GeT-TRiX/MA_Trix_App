@@ -78,7 +78,7 @@ Vennplot <- reactive({
   if(length(user_cont()) <= 5){
   #g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
     
-  g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn, input$dispvenn , csvf()[[3]])
+  g = Vennfinal(vennlist()[[1]], user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn, input$dispvenn , csvf()[[3]])
   
 
    observe({value <<-T}) # listen inside the reactive expression 
@@ -195,7 +195,7 @@ observeEvent(input$noCont, {
 
 indnull <- reactive({
 
-    indexnull = which( sapply(vennlist() ,length) == 0)
+    indexnull = which( sapply(vennlist()[[1]] ,length) == 0)
     return(indexnull)
 })
 
@@ -264,7 +264,7 @@ output$downloadvenn <- downloadHandler(
   },
   content = function(fname) {
     write.table(
-      try(myventocsv(vennlist()  , user_cont())),
+      try(myventocsv(vennlist()[[2]]  , user_cont())),
       fname,
       na = "",
       row.names = F,
@@ -272,6 +272,39 @@ output$downloadvenn <- downloadHandler(
       append = TRUE,
       sep = ";"
     )
+  }
+)
+
+
+output$downloadsetven <- downloadHandler(
+  filename = function() {
+    paste(basename(file_path_sans_ext(projectname())),
+          '_clustered_venn',
+          '.csv',
+          sep = '')
+  },
+  content = function(fname) {
+    if(input$dispvenn == "genes")
+    write.table(
+      try(myventocsv(setvglobalvenn(vennlist()[[2]], user_cont()) , user_cont())),
+      fname,
+      na = "",
+      row.names = F,
+      col.names = T,
+      append = TRUE,
+      sep = ";"
+    )
+    else
+      write.table(
+        try(myventocsv(setvglobalvenn(vennlist()[[1]], user_cont()) , user_cont())),
+        fname,
+        na = "",
+        row.names = F,
+        col.names = T,
+        append = TRUE,
+        sep = ";"
+      )
+      
   }
 )
 

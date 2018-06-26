@@ -73,7 +73,6 @@ body <- dashboardBody(
     .tabbable > .nav > li > a[data-value='cutpan'] {background-color: blue;  color:white}
   ")),
   
-  
   #tags$style(type="text/css", Errorcss),
   useToastr(),
   
@@ -93,6 +92,14 @@ body <- dashboardBody(
             bsAlert("alert"),
             tags$style(type='text/css', ".well { max-width: 2em; }"),
             fluidRow(
+              tags$head(
+                tags$style(type="text/css", ".myslidermain .irs-grid-text {bottom: 5px;color: #333;} 
+      .myslidermain .irs-min{color: #333;font-size: 10px;line-height: 1.333;text-shadow: none;top: 0;padding: 1px 3px;
+      background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px} 
+      .myslidermain .irs-max{color: #333;font-size: 10px;line-height: 1.333;text-shadow: none;top: 0;padding: 1px 3px;
+      background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px}")
+              ),
+              
               column(width=9,
                 div( style = "width:100% ; max-width: 1200px; height: 1050px",
                
@@ -111,8 +118,9 @@ body <- dashboardBody(
                               12, h3(
                                 "This table summarize the number of significant genes depending on the p-value treshold choosen with the slider bar"
                               ),
-                              helpText("Choose your p-value treshold to modify the following data table")
-                              ,sliderInput(
+                              helpText("Choose your p-value treshold to modify the following data table"),
+                              div( class= "myslidermain",
+                              sliderInput(
                                 #Constructs a slider widget to select a numeric value from a range.
                                 "pval1",
                                 "",
@@ -123,28 +131,14 @@ body <- dashboardBody(
                                 width = "500"
                               ),
                               dataTableOutput("data_summary") # render a renderTable or renderDataTable within an application page
-                            ),
+                            )),
                             
                             column(12,
                               h3("This table shows the samples with the corresponding groups"),
                               dataTableOutput("new_test")
                             )
-                            # ,
-                            # column(12,
-                            #   h3("This table shows the head of the working set"),
-                            #   dataTableOutput("new_data")
-                            # )
-                            
-                            # column(12,
-                            #   h3("Show the actual data frame with the columns selected"),
-                            #   helpText(
-                            #     "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-                            #   ),
-                            #   dataTableOutput("new_group")
-                            # )
-                            # )
+
                    )
-              #)
               )
             ),  
             div(id="pass",style = "word-wrap: break-word;",
@@ -216,10 +210,12 @@ body <- dashboardBody(
     
     tabItem(tabName = "PCA",
             tags$style(type='text/css', ".well { max-width: 20em; }"),
+            tags$style(type='text/css', ".well { max-height: 50em; }"),
             fluidRow(column(
               width = 9,
               div(
-                style = "width:100% ; max-width: 1200px; height: 1050px",
+                style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;",
+                #style = "width:100% ; max-width: 1200px; height: 1050px",
                 tabsetPanel(
                   #title = "Principal component analysis",
                   #id = "tabset1",
@@ -260,8 +256,7 @@ body <- dashboardBody(
                     #   "",
                     #   choices = c("png", "eps", "pdf")),
                     
-                    br(),br(),
-                    plotOutput(outputId = "PCA", height = 800)
+                    plotOutput(outputId = "PCA", height = 700)
                   )
                   
                 )
@@ -342,7 +337,7 @@ body <- dashboardBody(
                     "Label size",
                     min = 2,
                     max = 6,
-                    value = 3,
+                    value = 4,
                     step = 1
                   ),
                   
@@ -379,21 +374,24 @@ body <- dashboardBody(
                     strong("Visualize the Venn diagram"),
                   
                     div(style="display:inline-block",
-                        fluidRow(column(4, style= "width:24%;",
+                        fluidRow(column(3, style= "width:18.5%;",
 
                                         downloadButton('downloadvenn', "Download the data",
                                                        style =
                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                 column(4, style="width:20%;",
+                                 column(3, style="width:18.5%;",
+                                        downloadButton("downloadsetven", "Download venn set" , style =
+                                                         "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                                 column(3, style="width:15.3%;",
                                         downloadButton("savevenn", "Save your plot" , style =
                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                     column(4,style="width:19%;", selectInput(
+                                 
+                                     column(3,style="width:19%;", selectInput(
                                        "formven",label = NULL,
                                        choices = c("png", "eps", "pdf")))
                         )),
                     
-                    
-                    br(),br(),
+                  
                     conditionalPanel(condition = '!output.bool',
                                      uiOutput(outputId = "image")
                                      , uiOutput("sorry")),
@@ -1116,21 +1114,10 @@ body <- dashboardBody(
                            ),
                            helpText("Note: It is highly advised to check this box if you're working with a set of genes close to 1000.",style="color:White; font-size:15px;"),
                            
-                           # fluidRow(
-                           #   column(4,
-                           # downloadButton(
-                           #   "save",
-                           #   "Save your plot" ,
-                           #   style = ## allowed to download an image
-                           #     "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                           # )),
-                           # 
-                           # downloadButton('downloadcut', "Download the data",
-                           #                style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
-                           # 
-                           # ),
                            
-                           conditionalPanel(condition = 'output.heatmbool',
+                           #conditionalPanel(condition = 'output.heatmbool',
+                          conditionalPanel(condition = 'output.heatmbool',
+                          #conditionalPanel(condition = 'input.button >0', 
                                             
                                             div(id = 'center', strong("GO Enrichment",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                             br(),

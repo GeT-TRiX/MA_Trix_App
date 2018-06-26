@@ -61,12 +61,15 @@ observeEvent(input$heatm, {
       isolate({
         hmbis()
         hmsize$cut <- hmbis()[[8]]
+        
         observe({
           boolhm <<- T
         })
+        
         output$heatmbool <- reactive({
           boolhm
         })
+        
         withProgress(message = 'Plotting heatmap:', # Add sliderbar when loading heatmap
                      value = 0,
                      {

@@ -14,20 +14,19 @@ output$data_summary <- renderDataTable(data_summary()) # Summary of the signific
 observe({
   req(input$dispvenn)
   if(input$dispvenn == "probes")
-    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100'))), server = F)
+    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')), options = list(scrollX = TRUE)), server = F)
   else
-    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('15', '30', '50','100'))), server = F)
+    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('15', '30', '50','100')), options = list(scrollX = TRUE)), server = F)
 })
     
 observe({
   if(input$dispvenn == "genes")
-    output$vennresintergen <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100'))), server = F)
+    output$vennresintergen <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')),options = list(scrollX = TRUE)), server = F)
 })
 
 output$davidgo <- DT::renderDataTable(DT::datatable(davidwebservice()[[as.numeric(input$cutgo)]][, -9] , options = list(scrollX = TRUE) ))
 
 #output$totalgenbyc <- renderDataTable(grouplength())
-
 
 
 #' myrenderedtop is a reactive function which aim is to display or not the labels in the PCA render plot
