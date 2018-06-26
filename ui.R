@@ -415,7 +415,7 @@ body <- dashboardBody(
                     ),
                     
                     DT::dataTableOutput("vennresinter"),br(),br(),br(),
-                    conditionalPanel(condition = "input$dispvenn == 'genes'", 
+                    conditionalPanel(condition = "input.dispvenn == 'genes'", 
                                      div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; ",
                                          htmlOutput("dfvennbef")),
                                      DT::dataTableOutput("vennresintergen"))
@@ -458,7 +458,7 @@ body <- dashboardBody(
                     
                     
                     br(),br(),
-                    conditionalPanel(condition = "input$dispvenn == 'genes'",  
+                    conditionalPanel(condition = "input.dispvenn == 'genes'",  
                                     # DT::dataTableOutput("vennresintergen"),
                                     div(class= "beforedf" , style="font-size:24px; margin-top: -8px;",
                                         htmlOutput("venngenesbef")),
