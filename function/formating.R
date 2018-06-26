@@ -232,15 +232,14 @@ chartofa = function(datach){
 
 #' This function returns a data frame of the significant genes associated with the corresponding cluster index
 #'
-#' @param cut02 a heatmap object
-#' @param ind a vector of integer
-#' @param signws a matrix 
-#' @param pval a data frame
+#' @param hmp01_All a heatmap object
+#' @param exprData a vector of indices for the significant genes who have crossed the treshold pval and fc
+#' @param pval a data frame of the alltoptable
+#' @param height numeric value where the dendogram is cut off
 #'
 #' @return a data frame
 #' @export
 #'
-
 
 heatmtoclust = function( hmp01_All, exprData, pval, height= 5){
   

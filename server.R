@@ -11,38 +11,38 @@ shinyServer(function(input, output,session) {
   
   source(file.path("server", "csvFile.R"), local = TRUE)$value #
   
-  #########################################
-  ######## Widget update and info         #
-  #########################################
+  ##########################################
+  ######## Widget update and info         ##
+  ##########################################
   
   source(file.path("server", "matrixwidg.R"), local = TRUE)$value #
   
-  #########################################
-  ######## Datarender                     #
-  #########################################
+  ##########################################
+  ######## Datarender                     ##
+  ##########################################
   
   source(file.path("server", "renderertable.R"), local = TRUE)$value #
   
-  #########################################
-  ######## HOME page                      #
-  #########################################
+  ##########################################
+  ######## HOME page                      ##
+  ##########################################
 
   source(file.path("server", "datasummary.R"), local = TRUE)$value #
   source(file.path("server", "renderertable.R"), local = TRUE)$value #
   source(file.path("server", "checkboxgrp.R"), local = TRUE)$value #
   
-  ###############################
-  ######## PCA page             #
-  ###############################
+  ################################
+  ######## PCA page             ##
+  ################################
   
   source(file.path("server", "PCAshiny.R"), local = TRUE)$value #
   #source(file.path("server", "plotandsave.R"), local = TRUE)$value #
   source(file.path("server", "PCAsandp.R"), local = TRUE)$value #
   source(file.path("server", "colforpca.R"), local = TRUE)$value #
   
-  ###############################
-  ######## Venn page            #
-  ###############################
+  ################################
+  ######## Venn page            ##
+  ################################
   
   source(file.path("server", "Venn.R"), local = TRUE)$value #
   source(file.path("server", "Vennrender.R"), local = TRUE)$value #
@@ -51,15 +51,15 @@ shinyServer(function(input, output,session) {
   source(file.path("server", "vennquery.R"), local = TRUE)$value # adjusted
   source(file.path("server", "trackervenn.R"), local = TRUE)$value #
   
-  ###############################
-  ######## Venn GO              #
-  ###############################
+  ################################
+  ######## Venn GO              ##
+  ################################
   
   
   
-  #########################################
-  ######## Grep project name              #
-  #########################################
+  ##########################################
+  ######## Grep project name              ##
+  ##########################################
   
   observeEvent(input$heatm, {
     print(colnames(adjusted()[[1]]))
@@ -89,9 +89,9 @@ shinyServer(function(input, output,session) {
     
   })
 
-  ###############################
-  ######## Heatmap page         #
-  ###############################
+  ################################
+  ######## Heatmap page         ##
+  ###############################"
   
   source(file.path("server", "checkboxcontrast.R"), local = TRUE)$value #
   source(file.path("server", "changeheatmbut.R"), local = TRUE)$value #
@@ -105,16 +105,16 @@ shinyServer(function(input, output,session) {
   source(file.path("server", "backgroundcolor.R"), local = TRUE)$value #
   source(file.path("server", "groupcolor.R"), local = TRUE)$value #
   
-  #########################################
-  ######## GO enrichissment               #
-  #########################################
+  ##########################################
+  ######## GO enrichissment               ##
+  ##########################################
   
   source(file.path("server", "shinygo.R"), local = TRUE)$value #
   
   
-  ###############################
-  ######## cutheatmap page      #
-  ###############################
+  ################################
+  ######## cutheatmap page      ##
+  ################################
   
   source(file.path("server", "cutheatmap.R"), local = TRUE)$value #
   

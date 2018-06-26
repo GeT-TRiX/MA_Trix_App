@@ -2,9 +2,23 @@ require(VennDiagram)
 
 #Intersect, Union and Setdiff (https://stackoverflow.com/questions/23559371/how-to-get-the-list-of-items-in-venn-diagram-in-r)
 
+#' Intersect is a function that takes a list as argument and return the identical elements between those lists 
+#'
+#' @param x list
+#'
+#' @return vector
+#' @export
+#' 
+#' @examples
+#' x <- c(sort(sample(1:20, 9)))
+#' y <- c(sort(sample(3:23, 7)))
+#' test = list()
+#' test[[1]] = x
+#' test[[2]] = y
+#' Intersect(test) = 9,19
+
 Intersect <- function (x) {  
-  # Multiple set version of intersect
-  # x is a list
+
   
   if (length(x) == 1) {
     unlist(x)
@@ -15,9 +29,23 @@ Intersect <- function (x) {
   }
 }
 
+#' Union is a function that takes a list as argument and return an union of those lists
+#'
+#' @param x list
+#'
+#' @return vector
+#' @export
+#' 
+#' @examples
+#' x <- c(sort(sample(1:20, 9)))
+#' y <- c(sort(sample(3:23, 7)))
+#' test = list()
+#' test[[1]] = x
+#' test[[2]] = y
+#' Union(test) = 1  2  4  9 11 14 16 17 19  3  6 10 12 21
+
 Union <- function (x) {  
-  # Multiple set version of union
-  # x is a list
+
   if (length(x) == 1) {
     unlist(x)
   } else if (length(x) == 2) {
@@ -27,9 +55,17 @@ Union <- function (x) {
   }
 }
 
+#' Setdiff is a function that remove the union of the y's from the common x's, x and y are lists of characters.
+#'
+#' @param x list of characters
+#' @param y list of characters
+#'
+#' @return
+#' @export
+#' 
+
 Setdiff <- function (x, y) {
-  # Remove the union of the y's from the common x's. 
-  # x and y are lists of characters.
+  
   xx <- Intersect(x)
   yy <- Union(y)
   setdiff(xx, yy)
@@ -37,15 +73,17 @@ Setdiff <- function (x, y) {
 
 
 
-#' Vennlist is a function which aim is to return a list of signficant genes for a treshold pvalue of 5%
+#' Vennlist is a function which aim is to return a list of signficant genes for a treshold defined by the user
 #'
-#' @param pval a data frame
-#' @param adj a data frame with the contrast selected
-#' @param fc a data frame with the constrast selected
-#' @param regulation a character
+#' @param adj dataframe subset of the alltoptable
+#' @param fc dataframe subset of the alltoptable
+#' @param regulation character for up both or down
+#' @param cutoffpval numeric value
+#' @param cutofffc numeric value
 #'
-#' @return \myl a list
+#' @return list.s
 #' 
+#' @export
 
 Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de foreach parallel
   
@@ -74,10 +112,16 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
 #' Vennfinal is a function which aim is to return an object containing a venn diagram 
 #' 
 #' @param myl a list of genes for the different contrasts
-#' @param adj a data frame 
-#' @param cex a vector giving the size for each area label 
+#' @param adj dataframe subset of the alltoptable
+#' @param cex vector giving the size for each area label (length = 1/3/7/15 based on set-number)
+#' @param cutoffpval numeric value
+#' @param cutofffc numeric value
+#' @param statimet character 
+#' @param meandup character 
+#' @param pval data frame of the alltoptable
 #'
-#' @return \final draw on the current device
+#' @return final draw on the current device of the venn diagram
+#' @export
 #' 
 
 Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = "probes", pval){ 
@@ -154,6 +198,16 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = 
 }
 
 
+
+#' Vennsev is a function that is used for more than 5 intersections
+#'
+#' @param myl a list of genes for the different contrasts
+#' @param adj dataframe subset of the alltoptable
+#'
+#' @return plot device
+#' @export
+#' 
+
 Vennsev <- function(myl, adj){
   
   myl <- myl[sapply(myl, length) > 0]
@@ -170,6 +224,7 @@ Vennsev <- function(myl, adj){
 #' @param adj a data frame
 #'
 #' @return
+#' @export
 #' 
 
 myventocsv <- function(myven, adj){
@@ -182,6 +237,15 @@ myventocsv <- function(myven, adj){
     as.data.frame()
 
 }
+
+#' totalvenn is a function which aim is to return the total element of each interesections for the venn diagram
+#'
+#' @param vennlist a list of genes for the different contrasts
+#' @param adj dataframe subset of the alltoptable
+#'
+#' @return numeric value
+#' @export
+#' 
 
 totalvenn <- function(vennlist,adj){
   
@@ -199,6 +263,13 @@ totalvenn <- function(vennlist,adj){
   return(sum(n.elements))
 }
 
+#' setvglobalvenn is a function which aim is to return lists of each probes for the different set of intersections 
+#'
+#' @param vennlist a list of genes for the different contrasts
+#' @param adj dataframe subset of the alltoptable
+#'
+#' @return list of probes
+#' @export
 
 setvglobalvenn <- function(vennlist,adj){
   
@@ -214,7 +285,14 @@ setvglobalvenn <- function(vennlist,adj){
   return(elements)
 }
 
-
+#' rowtoprob is a function that return the probe names for the corresponding indexes
+#'
+#' @param myven a list of index for the different contrasts
+#' @param pval dataframe of the alltoptable
+#' @param adj dataframe subset of the alltoptable
+#'
+#' @return list
+#' @export
 
 rowtoprob <- function(myven,pval,adj) {
   
@@ -235,7 +313,16 @@ rowtoprob <- function(myven,pval,adj) {
   )
 }
 
-
+#' topngenes is a function to plot the top n genes for a defined intersection between comparison.s
+#'
+#' @param dfinter list of intersection.s
+#' @param mycont character Vector 
+#' @param inputtop numeric value
+#' @param meandup character
+#'
+#' @return ggplot2 barplot
+#' @export
+#'
 
 topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F) {
   
@@ -330,7 +417,4 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F) {
   return( p)
   
 }
-
-
-
 

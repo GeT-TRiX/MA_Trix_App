@@ -3,6 +3,17 @@
 library(dplyr)
 
 
+#' gosearch is a function that return a list of data frame containing the go ids for the different clusters
+#'
+#' @param hm01 data frame object
+#' @param species character
+#' @param ids package use to perform the enrichment
+#' @param clusterlist list
+#'
+#' @return list of data frames
+#' @export
+#'
+
 gosearch <- function(hm01, species, ids, clusterlist) {
   #clusterlist = NULL
   library(goseq)
@@ -44,6 +55,15 @@ gosearch <- function(hm01, species, ids, clusterlist) {
   return(clusterlist)
 }
 
+#' wclust is a function that return a tabular file containing the top n genes for the different clusters, the go ids associated to this cluster, the id's term and the definition of the term
+#'
+#' @param clusterlist list of data frames
+#' @param filename name of the output file 
+#' @param min GO ids that are not represented significally by default = 2 
+#' @param top top go ids to display
+#'
+#' @return txt file
+#' @export
 
 wclust <- function(clusterlist, filename, min, top)  {
   cat("Clustering", file = filename)
@@ -79,7 +99,14 @@ wclust <- function(clusterlist, filename, min, top)  {
   
   close(con)
 }
-
+#' probnamtoentrez is a function that convert Gene symbols to entrez IDS
+#'
+#' @param hm01 data frame 
+#' @param mypack package specific to the genome
+#'
+#' @return lists of entrez IDS
+#' @export
+#'
 
 probnamtoentrez <- function(hm01,  mypack) {
   
@@ -98,6 +125,14 @@ probnamtoentrez <- function(hm01,  mypack) {
   })
 }
 
+#' probnamtoentrezvenn is a function that convert Gene symbols to entrez IDS
+#'
+#' @param venngenes lists of genes
+#' @param mypack package specific to the genome
+#'
+#' @return lists of entrez IDS
+#' @export
+#'
 probnamtoentrezvenn <- function(venngenes, mypack){
   
   entrezids <- venngenes %>%
@@ -110,13 +145,30 @@ probnamtoentrezvenn <- function(venngenes, mypack){
   
 }
 
+#' entreztosymb is a function which aim is to convert entrez IDS to gene symbols
+#'
+#' @param myentz lists of genes
+#' @param mypack package specific to the genome
+#'
+#' @return lists of gene symbols
+#' @export
+#'
 
 entreztosymb <- function(myentz, mypack){
 lapply(1:NROW(myentz), function(x)
   as.vector(unlist(mget(myentz[[x]], envir=mypack, ifnotfound=NA))))
 }
 
-
+#' davidquery is a function which aim is to querrying DWS and performing go term enrichment analysis 
+#'
+#' @param entrezids list of entrez IDS
+#' @param species character name of the species whose genes are enriched
+#' @param mycat category of the enrichment analysis: MF, CC, BP or KEGG pathway
+#'
+#' @return list of data frames for each cluster containing 
+#' @export
+#'
+  
 davidquery <- function(entrezids, species, mycat) {
   test = lapply(1:NROW(entrezids), function(x) {
     david <- DAVIDWebService$new(email = "franck.soubes@inra.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
@@ -144,6 +196,15 @@ davidquery <- function(entrezids, species, mycat) {
   })
 }
 
+
+#' davidqueryvenn is a function which aim is to querrying DWS and performing Functional Annotation Clustering
+#'
+#' @param entrezids list of entrez IDS
+#' @param species character name of the species whose genes are enriched
+#'
+#' @return david object
+#' @export
+#'
 
 davidqueryvenn <- function(entrezids, species){
   
@@ -178,10 +239,5 @@ davidqueryvenn <- function(entrezids, species){
 # The p-values associated with each annotation terms inside each clusters are exactly the same meaning/values as p-values (Fisher Exact/EASE Score) shown in the regular chart report for the same terms.
 # The Group Enrichment Score new! , the geometric mean (in -log scale) of member's p-values in a corresponding annotation cluster, is used to rank their biological significance. 
 # Thus, the top ranked annotation groups most likely have consistent lower p-values for their annotation members.
-
-
-
-
-
 
 
