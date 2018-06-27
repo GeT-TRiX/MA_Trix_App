@@ -146,6 +146,7 @@ body <- dashboardBody(
             width = 3,
             box(id="boxpass",title = strong("Upload data", style="font-size:25px;"), width = NULL, background = "light-blue",
                 inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
+                
               #shinydashboard::box(
               # sidebarPanel(
               #   id = "sideloadpan",

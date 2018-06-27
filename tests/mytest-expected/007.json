@@ -1,9 +1,9 @@
 {
   "input": {
-    "allCont": 0,
+    "allCont": 1,
     "allIndividus": 0,
     "allIndividuspca": 0,
-    "allTests": 0,
+    "allTests": 1,
     "catinfo": [
       "GOTERM_BP_ALL",
       "GOTERM_MF_ALL",
@@ -15,11 +15,18 @@
     "col1": "green",
     "col3": "red",
     "colname": "show",
-    "colpca_1": "#1B9E77",
+    "colpca_1": "#7570B3",
     "colpca_2": "#D95F02",
     "colpca_3": "#7570B3",
     "colpca_4": "#E7298A",
     "colsize": 0.9,
+    "cont": [
+      "LWT_MCD-LWT_CTRL",
+      "LKO_MCD-LKO_CTRL",
+      "LKO_CTRL-LWT_CTRL",
+      "(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)"
+    ],
+    "cutgo": "1",
     "cutinfo": "Boxplot",
     "data_summary_cell_clicked": {
 
@@ -41,12 +48,13 @@
     "data_summary_rows_selected": null,
     "data_summary_search": "",
     "data_summary_state": null,
+    "DAVID": 0,
     "dim1": "1",
     "dim2": "2",
-    "dispvenn": "probes",
+    "dispvenn": "genes",
     "dist": "correlation",
     "ellipse": false,
-    "fc": 1,
+    "fc": 2,
     "fcvenn": 1,
     "file": {
       "name": [
@@ -77,12 +85,19 @@
     "formvenbar": "png",
     "GO": 0,
     "GOvenn": 0,
-    "indivpca": [
+    "heatm": 0,
+    "indiv": [
       "LKO_CTRL",
       "LKO_MCD ",
       "LWT_CTRL",
       "LWT_MCD "
     ],
+    "indivpca": [
+      "LKO_CTRL",
+      "LKO_MCD ",
+      "LWT_CTRL"
+    ],
+    "intscol": "LWT_MCD-LWT_CTRL",
     "jitter": false,
     "label": true,
     "labelsiize": 4,
@@ -30316,7 +30331,7 @@
     "noIndividuspca": 0,
     "noTests": 0,
     "pointsiize": 2,
-    "pval": 0.05,
+    "pval": 0.04,
     "pval1": 0.01,
     "pvalvenn": 0.05,
     "reactheat": false,
@@ -30326,12 +30341,19 @@
     "rowsize": 0.9,
     "scalcol": false,
     "session": 0,
-    "side": "PCA",
+    "side": "Heatmap",
     "sidebarCollapsed": false,
     "sidebarItemExpanded": null,
     "Species": "Mus musculus",
     "Speciesvenn": "Mus musculus",
     "tabset25": "hmpan",
+    "test": [
+      "LWT_MCD-LWT_CTRL",
+      "LKO_MCD-LKO_CTRL",
+      "LKO_MCD-LWT_MCD",
+      "LKO_CTRL-LWT_CTRL",
+      "(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)"
+    ],
     "toggleAdvanced": 0,
     "toggleAdvancedcolors": 0,
     "topdegenes": 0,
@@ -30340,6 +30362,50 @@
   "output": {
     "bool": true,
     "boolmark": false,
+    "button": {
+      "html": "<button id=\"heatm\" type=\"button\" class=\"btn btn-default action-button\" style=\"color: #fff; background-color: #b77033; border-color: #b77033\">\n  <i class=\"fa fa-repeat\"><\/i>\n  Update Heatmap\n<\/button>",
+      "deps": [
+        {
+          "name": "font-awesome",
+          "version": "4.7.0",
+          "src": {
+            "href": "shared/font-awesome"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "css/font-awesome.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "contout": {
+      "html": "<div id=\"cont\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <label class=\"control-label\" for=\"cont\">Choose your comparison<\/label>\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"LWT_MCD-LWT_CTRL\"/>\n        <span>LWT_MCD-LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"LKO_MCD-LKO_CTRL\"/>\n        <span>LKO_MCD-LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"LKO_CTRL-LWT_CTRL\"/>\n        <span>LKO_CTRL-LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)\"/>\n        <span>(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+
+      ]
+    },
+    "cutgo": {
+      "html": "<div class=\"form-group shiny-input-container\">\n  <label class=\"control-label\" for=\"cutgo\">Choose your cluster<\/label>\n  <div>\n    <select id=\"cutgo\"><option value=\"1\" selected>1<\/option>\n<option value=\"2\">2<\/option>\n<option value=\"3\">3<\/option><\/select>\n    <script type=\"application/json\" data-for=\"cutgo\" data-nonempty=\"\">{}<\/script>\n  <\/div>\n<\/div>",
+      "deps": [
+        {
+          "name": "selectize",
+          "version": "0.11.2",
+          "src": {
+            "href": "shared/selectize"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "css/selectize.bootstrap3.css",
+          "head": "<!--[if lt IE 9]>\n<script src=\"shared/selectize/js/es5-shim.min.js\"><\/script>\n<![endif]-->\n<script src=\"shared/selectize/js/selectize.min.js\"><\/script>",
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
     "data_summary": {
       "x": {
         "filter": "none",
@@ -30434,8 +30500,42 @@
         }
       ]
     },
+    "DAVID": {
+      "html": "<button id=\"DAVID\" type=\"button\" class=\"btn btn-default action-button\" style=\"color: #fff; background-color: #337ab7; border-color: #2e6da4\" onclick=\"window.open( &#39;http://david.abcc.ncifcrf.gov/api.jsp?type=OFFICIAL_GENE_SYMBOL&amp;ids=Ahcy,Cdk5rap1,Rprd1b,NAP092468-001,Inmt,Ces2c,Ces2b,Pbx1,Mnda,Pydc3,Gm4955,Cux2,Usp2,Gm129,A930033H14Rik,Vldlr,Id1,Smad7,Hamp,Pik3c2g,4931408D14Rik,Dbp,Bhlhe40,Fam134b,Upp2,A_55_P2174524,Cyp2c39,Cyp2c38,Fes,Defa-rs10,Defa-rs7,Defa-rs4,Defa-rs12,Gm15308,Defa3,Defa-rs2,Stap1,Agpat9,Adora1,Cdt1,Dixdc1,Zfp608,Eepd1,Unc93a,Gm2085,Grpel2,Mfsd7c,Enc1,Cables1,Gm10804,Cyp3a59,Wipf3,4831426I19Rik,Eps8,Wee1,Kbtbd11,Cdkn1c,9030411M13Rik,D630004K10Rik,Gpr98,Camk2d,Gypc,Osbpl7,Gstm1,Gsta2,Gm10639,Odz4,A_55_P1963134,Usp18,Cyp2a4,A_55_P1997585,6330412A17Rik,TC1728321,2310081J21Rik,Tnfrsf19,Aqp4,Hamp2,Sult1c2,Krt23,Setd4,Prlr,Tbcel,Cyp1a1,Fnip2,Cyp2g1,Acot3,Aldh3a2,Cyp4a14,Cyp2b10,Acot4,Acot2,Nipal1,Ccnd1,Pdk4,Alpl,Mgst3,A_55_P2093770,Ddah1,Serpina6,Abcc3,Nr1i3,Ptp4a3,Fmo1,Igfbp2,Vnn3,Oat,Cyr61,Cyp3a11,Cyp3a41b,A_55_P2148071,Cyp3a16,Cyp4a10,Cyp4a31,Gstt2,Rdh16,Hsd17b6,Rgs16,Htra2,A730009E18Rik,Rab30,Sgk2,Tmprss4,Gja4,Inhbb,Akap12,Eml1,Thbd,Csprs,Id4,Vmn2r3,B230114P17Rik,Akr1c19,Vil1,Unc5a,BC029722,Postn,Abi3bp,Ano1,Lrat,Gucy1a3,Ccdc68,Nkd1,Rspo3,Fabp2,Lrrn3,Sdpr,Mylip,Klf2,Hand2,Spry1,Ihh,Fam13a,Zfp385b,Rtp4,Ifi44,Oas1a,Oas1f,Apol9a,Apol9b,Lgals3bp,Irf7,Egr1,Cmpk2,I830012O16Rik,Ifit3,Rsad2,Ifit1,Oasl1,Gm9706,Xaf1,Isg15,Sgcb,H2-M3,Samd9l,Trim30a,Mx1,Kcnj10,Ifi202b,Pcp4l1,Ifi203,AI607873,Ifi204,Gdap10,Cplx2,Ly6a,Fbln5,Plagl1,Slc50a1,Ms4a4d,Rtn1,Sh3tc1,Lrmp,Ccdc102a,Chst15,Plvap,Tgfbi,Ifitm1,Slc16a9,Ednrb,Ntn1,Gdf2,Ednra,Gm13889,Gem,Hpse,Lamb1,Dcn,Pam,Myo9a,Tnfaip8,Clec4b1,Snn,Vcam1,Gm16340,Tlr7,Sla,4632428N05Rik,Clec1b,Serpinb6c,Serpinb6a,Cttnbp2nl,Bmp2k,Il10rb,5830408B19Rik,Tnfrsf11b,Marcks,P2ry14,Naip6,Tmem229b,A430084P05Rik,Sp110,Clec10a,Pilra,Slc38a1,Evi2a,Cerk,Rgs10,Lpxn,Cotl1,Tmsb4x,Rab8b,Myo1g,Myo1f,Mical1,Adcy7,St8sia4,Rab19,Acss1,Mbp,Endod1,Ebi3,Arhgap15,Gimap3,Cxcr3,Ms4a4b,Hcst,Kif21b,AI790276,Akr1b10,Ptpn22,Wipf1,Itpr3,Trpv2,Rassf2,Coro1a,Gbp3,Btbd11,Abcg1,Cd86,Spic,Tmem86a,Hmga1,Tbc1d1,Vsig4,Clec4f,Pira2,Fabp7,Emr1,Csf1r,Cd97,Slc40a1,Emr4,Aoah,Frmd4a,Fli1,Cyfip2,Tspan13,Zeb2,Slc25a24,Kctd12,Skap1,Ltb,Rasgrp1,Nrp2,Cxcl16,Srgn,Plekho1,Akr1b8,Pla2g4a,Tor3a,ENSMUST00000103743,Gbp4,Gm10134,Itgb7,Cd300ld,Ifitm6,Plac8,B430306N03Rik,Sell,C130026I21Rik,Dock11,Gm11428,Emilin2,Tlr13,Hck,Lilrb3,Coro2a,Rgs19,Marcksl1,A_55_P2074381,Col5a1,Ubash3b,Cmtm3,Gm14548,Lilra6,Pira7,Gm10693,Pira11,Fyb,Dock10,Ptpn18,Arhgap9,Pdlim4,Msn,Vav1,P2ry6,March1,Clec4a1,Gngt2,Ctss,Gpr65,Ly86,Nckap1l,AF251705,Prkcb,Igsf6,Pla2g7,Casp1,Ptpro,Lyz1,Cd68,Lpl,Phlda3,Lgmn,Ms4a6c,ENSMUST00000096862,Eif4e3,Metrnl,Stx3,Arhgap25,Arhgdib,Ccl6,Fut7,Cd48,Apbb1ip,Dok2,Cytip,Clec7a,Pmaip1,Plek,Samsn1,Csf2ra,Lgals3,Ncf2,Ms4a6d,Flna,Abcc1,Lilrb4,Emp3,Gng2,C530028O21Rik,Prex1,Sash3,Sh3bp1,Parp8,Dok1,Il10ra,Rasa4,Axl,Tyrobp,Slc11a1,Fcer1g,Cd84,Tlr1,Ppp1r9b,Selplg,Ptprc,Cmtm7,Ms4a4c,Wdfy4,Slc43a2,Plekha2,Stk10,Syk,Gm20117,Slc15a3,Apobr,Tbxas1,Ckb,Lst1,Btk,Aif1,Plcg2,Nfam1,Gpsm3,Irf8,Rac2,Cyba,Hcls1,Cd52,Was,Alox5ap,A_55_P2112302,NAP111445-1,Sdc3,BC013712,C1qb,C1qc,C1qa,Siglec1,Cd5l,Cfp,A_55_P1963960,Clec4a3,Cd300e,Ccr5,Gm8995,Fcgr4,Ifit2,Oasl2,Trim30d,Fam129a,Pyhin1,Slfn8,A_55_P1957353,Gm4902,Phf11,D14Ertd668e,Oas2,Filip1l,Ifi27l2a,Cib3,Mxra7,Ear12,Ucp2,Ucp3,Gltp,Pld4,Fermt3,Plekho2,Cybb,Hk3,H2-DMa,Cd44,Prkcd,Ly9,Cnn2,Tmsb10,A_55_P2144126,Ifi30,Cd53,Lyz2,Itgb2,Parvg,Sh3bgrl3,Fxyd5,Anxa3,Renbp,Synpo,Slc1a5,Tsc22d4,Arhgdia,5330417C22Rik,Pak1,Slfn2,Ptger4,Xdh,9030625A04Rik,A1bg,Dram1,Tnfrsf18,Map4k1,Il2rg,Hmox1,Icosl,Pdgfb,Ceacam16,AW112010,Sh3pxd2b,Mmp12,Gpnmb,5730416F02Rik,Cd300lb,Mmp13,Fblim1,Glipr1,Gpr137b-ps,Gp49a,B930041F14Rik,Frzb,Ralgds,Ccdc80,Loxl2,Vim,Col6a3,Col6a1,Lrrc32,Col4a1,Dbn1,Olfml3,Rab31,Cd14,Plaur,Tagln2,Thbs1,Pkm2,AK203298,Napsa,NAP113386-1,G6pdx,S100a6,Crip1,Ly6c1,Gstm2,Gstm3,4930415C11Rik,Gstm4,TC1642106,Ripk3,Gbp6,Cd74,H2-DMb1,H2-Aa,H2-Ab1,H2-Eb1,A_55_P2090505,Wdr92,Gm19809,A_55_P2051596,A_55_P1998811,A_55_P2138306,Actg1,A_55_P2034227,NAP111417-1,A_55_P2025829,NAP112112-1,NAP025353-001,Olig1,Cd6,Gzmk,A_55_P2011341,Gzma,Sytl3,Cd5,Cd3g,Ccl5,Gzmb,Nkg7,CD555887,Gm4841,A_55_P1952768,Gbp1,Cxcl13,Lck,Padi2,A430104N18Rik,Gbp5,A130071D04Rik,Il2rb,Itga4,ENSMUST00000103299,ENSMUST00000103291,Thy1,Cd3d,Itk,Cd2,ENSMUST00000073997,Chi3l1,Csf2rb2,Serpina3g,Mefv,Tm7sf4,Fgr,Emb,Nfkbid,Tnf,Gpr84,Slc16a3,Irg1,Clec4e,Slc2a6,Gm12250,Il1b,Fpr2,Cd274,Batf2,Hvcn1,Abcc5,Procr,NAP030094-1,Gbp8,Samhd1,Siglech,D13Ertd608e,Fgd3,Inpp5d,Iqgap1,Evl,Lrrc33,Batf,Clec4n,Bcl2a1c,Traf1,Gpr68,Sema4d,Capg,Cd40,Snx20,Spn,Gpr137b,Panx1,Pitpnm1,Gpr132,Galnt6,S100a4,Mgst2,Ccr2,Laptm5,Sirpa,2900076A13Rik,Pik3cd,Hk2,Adap1,Cyth4,Ncf4,Arl5c,Ccdc88b,Nfkbie,Igtp,Tgtp2,A_55_P2081432,Gbp2,Card11,Lsp1,Flt3,Gbp9,Mcoln2,Ubd,A_55_P1981455,Dapp1,Sp140,Nfe2,H19,2210010C17Rik,Hist1h2ab,Hist1h1b,ENSMUST00000169692,ENSMUST00000081342,Hist1h2ag,ENSMUST00000103410,Igj,XM_003085465,XM_001472091,Il7r,Igh-VJ558,Mcm6,Stbd1,Dhrs7,Fut1,Psat1,Ank3,Rab3d,Serpina7,Rnu3b1,Prelid2,Rnf24,D330045A20Rik,Lepr,Cdkn2c,Ostb,Morc4,Ctps2,Ankrd13b,Cgref1,Tox,Atp6v0d2,Abhd2,Cntnap1,Cidec,Rhbdd2,Lpin2,Myom1,Fads2,Agt,A_55_P1952404,Map3k6,Fkbp5,Tsku,AA986860,Ddit4,AK037423,Mfsd2a,Slc25a27,1810053B23Rik,Slc16a7,1810055G02Rik,9530053J19Rik,Per1,Iqgap3,Cklf,Fgd6,Sult1a1,D130043K22Rik,Rdh9,Tmem184b,Soat2,Maff,Glt1d1,Il22ra1,Tmem51,Klf16,Mknk2,Cx3cr1,Sh2d4a,Rhox5,Aifm2,Nt5c2,Det1,Aldh1b1,Fbxw9,Chpf2,Pkp1,Pdgfra,Hexb,Por,Plin4,App,Pde1a,Gm11686,Pparg,Fmo3,Abcb1a,Cd36,Abcd2,Idh2,A_55_P2034531,A_55_P2071906,Cyp2b9,Slco1a4,TC1646634,Pqlc2,Ctdsp2,Cln6,Gadd45b,Slc22a26,Cyp3a44,Bex2,Slc22a29,Sgms1,Slc16a5,9030601B04Rik,Akr1b7,Slc22a27,Trim24,Cyp2a22,Cyp2b13,Fmo2,Wtap,4930458D05Rik,2310034O05Rik,Apoa5,Htatip2,Fam19a2,A_55_P1989248,Sult2a2,Sult2a1,Sult2a6,Ank2,Gm5640,DXBay18,Sntg1,Cyp2c55,Lyve1,Gbp11,Gadd45g,Plk3,Alas1,Ccrn4l,Snhg12,Rasgef1b,Myc,Sds,Pmm1,Gm6614,Trim46,Gtpbp2,Pvr,Smox,BC051142,Tnfrsf12a,Atic,Ccdc21,Ddit3,Nupr1,Ifrd1,Mapkapk3,Vsig8,Areg,Dnahc2,Slamf8,Efhd2,Serpina3f,Defb1,Arc,C5ar1,Sphk1,Arhgap17,Crebbp,Trp63,A_55_P2077546,Git2,Pif1,Tat,Igfbp1,Ctgf,Trp53inp1,Jun,Sybu,Smoc2,9030619P08Rik,Cyp39a1,Sult1e1,Il1rn,Dhrs13,Kctd17,Prss8,TC1620565,Mat2a,Sik1,Camk2n2,Tmprss2,BC062258,Sprr1a,Mtmr11,Slc3a2,Map4k4,Dusp2,Rgs1,Cyb5r1,Flt3l,2010003K11Rik,Ccdc120,Atf3,Bcl2l11,Gm6484,Osgin1,Hipk2,Parp16,Ncapg2,Neat1,NEAT1,Klhl25,Gpt2,Mthfd1l,Bex1,1700024P16Rik,Nop58,Ptrh1,Acsl4,Syncrip,Serpine1,Ikbip,Arhgap30,Anxa5,2010002N04Rik,Mcm3,Epdr1,Fkbp10,Fstl1,Anxa1,Tgfbr2,Stk17b,Emp1,Tuba1a,Scd2,Nfatc2,Sfxn3,Tpm4,Cd63,Ahnak,Agpat4,Lum,Nid1,Gdf10,Unc5b,Tead1,Itga6,Dkk3,Rftn1,Cd93,Spats2l,Cbr3,Abcc12,Cbr1,A_55_P2068988,Nqo1,Pgd,Abcc4,Krt31,Ptafr,Ska1,Dusp4,Tubb6,Krt8,Wfdc3,Vmn2r5,Tnfrsf10b,Bpifa5,A_55_P1953377,A_55_P1970596,Btc,Pdgfa,Srxn1,Elovl7,Nrg1,Cep192,Cxcl10,ENSMUST00000095071,Sema3b,Tnfaip3,Il33,Gpx7,BC016579,A_55_P1980214,Calml4,Ndel1,Slc20a1,Rnf145,Blnk,Anxa2,Gm6377,Ppp1r3g,Fam49a,Cd83,Gm3776,Naip2,A_55_P2118537,Samd5,Csnk1e,Klf6,Akap2,Nt5e,Gpc1,Ets2,Chpf,Slc7a1,Adamts14,Jdp2,Itprip,Sgk1,Ppap2a,Bcl2l14,Dfna5,Ppfibp1,Wdr67,Ttc19,Ppp4r4,Ctsl,Snx6,Plekha1,Gm2990,Rassf1,Fam84b,Aebp2,Gtdc1,Tceal5,Tceal8,A_55_P1972448,Trdmt1,ENSMUST00000100518,Rbm3,Rhbdf1,Chaf1b,Pspc1,Afp,1700037C18Rik,D430019H16Rik,Rrm2,Fibin,Klf4,Pde6c,Ube4b,Sall1,2410006H16Rik,1500012F01Rik,Gadd45a,Trib3,Frmd4b,Cln8,Mab21l3,Foxm1,AK079655,Baiap2,Pik3r5,Tpx2,Kifc1,Nfkbib,Atp2b2,Adamts1,Eif2ak3,Tubb2a,Pbk,Cdca3,Slc35d1,Ccnb1,Rad51,Ect2,A_55_P1973560,Kif20a,Birc5,Cdkn3,Ccnb2,D2Ertd750e,A_55_P2103706,NAP102625-1,1190002F15Rik,Ckap2,Fignl1,Kif22,Aspm,Cdk1,Diap3,Cdca8,Cpeb1,Stmn1,Gm11223,Anln,Aurka,Tacc3,Cdc20,E130306D19Rik,Ube2c,Prc1,A_55_P2063146,Ccna2,Mki67,Cdca5,Cenpe,Sgol1,Mad2l1,Kif20b,Trim59,Cenpp,Plk1,Cox6a2,Incenp,Myo9b,Pkmyt1,Uhrf1,Rad51ap1,Gfra2,Tmem136,Nusap1,4930427A07Rik,Racgap1,Tmc7,Sparcl1,Shcbp1,Ubc,Bhlha15,Gldn,Fabp12,Srrm4,Rcan2,D9Wsu90e,Ppan,Cyp26a1,Sult3a1,Raet1b,Raet1e,Nrg4,Rbp1,9030425E11Rik,Adh7,Ak7,Muc4,Rad51l1,Pde4d,Adam32,Mogat2,Tuba8,Tmem139,Gdf15,Hexim1,Actc1,Mcm2,Tnfrsf23,Cul7,Mcm5,Chaf1a,Airn,Dntt,Fam169b,Ptplb,Dennd2d,Ehd1,Arhgef2,Tlr12,Marco,Car2,S100g,Adrbk2,Amica1,Osbpl3,Ldhb,A_55_P2086835,Lamb3,Atf5,Fgf21,Mthfr,Zfp618,Rps6kc1,H2-Q1,Syce3,Gm3289,Gpr64,Zcchc11,Ptpdc1,1700007F19Rik,Cyp7a1,Ctse,4932443L11Rik,Etnk2,Cacna1s,A_55_P2092745,LOC100044656,AK167004,Ren2,ENSMUST00000172100,Gm1966,Gvin1,ENSMUST00000098144,F13a1,Rnase4,Arid5a,Retnlg,S100a9,S100a8,Apoa4,AK158451,Myom3,Sorl1,Wt1,Igfbp6,Cxcl9,Timp1,Bst1,Trpm4,Col1a1,Col1a2,Col3a1,Ltbp2,Aebp1,Cyp4f18,A_55_P2038452,Rnf150,Lrrc25,Rhbg,Il18bp,Spink3,Hr,Lgals1,Uap1l1,Haus8,Golm1,Ier3,Rbl1,Csrp1,Rhoc,Dpep2,Ube2v2,Cd300lf,Zbp1,Slamf9,Amz1,Arhgap22,Ccl7,Egr2,Ccl2,Nr4a1,Ms4a7,Hdc,Ccr7,Itpripl2,Cd72,Niacr1,Adam8,Clec4d,Ccl3,Ccl4,Cstb,Itgax,Bcl2a1d,5430435G22Rik,Tnip1,Sirpb1a,Sirpb1b,H2-M2,Ptgir,TC1715571,Trem2,Dusp8,Btg2,Nfkb2,Jund,Fos,Relb,Pfkfb4,Chi3l3,Tlr2,Btg3,Mmgt2,Pawr,Mpeg1,Ly6e,Slpi,S100a11,Gm5068,Ttc39a,Ly6d,Gm10872,Slc6a8,Smpd3,Ifi27l2b,&amp;tool=summary&amp;annot=GOTERM_BP_ALL,GOTERM_CC_ALL,GOTERM_MF_ALL,&#39; , &#39;_blank&#39;)\">Open DAVID<\/button>",
+      "deps": [
+
+      ]
+    },
+    "distPlot": {
+      "src": "[image data sha1: bf4f580a37b4b6a45e1d4f06ed6fe58e722a55e3]",
+      "width": 406,
+      "height": 1200,
+      "coordmap": [
+        {
+          "domain": {
+            "left": -100.24,
+            "right": 2633.24,
+            "bottom": -2.99158525859378,
+            "top": 62.4545419894622
+          },
+          "range": {
+            "left": 72,
+            "right": 390.16,
+            "bottom": 1127,
+            "top": 13.4000000000001
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "mapping": {
+
+          }
+        }
+      ]
+    },
     "eigpca": {
-      "src": "[image data sha1: b5e228e9f4bb3b45315ac761baad0cfb563cf9fe]",
+      "src": "[image data sha1: 9c3b8babfe591dce62effe3e3854a8459dd2c057]",
       "width": 542,
       "height": 700,
       "coordmap": [
@@ -30462,15 +30562,30 @@
         }
       ]
     },
-    "heatmbool": false,
+    "heatmbool": true,
+    "indivcol": "LKO_CTRL, LKO_MCD , LWT_CTRL, LWT_MCD ,",
+    "individusel": {
+      "html": "<div id=\"indiv\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <label class=\"control-label\" for=\"indiv\">Choose your group to visualize<\/label>\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indiv\" value=\"LKO_CTRL\" checked=\"checked\"/>\n        <span>LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indiv\" value=\"LKO_MCD \" checked=\"checked\"/>\n        <span>LKO_MCD <\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indiv\" value=\"LWT_CTRL\" checked=\"checked\"/>\n        <span>LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indiv\" value=\"LWT_MCD \" checked=\"checked\"/>\n        <span>LWT_MCD <\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+
+      ]
+    },
     "individuselpca": {
       "html": "<div id=\"indivpca\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LKO_CTRL\" checked=\"checked\"/>\n        <span>LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LKO_MCD \" checked=\"checked\"/>\n        <span>LKO_MCD <\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LWT_CTRL\" checked=\"checked\"/>\n        <span>LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LWT_MCD \" checked=\"checked\"/>\n        <span>LWT_MCD <\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
       "deps": [
 
       ]
     },
+    "myCLUST": "3",
+    "myCOL": "0.9",
+    "myFC": "2",
+    "myLEG": "0.8",
+    "myMAT": "correlation",
+    "myMET": "FDR",
+    "myNUM": "2532",
+    "myPAL": "#1B9E77 #D95F02 #7570B3 #E7298A",
     "myPanelpca": {
-      "html": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_1\">LKO_CTRL<\/label>\n      <input id=\"colpca_1\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#1B9E77\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_2\">LKO_MCD <\/label>\n      <input id=\"colpca_2\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#D95F02\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>\n<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_3\">LWT_CTRL<\/label>\n      <input id=\"colpca_3\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#7570B3\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_4\">LWT_MCD <\/label>\n      <input id=\"colpca_4\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#E7298A\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>",
+      "html": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_1\">LKO_CTRL<\/label>\n      <input id=\"colpca_1\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#1B9E77\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_2\">LKO_MCD <\/label>\n      <input id=\"colpca_2\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#D95F02\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>\n<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_3\">LWT_CTRL<\/label>\n      <input id=\"colpca_3\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#7570B3\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>",
       "deps": [
         {
           "name": "colourpicker-binding",
@@ -30499,6 +30614,55 @@
           "attachment": null,
           "package": null,
           "all_files": true
+        }
+      ]
+    },
+    "myPVAL": "0.04",
+    "myROW": "0.9",
+    "myselvenn": {
+      "html": "<div class=\"form-group shiny-input-container\">\n  <label class=\"control-label\" for=\"intscol\">Specify your interaction(s):<\/label>\n  <div>\n    <select id=\"intscol\" multiple=\"multiple\"><option value=\"LWT_MCD-LWT_CTRL\">LWT_MCD-LWT_CTRL<\/option>\n<option value=\"LKO_MCD-LKO_CTRL\">LKO_MCD-LKO_CTRL<\/option>\n<option value=\"LKO_CTRL-LWT_CTRL\">LKO_CTRL-LWT_CTRL<\/option>\n<option value=\"(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)\">(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/option><\/select>\n    <script type=\"application/json\" data-for=\"intscol\">{}<\/script>\n  <\/div>\n<\/div>",
+      "deps": [
+        {
+          "name": "selectize",
+          "version": "0.11.2",
+          "src": {
+            "href": "shared/selectize"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "css/selectize.bootstrap3.css",
+          "head": "<!--[if lt IE 9]>\n<script src=\"shared/selectize/js/es5-shim.min.js\"><\/script>\n<![endif]-->\n<script src=\"shared/selectize/js/selectize.min.js\"><\/script>",
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "myVenn": {
+      "src": "[image data sha1: 4a9229b1898cc4a60bf953cd04056dc01e3d211d]",
+      "width": 542,
+      "height": 800,
+      "coordmap": [
+        {
+          "domain": {
+            "left": -0.04,
+            "right": 1.04,
+            "bottom": -0.04,
+            "top": 1.04
+          },
+          "range": {
+            "left": 0,
+            "right": 542,
+            "bottom": 799,
+            "top": -1
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "mapping": {
+
+          }
         }
       ]
     },
@@ -30668,7 +30832,15 @@
           "all_files": true
         }
       ]
-    }
+    },
+    "testout": {
+      "html": "<div id=\"test\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <label class=\"control-label\" for=\"test\">Choose your comparison<\/label>\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"test\" value=\"LWT_MCD-LWT_CTRL\"/>\n        <span>LWT_MCD-LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"test\" value=\"LKO_MCD-LKO_CTRL\"/>\n        <span>LKO_MCD-LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"test\" value=\"LKO_MCD-LWT_MCD\"/>\n        <span>LKO_MCD-LWT_MCD<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"test\" value=\"LKO_CTRL-LWT_CTRL\"/>\n        <span>LKO_CTRL-LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"test\" value=\"(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)\"/>\n        <span>(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+
+      ]
+    },
+    "testtt": "LWT_MCD-LWT_CTRL, LKO_MCD-LKO_CTRL, LKO_MCD-LWT_MCD, LKO_CTRL-LWT_CTRL, (LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL),",
+    "warningsheat": ""
   },
   "export": {
 

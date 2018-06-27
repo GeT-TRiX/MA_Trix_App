@@ -1,6 +1,6 @@
 {
   "input": {
-    "allCont": 0,
+    "allCont": 1,
     "allIndividus": 0,
     "allIndividuspca": 0,
     "allTests": 0,
@@ -15,11 +15,17 @@
     "col1": "green",
     "col3": "red",
     "colname": "show",
-    "colpca_1": "#1B9E77",
+    "colpca_1": "#7570B3",
     "colpca_2": "#D95F02",
     "colpca_3": "#7570B3",
     "colpca_4": "#E7298A",
     "colsize": 0.9,
+    "cont": [
+      "LWT_MCD-LWT_CTRL",
+      "LKO_MCD-LKO_CTRL",
+      "LKO_CTRL-LWT_CTRL",
+      "(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)"
+    ],
     "cutinfo": "Boxplot",
     "data_summary_cell_clicked": {
 
@@ -43,7 +49,7 @@
     "data_summary_state": null,
     "dim1": "1",
     "dim2": "2",
-    "dispvenn": "probes",
+    "dispvenn": "genes",
     "dist": "correlation",
     "ellipse": false,
     "fc": 1,
@@ -80,9 +86,9 @@
     "indivpca": [
       "LKO_CTRL",
       "LKO_MCD ",
-      "LWT_CTRL",
-      "LWT_MCD "
+      "LWT_CTRL"
     ],
+    "intscol": "LWT_MCD-LWT_CTRL",
     "jitter": false,
     "label": true,
     "labelsiize": 4,
@@ -30326,7 +30332,7 @@
     "rowsize": 0.9,
     "scalcol": false,
     "session": 0,
-    "side": "PCA",
+    "side": "Venn",
     "sidebarCollapsed": false,
     "sidebarItemExpanded": null,
     "Species": "Mus musculus",
@@ -30340,6 +30346,12 @@
   "output": {
     "bool": true,
     "boolmark": false,
+    "contout": {
+      "html": "<div id=\"cont\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <label class=\"control-label\" for=\"cont\">Choose your comparison<\/label>\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"LWT_MCD-LWT_CTRL\"/>\n        <span>LWT_MCD-LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"LKO_MCD-LKO_CTRL\"/>\n        <span>LKO_MCD-LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"LKO_CTRL-LWT_CTRL\"/>\n        <span>LKO_CTRL-LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"cont\" value=\"(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)\"/>\n        <span>(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+
+      ]
+    },
     "data_summary": {
       "x": {
         "filter": "none",
@@ -30435,7 +30447,7 @@
       ]
     },
     "eigpca": {
-      "src": "[image data sha1: b5e228e9f4bb3b45315ac761baad0cfb563cf9fe]",
+      "src": "[image data sha1: 9c3b8babfe591dce62effe3e3854a8459dd2c057]",
       "width": 542,
       "height": 700,
       "coordmap": [
@@ -30470,7 +30482,7 @@
       ]
     },
     "myPanelpca": {
-      "html": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_1\">LKO_CTRL<\/label>\n      <input id=\"colpca_1\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#1B9E77\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_2\">LKO_MCD <\/label>\n      <input id=\"colpca_2\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#D95F02\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>\n<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_3\">LWT_CTRL<\/label>\n      <input id=\"colpca_3\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#7570B3\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_4\">LWT_MCD <\/label>\n      <input id=\"colpca_4\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#E7298A\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>",
+      "html": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_1\">LKO_CTRL<\/label>\n      <input id=\"colpca_1\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#1B9E77\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_2\">LKO_MCD <\/label>\n      <input id=\"colpca_2\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#D95F02\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>\n<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_3\">LWT_CTRL<\/label>\n      <input id=\"colpca_3\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#7570B3\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>",
       "deps": [
         {
           "name": "colourpicker-binding",
@@ -30499,6 +30511,53 @@
           "attachment": null,
           "package": null,
           "all_files": true
+        }
+      ]
+    },
+    "myselvenn": {
+      "html": "<div class=\"form-group shiny-input-container\">\n  <label class=\"control-label\" for=\"intscol\">Specify your interaction(s):<\/label>\n  <div>\n    <select id=\"intscol\" multiple=\"multiple\"><option value=\"LWT_MCD-LWT_CTRL\">LWT_MCD-LWT_CTRL<\/option>\n<option value=\"LKO_MCD-LKO_CTRL\">LKO_MCD-LKO_CTRL<\/option>\n<option value=\"LKO_CTRL-LWT_CTRL\">LKO_CTRL-LWT_CTRL<\/option>\n<option value=\"(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)\">(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/option><\/select>\n    <script type=\"application/json\" data-for=\"intscol\">{}<\/script>\n  <\/div>\n<\/div>",
+      "deps": [
+        {
+          "name": "selectize",
+          "version": "0.11.2",
+          "src": {
+            "href": "shared/selectize"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "css/selectize.bootstrap3.css",
+          "head": "<!--[if lt IE 9]>\n<script src=\"shared/selectize/js/es5-shim.min.js\"><\/script>\n<![endif]-->\n<script src=\"shared/selectize/js/selectize.min.js\"><\/script>",
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "myVenn": {
+      "src": "[image data sha1: 4a9229b1898cc4a60bf953cd04056dc01e3d211d]",
+      "width": 542,
+      "height": 800,
+      "coordmap": [
+        {
+          "domain": {
+            "left": -0.04,
+            "right": 1.04,
+            "bottom": -0.04,
+            "top": 1.04
+          },
+          "range": {
+            "left": 0,
+            "right": 542,
+            "bottom": 799,
+            "top": -1
+          },
+          "log": {
+            "x": null,
+            "y": null
+          },
+          "mapping": {
+
+          }
         }
       ]
     },
