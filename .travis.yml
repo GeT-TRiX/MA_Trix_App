@@ -4,10 +4,6 @@ sudo: false
 r: 3.5.0
 r: bioc-release
 use_bioc: true 
-addons:
-  apt:
-    packages:
-      - libv8-3.14-dev
 r: 
   - bioc-release
   - bioc-devel
@@ -29,6 +25,11 @@ bioc_packages:
   - Rgraphviz
   - org.Mm.eg.db
   - RDAVIDWebService
+  
+addons:
+  apt:
+    packages:
+      - libv8-3.14-dev
 
 # Install packrat if needed and have it restore packages.
 install:
