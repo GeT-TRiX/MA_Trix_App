@@ -1,24 +1,7 @@
 PackratFormat: 1.4
 PackratVersion: 0.4.9.3
 RVersion: 3.5.0
-Repos: BioCsoft=http://bioconductor.org/packages/3.0/bioc,
-    BioCann=http://bioconductor.org/packages/3.0/data/annotation,
-    BioCexp=http://bioconductor.org/packages/3.0/data/experiment,
-    BioCextra=http://bioconductor.org/packages/3.0/extra,
-    CRAN=https://cran.rstudio.com
-
-Package: AnnotationDbi
-Source: Bioconductor
-Version: 1.42.1
-Hash: 2ba97e9787bfba64e9dc271d4d3736a5
-Requires: Biobase, BiocGenerics, DBI, IRanges, RSQLite, S4Vectors
-
-Package: AnnotationForge
-Source: Bioconductor
-Version: 1.22.0
-Hash: 78148d7da46997a19bc3040327e05236
-Requires: AnnotationDbi, Biobase, BiocGenerics, DBI, RCurl, RSQLite,
-    S4Vectors, XML
+Repos: CRAN=https://cran.rstudio.com
 
 Package: BH
 Source: CRAN
@@ -60,12 +43,6 @@ Hash: cc5979743125dccc274f1920eb9c8197
 Requires: Formula, acepack, base64enc, data.table, ggplot2, gridExtra,
     gtable, htmlTable, htmltools, lattice, latticeExtra, survival,
     viridis
-
-Package: IRanges
-Source: Bioconductor
-Version: 2.14.10
-Hash: 040cba2c417dde662519453a9b4bc536
-Requires: BiocGenerics, S4Vectors
 
 Package: Matrix
 Source: CRAN
@@ -443,12 +420,6 @@ Source: CRAN
 Version: 3.0.1
 Hash: b7abe122479c203aa236499b7fc4b816
 Requires: caTools, gdata, gtools
-
-Package: graph
-Source: Bioconductor
-Version: 1.58.0
-Hash: 456415caca682d5c16cf5be5b76dee46
-Requires: BiocGenerics
 
 Package: gridExtra
 Source: CRAN
