@@ -18,6 +18,28 @@ install:
   - R -e "packrat::packify(); packrat::restore()"
   # - R -e "0" --args --bootstrap-packrat
 
+r: 
+  - bioc-release
+  - bioc-devel
+  
+bioc_packages:
+  - BiocGenerics
+  - Biobase
+  - IRanges 
+  - S4Vectors
+  - AnnotationDbi
+  - annotate
+  - GSEABase
+  - genefilter
+  - graph
+  - RBGL
+  - AnnotationForge
+  - Category
+  - GO.db
+  - Rgraphviz
+  - org.Mm.eg.db
+  - RDAVIDWebService
+
 cache:
   # Main R library
   packages: true
