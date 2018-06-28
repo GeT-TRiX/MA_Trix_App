@@ -4,6 +4,7 @@ sudo: false
 r: 3.5.0
 r: bioc-release
 use_bioc: true 
+deb: libv8-3.14-dev
 
 # Install packrat if needed and have it restore packages.
 install:
