@@ -54,6 +54,5 @@ packrat/lib*/
 
 # shiny test ignore packrat
 
-packrat/init.R
 packrat/src
 packrat/packrat.opts
