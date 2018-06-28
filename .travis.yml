@@ -8,6 +8,7 @@ r: 3.5.0
 install:
   - R -e 'if (system.file(package="packrat") == "") install.packages("packrat")'
   - R -e 'if (system.file(package="BiocInstaller") == "") install.packages("BiocInstaller")'
+  - R -e  "source("https://bioconductor.org/biocLite.R");biocLite("BiocInstaller");"
   - R -e "options(repos = c(getOption('repos'), BiocInstaller:::biocinstallRepos()));
           packrat::packify(); packrat::restore()"
 
