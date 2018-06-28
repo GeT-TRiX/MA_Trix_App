@@ -41,7 +41,7 @@ install:
   #- R -e  "source('https://bioconductor.org/biocLite.R');biocLite('BiocGenerics');"
   #- R -e "options(repos = c(getOption('repos'), BiocInstaller::biocinstallRepos()));"
   #- R -e  "source('https://bioconductor.org/biocLite.R');biocLite(c('BiocGenerics', 'Biobase' ,'IRanges' ,'S4Vectors', 'AnnotationDbiannotate' ,'GSEABase', 'genefilter' ,'graph', 'RBGL', 'AnnotationForge',' Category' ,'GO.db','Rgraphviz','org.Mm.eg.db',' RDAVIDWebService' ));"
-  - R -e "packrat::packify(); source('https://bioconductor.org/biocLite.R');biocLite(c('BiocGenerics', 'Biobase' ,'IRanges' ,'S4Vectors', 'AnnotationDbiannotate' ,'GSEABase', 'genefilter' ,'graph', 'RBGL', 'AnnotationForge',' Category' ,'GO.db','Rgraphviz','org.Mm.eg.db',' RDAVIDWebService' )); packrat::restore()"
+  - R -e "packrat::packify(); packrat::restore()"
   #- R -e  "source('https://bioconductor.org/biocLite.R');biocLite(c('BiocGenerics', 'Biobase' ,'IRanges' ,'S4Vectors', 'AnnotationDbiannotate' ,'GSEABase', 'genefilter' ,'graph', 'RBGL', 'AnnotationForge',' Category' ,'GO.db','Rgraphviz','org.Mm.eg.db',' RDAVIDWebService' ));"
   # - R -e "0" --args --bootstrap-packrat
 
