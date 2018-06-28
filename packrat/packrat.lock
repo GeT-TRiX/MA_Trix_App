@@ -1,7 +1,11 @@
 PackratFormat: 1.4
 PackratVersion: 0.4.9.3
 RVersion: 3.5.0
-Repos: CRAN=https://cloud.r-project.org
+Repos: BioCsoft=http://bioconductor.org/packages/3.0/bioc,
+    BioCann=http://bioconductor.org/packages/3.0/data/annotation,
+    BioCexp=http://bioconductor.org/packages/3.0/data/experiment,
+    BioCextra=http://bioconductor.org/packages/3.0/extra,
+    CRAN=https://cran.rstudio.com
 
 Package: AnnotationDbi
 Source: Bioconductor
