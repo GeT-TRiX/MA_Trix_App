@@ -10,7 +10,7 @@ install:
   - R -e 'if (system.file(package="packrat") == "") install.packages("packrat")'
   - R -e 'if (system.file(package="BiocInstaller") == "") install.packages("BiocInstaller")'
   - R -e  "source('https://bioconductor.org/biocLite.R');biocLite('BiocInstaller');"
-  - R -e "options(library(BiocInstaller),repos = c(getOption('repos'), biocinstallRepos()));packrat::packify(); packrat::restore()"
+  - R -e "library(BiocInstaller);options(repos = c(getOption('repos'), biocinstallRepos()));packrat::packify(); packrat::restore()"
   # - R -e "0" --args --bootstrap-packrat
 
 cache:
