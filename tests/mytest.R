@@ -13,7 +13,7 @@ app$setInputs(method = "None")
 # Input 'data_summary_rows_current' was set, but doesn't have an input binding.
 # Input 'data_summary_rows_all' was set, but doesn't have an input binding.
 app$setInputs(pval1 = 0.01)
-# Input 'data_summary_rows_current' was set, but doesn't have an input binding.
+# Input 'data_summary_rows_current' was set, but doesn't have an input binding.#
 # Input 'data_summary_rows_all' was set, but doesn't have an input binding.
 app$snapshot()
 app$setInputs(side = "PCA")
