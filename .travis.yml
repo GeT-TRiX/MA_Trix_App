@@ -3,7 +3,7 @@ language: r
 sudo: false
 r: 3.5.0
 #r: bioc-release
-#use_bioc: true .
+#use_bioc: true 
 
 # Install packrat if needed and have it restore packages.
 install:
