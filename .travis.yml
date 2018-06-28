@@ -2,14 +2,12 @@ dist: trusty   # Use Ubuntu 14.04 image (instead of 12.04)
 language: r
 sudo: false
 r: 3.5.0
-#r: bioc-release
-#use_bioc: true 
+r: bioc-release
+use_bioc: true 
 
 # Install packrat if needed and have it restore packages.
 install:
   - R -e 'if (system.file(package="packrat") == "") install.packages("packrat")'
-  r: bioc-release
-  use_bioc: true
   #- R -e 'if (system.file(package="BiocInstaller") == "") install.packages("BiocInstaller")'
   #- R -e  "source('https://bioconductor.org/biocLite.R');biocLite('BiocInstaller');"
   - R -e "options(repos = c(getOption('repos'), biocinstallRepos()));packrat::packify(); packrat::restore()"
