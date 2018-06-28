@@ -34,6 +34,7 @@ addons:
 # Install packrat if needed and have it restore packages.
 install:
   - R -e 'if (system.file(package="packrat") == "") install.packages("packrat")'
+  - Rscript -e 'source(file = "http://bioconductor.org/biocLite.R");tryCatch(useDevel(devel = TRUE), error = function(err){message(err)})'
   #- R -e 'if (system.file(package="BiocInstaller") == "") install.packages("BiocInstaller")'
   #- R -e  "source('https://bioconductor.org/biocLite.R');biocLite('BiocInstaller');"
   #- R -e "options(repos = c(getOption('repos'), BiocInstaller::biocinstallRepos()));"
