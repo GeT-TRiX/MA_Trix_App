@@ -1,9 +1,11 @@
 dist: trusty   # Use Ubuntu 14.04 image (instead of 12.04)
 language: r
-sudo: false
 r: 3.5.0
 r: bioc-release
-use_bioc: true 
+sudo: false
+bioc_required: true
+warnings_are_errors: false
+
 #r: 
 #  - bioc-release
 #  - bioc-devel
@@ -38,8 +40,9 @@ install:
   #- R -e 'if (system.file(package="BiocInstaller") == "") install.packages("BiocInstaller")'
   #- R -e  "source('https://bioconductor.org/biocLite.R');biocLite('BiocGenerics');"
   #- R -e "options(repos = c(getOption('repos'), BiocInstaller::biocinstallRepos()));"
-  - R -e "packrat::packify(); packrat::restore()"
   - R -e  "source('https://bioconductor.org/biocLite.R');biocLite(c('BiocGenerics', 'Biobase' ,'IRanges' ,'S4Vectors', 'AnnotationDbiannotate' ,'GSEABase', 'genefilter' ,'graph', 'RBGL', 'AnnotationForge',' Category' ,'GO.db','Rgraphviz','org.Mm.eg.db',' RDAVIDWebService' ));"
+  - R -e "packrat::packify(); packrat::restore()"
+  #- R -e  "source('https://bioconductor.org/biocLite.R');biocLite(c('BiocGenerics', 'Biobase' ,'IRanges' ,'S4Vectors', 'AnnotationDbiannotate' ,'GSEABase', 'genefilter' ,'graph', 'RBGL', 'AnnotationForge',' Category' ,'GO.db','Rgraphviz','org.Mm.eg.db',' RDAVIDWebService' ));"
   # - R -e "0" --args --bootstrap-packrat
 
 
