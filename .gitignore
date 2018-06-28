@@ -49,3 +49,11 @@ rsconnect/
 #pas de Rplots.pdf
 Rplots.pdf
 .Rproj.user
+packrat/lib*/
+
+
+# shiny test ignore packrat
+
+packrat/init.R
+packrat/src
+packrat/packrat.opts
