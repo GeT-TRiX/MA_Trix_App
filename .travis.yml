@@ -36,7 +36,7 @@ install:
   - R -e 'if (system.file(package="packrat") == "") install.packages("packrat")'
   - Rscript -e 'source(file = "http://bioconductor.org/biocLite.R");tryCatch(useDevel(devel = TRUE), error = function(err){message(err)})'
   #- R -e 'if (system.file(package="BiocInstaller") == "") install.packages("BiocInstaller")'
-  #- R -e  "source('https://bioconductor.org/biocLite.R');biocLite('BiocInstaller');"
+  - R -e  "source('https://bioconductor.org/biocLite.R');biocLite('BiocGenerics');"
   #- R -e "options(repos = c(getOption('repos'), BiocInstaller::biocinstallRepos()));"
   - R -e "packrat::packify(); packrat::restore()"
   # - R -e "0" --args --bootstrap-packrat
