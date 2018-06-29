@@ -7,7 +7,6 @@ bioc_required: true
 warnings_are_errors: false
 
 
-  
 addons:
   apt:
     packages:
@@ -30,8 +29,9 @@ install:
 
  
 cache:
-  directories: $TRAVIS_BUILD_DIR/packrat/
+  
   packages: true
+  directories: $TRAVIS_BUILD_DIR/packrat/
   # PhantomJS
   - travis_phantomjs
 
