@@ -26,15 +26,6 @@ install:
   #- R -e  "source('https://bioconductor.org/biocLite.R');biocLite(c('BiocGenerics', 'Biobase' ,'IRanges' ,'S4Vectors', 'AnnotationDbiannotate' ,'GSEABase', 'genefilter' ,'graph', 'RBGL', 'AnnotationForge',' Category' ,'GO.db','Rgraphviz','org.Mm.eg.db',' RDAVIDWebService' ));"
   # - R -e "0" --args --bootstrap-packrat
 
-
-#cache:
-#  # Main R library
-#  packages: true
-#  directories: 
-#    #Packrat packages
-#    $TRAVIS_BUILD_DIR/packrat/
-#    # PhantomJS
-#    - travis_phantomjs
     
 cache:
   # Main R library
@@ -45,16 +36,6 @@ cache:
     # PhantomJS
     - travis_phantomjs
 
-#cache:
-  # Main R library
-#  $TRAVIS_BUILD_DIR/packrat/
-#  packages: true
-#  directories:
-    #Packrat packages
-    #- packrat/lib
-    # PhantomJS
-    #- travis_phantomjs
-    #$TRAVIS_BUILD_DIR/packrat/
 
 # Install PhantomJS (if not cached)
 before_install:
