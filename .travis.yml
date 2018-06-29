@@ -6,27 +6,7 @@ sudo: false
 bioc_required: true
 warnings_are_errors: false
 
-#r: 
-#  - bioc-release
-#  - bioc-devel
-  
-#bioc_packages:
-#  - BiocGenerics
-#  - Biobase
-#  - IRanges 
-#  - S4Vectors
-#  - AnnotationDbi
-#  - annotate
-#  - GSEABase
-#  - genefilter
-#  - graph
-#  - RBGL
-#  - AnnotationForge
-#  - Category
-#  - GO.db
-#  - Rgraphviz
-#  - org.Mm.eg.db
-#  - RDAVIDWebService
+
   
 addons:
   apt:
@@ -52,6 +32,8 @@ install:
 cache:
   directories: $TRAVIS_BUILD_DIR/packrat/
   packages: true
+  # PhantomJS
+  - travis_phantomjs
 
 #cache:
   # Main R library
