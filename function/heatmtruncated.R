@@ -53,7 +53,7 @@ disteucl<-function(x) {dist(x,method="euclidian")}
 hclustfun=function(d) {hclust(d,method="ward.D2")} 
 
 #require("Biobase")  
-require("marray") 
+#require("marray") 
 
 
 #' num2cols is a function that gives a character vector of color names for a given numeric vector
