@@ -27,12 +27,21 @@ install:
   # - R -e "0" --args --bootstrap-packrat
 
 
+#cache:
+#  # Main R library
+#  packages: true
+#  directories: 
+#    #Packrat packages
+#    $TRAVIS_BUILD_DIR/packrat/
+#    # PhantomJS
+#    - travis_phantomjs
+    
 cache:
   # Main R library
   packages: true
-  directories: 
-    #Packrat packages
-    $TRAVIS_BUILD_DIR/packrat/
+  directories:
+    # Packrat packages
+    - packrat/lib
     # PhantomJS
     - travis_phantomjs
 
