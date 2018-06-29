@@ -31,7 +31,7 @@ cache:
   packages: true
   directories: $TRAVIS_BUILD_DIR/packrat/
   # PhantomJS
-  - travis_phantomjs
+  #- travis_phantomjs
 
 #cache:
   # Main R library
