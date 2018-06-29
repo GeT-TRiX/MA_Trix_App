@@ -53,7 +53,7 @@ packrat/lib*/
 
 
 #shiny test ignore and expect packrat
-
+packrat/src/*
 !packrat/src/BiocGenerics
 !packrat/src/Biobase
 !packrat/src/IRanges 
@@ -70,4 +70,4 @@ packrat/lib*/
 !packrat/src/Rgraphviz
 !packrat/src/org.Mm.eg.db
 !packrat/src/RDAVIDWebService
-packrat/src
+
