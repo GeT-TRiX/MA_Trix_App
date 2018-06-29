@@ -5,7 +5,7 @@
 list.of.packages <- c('shiny',"shinythemes","shinyjs","ggplot2","shinyBS","markdown"
                       ,"BH","data.table","DT","readr","colourpicker","shinydashboard","shinytoastr",
                       "tools","FactoMineR","factoextra","gplots","V8","RColorBrewer","foreach","doParallel",
-                      "VennDiagram","gridExtra","AnnotationDbi","dplyr")
+                      "VennDiagram","gridExtra","dplyr")
 
 
 # list.of.packages <- c('shiny","shinythemes","shinyjs","ggplot2","shinyBS","markdown"
