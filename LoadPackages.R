@@ -5,7 +5,7 @@
 list.of.packages <- c("shiny","shinythemes","shinyjs","ggplot2","shinyBS","markdown"
                       ,"BH","data.table","DT","readr","colourpicker","shinydashboard","shinytoastr",
                       "tools","devEMF","R.devices","FactoMineR","factoextra","gplots","V8",
-                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly","dplyr","reticulate","Hmisc")
+                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly","dplyr","reticulate","Hmisc", "AnnotationDbi")
 
 #"goseq","GO.db","rbenchmark","heatmaply"
 
