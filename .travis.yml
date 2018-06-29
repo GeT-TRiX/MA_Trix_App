@@ -11,7 +11,6 @@ addons:
     packages:
       - libv8-3.14-dev
       
-
 # Install packrat if needed and have it restore packages.
 install:
   - R -e 'if (system.file(package="packrat") == "") install.packages("packrat")'
