@@ -28,8 +28,10 @@ install:
 
 
 cache:
+  # Main R library
   packages: true
   directories: 
+    #Packrat packages
     $TRAVIS_BUILD_DIR/packrat/
     # PhantomJS
     - travis_phantomjs
