@@ -52,4 +52,5 @@ before_install:
 script:
   - R -f run_tests.R
   
-  
+notifications:
+  email: false
