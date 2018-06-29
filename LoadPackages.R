@@ -1,7 +1,6 @@
 
 #sudo apt-get install libv8-dev
 
-library(AnnotationDbi)
 
  list.of.packages <- c("shiny","shinythemes","shinyjs","ggplot2","shinyBS","markdown"
                       ,"BH","data.table","DT","readr","colourpicker","shinydashboard","shinytoastr",
