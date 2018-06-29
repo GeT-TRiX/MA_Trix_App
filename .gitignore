@@ -52,9 +52,8 @@ Rplots.pdf
 packrat/lib*/
 
 
-#shiny test ignore packrat
+#shiny test ignore and expect packrat
 
-packrat/src
 !packrat/src/BiocGenerics
 !packrat/src/Biobase
 !packrat/src/IRanges 
@@ -71,3 +70,4 @@ packrat/src
 !packrat/src/Rgraphviz
 !packrat/src/org.Mm.eg.db
 !packrat/src/RDAVIDWebService
+packrat/src
