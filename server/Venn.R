@@ -6,7 +6,7 @@ value=T # boolean at t=0
 
 #' bool is a reactive function that return the bool value in the local environment
 #'
-#' @value a boolean
+#' @value boolean
 #'
 #' @return bool a reactive boolean outside the reactive environment
 #'
