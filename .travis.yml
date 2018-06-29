@@ -32,6 +32,7 @@ addons:
   apt:
     packages:
       - libv8-3.14-dev
+      
 
 # Install packrat if needed and have it restore packages.
 install:
@@ -55,9 +56,11 @@ cache:
   packages: true
   directories:
     # Packrat packages
-    - packrat/lib
+    #- packrat/lib
     # PhantomJS
     - travis_phantomjs
+    $TRAVIS_BUILD_DIR/packrat/
+    packages: true
 
 # Install PhantomJS (if not cached)
 before_install:
