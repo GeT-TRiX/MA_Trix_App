@@ -32,7 +32,6 @@ cache:
   packages: true
   directories:
     # Packrat packages
-    - packrat/src
     - packrat/lib
     # PhantomJS
     - travis_phantomjs
