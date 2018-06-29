@@ -49,18 +49,20 @@ install:
 
 
  
-
-
 cache:
-  # Main R library
+  directories: $TRAVIS_BUILD_DIR/packrat/
   packages: true
-  directories:
+
+#cache:
+  # Main R library
+#  $TRAVIS_BUILD_DIR/packrat/
+#  packages: true
+#  directories:
     # Packrat packages
     #- packrat/lib
     # PhantomJS
-    - travis_phantomjs
-    $TRAVIS_BUILD_DIR/packrat/
-    packages: true
+    #- travis_phantomjs
+    #$TRAVIS_BUILD_DIR/packrat/
 
 # Install PhantomJS (if not cached)
 before_install:
