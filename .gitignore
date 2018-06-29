@@ -52,7 +52,6 @@ Rplots.pdf
 packrat/lib*/
 
 
-# shiny test ignore packrat
+#shiny test ignore packrat
 
 packrat/src
-packrat/packrat.opts
