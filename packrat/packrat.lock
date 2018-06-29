@@ -1040,3 +1040,27 @@ Source: Bioconductor
 Version: 0.18.3
 Hash: 8e0cda9fedd25e9682cf5277ffb8f8a6
 Requires: BiocGenerics
+
+Package: annotate
+Source: Bioconductor
+Version: 1.58.0
+Hash: cdc5500011aad18f468be8f3c0f3dd08
+Requires: AnnotationDbi, Biobase, BiocGenerics, DBI, RCurl, XML, xtable
+
+Package: genefilter
+Source: Bioconductor
+Version: 1.62.0
+Hash: 61edca4dd7050c807bc8160864a3bb88
+Requires: AnnotationDbi, Biobase, S4Vectors, annotate, survival
+
+Package: graph
+Source: Bioconductor
+Version: 1.58.0
+Hash: 456415caca682d5c16cf5be5b76dee46
+Requires: BiocGenerics
+
+Package: RBGL
+Source: Bioconductor
+Version: 1.56.0
+Hash: c9e7a8d8deca37e268b5db0df9812948
+Requires: graph
