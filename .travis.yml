@@ -31,7 +31,7 @@ cache:
   packages: true
   directories: 
     $TRAVIS_BUILD_DIR/packrat/
-  # PhantomJS
+    # PhantomJS
     - travis_phantomjs
 
 #cache:
@@ -39,7 +39,7 @@ cache:
 #  $TRAVIS_BUILD_DIR/packrat/
 #  packages: true
 #  directories:
-    Packrat packages
+    #Packrat packages
     #- packrat/lib
     # PhantomJS
     #- travis_phantomjs
