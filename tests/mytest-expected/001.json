@@ -20,8 +20,20 @@
     "data_summary_cell_clicked": {
 
     },
-    "data_summary_rows_all": null,
-    "data_summary_rows_current": null,
+    "data_summary_rows_all": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "data_summary_rows_current": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
     "data_summary_rows_selected": null,
     "data_summary_search": "",
     "data_summary_state": null,
