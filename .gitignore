@@ -46,6 +46,9 @@ rsconnect/
 .temp
 .tmp
 
+#pas de fichier xlsx
+.xlsx
+
 #pas de Rplots.pdf
 Rplots.pdf
 .Rproj.user

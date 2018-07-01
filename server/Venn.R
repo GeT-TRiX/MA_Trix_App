@@ -258,7 +258,7 @@ user_fc <- reactive({
 output$downloadvenn <- downloadHandler(
   filename = function() {
     paste(basename(file_path_sans_ext(projectname())),
-          '_clustered_venn',
+          '_filtered_venn',
           '.csv',
           sep = '')
   },
@@ -279,14 +279,14 @@ output$downloadvenn <- downloadHandler(
 output$downloadsetven <- downloadHandler(
   filename = function() {
     paste(basename(file_path_sans_ext(projectname())),
-          '_clustered_venn',
+          '_inter_venn',
           '.csv',
           sep = '')
   },
   content = function(fname) {
     if(input$dispvenn == "genes")
     write.table(
-      try(myventocsv(setvglobalvenn(vennlist()[[2]], user_cont()) , user_cont())),
+      try(mysetventocsv(setvglobalvenn(vennlist()[[2]], user_cont(), dll = T))),
       fname,
       na = "",
       row.names = F,
@@ -296,7 +296,7 @@ output$downloadsetven <- downloadHandler(
     )
     else
       write.table(
-        try(myventocsv(setvglobalvenn(vennlist()[[1]], user_cont()) , user_cont())),
+        try(mysetventocsv(setvglobalvenn(vennlist()[[1]], user_cont(), dll = T))),
         fname,
         na = "",
         row.names = F,

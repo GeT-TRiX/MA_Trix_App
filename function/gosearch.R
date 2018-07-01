@@ -190,7 +190,7 @@ davidquery <- function(entrezids, species, mycat) {
     #getSpecieNames(david)
     setAnnotationCategories(david, mycat) #c("GOTERM_MF_ALL", "GOTERM_CC_ALL", "GOTERM_BP_ALL")) # "KEGG_PATHWAY"
     mydav = as.data.frame(cbind(getFunctionalAnnotationChart(object=david, threshold=1, count=0L)))  %>%
-      filter(Count>1) %>% arrange(desc(Count))  %>% select( Category:Count, List.Total:Pop.Total,X.,PValue,Genes,Fold.Enrichment, Bonferroni, Benjamini)
+      filter(Count>1) %>% arrange(desc(Count))  %>% dplyr::select( Category:Count, List.Total:Pop.Total,X.,PValue,Genes,Fold.Enrichment, Bonferroni, Benjamini)
     colnames(mydav)[[7]] = "percent"
     return(mydav)
   })
@@ -210,7 +210,7 @@ davidqueryvenn <- function(entrezids, species){
   
   david <- DAVIDWebService$new(email = "franck.soubes@inra.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
   RDAVIDWebService::setTimeOut(david, 90000)
-  
+  print(entrezids)
   addList(
     david,
     entrezids,
@@ -229,6 +229,23 @@ davidqueryvenn <- function(entrezids, species){
   
 }
 
+
+#' mygotavres is a function which aim is to summarise the top 10 for each different cagetogies of the  the DAVID gene set enrichment analysis data table
+#'
+#' @param davtab data frame
+#'
+#' @return list of data frames
+#' @export
+#'
+
+mygotabres <- function(davtab){
+  
+  lapply(seq(unique(davtab$Category)), function(x){
+    return(davtab %>% select(Category, Term,Fold.Enrichment,Benjamini)%>%
+             filter(Category == unique(davtab$Category)[[x]]) %>%
+             top_n(10, Fold.Enrichment) %>% arrange(desc(Fold.Enrichment))
+    )})
+}
   
 # Functional Annotation Clustering: new!
 # Due to the redundant nature of annotations, Functional Annotation Chart presents similar/relevant annotations repeatedly. 

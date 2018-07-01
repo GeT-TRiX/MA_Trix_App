@@ -47,3 +47,11 @@ myrenderedtop <- reactive({
 
 output$new_group <- DT::renderDataTable(DT::datatable(myrenderedtop()[,-c(4:9)] , options = list(scrollX = TRUE) ) )
 
+output$cat_MF <- DT::renderDataTable(DT::datatable(myresdavitab()[[1]] , options = list(scrollX = TRUE) ) )
+
+output$cat_BP <- DT::renderDataTable(DT::datatable(myresdavitab()[[2]] , options = list(scrollX = TRUE) ) )
+
+output$cat_CC <- DT::renderDataTable(DT::datatable(myresdavitab()[[3]] , options = list(scrollX = TRUE) ) )
+
+output$cat_KEGG <- DT::renderDataTable(DT::datatable(myresdavitab()[[4]] , options = list(scrollX = TRUE) ) )
+

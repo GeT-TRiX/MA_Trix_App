@@ -289,6 +289,22 @@ output$printselected <- renderPrint({
 })
 
 
+myresdavitab <- reactive({
+  req(davidwebservice())
+  mygotabres(davidwebservice()[[as.numeric(input$cutgo)]])
+})
+
+output$titlegomain <- renderText({
+  req(input$GO)
+  mytitlevenn <<- print("DAVID Gene Set Enrichment Analysis")
+})
+
+
+output$titlegotop <- renderText({
+  req(input$GO)
+    mytitlevenn <<- print("Top 10 Significantly Enriched GO and KEGG Terms")
+})
+
 
 output$savegohmdav = downloadHandler( paste0(basename(file_path_sans_ext(projectname())), '_go.',"xlsx", sep = ''),
   content = function(file) {

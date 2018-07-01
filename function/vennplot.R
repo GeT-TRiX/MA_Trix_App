@@ -238,6 +238,18 @@ myventocsv <- function(myven, adj){
 
 }
 
+
+mysetventocsv <- function(myven){
+  
+  
+  max.length <- max(sapply(myven, length))
+  myven %>%
+    lapply(function(v){ c(v, rep("", max.length-length(v)))}) %>%
+    as.data.frame()
+  
+}
+
+
 #' totalvenn is a function which aim is to return the total element of each interesections for the venn diagram
 #'
 #' @param vennlist a list of genes for the different contrasts
@@ -271,16 +283,17 @@ totalvenn <- function(vennlist,adj){
 #' @return list of probes
 #' @export
 
-setvglobalvenn <- function(vennlist,adj){
+setvglobalvenn <- function(vennlist,adj, dll = F ){
   
   names(vennlist) = colnames(adj)
   elements <- 1:length(vennlist) %>% lapply(function(x)
     combn(names(vennlist), x, simplify = FALSE)) %>%
-    unlist(recursive = F) %>% setNames(., sapply(., function(p)
-      paste0(p, collapse = ""))) %>%
+    unlist(recursive = F) %>% setNames(., sapply(., function(p){
+      if(dll)
+        paste0(p, collapse = "vs")
+      else paste0(p, collapse = "") })) %>%
     lapply(function(i)
       Setdiff(vennlist[i], vennlist[setdiff(names(vennlist), i)])) %>% .[sapply(., length) > 0]
-  
   
   return(elements)
 }

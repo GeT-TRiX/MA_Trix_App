@@ -1,7 +1,5 @@
 import sys
-import requests
 import os.path
-import webbrowser
 
 
 '''

@@ -182,12 +182,12 @@ body <- dashboardBody(
                 # selectInput("method2", "Choose your matrix distance:", selected = "FDR",
                 #             c("adj.p.val(FDR)" = "FDR", "p.value(raw)" = "None" )),
                 
-                
+              conditionalPanel(condition = '!output.boolmark',
                 selectInput(
                   "method",
                   #  Create a select list that can be used to choose a single or multiple items from a list of values.
                   "Choose your statistical method",
-                  choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None")
+                  choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None"))
                 )
                 
               )
@@ -797,9 +797,25 @@ body <- dashboardBody(
                     strong("(GO) enrichment-based cluster analysis"),value="maingo",
                     downloadButton("savegohmdav", "Save your enrichment clusters" , style =
                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                    
+                    conditionalPanel(condition = "input.GO",
+                     div(class= "highvenn" , style="font-size:24px;",
+                               htmlOutput("titlegomain")),
                     DT::dataTableOutput("davidgo"), 
+              
                     verbatimTextOutput("printmessage"),
-                    verbatimTextOutput("printselected")
+                    verbatimTextOutput("printselected"),
+                    div(class= "highvenn" , style="font-size:24px;",
+                        htmlOutput("titlegotop")),
+                    #strong("Top 10 significantly enriched GO and KEGG terms"),
+                    fluidRow(
+                      column(6,DT::dataTableOutput("cat_MF") ),
+                      column(6,DT::dataTableOutput("cat_BP") )),
+                    fluidRow(
+                      column(6,DT::dataTableOutput("cat_CC") ),
+                      column(6,DT::dataTableOutput("cat_KEGG") )
+                    
+                    ))
                     
                     
                     #,

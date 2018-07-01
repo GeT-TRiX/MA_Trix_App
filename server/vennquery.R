@@ -6,7 +6,7 @@ observe({
 output$clusterPlot <- renderPlot({
   req(Venncluster())
   if(input$clusterNumber == 1)
-    shinyjs::alert("There's not enough genes in your interaction(s)")
+    shinyjs::alert("There's not enough genes in your interaction(s) for this cluster!")
   plot2D(Venncluster(), input$clusterNumber)
 })
 
@@ -44,7 +44,7 @@ Venncluster <- eventReactive(input$GOvenn, {
                        invokeRestart("muffleWarning")
                    
                    tryCatch({
-                     mygodavid = probnamtoentrezvenn(vennfinal()$GeneName , Species()[[1]]) %>%
+                     mygodavid = probnamtoentrezvenn(vennfinal()[[1]]$GeneName , Species()[[1]]) %>%
                      davidqueryvenn(input$Speciesvenn) %>% withCallingHandlers(error = timeoutdav)
                    }, warning = function(e) {
                      
