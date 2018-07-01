@@ -367,11 +367,13 @@ body <- dashboardBody(
               div(
                 style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;",
                 tabsetPanel(
+                id = "Vennd",    
                 # tabBox(
                 #   title = "Venn diagramm",
                 #   id = "tabset1",
                 #   width = NULL,
                   tabPanel(
+                    value= "vennset",
                     strong("Visualize the Venn diagram"),
                   
                     div(style="display:inline-block",
@@ -401,6 +403,7 @@ body <- dashboardBody(
                     )
                   ),
                   tabPanel(
+                    value = "vennbarplotpan",
                     strong("Visualize the intersection table"),
                     fluidRow( 
                       # tags$head(
@@ -536,6 +539,7 @@ body <- dashboardBody(
                   )
                  
                  , tabPanel(strong("Venn GO enrichment"),
+                            value = "venngopanel",
 
 
                           plotOutput("clusterPlot"),
