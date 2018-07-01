@@ -30,7 +30,7 @@ if(!require('shiny')){
  library(shiny)
 }
 
-# Install dependencies, download last version of SHAMAN from github and run shaman in one command :
+# Install dependencies, download last version of MATRiX from github and run matrix in one command :
 runGitHub('fsoubes/MA_Trix_App')
 ```
 This script can also be executed as following : 
