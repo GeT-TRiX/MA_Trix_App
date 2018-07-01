@@ -73,6 +73,7 @@ packrat/src/*
 !packrat/src/Rgraphviz
 !packrat/src/org.Mm.eg.db
 !packrat/src/RDAVIDWebService
+!packrat/src/org.GOstats
 !packrat/src/org.Gg.eg.db
 !packrat/src/org.Dr.eg.db
 !packrat/src/org.Hs.eg.db
