@@ -733,42 +733,6 @@ Version: 4.1.0
 Hash: fc08b7114571c28b0fc9cfe3608c2188
 Requires: Rcpp, zip
 
-Package: org.Dr.eg.db
-Source: Bioconductor
-Version: 3.6.0
-Hash: 588d9cddc99d4f7a575ebfdaf3e636bb
-Requires: AnnotationDbi
-
-Package: org.Gg.eg.db
-Source: Bioconductor
-Version: 3.6.0
-Hash: dc044e21e30aef1a4a8d0f187b414bf5
-Requires: AnnotationDbi
-
-Package: org.Hs.eg.db
-Source: Bioconductor
-Version: 3.6.0
-Hash: 78c5b137f85fc318c57313f1b7ad7b26
-Requires: AnnotationDbi
-
-Package: org.Mm.eg.db
-Source: Bioconductor
-Version: 3.6.0
-Hash: 6005ea658c926c9100da406ae5ec76e5
-Requires: AnnotationDbi
-
-Package: org.Rn.eg.db
-Source: Bioconductor
-Version: 3.6.0
-Hash: 87c7bf199c0ef1959cd10a3d3d0f6455
-Requires: AnnotationDbi
-
-Package: org.Ss.eg.db
-Source: Bioconductor
-Version: 3.6.0
-Hash: ed76da02c70cf1f91a374cd106edc85a
-Requires: AnnotationDbi
-
 Package: packrat
 Source: CRAN
 Version: 0.4.9-3
