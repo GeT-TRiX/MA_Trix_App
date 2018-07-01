@@ -15,8 +15,8 @@
     "col1": "green",
     "col3": "red",
     "colname": "show",
-    "colpca_1": "#7570B3",
-    "colpca_2": "#D95F02",
+    "colpca_1": "#1B9E77",
+    "colpca_2": "#7570B3",
     "colpca_3": "#7570B3",
     "colpca_4": "#E7298A",
     "colsize": 0.9,
@@ -30334,6 +30334,7 @@
     "toggleAdvanced": 0,
     "toggleAdvancedcolors": 0,
     "topdegenes": 0,
+    "Vennd": "vennset",
     "vennsize": 1
   },
   "output": {
@@ -30434,7 +30435,7 @@
       ]
     },
     "eigpca": {
-      "src": "[image data sha1: 9c3b8babfe591dce62effe3e3854a8459dd2c057]",
+      "src": "[image data sha1: 12210266fceebbddcde31a70bce402c79db06952]",
       "width": 542,
       "height": 700,
       "coordmap": [

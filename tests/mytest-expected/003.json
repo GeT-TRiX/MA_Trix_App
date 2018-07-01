@@ -15,10 +15,6 @@
     "col1": "green",
     "col3": "red",
     "colname": "show",
-    "colpca_1": "#1B9E77",
-    "colpca_2": "#D95F02",
-    "colpca_3": "#7570B3",
-    "colpca_4": "#E7298A",
     "colsize": 0.9,
     "cutinfo": "Boxplot",
     "data_summary_cell_clicked": {
@@ -77,11 +73,6 @@
     "formvenbar": "png",
     "GO": 0,
     "GOvenn": 0,
-    "indivpca": [
-      "LKO_CTRL",
-      "LKO_MCD ",
-      "LWT_CTRL"
-    ],
     "jitter": false,
     "label": true,
     "labelsiize": 4,
@@ -30325,7 +30316,7 @@
     "rowsize": 0.9,
     "scalcol": false,
     "session": 0,
-    "side": "PCA",
+    "side": "Home",
     "sidebarCollapsed": false,
     "sidebarItemExpanded": null,
     "Species": "Mus musculus",
@@ -30334,6 +30325,7 @@
     "toggleAdvanced": 0,
     "toggleAdvancedcolors": 0,
     "topdegenes": 0,
+    "Vennd": "vennset",
     "vennsize": 1
   },
   "output": {
@@ -30433,74 +30425,7 @@
         }
       ]
     },
-    "eigpca": {
-      "src": "[image data sha1: 9c3b8babfe591dce62effe3e3854a8459dd2c057]",
-      "width": 542,
-      "height": 700,
-      "coordmap": [
-        {
-          "domain": {
-            "left": -0.04,
-            "right": 1.04,
-            "bottom": -0.04,
-            "top": 1.04
-          },
-          "range": {
-            "left": 0,
-            "right": 542,
-            "bottom": 699,
-            "top": -1
-          },
-          "log": {
-            "x": null,
-            "y": null
-          },
-          "mapping": {
-
-          }
-        }
-      ]
-    },
     "heatmbool": false,
-    "individuselpca": {
-      "html": "<div id=\"indivpca\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LKO_CTRL\" checked=\"checked\"/>\n        <span>LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LKO_MCD \" checked=\"checked\"/>\n        <span>LKO_MCD <\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LWT_CTRL\" checked=\"checked\"/>\n        <span>LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LWT_MCD \" checked=\"checked\"/>\n        <span>LWT_MCD <\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
-      "deps": [
-
-      ]
-    },
-    "myPanelpca": {
-      "html": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_1\">LKO_CTRL<\/label>\n      <input id=\"colpca_1\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#1B9E77\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_2\">LKO_MCD <\/label>\n      <input id=\"colpca_2\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#D95F02\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>\n<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_3\">LWT_CTRL<\/label>\n      <input id=\"colpca_3\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#7570B3\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>",
-      "deps": [
-        {
-          "name": "colourpicker-binding",
-          "version": "0.1.0",
-          "src": {
-            "href": "colourpicker-binding"
-          },
-          "meta": null,
-          "script": "input_binding_colour.js",
-          "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": true
-        },
-        {
-          "name": "colourpicker-lib",
-          "version": "0.1.0",
-          "src": {
-            "href": "colourpicker-lib"
-          },
-          "meta": null,
-          "script": "js/colourpicker.min.js",
-          "stylesheet": "css/colourpicker.min.css",
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": true
-        }
-      ]
-    },
     "new_group": {
       "x": {
         "filter": "none",

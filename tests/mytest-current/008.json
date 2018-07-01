@@ -3,7 +3,7 @@
     "allCont": 1,
     "allIndividus": 0,
     "allIndividuspca": 0,
-    "allTests": 0,
+    "allTests": 1,
     "catinfo": [
       "GOTERM_BP_ALL",
       "GOTERM_MF_ALL",
@@ -15,8 +15,8 @@
     "col1": "green",
     "col3": "red",
     "colname": "show",
-    "colpca_1": "#E7298A",
-    "colpca_2": "#D95F02",
+    "colpca_1": "#1B9E77",
+    "colpca_2": "#7570B3",
     "colpca_3": "#7570B3",
     "colpca_4": "#E7298A",
     "colsize": 0.9,
@@ -54,7 +54,7 @@
     "dispvenn": "genes",
     "dist": "correlation",
     "ellipse": false,
-    "fc": 2,
+    "fc": 3,
     "fcvenn": 3,
     "file": {
       "name": [
@@ -81,7 +81,7 @@
     "formcut": "pdf",
     "formhm": "png",
     "formpca": "png",
-    "formven": "eps",
+    "formven": "png",
     "formvenbar": "png",
     "GO": 0,
     "GOvenn": 0,
@@ -106,7 +106,7 @@
     "labelsiize": 4,
     "legsize": 0.8,
     "mainhmtabset": "hmmainpan",
-    "maxgen": null,
+    "maxgen": 100,
     "meandup": false,
     "meangrp": false,
     "meanpoint": true,
@@ -30350,7 +30350,13 @@
     "Species": "Mus musculus",
     "Speciesvenn": "Mus musculus",
     "tabset25": "hmpan",
-    "test": "LKO_CTRL-LWT_CTRL",
+    "test": [
+      "LWT_MCD-LWT_CTRL",
+      "LKO_MCD-LKO_CTRL",
+      "LKO_MCD-LWT_MCD",
+      "LKO_CTRL-LWT_CTRL",
+      "(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)"
+    ],
     "toggleAdvanced": 0,
     "toggleAdvancedcolors": 0,
     "topdegenes": 1,
@@ -31469,7 +31475,7 @@
       ]
     },
     "DAVID": {
-      "html": "<button id=\"DAVID\" type=\"button\" class=\"btn btn-default action-button\" style=\"color: #fff; background-color: #337ab7; border-color: #2e6da4\" onclick=\"window.open( &#39;http://david.abcc.ncifcrf.gov/api.jsp?type=OFFICIAL_GENE_SYMBOL&amp;ids=Sebox,Prg4,Ankrd2,Mrap2,Cep55,Saa4,Fga,Slc41a2,Cyp21a1,Scara5,Cyp3a13,Atp11a,Krtap11-1,Il27,Gprc5a,Gnat1,ENSMUST00000143649,Crybb3,Dnajc12,Prtn3,Cxcl14,Nnmt,Fgl1,A_55_P2011385,Tifa,Apol10b,Steap4,Gm19958,Orm1,Orm2,Lbp,Jak3,Serpina10,Itih4,Slc13a5,Cyth3,Orm3,Saa3,Olfr1260,A_55_P2014149,A_55_P2050044,Slc37a1,Lcn2,Pip5k1a,Mt1,Mt2,Rnase4,Retnlg,S100a9,S100a8,&amp;tool=summary&amp;annot=GOTERM_BP_ALL,GOTERM_CC_ALL,GOTERM_MF_ALL,&#39; , &#39;_blank&#39;)\">Open DAVID<\/button>",
+      "html": "<button id=\"DAVID\" type=\"button\" class=\"btn btn-default action-button\" style=\"color: #fff; background-color: #337ab7; border-color: #2e6da4\" onclick=\"window.open( &#39;http://david.abcc.ncifcrf.gov/api.jsp?type=OFFICIAL_GENE_SYMBOL&amp;ids=Hamp2,Cyp2b10,A_55_P2034531,A_55_P2071906,Cyp2b9,Fmo2,Cyp2b13,Fmo3,Abcb1a,Map4k4,Dusp2,Slc16a5,Arhgef2,Dntt,Car2,Gm6484,Akr1b7,Slc22a29,Slc22a27,Trim24,Prss8,&amp;tool=summary&amp;annot=GOTERM_BP_ALL,GOTERM_CC_ALL,GOTERM_MF_ALL,&#39; , &#39;_blank&#39;)\">Open DAVID<\/button>",
       "deps": [
 
       ]
@@ -31477,16 +31483,16 @@
     "dfvenn": "Table showing the GeneNames associated with the average logFC for the intersection(s) selected",
     "dfvennbef": "Table showing the GeneNames associated with their respective logFC for the intersection(s) selected",
     "distPlot": {
-      "src": "[image data sha1: 6dbc74f7cb996c28d7cddbf9c1357fe6d149aafe]",
+      "src": "[image data sha1: 92a7d48816aac94c140da9a20c3add1e5292563c]",
       "width": 406,
       "height": 1200,
       "coordmap": [
         {
           "domain": {
-            "left": -2.24,
-            "right": 85.24,
-            "bottom": -0.388020951442417,
-            "top": 8.10061178602103
+            "left": -4.84,
+            "right": 152.84,
+            "bottom": -0.607222006008578,
+            "top": 12.6768147965185
           },
           "range": {
             "left": 72,
@@ -31548,12 +31554,12 @@
     },
     "myCLUST": "3",
     "myCOL": "0.9",
-    "myFC": "2",
+    "myFC": "3",
     "myFCvenn": "3",
     "myLEG": "0.8",
     "myMAT": "correlation",
     "myMET": "FDR",
-    "myNUM": "82",
+    "myNUM": "147",
     "myPAL": "#1B9E77 #D95F02 #7570B3 #E7298A",
     "myPanelpca": {
       "html": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_1\">LKO_CTRL<\/label>\n      <input id=\"colpca_1\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#1B9E77\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_2\">LKO_MCD <\/label>\n      <input id=\"colpca_2\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#D95F02\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>\n<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_3\">LWT_CTRL<\/label>\n      <input id=\"colpca_3\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#7570B3\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>",
@@ -31811,7 +31817,7 @@
 
       ]
     },
-    "testtt": "LKO_CTRL-LWT_CTRL,",
+    "testtt": "LWT_MCD-LWT_CTRL, LKO_MCD-LKO_CTRL, LKO_MCD-LWT_MCD, LKO_CTRL-LWT_CTRL, (LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL),",
     "topgenesdf": "50",
     "topgenesvenn": {
       "html": "<div class=\"topgeness\">\n  <div class=\"form-group shiny-input-container\">\n    <label for=\"topgenes\">Top genes<\/label>\n    <input id=\"topgenes\" type=\"number\" class=\"form-control\" value=\"50\" min=\"1\" max=\"460\"/>\n  <\/div>\n<\/div>",
