@@ -95,7 +95,7 @@
   "output": {
     "bool": true,
     "boolmark": false,
-     "data_summary": {	  
+     "data_summary": {
        "x": {
          "filter": "none",
          "container": "<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>FC&gt;1.0<\/th>\n      <th>FC &gt;1.2<\/th>\n      <th>FC &gt;2<\/th>\n      <th>FC &gt;4<\/th>\n      <th>FC &gt;6<\/th>\n      <th>FC &gt;10<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
