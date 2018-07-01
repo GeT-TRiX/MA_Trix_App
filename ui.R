@@ -799,13 +799,13 @@ body <- dashboardBody(
                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
                     
                     conditionalPanel(condition = "input.GO",
-                     div(class= "highvenn" , style="font-size:24px;",
+                     div(class= "highvenn" , style="font-size:24px; text-align: center;",
                                htmlOutput("titlegomain")),
                     DT::dataTableOutput("davidgo"), 
               
                     verbatimTextOutput("printmessage"),
                     verbatimTextOutput("printselected"),
-                    div(class= "highvenn" , style="font-size:24px;",
+                    div(class= "highvenn" , style="font-size:24px; text-align: center;",
                         htmlOutput("titlegotop")),
                     #strong("Top 10 significantly enriched GO and KEGG terms"),
                     fluidRow(
