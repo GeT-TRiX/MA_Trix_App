@@ -37,7 +37,7 @@ This script can also be executed as following :
 git clone https://github.com/fsoubes/MA_Trix_App
 chmod +x ./cmd.sh
 ./cmd.sh
-
+```
 
 ## Contact
 
