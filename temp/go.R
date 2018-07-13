@@ -8,10 +8,45 @@ biocLite("org.Mm.eg.db")
 require("org.Mm.eg.db") 
 library(dplyr)
 
+6/7
 
+musmuscu <- read.csv2("TOXA_HEGU_MA0191_AllChip_WorkingSet.csv")
+pval <- read.csv2("All_topTableAll.csv")
+View(musmuscu)
+colnames(musmuscu)
+View(pval)
+library(dplyr)
+myval <- grepl( "LWT_Ctrl", colnames(musmuscu)) %>%
+  which(. == T) 
+myval2 <- grepl( "LWT_MCD", colnames(musmuscu)) %>%
+  which(. == T) 
 
-musmuscu <- read.csv2("data/TOXA_HEGU_MA0191_AllChip_WorkingSet.csv")
-pval <- read.csv2("data/All_topTableAll.csv")
+myval
+myval2
+print(musmuscu[[2]][1])+print(musmuscu[[1]][9])+print(musmuscu[[1]][11])+print(musmuscu[[1]][16])
+View(musmuscu)
+print(musmuscu[[2]][1])
+sum = 0
+tot=0
+for(i in myval){
+  print(i)
+  sum = musmuscu[[i]][1]
+  tot = tot + sum 
+}
+
+for(i in myval2){
+  print(i)
+  sum = musmuscu[[i]][1]
+  tot = tot + sum 
+}
+
+tot # 37.74352
+sum
+
+(41.121-37.74)/6
+
+deux gènes mm profil, 
+
 
 
 test = c(1,2,3)
