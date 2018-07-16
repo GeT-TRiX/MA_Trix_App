@@ -78,7 +78,12 @@ Vennplot <- reactive({
   if(length(user_cont()) <= 5){
   #g = Vennfinal(vennlist(), user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn)
     
-  g = Vennfinal(vennlist()[[1]], user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn, input$dispvenn , csvf()[[3]])
+  if(!input$fill == "")
+    mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(input$fill, ",")))
+  else 
+    mycol = ""
+  
+  g = Vennfinal(vennlist()[[1]], user_cont(), cex = input$vennsize, input$pvalvenn, input$fcvenn, input$methodforvenn, input$dispvenn , csvf()[[3]], mycol = mycol)
   
 
    observe({value <<-T}) # listen inside the reactive expression 
@@ -169,6 +174,7 @@ observeEvent(input$allCont, {
     label = "Choose your comparison",
 
     choices = colnames(adjusted()[[1]][,-1][myindex()]),
+    #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())]),
     selected = colnames(adjusted()[[1]][,-1][myindex()]),
     inline = groupinline
   )
@@ -179,7 +185,7 @@ observeEvent(input$noCont, {
   updateCheckboxGroupInput(session,
                            "cont",
                            label = "Choose your comparison",
-                           #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())])
+                           #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())]),
                            choices = colnames(adjusted()[[1]][,-1][myindex()]),
                            inline=groupinline
   )
@@ -328,6 +334,7 @@ output$downloadsetven <- downloadHandler(
 myindex<- reactive({
   
   myl = lapply(seq(ncol(adjusted()[[1]])),function(x)
+    #return(which(adjusted()[[1]][[x]] < input$pvalvenn & adjusted()[[3]][[x]]  > log2( input$fcvenn))))
     return(which(adjusted()[[1]][[x]] < 0.05)))
     
   indexnull = which( sapply(myl ,length) == 0)

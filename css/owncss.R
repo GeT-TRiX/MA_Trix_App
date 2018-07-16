@@ -85,6 +85,15 @@ margin-bottom: -40px;
 "
 
 
+addNews <- function(date ="",title="",text="")
+{
+  res=list()
+  res$r1 = paste("<b><font size='+1'>",date,"</font></b>", " - ", "<b><font size='+1'>",title,"</font></b><br/>")
+  res$r2 = paste("<p><font color='grey'>",text,"</font></p><hr/>")
+  
+  return(HTML(unlist(res)))
+}
+
 
 #InfoBoxCSS <- "
 #.info-box:hover,

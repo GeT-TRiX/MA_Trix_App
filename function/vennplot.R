@@ -103,7 +103,6 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
       return(as.character(which(adj[[x]] < cutoffpval & abs(fc[[x]]) > log2(cutofffc))))
   })
   
-  #slice(my_data, 1:6)
 
 }
 
@@ -124,12 +123,12 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
 #' @export
 #' 
 
-Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = "probes", pval){ 
+Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = "probes", pval, mycol= ""){ 
   
   if(is.null(myl))
     return(NULL)
   
-  
+  palette("default")
   if(meandup == "genes"){
     myl = lapply(seq(length(myl)), function(x){pval %>% select(GeneName, ProbeName) %>% filter( ProbeName %in% myl[[x]]) %>% 
         distinct( GeneName)}) %>%
@@ -137,14 +136,15 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = 
     myl = lapply(1:length(myl),FUN = function(i) as.character(myl[[i]]$GeneName))  #D14Ertd668e doublons pour LWT_MCD.LWT_CTRL (si genesymbol -1 perte d'info) avec une probe nom partagée avec LKO_MCD.LKO_CTRL  et une probe partagée
   
   }
-  
   metuse = ifelse(statimet == "FDR","DEG BH ", "DEG RAW ")
   
   indexnull = which( sapply(myl ,length) == 0)
+  if(length(indexnull)>0) test = colnames(adj[,-c(indexnull)]) else  test = colnames(adj)
   myl <- myl[sapply(myl, length) > 0]
   final = length(myl)-1
+  if(mycol =="") mycolven= 2:(2+final) else mycolven = mycol
   totgenes =  sum(sapply(myl,length))
-  totprobes=  totalvenn(myl, adj)
+  totprobes=  totalvenn(myl, test)
   mynumb = paste("total ", meandup,  ":", totgenes ,"and total ", meandup,  "crossings :",totprobes, collapse = "")
 
   futile.logger::flog.threshold(futile.logger::ERROR, name = "VennDiagramLogger")
@@ -155,37 +155,35 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = 
      if (length(myl[[2]])> length(myl[[1]]))
        mynames = rev(colnames(adj))
      else
-       mynames = colnames(adj)
+       mynames = test
   }
   else
-    mynames = colnames(adj)
+    mynames = test
 
-  
-  
   if(length(indexnull)>0){
     if(length(myl)==5){
       print(colnames(adj[,-c(indexnull)]))
       g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1, cat.just= list(c(0.6,1) , c(0,0) , c(0,0) , c(1,1) , c(1,0)),
-                   category.names = mynames[,-c(indexnull)],fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
-                   fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
+                       category.names = mynames,fill = list(mycolven) , alpha = 0.3, sub=mynumb, cex=1, 
+                       fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
     }
     else{
       print(colnames(adj[,-c(indexnull)]))
       g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,
-                     category.names = mynames[,-c(indexnull)],fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
-                     fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
+                       category.names = mynames,fill = mycolven, alpha = 0.3, sub=mynumb, cex=1, 
+                       fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
     }
   }
   else{
       if(length(myl)==5){
       g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,cat.just=  list(c(0.6,1) , c(0,0) , c(0,0) , c(1,1) , c(1,0)) ,
-                     category.names = mynames,fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                     category.names = mynames,fill = mycolven  , alpha = 0.3, sub=mynumb, cex=1, 
                      fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop4
       }
       else{
-
+        print("yo")
         g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,
-                         category.names = mynames,fill = 2:(2+final), alpha = 0.3, sub=mynumb, cex=1, 
+                         category.names = mynames,fill = mycolven, alpha = 0.3, sub=mynumb, cex=1, 
                          fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
       }
   }
@@ -260,8 +258,8 @@ mysetventocsv <- function(myven){
 #' 
 
 totalvenn <- function(vennlist,adj){
-  
-  names(vennlist) = colnames(adj)
+
+  names(vennlist) = adj
   elements <- 1:length(vennlist) %>% lapply(function(x)
       combn(names(vennlist), x, simplify = FALSE)) %>%
     unlist(recursive = F) %>% setNames(., sapply(., function(p)
