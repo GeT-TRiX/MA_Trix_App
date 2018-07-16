@@ -6,7 +6,7 @@ vcs.ignore.src: FALSE
 external.packages: 
 local.repos: ~/R/x86_64-pc-linux-gnu-library/3.5/
 load.external.packages.on.startup: TRUE
-ignored.packages: 
+ignored.packages:
     org.Dr.eg.db
     org.Gg.eg.db
     org.Hs.eg.db

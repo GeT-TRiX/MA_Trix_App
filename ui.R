@@ -194,7 +194,9 @@ body <- dashboardBody(
             box(
               title = "What's new in MATRiX", width = NULL, status = "primary",
               div(style = 'overflow-y: scroll; height: 550px',
-                  addNews("Jul 16th 2018","Bug","Venn diagram display erros when filtering ???"),
+	          addNews("Jul 17th 2018", "Tutorial/Video", "Soon will be added a video to resume the application"),
+                  addNews("Jul 16th 2018", "Venn" ,"You can now choose your color for the venn diagram"),
+                  addNews("Jul 16th 2018","Bug fixes","Venn diagram display erros when filtering"),
                   addNews("Jul 5th 2018","Venn/DAVID","Add Gene functionnal classification for selected interaction(s)"),
                   addNews("Jun 26th 2018","Add features","It's now possible to interact with the rendering table to filter the table in the aim of plotting the top n genes.
                           For the GO enrichment it is now possible to select the rows in order to display the gene symbol according to the entrez ids"),
@@ -202,11 +204,10 @@ body <- dashboardBody(
                   addNews("Jun 20th 2018","MATRiX","First public release of MATRiX. 
                                                               Enhancement of the gui with the use of dashboard package"),
                   addNews("Jun 18th 2018","GO enrichment","It is now possible to query the DWS for the Heatmap and save the result in xlsx format for the different clusters"),
-                  addNews("Sep 9th 2016","PCA/PCOA","You can select the axes for the PCOA and PCA plots."),
                   addNews("Jun 15th 2018","DNS ","Adding DNS for the MATRiX application (matrix.toulouse.inra.fr)"),
                   addNews("Jun 10th 2018","Venn diagram","The venn diagram FC and display of the top n genes
                                                                 have been added to compare the results of 2 or more contrasts."), 
-                  addNews("Jun 5th 2018","PCA/Heatmap","display color groups side by side in the gui"), 
+                  addNews("Jun 5th 2018","PCA/Heatmap","Display color groups side by side in the gui"), 
                   addNews("May 29th 2018","beta-test","The service will be made available once the beta test phase is officially completed.")
               )))
             ),
