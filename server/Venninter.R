@@ -16,7 +16,6 @@ vennchoice <- reactive({
 
 output$myselvenn <- renderUI({
   req(user_cont())
-  #intscol <- names(user_cont())#names(adjusted()[[1]][,-1])
   selectInput(
     'intscol',
     'Specify your interaction(s):',
@@ -87,16 +86,10 @@ vennfinal <- reactive({
   #mutate_if(is.numeric, funs(formatC(., format = "f")))
   
   return(reslist)
-  #return(resfinal)
 })
 
 
-# label {
-#   display: inline-block;
-#   max-width: 100%;
-#   margin-bottom: 0px;
-#   font-weight: 700;
-# }
+
 
 output$topgenesvenn <- renderUI({
   req(vennfinal(), vennchoice())

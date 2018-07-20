@@ -18,12 +18,6 @@ shinyServer(function(input, output,session) {
   source(file.path("server", "matrixwidg.R"), local = TRUE)$value #
   
   ##########################################
-  ######## Datarender                     ##
-  ##########################################
-  
-  source(file.path("server", "renderertable.R"), local = TRUE)$value #
-  
-  ##########################################
   ######## HOME page                      ##
   ##########################################
 
@@ -36,7 +30,6 @@ shinyServer(function(input, output,session) {
   ################################
   
   source(file.path("server", "PCAshiny.R"), local = TRUE)$value #
-  #source(file.path("server", "plotandsave.R"), local = TRUE)$value #
   source(file.path("server", "PCAsandp.R"), local = TRUE)$value #
   source(file.path("server", "colforpca.R"), local = TRUE)$value #
   

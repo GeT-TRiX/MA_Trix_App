@@ -5,9 +5,6 @@
 boolhm <- F
 
 
-#hmneed <- T # Boolean uses to hide or show the mardkwon serving to load data
-
-
 output$heatmbool <- reactive({
   boolhm
 })

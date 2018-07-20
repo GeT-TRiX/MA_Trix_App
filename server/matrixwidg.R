@@ -1,14 +1,39 @@
-observe({
-  req(input$tabset25)
-  if (grepl("hmpan", input$tabset25)) {
-    updateTabsetPanel(session, "mainhmtabset",
+observeEvent(input$tabset25,{
+
+isolate(
+  if (grepl("widgetheat", input$tabset25)) {
+
+    updateTabsetPanel(session, "tabset1",
                       selected = "hmmainpan")
   }
-  else if (grepl("cutpan", input$tabset25)) {
-    updateTabsetPanel(session, "mainhmtabset",
+  else if (grepl("test3", isolate(input$tabset25))) {
+
+    updateTabsetPanel(session, "tabset1",
                       selected = "cuthmmainpan")
+    
   }
+)
 })
+
+
+# observeEvent(input$tabset1,{
+#   isolate(
+#   if (grepl("cuthmmainpan", input$tabset1)) {
+#     print("ko")
+#     updateTabsetPanel(session, "tabset25",
+#                       selected = "widgetheat")
+#   }
+#   else if (grepl("hmmainpan", input$tabset1)) {
+#     print("koo")
+#     updateTabsetPanel(session, "tabset25",
+#                       selected = "test3")
+#   }
+#   )
+# })
+
+
+
+
 
 observe({
   

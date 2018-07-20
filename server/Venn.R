@@ -38,8 +38,7 @@ vennlist <- reactive({
     return(NULL)
   mycont = Vennlist(user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
   probven = rowtoprob(mycont,csvf()[[3]], user_cont())
-  #colnames(probven) = names(user_cont())
-  #return(mycont)
+
   return(probven)
 })
 

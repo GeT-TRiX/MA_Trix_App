@@ -21,12 +21,11 @@ observe({
     
 observe({
   if(input$dispvenn == "genes")
-    output$vennresintergen <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')),options = list(scrollX = TRUE)), server = F)
+    output$vennresintergen <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')),options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons'), server = F)
 })
 
-output$davidgo <- DT::renderDataTable(DT::datatable(davidwebservice()[[as.numeric(input$cutgo)]][, -9] , options = list(scrollX = TRUE) ))
+output$davidgo <- DT::renderDataTable(DT::datatable(davidwebservice()[[as.numeric(input$cutgo)]][, -9] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons'))
 
-#output$totalgenbyc <- renderDataTable(grouplength())
 
 
 #' myrenderedtop is a reactive function which aim is to display or not the labels in the PCA render plot
@@ -41,17 +40,37 @@ output$davidgo <- DT::renderDataTable(DT::datatable(davidwebservice()[[as.numeri
 myrenderedtop <- reactive({
   req(csvf())
   select( csvf()[[3]], ProbeName:SystematicName, everything() ) %>%
+    #mutate_if(is.numeric, funs(format(., digits = 3)))
     mutate_if(is.numeric, funs(format(., digits = 3)))
-  
 })
 
-output$new_group <- DT::renderDataTable(DT::datatable(myrenderedtop()[,-c(4:9)] , options = list(scrollX = TRUE) ) )
+output$new_group <- DT::renderDataTable(DT::datatable(myrenderedtop()[,-c(4:9)] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons') )
 
-output$cat_MF <- DT::renderDataTable(DT::datatable(myresdavitab()[[1]] , options = list(scrollX = TRUE) ) )
 
-output$cat_BP <- DT::renderDataTable(DT::datatable(myresdavitab()[[2]] , options = list(scrollX = TRUE) ) )
+observe({
+  req(!is.null(length(myresdavitab())))
+output$cat_MF <- DT::renderDataTable({
+  if(is.null(myresdavitab()[[1]]))
+    return(NULL)
+  else DT::datatable(myresdavitab()[[1]] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons') })
+})
 
-output$cat_CC <- DT::renderDataTable(DT::datatable(myresdavitab()[[3]] , options = list(scrollX = TRUE) ) )
+observe({
+  req(length(myresdavitab())>1)
+output$cat_BP <- DT::renderDataTable({
+DT::datatable(myresdavitab()[[2]] ,options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons') })})
 
-output$cat_KEGG <- DT::renderDataTable(DT::datatable(myresdavitab()[[4]] , options = list(scrollX = TRUE) ) )
+observe({
+req(length(myresdavitab())>2)
 
+output$cat_CC <- DT::renderDataTable({
+ DT::datatable(myresdavitab()[[3]] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons' ) })
+})
+
+
+observe({
+  req(length(myresdavitab())>3)
+
+  output$cat_KEGG <- DT::renderDataTable({
+  DT::datatable(myresdavitab()[[4]] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons') })
+})

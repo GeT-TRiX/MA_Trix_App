@@ -35,8 +35,7 @@ cols <- reactive({
   if (is.null(mypal()) )
     lapply(seq_along(mycolgrp()), function(i) {
       
-      # fluidRow(
-      #   column(6,
+
       colourInput(
         paste("col", i, sep = "_"),
         levels(mycolgrp())[i],
@@ -131,13 +130,6 @@ output$myPanel <- renderUI({
 })
 
 
-# output$myPanel1 <- renderUI({ # display the colourInput in the UI
-#   cols()[1:2]
-# })
-# 
-# output$myPanel2 <- renderUI({ # display the colourInput in the UI
-#   cols()[3:4]
-# })
 
 #' colors is a reactive function which aim is to create as many variables as groups
 #'

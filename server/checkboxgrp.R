@@ -4,8 +4,6 @@
 
 
 # Render in the UI.R the levels for the pData Group
-
-
 observe({
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   
@@ -106,9 +104,6 @@ new_group <- reactive({
     return(NULL)
   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
 })
-
-
-
 
 
 #' new_data is a reactive function that aim is to select specific individuals in the data frame

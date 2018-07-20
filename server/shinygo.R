@@ -40,7 +40,6 @@ observe({
   
   totalclust <- reactive({
     req(hmobj$hm)
-    
     n <- unique(hmobj$hm$cluster)
     selectInput("cutgo",
                 "Choose your cluster",
@@ -145,15 +144,14 @@ davidwebservice <-
     
     final = lapply(1:NROW(mygodavid), function(x)
       return(format(mygodavid[[x]], digits = 3)))
+
+    
+    updateTabsetPanel(session, "tabset1",
+                      selected = "maingo")
     
     return(final)
   })
 
-
-observe({
-  req(davidwebservice())
-  print(colnames(davidwebservice()))
-})
 
 
 #' davidurl is a reactive function that aim is to return an url of grouped genes 
@@ -306,7 +304,7 @@ output$titlegotop <- renderText({
 })
 
 
-output$savegohmdav = downloadHandler( paste0(basename(file_path_sans_ext(projectname())), '_go.',"xlsx", sep = ''),
+output$savegohmdavxlsx = downloadHandler(filename <- function() { paste0(basename(file_path_sans_ext(projectname())), '_go.',"xlsx", sep = '')},
   content = function(file) {
     
     withProgress(message = 'Creation of the xlsx table:',
@@ -354,50 +352,42 @@ Species <- reactive({
   if (input$Species == "Homo sapiens" || input$Speciesvenn == "Homo sapiens") {
     # human
     library("org.Hs.eg.db")
-    mypack = list(org.Hs.egALIAS2EG, org.Hs.egSYMBOL)
-    return(mypack)
+    return(list(org.Hs.egALIAS2EG, org.Hs.egSYMBOL))
   }
   else if (input$Species == "Mus musculus" || input$Speciesvenn == "Mus musculus" ) {
     # Mouse
     library("org.Mm.eg.db")
-    mypack = list(org.Mm.egALIAS2EG, org.Mm.egSYMBOL)
-    return(mypack)
+    return( list(org.Mm.egALIAS2EG, org.Mm.egSYMBOL))
   }
   else if (input$Species == "Danio rerio" || input$Speciesvenn == "Danio rerio") {
     #Zebra fish
     library("org.Dr.eg.db")
-    mypack = list(org.Dr.egALIAS2EG, org.Dr.egSYMBOL)
-    return(mypack)
+    return(list(org.Dr.egALIAS2EG, org.Dr.egSYMBOL))
   }
   else if (input$Species == "Gallus gallus" || input$Speciesvenn == "Gallus gallus") {
     # chicken
     library("org.Gg.eg.db")
-    mypack = list(org.Gg.egALIAS2EG, org.Gg.egSYMBOL)
-    return(mypack)
+    return(list(org.Gg.egALIAS2EG, org.Gg.egSYMBOL))
   }
   else if (input$Species == "equCab2" || input$Speciesvenn == "equCab2") {
     # horse
     library("org.Gg.eg.db")
-    mypack = org.Mm.egALIAS2EG
-    return(mypack)
+    return(list(org.Gg.eg.dbALIAS2EG))
   }
   else if (input$Species == "Caenorhabditis elegans" || input$Speciesvenn == "Caenorhabditis elegans") {
     # cC elegans
     library("org.Ce.eg.db")
-    mypack = list(org.Ce.egALIAS2EG, org.Ce.egSYMBOL)
-    return(mypack)
+    return(list(org.Ce.egALIAS2EG, org.Ce.egSYMBOL))
   }
   else if (input$Species == "Rattus norvegicus" || input$Speciesvenn == "Rattus norvegicus") {
     # Rat
     library("org.Rn.eg.db")
-    mypack = list(org.Rn.egALIAS2EG, org.Rn.egSYMBOL )
-    return(mypack)
+    return(list(org.Rn.egALIAS2EG, org.Rn.egSYMBOL ))
   }
   else if (input$Species == "Sus scrofa" || input$Speciesvenn == "Sus scrofa") {
     # Pig
     library("org.Ss.eg.db")
-    mypack = list(org.Ss.egALIAS2EG, org.Ss.egSYMBOL)
-    return(mypack)
+    return(list(org.Ss.egALIAS2EG, org.Ss.egSYMBOL))
   }
   
 })

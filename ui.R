@@ -32,18 +32,18 @@ tags$head(
       menuItemOutput("dymMenu"),
       collapsed = TRUE,
 
-      img(
+      tags$a(img(
         src = "GeT_logo-RVB.png",
         height = 50,
         width = 180,
         style = "position:absolute;bottom:50px;margin:0 0 15px 10px;"
-      ),
-      img(
+      ) , href="https://get.genotoul.fr/en/", target="_blank"),
+      tags$a(img(
         src = "Logotype-INRA-transparent.png",
         height = 43,
         width = 168,
         style = "position:absolute;bottom:0;margin:0 0 15px 10px;"
-      )    
+      ) , href="https://www6.toulouse.inra.fr/toxalim", target="_blank")
       
       )
   )
@@ -159,7 +159,7 @@ body <- dashboardBody(
                 # border-color: #2e6da4; background-color: #337ab7, width: 28px; ", #CSS attributes for the sidebarPanel
                 # width = 3,
                 
-                downloadLink("downloadData", label = "download sample data", style="color:white; float:right;"),
+                downloadLink("downloadData", label = "download sample data", style="color:red; float:right;"),
                 br(),
                 br(),
                 #csvFileInput("file", "Choose your csv files"),
@@ -537,33 +537,6 @@ body <- dashboardBody(
                       #)),
                     
                     br(),br()
-                    #div.col-sm-4 {padding:0px};
-                    #fluidRow(column(4),column(3,strong("top genes"))),
-                    # div(style="display:inline-block",
-                    #     fluidRow(column(4,br(),style= "width:14%;",
-                    #                     actionButton(
-                    #                       inputId = "topdegenes",
-                    #                       label = "Plot top DE genes",
-                    #                       style =
-                    #                         "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                    #                     )),
-                    #              column(3, style= "width:15.5%;",br(),
-                    #                     
-                    #                     downloadButton("savebarplot", "Save your barplot" , style =
-                    #                                      "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                    #              column(2 ,br(),style= "width:15.5%; , padding: 0%;",
-                    #              selectInput( "formvenbar",label = NULL,
-                    #                choices = c("png", "eps", "pdf"))),
-                    #               column(2,style= "width:12%; padding: 0%;", uiOutput("topgenesvenn", style= "padding: 0px;"))
-                    #     )),
-                    # 
-                    # 
-                    # br(),
-                    # #column(6,
-                    # plotOutput(outputId ="barplotvenn", height = 700),
-                    # conditionalPanel(condition = "input$dispvenn == 'genes'",  
-                    #                  DT::dataTableOutput("vennresintergen"),
-                    #                  plotOutput(outputId ="barplotvennmean", height = 700))
                   )
                  
                  , tabPanel(strong("Venn GO enrichment"),
@@ -611,10 +584,10 @@ body <- dashboardBody(
                                                 choices = c("both","up", "down")))),
                           div(id = "mytext", 
                            p("A comma-separated list of ",
-                                a(href = "https://stat.columbia.edu/~tzheng/files/Rcolor.pdf",
+                                tags$a(href = "https://stat.columbia.edu/~tzheng/files/Rcolor.pdf",target="_blank",
                                   "x11"),
                                 "or",
-                                a(href = "https://en.wikipedia.org/wiki/Web_colors#Hex_triplet",
+                                tags$a(href = "https://en.wikipedia.org/wiki/Web_colors#Hex_triplet",target="_blank",
                                   "hex colors."))),
                           
                            textInput(
@@ -710,9 +683,9 @@ body <- dashboardBody(
                 #style = "width:100% ; max-width: 1200px; height: 1300px; max-height: 1800px;",
                 #tabBox(
                 tabsetPanel(
-                  id = "mainhmtabset",
+                  #id = "mainhmtabset",
                   #title = "Heatmap and GO enrichment",
-                  #id = "tabset1",
+                  id = "tabset1",
                   #width = NULL,
                   tabPanel(
                      strong("Visualize the Heatmap"),value = "hmmainpan",
@@ -733,6 +706,15 @@ body <- dashboardBody(
                         
                         conditionalPanel(condition = '!output.heatmbool',  verbatimTextOutput("warningsheat")
                         ),
+                    
+                    conditionalPanel(
+                      condition = "input.col1 =='blue' && input.col3 =='red' && input.submit == 0 ", 
+                      wellPanel(style = "position: absolute; width: 30%; left: 35%; top: 40%;
+                         box-shadow: 10px 10px 15px grey;",
+                                selectInput("text", "Choose your intermediate color:", choices = c("yellow", "white")),
+                                actionButton("submit", "Submit"))
+                    ),
+                        
                         #plotOutput("warningsheat")
                         conditionalPanel(condition = 'output.heatmbool',
                                          plotOutput("distPlot", width = "85%" , height = 1200)
@@ -831,9 +813,8 @@ body <- dashboardBody(
                     )),
                   tabPanel(
                     strong("(GO) enrichment-based cluster analysis"),value="maingo",
-                    downloadButton("savegohmdav", "Save your enrichment clusters" , style =
-                                     "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-                    
+                    downloadButton("savegohmdavxlsx", "Save your enrichment as xlsx" , style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+
                     conditionalPanel(condition = "input.GO",
                      div(class= "highvenn" , style="font-size:24px; text-align: center;",
                                htmlOutput("titlegomain")),
@@ -844,6 +825,7 @@ body <- dashboardBody(
                     div(class= "highvenn" , style="font-size:24px; text-align: center;",
                         htmlOutput("titlegotop")),
                     #strong("Top 10 significantly enriched GO and KEGG terms"),
+                    
                     fluidRow(
                       column(6,DT::dataTableOutput("cat_MF") ),
                       column(6,DT::dataTableOutput("cat_BP") )),
@@ -869,7 +851,6 @@ body <- dashboardBody(
                     br(),br(),br(),br(),br(),br(),br(),br(),br(),
                     br(),br()
                     
-                    #verbatimTextOutput("event")
                     )
                   )
             )
@@ -894,11 +875,11 @@ body <- dashboardBody(
                              style="background-color: #3c8dbc;",
                              # box(id="boxpassvenn",title = strong("Heatmap settings"), width = NULL, background = "light-blue",
                              #     inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
-                             value="hmpan",
+                             value="widgetheat",
                           strong("Heatmap settings", style="font-size:25px;") ,
                           br(),
                              
-                           actionLink("resetAll",  label = ("reset all"), style="color:White;float:right;"),
+                           actionLink("resetAll",  label = ("reset all"), style="color:orange;float:right;font-size: 18px;"),
                            br(),
                            #wellPanel(
                              uiOutput("individusel"),
@@ -983,19 +964,8 @@ body <- dashboardBody(
                                step = 1
                              ))),
                              
-                             # sliderInput(
-                             #   "cutheatm",
-                             #   "Choose where you cut the heatmap",
-                             #   min = 1,
-                             #   max = 15,
-                             #   value = 2,
-                             #   step = 0.5
-                             # ),
-                             
                              br(),
                              
-                             # selectInput("method2", "Choose your matrix distance:", selected = "FDR", 
-                             #             c("adj.p.val(FDR)" = "FDR", "p.value(raw)" = "None" )),
                              
                              div(id = 'center', strong("Advanced settings",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                              br(),
@@ -1097,17 +1067,6 @@ body <- dashboardBody(
                                  )
                                  
                                  ),
-                              # column(
-                              #   6,
-                              #    numericInput(
-                              #      'legsize',
-                              #      'Legend size',
-                              #      0.8,
-                              #      min = 0.2,
-                              #      max = 1.5,
-                              #      step = 0.1
-                              #    )
-                              #   ),
                                  
                                  fluidRow(column(
                                    6,
@@ -1122,15 +1081,9 @@ body <- dashboardBody(
                                                 "show/hide colnames",
                                                 c("show", "hide"))
                                  )),
-                                 
-
-                                 #uiOutput('myPanel',inline=T),
-                              #column(12,uiOutput('myPanel')),  
+ 
                               uiOutput('myPanel'),
-                              
-                              
                                  br()
-                               #)
                              ))), #end of the div "form"
                            
                            br(),
@@ -1224,7 +1177,7 @@ body <- dashboardBody(
                 tabPanel(
                   
                   "Heatmap clustering",
-                  value="cutpan",
+                  value="test3",
                   # box(id="boxpassvenn",title = strong("Heatmap settings"), width = NULL, background = "light-blue",
                   #     inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
                   
@@ -1273,13 +1226,13 @@ body <- dashboardBody(
           tags$style(type='text/css', ".well { max-width: 20em; }"),
           tabPanel(p(icon("info-circle"),
                      "About"),
-                   mainPanel(includeMarkdown(
-                     "markdown/about.md"
-                   )), 
-                   br(), br(), br(),
-                   br(), br(), br(),
-                   br(), br(), br(),
-                   br(), br(), 
+                   tags$h2("MATRiX App"),
+                   tags$p("This application created during my internship is used to facilitate access to biologist in the aim of publishing graphs related to some specifics data produced by microarray"),
+                   tags$p("Date updated: 29/05/2018"),
+                   p("About author: Franck Soubès", 
+                   tags$a(href = "https://github.com/fsoubes",target="_blank",
+                          "See github")),
+                   #<a href="https://github.com/fsoubes">See github</a></p>
                    actionLink("session",
                               "Print version information about R, the OS and attached or loaded packages."),
                    br(), br(), br(),

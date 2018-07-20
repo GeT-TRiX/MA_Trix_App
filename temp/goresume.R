@@ -1,16 +1,15 @@
 library(xlsx)
 read.xlsx2(file= "MA0706_go.xlsx")[[1]]
 library(readxl)
-gotab <- read.xlsx2("MA0706_go.xlsx", sheetIndex = 1)
+gotab <- read.xlsx2("MA0191_go.xlsx", sheetIndex = 1)
 View(gotab)
 library(dplyr)
 colnames(gotab)
 unique(gotab$Category)
-
+View(gotab)
 
 
 resumgotab <- function(gotab){
-  
  lapply(seq(NROW(unique(gotab$Category))), function(x){
   myl = unique(gotab$Category)
   return(gotab %>% filter(Category == myl[[x]]) %>% 
@@ -19,7 +18,7 @@ resumgotab <- function(gotab){
 }
 
 test = resumgotab(gotab)
-View(test)
+View(test[[2]])
 
 
 View(gotab)

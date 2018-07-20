@@ -72,8 +72,10 @@ my_intermediate <- reactive({
   else if (col_choice1() == "orange" & col_choice3() == "red")
     inter = "yellow"
   
-  else if (col_choice1() == "blue" & col_choice3() == "red")
-    inter = "white"
+  else if (col_choice1() == "blue" & col_choice3() == "red"){#
+    user_choice <- eventReactive(input$submit, input$text)
+    inter <- user_choice()
+  }
   
   else if (col_choice1() == "blue" & col_choice3() == "yellow")
     inter = "black"

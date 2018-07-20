@@ -56,7 +56,7 @@ observeEvent(input$noTests, {
 choix_test <- reactive({
   return(input$test)
 })
-#, ignoreNULL = F)
+
 
 
 
