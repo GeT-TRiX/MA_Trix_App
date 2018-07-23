@@ -4,7 +4,6 @@
 #}else{
 # Limit with the raw data submission to 2Gb
 options(shiny.maxRequestSize=2000000000)
-#}
 
 
 cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"), 
@@ -14,13 +13,10 @@ cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatm
 categoerygen = c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY")
 
 
-
 source("css/owncss.R")
 source('LoadPackages.R')
 source("function/formating.R")
-#source("environnement/global.R")
 source("function/PCA.R")
-#source("www/loadingcss.R")
 source("function/heatmtruncated.R")
 source("function/formating.R")
 source("function/PCA.R")
@@ -29,21 +25,37 @@ source("function/vennplot.R")
 source("function/create_forked_task.R")
 source("function/cutheat.R")
 source("function/gosearch.R")
+source("function/highchartconverter.R")
 
 
 
-# source("function/PCA.R")
-# source('LoadPackages.R')
-# source("css/owncss.R")
-# source("function/formating.R")
-# source("Rfunctions/Data_Management.R")
-# source("Rfunctions/Stat_Model.R")
-# source("Rfunctions/DiagPlot.R")
-# source("Rfunctions/VisuPlot.R")
-# source("Rfunctions/CompPlot.R")
-# source("Rfunctions/DiffTable.R")
-# source('Rfunctions/directoryInput.R')
-# source('Rfunctions/internal_masque.R')
+################################
+######## Chat env             ##
+################################
+
+# Globally define a place where all users can share some reactive data.
+vars <- reactiveValues(chat=NULL, users=NULL)
+
+# Restore the chat log from the last session.
+if (file.exists("chat.Rds")){
+  vars$chat <- readRDS("chat.Rds")
+} else {
+  vars$chat <- "Welcome to MATRiX Chat!"
+}
+
+#' Get the prefix for the line to be added to the chat window. Usually a newline
+#' character unless it's the first line.
+linePrefix <- function(){
+  if (is.null(isolate(vars$chat))){
+    return("")
+  }
+  return("<br />")
+}
+
+################################
+######## Variables env        ##
+################################
+
 
 firstcol = "green"
 intercol = "black"

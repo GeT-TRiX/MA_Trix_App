@@ -53,10 +53,6 @@ shinyServer(function(input, output,session) {
   ######## Grep project name              ##
   ##########################################
   
-  observeEvent(input$heatm, {
-    print(colnames(adjusted()[[1]]))
-    cat(colnames(adjusted()[[1]]))
-  })
   
   file_name <- reactive({
     inFile <- input$file
@@ -83,7 +79,7 @@ shinyServer(function(input, output,session) {
 
   ################################
   ######## Heatmap page         ##
-  ###############################"
+  ################################
   
   source(file.path("server", "checkboxcontrast.R"), local = TRUE)$value #
   source(file.path("server", "changeheatmbut.R"), local = TRUE)$value #
@@ -101,13 +97,22 @@ shinyServer(function(input, output,session) {
   ######## GO enrichissment               ##
   ##########################################
   
+  
   source(file.path("server", "shinygo.R"), local = TRUE)$value #
+  source(file.path("server", "highchartshiny.R"), local = TRUE)$value #
   
   ################################
   ######## cutheatmap page      ##
   ################################
   
   source(file.path("server", "cutheatmap.R"), local = TRUE)$value #
+  
+  ##########################################
+  ######## Contact chat                   ##
+  ##########################################
+  
+  source(file.path("server", "shinychat.R"), local = TRUE)$value #
+  
   
 })
 

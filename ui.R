@@ -27,6 +27,7 @@ tags$head(
       menuItem("PCA", tabName = "PCA", icon = icon("line-chart")),
       menuItem("Venn diagram", tabName = "Venn", icon = icon("line-chart")),
       menuItem("Heatmap", tabName = "Heatmap", icon = icon("line-chart")),
+      menuItem("Support", tabName = "Support", icon = icon("question-circle")),
       menuItem("About", tabName = "About", icon = icon("info-circle")),
       #bookmarkButton(),
       menuItemOutput("dymMenu"),
@@ -500,16 +501,16 @@ body <- dashboardBody(
                                   display: inline;
                                   }")),
                       
-                      tags$head(tags$style("
+                    tags$head(tags$style("
                                   #mytext p{
-                                        font-weight: 500;
-                                        font-size: 17px;
-                                        line-height: 1.5;
-                                        color: white;
-                                        position: static;
-                                  }
-                                 #mytext a{
-                                           color: red;}")),
+                                         font-weight: 500;
+                                         font-size: 17px;
+                                         line-height: 1.5;
+                                         color: white;
+                                         position: static;
+                                         }
+                                         #mytext a{
+                                         color: red;}")),
                       
                       div(
                         id = "container",
@@ -826,19 +827,29 @@ body <- dashboardBody(
                         htmlOutput("titlegotop")),
                     #strong("Top 10 significantly enriched GO and KEGG terms"),
                     
-                    fluidRow(
-                      column(6,DT::dataTableOutput("cat_MF") ),
-                      column(6,DT::dataTableOutput("cat_BP") )),
-                    fluidRow(
-                      column(6,DT::dataTableOutput("cat_CC") ),
-                      column(6,DT::dataTableOutput("cat_KEGG") )
+                    # fluidRow(
+                    #   column(6,DT::dataTableOutput("cat_MF") ),
+                    #   column(6,DT::dataTableOutput("cat_BP") )),
+                    # fluidRow(
+                    #   column(6,DT::dataTableOutput("cat_CC") ),
+                    #   column(6,DT::dataTableOutput("cat_KEGG") )
+                    # 
+                    # ))
                     
-                    ))
+                    tags$script(src="libraries/jquery-1.9.1.min.js")
+                    ,tags$script(src="https://code.highcharts.com/highcharts.js")
+                    ,tags$script(src="https://code.highcharts.com/highcharts-more.js")
+                    ,tags$script(src="https://code.highcharts.com/modules/exporting.js")   
+                    ,tags$script(src="https://code.highcharts.com/modules/export-data.js")  
+                    
+                    
+                    ,tags$div(id="highChart")  
+                    ,tags$script(src="bubble.js")
                     
                     
                     #,
                     #verbatimTextOutput("clustgo")
-                  ),
+                  )),
                   tabPanel
                   (
                     strong("Cut heatmap"),#icon("table"), 
@@ -1222,6 +1233,68 @@ body <- dashboardBody(
       
     )),
   
+  tabItem(tabName = "Support",
+          tags$head(
+            tags$style(
+              "#entry {width: 100%;position: relative;left: 4%;}
+              #users ul li {font-family: 'Inconsolata', cursive;font-weight: 500;line-height: 1.5;color: white;position: static;font-size: 18px;} 
+              #users a{color: red;} #users p{color:white;}")), 
+                   
+                   includeCSS("www/shinychat.css"),
+                   
+                   # And custom JavaScript -- just to send a message when a user hits "enter"
+                   # and automatically scroll the chat window for us. Totally optional.
+                   includeScript("www/sendOnEnter.js"),
+                   fluidRow(
+                   column(width=9,
+                          div( style = "width:100% ; max-width: 1200px; height: 500px",
+                               #tags$h2("Support client"),
+                     div(
+                       class = "row-fluid", 
+                         # Create a spot for a dynamic UI containing the chat contents.
+                         uiOutput("chat"),
+                         
+                         # Create the bottom bar to allow users to chat.
+                         fluidRow(
+                           div(class="span8",
+                               textInput("entry", "")
+                           ),
+                           div(class="span2 center",
+                               actionButton("send", "Send")
+                           )
+                         )
+                       ))),
+                     
+                   
+                   div(id="pass",style = "word-wrap: break-word;",
+                       column(
+                         width = 3,
+                         box(id="boxpass",title = strong("Upload data", style="font-size:25px;"), width = NULL, background = "light-blue",
+                             inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
+                   
+                       # The right sidebar
+                         # Let the user define his/her own ID
+                         textInput("user", "Your User ID:", value=""),
+                         tags$hr(),
+                         h5("Connected Users"),
+                         # Create a spot for a dynamic UI containing the list of users.
+                       div(id ="users",
+                         uiOutput("userList"),
+                         tags$hr(),
+                         #helpText(HTML("<p>Built using R & <a href = \"http://rstudio.com/shiny/\">Shiny</a>.<p>Source code available <a href =\"https://github.com/trestletech/ShinyChat\">on GitHub</a>.")),
+                         p("Built using R and" ,tags$a(href = "http://rstudio.com/shiny/",target="_blank",
+                                                          "Shiny")),
+                         p("Source code available ", 
+                           tags$a(href = "https://github.com/trestletech/ShinyChat",target="_blank",
+                                  "on GitHub"))
+                         
+                       ))
+                     
+                     
+                   )
+  ))), 
+  
+  
   tabItem(tabName = "About",
           tags$style(type='text/css', ".well { max-width: 20em; }"),
           tabPanel(p(icon("info-circle"),
@@ -1232,7 +1305,7 @@ body <- dashboardBody(
                    p("About author: Franck Soubès", 
                    tags$a(href = "https://github.com/fsoubes",target="_blank",
                           "See github")),
-                   #<a href="https://github.com/fsoubes">See github</a></p>
+                   
                    actionLink("session",
                               "Print version information about R, the OS and attached or loaded packages."),
                    br(), br(), br(),
