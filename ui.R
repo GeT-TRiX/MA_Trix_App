@@ -386,10 +386,7 @@ body <- dashboardBody(
                 style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;",
                 tabsetPanel(
                 id = "Vennd",    
-                # tabBox(
-                #   title = "Venn diagramm",
-                #   id = "tabset1",
-                #   width = NULL,
+
                   tabPanel(
                     value= "vennset",
                     strong("Visualize the Venn diagram"),
@@ -424,8 +421,7 @@ body <- dashboardBody(
                     value = "vennbarplotpan",
                     strong("Visualize the intersection table"),
                     fluidRow( 
-                      # tags$head(
-                      #   tags$style(type="text/css", " #topgenes .label {display: inline-block;max-width: 100%;margin-bottom: 0px;font-weight: 700;}")),
+
                       column(6,br(),
                     downloadButton('downloadvennset', "Download the filtered data",
                                    style =
@@ -481,7 +477,7 @@ body <- dashboardBody(
                     
                     br(),br(),
                     conditionalPanel(condition = "input.dispvenn == 'genes'",  
-                                    # DT::dataTableOutput("vennresintergen"),
+
                                     div(class= "beforedf" , style="font-size:24px; margin-top: -8px;",
                                         htmlOutput("venngenesbef")),
                                      plotOutput(outputId ="barplotvennmean", height = 700)))),
@@ -489,9 +485,7 @@ body <- dashboardBody(
                   
                     br(),
                     h1("Here's a tracker for your different selections:"),
-                    #br(),
-                    #wellPanel(
-                      #column(width=9,
+
                       tags$head(
                         tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
                       ),
@@ -667,11 +661,6 @@ body <- dashboardBody(
   ######## Heatmap Page         #
   ###############################
   
-  
-    #tags$style(type='text/css', ".well { max-width: 15em; }"),
-    # tags$head(tags$style(HTML(InfoBoxCSS))),
-    #tags$head(tags$script("$(function() { $(\"[data-toggle='popover']\").popover(); })")),
-
   
     tabItem(tabName = "Heatmap",
             tags$style(type='text/css', ".well { max-width: 25em; }"),
@@ -867,9 +856,6 @@ body <- dashboardBody(
             ),
            # div(id="pass",style = "word-wrap: break-word;",
                 column(width=4,
-  
-                       # box(id="boxpassvenn",title = strong("Heatmap settings"), width = NULL, background = "light-blue",
-                       #      inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
                        
                        div(id="mypanheat", style="color: white;",
                       tabBox(
@@ -883,8 +869,7 @@ body <- dashboardBody(
                         #div( id="testingu",
                            tabPanel("Heatmap",id= "heatmpan", ##ADD8E6
                              style="background-color: #3c8dbc;",
-                             # box(id="boxpassvenn",title = strong("Heatmap settings"), width = NULL, background = "light-blue",
-                             #     inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
+
                              value="widgetheat",
                           strong("Heatmap settings", style="font-size:25px;") ,
                           br(),
@@ -1188,17 +1173,7 @@ body <- dashboardBody(
                   
                   "Heatmap clustering",
                   value="test3",
-                  # box(id="boxpassvenn",title = strong("Heatmap settings"), width = NULL, background = "light-blue",
-                  #     inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
-                  
-                  # sliderInput(
-                  #   "cutheight",
-                  #   "Choose where you cut the heatmap",
-                  #   min = 1,
-                  #   max = 15,
-                  #   value = 2,
-                  #   step = 0.5
-                  # ),
+
                   strong("Cut heatmap settings", style="font-size:25px;") ,
                   
                   br(),
@@ -1231,7 +1206,7 @@ body <- dashboardBody(
                 )
       
     )),
-  
+  # Source of the Support https://github.com/trestletech/ShinyChat
   tabItem(tabName = "Support",
           tags$head(
             tags$style(
