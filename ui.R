@@ -29,7 +29,6 @@ tags$head(
       menuItem("Heatmap", tabName = "Heatmap", icon = icon("line-chart")),
       menuItem("Support", tabName = "Support", icon = icon("question-circle")),
       menuItem("About", tabName = "About", icon = icon("info-circle")),
-      #bookmarkButton(),
       menuItemOutput("dymMenu"),
       collapsed = TRUE,
 
