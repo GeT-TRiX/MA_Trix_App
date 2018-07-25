@@ -1,3 +1,6 @@
+#Source https://stackoverflow.com/questions/33839543/shiny-server-session-time-out-doesnt-work
+# but seems to not work
+
 inactivity <- "function idleTimer() {
   var t = setTimeout(logout, 5000);
   window.onmousemove = resetTimer; // catches mouse movements
@@ -17,8 +20,8 @@ inactivity <- "function idleTimer() {
 }
 idleTimer();"
 
-
-
+#The following html are sourced from https://github.com/aghozlane/shaman/blob/master/css/owncss.R
+ 
 spincss <- "
   #plot-container {
 z-index: 0;
