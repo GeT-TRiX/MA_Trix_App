@@ -39,16 +39,16 @@ if(!require('shiny')){
 # Install dependencies, download last version of MATRiX from github and run matrix in one command :
 runGitHub('fsoubes/MA_Trix_App')
 ```
-This script can also be executed as following : 
+You can also run the app as following : 
 ```
 git clone https://github.com/fsoubes/MA_Trix_App
 chmod +x ./cmd.sh
 ./cmd.sh
 ```
 
-## Contact us
+## Contact
 
-If you have any comments, questions or suggestions, or need help to use MATRiX, dont hesitate to contact us at [Franck Soubès] (franck.soubes@inra.fr) or [Yannick Lippi] (yannick.lippi@inra.fr).
+For any questions, suggestions or if you need help to use MATRiX, dont hesitate to contact us at [Franck Soubès] (franck.soubes@inra.fr) or [Yannick Lippi] (yannick.lippi@inra.fr).
 
 ## Acknowledgements
 
