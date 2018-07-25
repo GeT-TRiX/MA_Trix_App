@@ -48,7 +48,7 @@ chmod +x ./cmd.sh
 
 ## Contact
 
-For any questions, suggestions or if you need help to use MATRiX, dont hesitate to contact us at [Franck Soubès] (franck.soubes@inra.fr) or [Yannick Lippi] (yannick.lippi@inra.fr).
+Here are our mail [Franck Soubès] (franck.soubes@inra.fr) or [Yannick Lippi] (yannick.lippi@inra.fr) for any questions, suggestions or if you need help to use MATRiX, dont hesitate to contact us.
 
 ## Acknowledgements
 
