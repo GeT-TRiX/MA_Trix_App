@@ -1,3 +1,6 @@
+/*
+Author: Franck Soubès
+*/
 
 $(document).ready(function () {
 
