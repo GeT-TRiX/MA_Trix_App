@@ -3,6 +3,7 @@ import os.path
 
 
 '''
+Author: Franck Soubès
 For a listing genes, display a web page with the enrichment of theses genes. It is possible in the web page to select the right organism.
 '''
 
