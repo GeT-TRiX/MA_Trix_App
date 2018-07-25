@@ -4,7 +4,7 @@
 
 - [Introduction](#introduction)
 - [Installation](#installation)
-- [Contact](#contact us)
+- [Contact](#contact)
 - [Acknowledgements](#acknowledgements)
 
 
