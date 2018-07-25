@@ -1,11 +1,10 @@
 # MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
-[Franck Soubès] (franck.soubes@inra.fr) [Yannick Lippi] (yannick.lippi@inra.fr)
 
 ## Contents
 
 - [Introduction](#introduction)
 - [Installation](#installation)
-- [Contact](#contact)
+- [Contact](#contact us)
 - [Acknowledgements](#acknowledgements)
 
 
@@ -24,7 +23,14 @@ TODO
 
 MATRiX is available for R>3.5.0. The installation, download and execution can all be performed with a small R script :
 ```
-# Load shiny packages
+## Download RDAVIDWebService
+source("https://bioconductor.org/biocLite.R")
+biocLite("RDAVIDWebService")
+
+## Load RDAVIDWebService 
+library(RDAVIDWebService)
+
+## Load shiny packages
 if(!require('shiny')){
  install.packages('shiny')
  library(shiny)
@@ -40,9 +46,9 @@ chmod +x ./cmd.sh
 ./cmd.sh
 ```
 
-## Contact
+## Contact us
 
-If you have any comments, questions or suggestions, or need help to use MATRiX, please contact me [here](franck.soubes@inra.fr).
+If you have any comments, questions or suggestions, or need help to use MATRiX, dont hesitate to contact us at [Franck Soubès] (franck.soubes@inra.fr) or [Yannick Lippi] (yannick.lippi@inra.fr).
 
 ## Acknowledgements
 
