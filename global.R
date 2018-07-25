@@ -1,9 +1,5 @@
-# Allow to upload 50M files only shaman server
-#if(Sys.info()["nodename"] == "ShinyPro"){
-#  options(shiny.maxRequestSize=1000000000*1024^2)
-#}else{
-# Limit with the raw data submission to 2Gb
-options(shiny.maxRequestSize=2000000000)
+# data' site
+options(shiny.maxRequestSize=1280000)
 
 
 cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"), 
@@ -12,9 +8,29 @@ cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatm
 
 categoerygen = c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY")
 
+# Loading packages
+
+
+#sudo apt-get install libv8-dev
+
+ list.of.packages <- c("AnnotationDbi","shiny","shinythemes","shinyjs","ggplot2","shinyBS","markdown","plyr",
+                      "BH","data.table","DT","readr","colourpicker","shinydashboard","shinytoastr",
+                      "tools","devEMF","R.devices","FactoMineR","factoextra","gplots","V8",
+                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly","dplyr","reticulate","Hmisc")
+
+#"goseq","GO.db","rbenchmark","heatmaply"
+
+#AnnotationDbi
+
+
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+lapply(list.of.packages,function(x){
+suppressPackageStartupMessages(library(x,character.only=TRUE))}) 
+
+
 
 source("css/owncss.R")
-source('LoadPackages.R')
 source("function/formating.R")
 source("function/PCA.R")
 source("function/heatmtruncated.R")
