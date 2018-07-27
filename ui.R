@@ -603,7 +603,7 @@ body <- dashboardBody(
                         
                         #plotOutput("warningsheat")
                         conditionalPanel(condition = 'output.heatmbool',
-                                         plotOutput("distPlot", width = "85%" , height = 1200)
+                                         plotOutput("distPlot", width = "100%" , height = 1300)
                                          
                                          ### Adding white spaces between the heatmap plot and the tracker
                                          

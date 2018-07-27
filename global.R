@@ -1,5 +1,5 @@
 # data' site
-options(shiny.maxRequestSize=1280000)
+options(shiny.maxRequestSize=128000000)
 
 
 cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"), 

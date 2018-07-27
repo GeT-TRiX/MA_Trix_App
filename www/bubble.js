@@ -10,28 +10,18 @@ var defaultOptions = {
   
   
     series: null,
-   //data goes here. initialize as null. will be updated later.
     chart: {
-	 
 	  zoomType: "xy",
-	  width: 1000,
+	  width: 1100,
 	  height: 600,
 	  renderTo: "highChart",
 	  type: 'bubble'
-	  //where should the chart be rendered on the page?
-                           //should correspond to the id of a div HTML tag 
-                           //in this case, "highChart" corresponds to this
-                           //below line code in ui.R:
-                           //     tags$div(id="highChart")
+
   },
-                           
-  //doesn't seem like we need the below, but will keep 
-  //as a precaution for linking with HTML/shiny
-  //maybe not necessary because jQuery handles the input/output? Not sure.
+
   dom: "highChart",  
   id: "highChart",  
                            
-  //get rid off exporting options and Highcharts logo
   exporting: {enabled: true},
   credits: {href: null, text: null},
   

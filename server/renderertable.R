@@ -12,6 +12,7 @@ output$data_summary <- renderDataTable(data_summary()) # Summary of the signific
 
 
 observe({
+  
   req(input$dispvenn)
   if(input$dispvenn == "probes")
     output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')), options = list(scrollX = TRUE)), server = F)

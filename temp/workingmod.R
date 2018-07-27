@@ -3,7 +3,7 @@
 library(shinyBS)
 library(shinyjs)
 library(data.table)
-source("function/formating.R")
+source("../function/formating.R")
 library(tool)
 
 options(shiny.maxRequestSize=2000000000)
@@ -129,7 +129,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
       return(NULL)
     }
     
-    req(input$file)
+    #req(input$file)
     print(inFile)
     
     
@@ -279,6 +279,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     
     Sys.sleep(1)
     closeAlert(session, "succeeded")
+    View(csvord[[1]])
     
     return (csvord)
   })
@@ -344,12 +345,14 @@ ui <- shinyUI(navbarPage(
 
 
 server <- function(input, output, session) {
+  
+  
   datafile <- callModule(csvFile, "Choose your csv files",
                          stringsAsFactors = T)
   
   observe({
     req(datafile())
-    print(datafile()[[1]])
+    View(datafile()[[1]])
     
     
   })
