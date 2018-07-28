@@ -16,7 +16,7 @@ DftoHighjson <- function(data, param) {
   
   
   unifiedData <- unifiedData[order(unifiedData$id),]
-
+  
   
   unifiedData$x <- as.numeric(as.character(unifiedData$FE))
   unifiedData$y <- as.numeric(unifiedData$Topgenes)
@@ -28,8 +28,8 @@ DftoHighjson <- function(data, param) {
   
   unifiedData$Term  = sapply(unifiedData$Term, FUN= function(x) if(grepl("^mmu", x)) return(strsplit(as.character(x), ":")%>% unlist() %>% .[2]) 
                         else return(strsplit(as.character(x), "~")%>% unlist() %>% .[2])) 
-  unifiedData$Pvalue =  tempData$pvalue
-  
+  unifiedData$Pvalue =  format(tempData$pvalue, digits = 3)
+
 
   
   return(highchartsConvert(unifiedData))

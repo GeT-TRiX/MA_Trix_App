@@ -142,14 +142,15 @@ davidwebservice <-
                    })
                  })
     
-    final = lapply(1:NROW(mygodavid), function(x)
-      return(format(mygodavid[[x]], digits = 3)))
+   # final = lapply(1:NROW(mygodavid), function(x)
+    #  return(format(mygodavid[[x]], digits = 3)))
+    # return(mygodavid[[x]]))
 
     
     updateTabsetPanel(session, "tabset1",
                       selected = "maingo")
     
-    return(final)
+    return(mygodavid)
   })
 
 

@@ -25,7 +25,15 @@ observe({
     output$vennresintergen <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')),options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons'), server = F)
 })
 
-output$davidgo <- DT::renderDataTable(DT::datatable(davidwebservice()[[as.numeric(input$cutgo)]][, -9] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons'))
+
+rounddavidtable <- reactive({
+  req(davidwebservice)
+  return(lapply(1:NROW(davidwebservice()), function(x)
+  return(format(davidwebservice()[[x]], digits = 3))))
+})
+
+
+output$davidgo <- DT::renderDataTable(DT::datatable(rounddavidtable()[[as.numeric(input$cutgo)]][, -9] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons'),server=F)
 
 
 
@@ -42,7 +50,7 @@ myrenderedtop <- reactive({
   req(csvf())
   select( csvf()[[3]], ProbeName:SystematicName, everything() ) %>%
     #mutate_if(is.numeric, funs(format(., digits = 3)))
-    mutate_if(is.numeric, funs(format(., digits = 3)))
+    mutate_if(is.numeric, funs(round(., digits = 3)))
 })
 
 output$new_group <- DT::renderDataTable(DT::datatable(myrenderedtop()[,-c(4:9)] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons') )
