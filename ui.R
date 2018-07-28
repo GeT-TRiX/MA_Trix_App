@@ -715,6 +715,7 @@ body <- dashboardBody(
                     
                     
                     tags$div(id="highChart")  ,
+                    checkboxInput("addlabelhigh", "add label", FALSE),
                     tags$script(src="bubble.js")
                     
                     

@@ -241,7 +241,7 @@ davidqueryvenn <- function(entrezids, species){
 mygotabres <- function(davtab){
   
   lapply(seq(unique(davtab$Category)), function(x){
-    return(davtab %>% select(Category, Term,Fold.Enrichment,Benjamini)%>%
+    return(davtab %>% select(Category, Term,Fold.Enrichment,Benjamini,Count,List.Total)%>%
              filter(Category == unique(davtab$Category)[[x]]) %>%
              top_n(10, Fold.Enrichment) %>% arrange(desc(Fold.Enrichment))%>% tibble::rownames_to_column("Top")
     )})

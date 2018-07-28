@@ -9,6 +9,7 @@ DftoHighjson <- function(data, param) {
   tempData$pvalue <- data$Benjamini
   tempData$FE <- data$Fold.Enrichment 
   tempData$Topgenes <-  data$Top
+  tempData$percent <- data$percent
 
   unifiedData <- reshape(tempData, varying=paste0("y",1), 
                       direction="long", idvar="Top",sep="",timevar="x")
@@ -19,7 +20,9 @@ DftoHighjson <- function(data, param) {
   
   unifiedData$x <- as.numeric(as.character(unifiedData$FE))
   unifiedData$y <- as.numeric(unifiedData$Topgenes)
-  unifiedData$z <-  as.numeric(as.character(unifiedData$FE))
+  unifiedData$z <-  as.numeric(as.character(unifiedData$percent))
+  
+  
   unifiedData$GO  = sapply(unifiedData$Term, FUN= function(x) if(grepl("^mmu", x)) return(strsplit(as.character(x), ":")%>% unlist() %>% .[1]) 
                         else return(strsplit(as.character(x), "~")%>% unlist() %>% .[1])) 
   
@@ -28,7 +31,6 @@ DftoHighjson <- function(data, param) {
   unifiedData$Pvalue =  tempData$pvalue
   
 
-  #DftoHighjson <- highchartsConvert(unifiedData)
   
   return(highchartsConvert(unifiedData))
 }

@@ -89,7 +89,6 @@ var defaultOptions = {
                 style: {
                     fontStyle: 'italic'
                 },
-                //text: 'Safe sugar intake 50g/day',
                 x: -10
             },
             zIndex: 3
@@ -97,22 +96,27 @@ var defaultOptions = {
     },
 
     tooltip: {
+        //valueDecimals: 2,
+        //yDecimals: 0,
+        //xDecimals: 1,
         useHTML: true,
         headerFormat: '<table>',
         pointFormat: '<tr><th colspan="2"><h3>{point.term}</h3></th></tr>' +
                     '<tr><th> adj.pval:</th><td>{point.pvalue}</td></tr>' +
-                    '<tr><th>Fold enrichment:</th><td>{point.x}</td></tr>' +
-                    '<tr><th>Top:</th><td>{point.y}</td></tr>' +
-                    '<tr><th>Fold enrichment:</th><td>{point.z}%</td></tr>',
+                    '<tr><th>Fold enrichment:</th><td>{point.x:,.1f}</td></tr>' +
+                    '<tr><th>Top:</th><td>{point.y:,.0f}</td></tr>' +
+                    '<tr><th>Percentage of hits:</th><td>{point.z:,.2f}%</td></tr>',
         footerFormat: '</table>',
         followPointer: true
     },
 
     plotOptions: {
         series: {
+            stickyTracking: false,
             dataLabels: {
                 enabled: true,
-                format: '{point.GO}'
+                format: '{point.GO}',
+                color: 'black'
             }
         }
     },
@@ -130,7 +134,6 @@ var defaultOptions = {
   );
   */
   
-  
   Shiny.addCustomMessageHandler("updateVariable", function(newData) {
   var newOptions = defaultOptions;
   newOptions.subtitle.text = newData.min;
@@ -138,11 +141,15 @@ var defaultOptions = {
   newOptions.series = newData.series; //update the series data 
   newOptions.subtitle.text = newData.legend;
   newOptions.yAxis.title.text = newData.title;
-  console.log(newOptions);
+
+  var nolabels = Shiny.addCustomMessageHandler("handler1", 
+  function (message){
+  newOptions.plotOptions.series.dataLabels.enabled = message;
   var chartObj = new Highcharts.Chart(newOptions);
-  //newOptions.title = "test";
-  //chartObj.redraw();
- 
+  
   });
   
 });
+
+});
+  
