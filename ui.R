@@ -24,13 +24,13 @@ tags$head(
   div(
     id = "matrixapp",
     sidebarMenu(id = "side",
-                
-      menuItem("Upload Data", tabName = "Home", icon = icon("upload")),
+      menuItem("Home", tabName = "Home", icon = icon("home")),      
+      menuItem("Upload Data", tabName = "Upload", icon = icon("upload")),
       menuItem("PCA", tabName = "PCA", icon = icon("line-chart")),
       menuItem("Venn diagram", tabName = "Venn", icon = icon("line-chart")),
       menuItem("Heatmap", tabName = "Heatmap", icon = icon("line-chart")),
-      menuItem("Support", tabName = "Support", icon = icon("question-circle")),
-      menuItem("About", tabName = "About", icon = icon("info-circle")),
+      #menuItem("Support", tabName = "Support", icon = icon("question-circle")),
+      #menuItem("About", tabName = "About", icon = icon("info-circle")),
       menuItemOutput("dymMenu"),
       collapsed = TRUE,
 
@@ -80,14 +80,132 @@ body <- dashboardBody(
   includeCSS("./css/style.css"),
   div(
     id = "loading-content",
-    br(),
-    br(),
+    br(),br(),
     br(),
     h2("Please wait while MATRiX is loading...")),
   div(
     id = "matrixapp",
   tabItems(
     tabItem(tabName = "Home",
+            fluidRow(
+              column(width=9,
+                     div(style="width:100% ; max-width: 1200px; height: 550px",id = "homepage",
+                         
+                         tabBox(title="Welcome to MATRiX", width=NULL,id = "homepage",
+
+                                tabPanel("About", style = "background-color: #ffffff;",
+                                         tags$h3("MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics."),
+                                         p("This project initiated by Yannick Lippi aims to facilitate access to biologist in order to publish graphs such as heatmap, PCA or Venn diagram related to specifics data produced by TRiX's facility 
+MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarize microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querrying the DWS (DAVID WEB SERVICES).
+
+MATRiX app is working with specific data produced by the limma package name, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/downloadData.zip) Here's the global workflow passing by the experiment to the visualization. "),
+                                      
+                                         p("Hereafter is the global workflow of the MATRiX application:")
+                                         ),
+                                tabPanel("Authors", h3("The main contributors to MATRiX:"),
+                                         p(a("Yannick Lippi",href="mailto:yannick.lippi@inra.fr"), "(Initiator, beta-testing, feature suggestions)"),
+                                         p(a("Franck Soubès", href="mailto:franck.soubes@inra.fr"), "(Coding, Unit testing, documentation, packaging, feature suggestions)",tags$a(href = "https://github.com/fsoubes",target="_blank",
+                                                                                                                                                                                   "See github")),
+                                         h3("Acknowledgements"),
+                                         p("Thanks to the Toxalim's team BioToMyc & TIM and especially to the following people for their helps reporting errors, proposing new features and beta testing MATRiX:"),
+                                         p("Laura Costes,", "Anne Fougerat,","Claire Naylies,", "Philippe Pinton,","Arnaud Polizzi," ,"Marion Regnier," , "Sandrine Ellero-Simatos,","Sarra Smati."),
+                                         p("Special Thanks to Didier Laborie for installing the virtual machine with Ubuntu and for answering to some of my questions")
+                                         
+                                ),
+                                tabPanel("Packages",
+                                         tags$h3("If you are using MATRiX in your work, you can cite some of the packages by clicking on the link down below."),
+                                         
+                                         actionLink("session",
+                                                    "Print version information about R, the OS and attached or loaded packages."),
+                                         br(), br(), br(),
+                                         DT::dataTableOutput("sessinfo")
+                                ),
+                                tabPanel("Support",
+                                         tags$head(
+                                           tags$style(
+                                             "#entry {width: 100%;position: relative;left: 4%;}
+              #users ul li {font-family: 'Inconsolata', cursive;font-weight: 500;line-height: 1.5;color: white;position: static;font-size: 18px;} 
+              #users a{color: red;} #users p{color:white;}")), 
+                                         
+                                         includeCSS("www/shinychat.css"),
+                                         
+                                         # And custom JavaScript -- just to send a message when a user hits "enter"
+                                         # and automatically scroll the chat window for us. Totally optional.
+                                         includeScript("www/sendOnEnter.js"),
+                                         fluidRow(
+                                           column(width=9,
+                                                  div( style = "width:100% ; max-width: 1200px; height: 500px",
+                                                       #tags$h2("Support client"),
+                                                       div(
+                                                         class = "row-fluid", 
+                                                         # Create a spot for a dynamic UI containing the chat contents.
+                                                         uiOutput("chat"),
+                                                         
+                                                         # Create the bottom bar to allow users to chat.
+                                                         fluidRow(
+                                                           div(class="span8",
+                                                               textInput("entry", "")
+                                                           ),
+                                                           div(class="span2 center",
+                                                               actionButton("send", "Send")
+                                                           )
+                                                         )
+                                                       )))
+                                         
+                                         
+                                )
+                                
+                                
+                                )))),
+              column(width=3,
+                     div(id="pass",style = "word-wrap: break-word;",
+                         box(id="boxpass",title = strong("Session information", style="font-size:25px;"), width = NULL, background = "light-blue",
+                             
+                             # The right sidebar
+                             # Let the user define his/her own ID
+                             textInput("user", "Your User ID:", value=""),
+                             tags$hr(),
+                             h5("Connected Users"),
+                             # Create a spot for a dynamic UI containing the list of users.
+                             div(id ="users",
+                                 uiOutput("userList"),
+                                 tags$hr(),
+                                 #helpText(HTML("<p>Built using R & <a href = \"http://rstudio.com/shiny/\">Shiny</a>.<p>Source code available <a href =\"https://github.com/trestletech/ShinyChat\">on GitHub</a>.")),
+                                 p("Built using R and" ,tags$a(href = "http://rstudio.com/shiny/",target="_blank",
+                                                               "Shiny")),
+                                 p("Chat source code is available ", 
+                                   tags$a(href = "https://github.com/trestletech/ShinyChat",target="_blank",
+                                          "here"))
+                                 
+                             ))
+                         
+                     ),
+                     box(
+                       title = "What's new in MATRiX", width = NULL, status = "primary",
+                       div(style = 'overflow-y: scroll; height: 550px',
+                           addNews("Jul 17th 2018", "Tutorial/Video", "Soon will be added a video to summarise the application"),
+                           addNews("Jul 16th 2018", "Venn" ,"You can now choose your color for the venn diagram"),
+                           addNews("Jul 16th 2018","Bug fixes","Venn diagram display erros when filtering"),
+                           addNews("Jul 5th 2018","Venn/DAVID","Add Gene functionnal classification for selected interaction(s)"),
+                           addNews("Jun 26th 2018","Add features","It's now possible to interact with the rendering table to filter the table in the aim of plotting the top n genes.
+                          For the GO enrichment it is now possible to select the rows in order to display the gene symbol according to the entrez ids"),
+                           addNews("Jun 22th 2018","Bug fixes","For two contrasts the venn.draw function was not ordering the contrast names in the right order."),
+                           addNews("Jun 20th 2018","MATRiX","First public release of MATRiX. 
+                                                              Enhancement of the gui with the use of dashboard package"),
+                           addNews("Jun 18th 2018","GO enrichment","It is now possible to query the DWS for the Heatmap and save the result in xlsx format for the different clusters"),
+                           addNews("Jun 15th 2018","DNS ","Adding DNS for the MATRiX application (matrix.toulouse.inra.fr)"),
+                           addNews("Jun 10th 2018","Venn diagram","The venn diagram FC and display of the top n genes
+                                                                have been added to compare the results of 2 or more contrasts."), 
+                           addNews("Jun 5th 2018","PCA/Heatmap","Display color groups side by side in the gui"), 
+                           addNews("May 29th 2018","beta-test","The service will be made available once the beta test phase is officially completed.")
+                       )
+                     )
+                    
+              )
+            )
+            ),
+    
+    tabItem(tabName = "Upload",
             bsAlert("alert"),
             tags$style(type='text/css', ".well { max-width: 2em; }"),
             fluidRow(
@@ -109,7 +227,7 @@ body <- dashboardBody(
                                              tags$ul(
                                                tags$li("First click on the browse button to load the data"),
                                                tags$li("After the pop up has appeared, you will have to select the files within the access path that is given in the report produced by Yannick. "),
-                                               tags$li("You will then find three distinct csv files, these files are respectively named xxx<em>pData, xxx</em>topTableAll and xxx_WorkingSet."),
+                                               tags$li("You will then find three distinct csv files, these files are respectively named xxx_pData, xxx_topTableAll and xxx_WorkingSet."),
                                                tags$li("The final step consist to select all the data at once and then confirm the selection by clicking on the open button."),
                                                tags$li("A green message will then appear to confirm the data loading with a summary table.")
                                              ),
@@ -193,7 +311,7 @@ body <- dashboardBody(
             box(
               title = "What's new in MATRiX", width = NULL, status = "primary",
               div(style = 'overflow-y: scroll; height: 550px',
-	          addNews("Jul 17th 2018", "Tutorial/Video", "Soon will be added a video to resume the application"),
+	          addNews("Jul 17th 2018", "Tutorial/Video", "Soon will be added a video to summarise the application"),
                   addNews("Jul 16th 2018", "Venn" ,"You can now choose your color for the venn diagram"),
                   addNews("Jul 16th 2018","Bug fixes","Venn diagram display erros when filtering"),
                   addNews("Jul 5th 2018","Venn/DAVID","Add Gene functionnal classification for selected interaction(s)"),
@@ -233,6 +351,7 @@ body <- dashboardBody(
               width = 9,
               div(style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;",
                 #style = "width:100% ; max-width: 1200px; height: 1050px",
+                #tabBox(title="PCA, width=NULL,id = "homepage",
                 tabsetPanel(
                   #title = "Principal component analysis",
                   #id = "tabset1",
@@ -341,6 +460,7 @@ body <- dashboardBody(
   
   
     tabItem(tabName = "Venn",
+            
             tags$style(type='text/css', ".well { max-width: 25em; }"),
             tags$style(type='text/css', ".well { max-height: 50em; }"),
             fluidRow(column(
@@ -494,7 +614,25 @@ body <- dashboardBody(
                     br(),br()
                   ), tabPanel(strong("Venn GO enrichment"),
                             value = "venngopanel",
-                          plotOutput("clusterPlot"),
+                            useShinyjs(),
+                            
+                                fluidRow( column(6 ,
+                                                 downloadButton(
+                                                   "saveclusterchoose",
+                                                   "Download the graph" ,
+                                                   style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+                                                 ),
+                                          column( 3, 
+                                                  selectInput(
+                                                    "formvennclus",label = NULL,
+                                                    choices = c("png", "eps", "pdf")))
+                                          
+                                )),
+                            
+                            
+                          plotOutput("clusterPlot", width = "100%", height = "700px"),
+                          br(),br(),br(),
+                          #plotOutput("acyclicgo", width = "100%", height = "1200px"),
                           verbatimTextOutput("debug")
                  )
                           
@@ -1020,88 +1158,7 @@ body <- dashboardBody(
                        )
                 )
       
-    )),
-  
-  tabItem(tabName = "Support",
-          tags$head(
-            tags$style(
-              "#entry {width: 100%;position: relative;left: 4%;}
-              #users ul li {font-family: 'Inconsolata', cursive;font-weight: 500;line-height: 1.5;color: white;position: static;font-size: 18px;} 
-              #users a{color: red;} #users p{color:white;}")), 
-                   
-                   includeCSS("www/shinychat.css"),
-                   
-                   # And custom JavaScript -- just to send a message when a user hits "enter"
-                   # and automatically scroll the chat window for us. Totally optional.
-                   includeScript("www/sendOnEnter.js"),
-                   fluidRow(
-                   column(width=9,
-                          div( style = "width:100% ; max-width: 1200px; height: 500px",
-                               #tags$h2("Support client"),
-                     div(
-                       class = "row-fluid", 
-                         # Create a spot for a dynamic UI containing the chat contents.
-                         uiOutput("chat"),
-                         
-                         # Create the bottom bar to allow users to chat.
-                         fluidRow(
-                           div(class="span8",
-                               textInput("entry", "")
-                           ),
-                           div(class="span2 center",
-                               actionButton("send", "Send")
-                           )
-                         )
-                       ))),
-                     
-                   
-                   div(id="pass",style = "word-wrap: break-word;",
-                       column(
-                         width = 3,
-                         box(id="boxpass",title = strong("Upload data", style="font-size:25px;"), width = NULL, background = "light-blue",
-                             inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
-                   
-                       # The right sidebar
-                         # Let the user define his/her own ID
-                         textInput("user", "Your User ID:", value=""),
-                         tags$hr(),
-                         h5("Connected Users"),
-                         # Create a spot for a dynamic UI containing the list of users.
-                       div(id ="users",
-                         uiOutput("userList"),
-                         tags$hr(),
-                         #helpText(HTML("<p>Built using R & <a href = \"http://rstudio.com/shiny/\">Shiny</a>.<p>Source code available <a href =\"https://github.com/trestletech/ShinyChat\">on GitHub</a>.")),
-                         p("Built using R and" ,tags$a(href = "http://rstudio.com/shiny/",target="_blank",
-                                                          "Shiny")),
-                         p("Source code available ", 
-                           tags$a(href = "https://github.com/trestletech/ShinyChat",target="_blank",
-                                  "on GitHub"))
-                         
-                       ))
-                     
-                     
-                   )
-  ))), 
-  
-  
-  tabItem(tabName = "About",
-          tags$style(type='text/css', ".well { max-width: 20em; }"),
-          tabPanel(p(icon("info-circle"),
-                     "About"),
-                   tags$h2("MATRiX App"),
-                   tags$p("This application created during my internship is used to facilitate access to biologist in the aim of publishing graphs related to some specifics data produced by microarray"),
-                   tags$p("Date updated: 29/05/2018"),
-                   p("About author: Franck Soubès", 
-                   tags$a(href = "https://github.com/fsoubes",target="_blank",
-                          "See github")),
-                   
-                   actionLink("session",
-                              "Print version information about R, the OS and attached or loaded packages."),
-                   br(), br(), br(),
-                   DT::dataTableOutput("sessinfo")
-          )
-  )
-  
+    ))
   
  )
 )

@@ -3,20 +3,74 @@ observe({
   updateSliderInput(session, "clusterNumber", max = nrow(summary(Venncluster())))
 })
 
+output$saveclusterchoose <- downloadHandler(filename <- function() {
+  paste0(basename(file_path_sans_ext(projectname())), '_venn', input$clusterNumber, 'cluster.', input$formvennclus, sep =
+           '')
+},
+content <- function(file) {
+  
+  
+  if (input$formvennclus == "pdf")
+    
+    pdf(file,
+        width = 12,
+        height = 12,
+        pointsize = 12)
+  
+  
+  else if (input$formvennclus == "png")
+    
+    png(
+      file,
+      width = 1200,
+      height = 1200,
+      units = "px",
+      pointsize = 12,
+      res = 100
+    )
+  else
+    eps(file,
+        width = 12,
+        height = 12,
+        pointsize = 12)
+  
+ 
+  acyclgo()
+  dev.off()
+})
+
+
+
+
 output$clusterPlot <- renderPlot({
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
       need(vennchoice(), 'You need to select in the Specify your interaction widget the comparisons defining your intersections!')%next%
       need(input$GOvenn ,'You need to click on the run Go button!'))
   req(Venncluster())
-  print(Venncluster())
-  print(Venncluster()[[1]])
-  if(input$clusterNumber == 1)
-    shinyjs::alert("There's not enough genes in your interaction(s) for this cluster!")
+
   plot2D(Venncluster(), input$clusterNumber)
 })
 
+#output$acyclicgo <- renderPlot({
+  
+#davidGODag<-DAVIDGODag(members(Venncluster())[[input$clusterNumber]],  pvalueCutoff=0.1)
+#plotGOTermGraph(g=goDag(davidGODag),r=davidGODag, max.nchar=50, node.shape="ellipse")
+
+#})
+
+davidtag<- reactive({req(Venncluster())
+  davidGODag<-DAVIDGODag(members(Venncluster())[[input$clusterNumber]],  pvalueCutoff=0.05) })
+
+acyclgo <- reactive({
+  req(davidtag())
+  plotGOTermGraph(g=goDag(davidtag()),r=davidtag(), max.nchar=40, node.shape="ellipse")
+  
+})
+
+
 output$debug <- renderPrint({
+  
   req(Venncluster())
   summary(Venncluster())
 })
@@ -56,7 +110,7 @@ Venncluster <- eventReactive(input$GOvenn, {
                      
                      shinyjs::alert("David's server is busy")
                      warning("David's server is busy")
-                     return(cbind("David's server is busy") %>% as.data.frame() %>% setNames("Error"))
+                     return(NULL)
                      
                    })
                  })

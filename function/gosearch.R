@@ -210,7 +210,6 @@ davidqueryvenn <- function(entrezids, species){
   
   david <- DAVIDWebService$new(email = "franck.soubes@inra.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
   RDAVIDWebService::setTimeOut(david, 90000)
-  print(entrezids)
   addList(
     david,
     entrezids,

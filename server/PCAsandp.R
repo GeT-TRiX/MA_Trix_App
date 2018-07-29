@@ -241,8 +241,8 @@ content <- function(file) {
     
     png(
       file,
-      width = 1200,
-      height = 1200,
+      width = 2500,
+      height = 2500,
       units = "px",
       pointsize = 12,
       res = 100
