@@ -100,10 +100,39 @@ body <- dashboardBody(
               ),
               
               column(width=9,
-                div( style = "width:100% ; max-width: 1200px; height: 1050px",
+                div( style = "width:100% ; max-width: 1200px; height: 100%" ,
                
                             conditionalPanel(condition = 'output.boolmark', #Hide or Show event depending on the loading data success or failure
-                                             includeMarkdown("markdown/help.md")),
+                                             #includeMarkdown("markdown/help.md")
+                                             tags$h1("How to import ?"),
+                                             #<h1 id="howtoimport">How to import ?</h1>
+                                             tags$ul(
+                                               tags$li("First click on the browse button to load the data"),
+                                               tags$li("After the pop up has appeared, you will have to select the files within the access path that is given in the report produced by Yannick. "),
+                                               tags$li("You will then find three distinct csv files, these files are respectively named xxx<em>pData, xxx</em>topTableAll and xxx_WorkingSet."),
+                                               tags$li("The final step consist to select all the data at once and then confirm the selection by clicking on the open button."),
+                                               tags$li("A green message will then appear to confirm the data loading with a summary table.")
+                                             ),
+
+                                               tags$p(
+    
+                                                tags$img(src = "pdata.png"),
+                                                 tags$img(src = "toptable.png"),
+                                                 tags$img(src = "workingset.png")),
+
+                                             tags$h1("Tips"),
+                                             tags$ul(
+                                               tags$li("You can select a region by handling the left click button if the files are stacked together, if it's not the case you can select the different files by maintening the Ctrl button and clicked on the files."),
+                                               tags$li("After the pop up has appeared, you will have to select the files within the access path that is given in the report produced by Yannick. "),
+                                               tags$li("You will then find three distinct csv files, these files are respectively named xxx<em>pData, xxx</em>topTableAll and xxx_WorkingSet."),
+                                               tags$li("The final step consist to select all the data at once and then confirm the selection by clicking on the open button."),
+                                               tags$li("A green message will then appear to confirm the data loading with a summary table.")
+                                             ),  
+                                             tags$h1("Warning"),
+                                             tags$ul(
+                                               tags$li("It is highly recommanded to not modify these files (removed columns, change column names ...) in the aim of not disturbing the well functionning of the application.")
+                                             )
+                                             ),
                             conditionalPanel(condition = '!output.boolmark',
                             
                             textOutput("myFileName"),

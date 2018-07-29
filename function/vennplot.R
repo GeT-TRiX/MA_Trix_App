@@ -1,4 +1,4 @@
-require(VennDiagram)
+
 
 #Intersect, Union and Setdiff (https://stackoverflow.com/questions/23559371/how-to-get-the-list-of-items-in-venn-diagram-in-r)
 
@@ -89,9 +89,7 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
   
   if(is.null(adj)) 
     return(NULL)
-  
-  
-  
+
   reguser = ifelse(regulation == "up", T, F)
   reguserboth = ifelse(regulation == "both", T, F)
   lapply(1:ncol(adj), FUN = function(x){
@@ -102,8 +100,6 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
     else
       return(as.character(which(adj[[x]] < cutoffpval & abs(fc[[x]]) > log2(cutofffc))))
   })
-  
-
 }
 
 
@@ -125,16 +121,15 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
 
 Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = "probes", pval, mycol= ""){ 
   
-  if(is.null(myl))
-    return(NULL)
+  #if(is.null(myl))
+    #return(NULL)
   
   palette("default")
   if(meandup == "genes"){
     myl = lapply(seq(length(myl)), function(x){pval %>% select(GeneName, ProbeName) %>% filter( ProbeName %in% myl[[x]]) %>% 
-        distinct( GeneName)}) %>%
-        as.matrix()
+        distinct( GeneName)}) %>%as.matrix()
+    
     myl = lapply(1:length(myl),FUN = function(i) as.character(myl[[i]]$GeneName))  #D14Ertd668e doublons pour LWT_MCD.LWT_CTRL (si genesymbol -1 perte d'info) avec une probe nom partagée avec LKO_MCD.LKO_CTRL  et une probe partagée
-  
   }
   metuse = ifelse(statimet == "FDR","DEG BH ", "DEG RAW ")
   
@@ -181,7 +176,6 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = 
                      fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop4
       }
       else{
-        print("yo")
         g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,
                          category.names = mynames,fill = mycolven, alpha = 0.3, sub=mynumb, cex=1, 
                          fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
@@ -227,7 +221,6 @@ Vennsev <- function(myl, adj){
 
 myventocsv <- function(myven, adj){
   
-  
   max.length <- max(sapply(myven, length))
   myven %>%
     lapply(function(v){ c(v, rep("", max.length-length(v)))}) %>%
@@ -238,13 +231,9 @@ myventocsv <- function(myven, adj){
 
 
 mysetventocsv <- function(myven){
-  
-  
+
   max.length <- max(sapply(myven, length))
-  myven %>%
-    lapply(function(v){ c(v, rep("", max.length-length(v)))}) %>%
-    as.data.frame()
-  
+  myven %>%lapply(function(v){ c(v, rep("", max.length-length(v)))}) %>% as.data.frame()
 }
 
 
@@ -264,8 +253,8 @@ totalvenn <- function(vennlist,adj){
       combn(names(vennlist), x, simplify = FALSE)) %>%
     unlist(recursive = F) %>% setNames(., sapply(., function(p)
       paste0(p, collapse = ""))) %>%
-    lapply(function(i)
-      Setdiff(vennlist[i], vennlist[setdiff(names(vennlist), i)])) %>% .[sapply(., length) > 0]
+    lapply(function(i)Setdiff(vennlist[i], vennlist[setdiff(names(vennlist), i)])) %>% 
+    .[sapply(., length) > 0]
   
   n.elements <- sapply(elements, length)
 
@@ -307,33 +296,20 @@ setvglobalvenn <- function(vennlist,adj, dll = F ){
 
 rowtoprob <- function(myven,pval,adj) {
   
-  pval$rownames = rownames(pval)
   names(myven) = colnames(adj)
   probesel = lapply(
     names(myven),
-    FUN = function(x) {
-      test = pval[pval$rownames %in% myven[[x]],]
-      probesel <- test %>%
-        select(ProbeName) %>%
-        unlist() %>%
-        as.character()
-      return(probesel)
-    }
+    FUN = function(x) 
+      return( pval %>%filter( rownames(.)%in% myven[[x]]) %>%
+                select(ProbeName) %>%unlist() %>%
+                as.character())
   )
   
   genesel = lapply(
     names(myven),
-    FUN = function(x) {
-      test = pval[pval$rownames %in% myven[[x]],]
-      
-      genesel <- test %>%
-        select(GeneName) %>%
-        unlist() %>%
-        as.character()
-      
-      
-      return(genesel)
-    }
+    FUN = function(x) 
+    return( pval %>%filter(rownames(.)%in% myven[[x]]) %>%
+                select(GeneName) %>%unlist() %>%as.character())
   )
 
   return(list(probesel, genesel))
@@ -383,23 +359,15 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F) {
     return(x)})
   
 
-  
-  reshp <-melt(
-    dfinter[1:inputtop, ],
-    id.vars = "GeneName",
-    measure.vars = c (mycont),
-    variable.name = "Comparisons",
-    value.name = "logFC"
+  reshp <-melt(dfinter[1:inputtop, ],
+    id.vars = "GeneName",measure.vars = c (mycont),
+    variable.name = "Comparisons",value.name = "logFC"
   )
   
   reshp <- droplevels(reshp)
   reshp$GeneName <-factor(reshp$GeneName, levels = unique(as.character(reshp$GeneName)))
   
-  # maxval = as.numeric(max(reshp$logFC))
-  # minval = as.numeric(min(reshp$logFC))
-  # print(c(minval-2,maxval+2))
-  
-  
+
   p <- ggplot(reshp, aes(
     x = GeneName,
     y = as.numeric(as.character(formatC(as.double(logFC), digits = 1, format = "f"))),
@@ -407,16 +375,11 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F) {
   )) +
     geom_bar(stat = "identity", position = "dodge") +
     
-   # coord_cartesian(ylim=c(minval-2,maxval+2))+
-    # scale_fill_discrete(
-    #   name = "GeneName",
-    #   breaks = c(seq(mycont)),
-    #   labels = c(mycont) )+
     
     scale_fill_manual(values = c("red","blue",'purple',"green","black")) + 
     
     xlab("Gene Names") + ylab("Log Fold-Change") +
-    #theme_classic() + 
+
     theme(
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank(),
@@ -436,10 +399,8 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F) {
       legend.position="top"
     ) 
     
-  #print(unique(sort(c(seq(as.numeric(maxval)),seq(as.numeric(minval))))))
   
   print(p)
-  
   return( p)
   
 }

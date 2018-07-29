@@ -45,8 +45,8 @@ var defaultOptions = {
         },
         labels: {
             format: '{value}'
-        },
-     
+        }
+      /*
         plotLines: [{
             color: 'black',
             dashStyle: 'dot',
@@ -62,6 +62,7 @@ var defaultOptions = {
             },
             zIndex: 3
         }]
+        */
     },
 
     yAxis: {

@@ -28,6 +28,7 @@ DftoHighjson <- function(data, param) {
   
   unifiedData$Term  = sapply(unifiedData$Term, FUN= function(x) if(grepl("^mmu", x)) return(strsplit(as.character(x), ":")%>% unlist() %>% .[2]) 
                         else return(strsplit(as.character(x), "~")%>% unlist() %>% .[2])) 
+  
   unifiedData$Pvalue =  format(tempData$pvalue, digits = 3)
 
 

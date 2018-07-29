@@ -1,4 +1,4 @@
-# data' site
+# increase loading files
 options(shiny.maxRequestSize=128000000)
 
 
@@ -79,7 +79,7 @@ lastcol = "red"
 wd_path= getwd()
 firstdim = 1
 secdim = 2
-#mysess <- sessionInfo()
+
 
 `%next%` <- shiny:::`%OR%`
 
@@ -90,8 +90,7 @@ palette = brewer.pal(8,"Dark2") %>%
 
 
 
-textInputRow<-function (inputId, label, value = "") 
-{
+textInputRow<-function (inputId, label, value = "") {
   div(style="display:inline-block",
       tags$label(label, `for` = inputId), 
       tags$input(id = inputId, type = "text", value = value,class="input-small"))
