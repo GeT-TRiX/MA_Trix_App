@@ -107,9 +107,9 @@ MATRiX app is working with specific data produced by the limma package name, res
                                          p(a("Franck Soubès", href="mailto:franck.soubes@inra.fr"), "(Coding, Unit testing, documentation, packaging, feature suggestions)",tags$a(href = "https://github.com/fsoubes",target="_blank",
                                                                                                                                                                                    "See github")),
                                          h3("Acknowledgements"),
-                                         p("Thanks to the Toxalim's team BioToMyc & TIM and especially to the following people for their helps reporting errors, proposing new features and beta testing MATRiX:"),
+                                         p("Thanks to the Toxalim's team BioToMyc & TIM and especially to the following people for their helps reporting errors, proposing new features and beta testing of MATRiX:"),
                                          p("Laura Costes,", "Anne Fougerat,","Claire Naylies,", "Philippe Pinton,","Arnaud Polizzi," ,"Marion Regnier," , "Sandrine Ellero-Simatos,","Sarra Smati."),
-                                         p("Special Thanks to Didier Laborie for installing the virtual machine with Ubuntu and for answering to some of my questions")
+                                         p("Special Thanks to Didier Laborie for installing the virtual machine with Ubuntu and for answering to my questions")
                                          
                                 ),
                                 tabPanel("Packages",
