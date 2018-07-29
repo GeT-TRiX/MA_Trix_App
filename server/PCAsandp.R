@@ -12,7 +12,7 @@ observe({
       label = NULL,
       #label =  "Choose your group to visualize",
       choices =  levels(csvf()[[2]]$Grp),
-      selected = levels(csvf()[[2]]$Grp),
+      #selected = levels(csvf()[[2]]$Grp),
       inline   = groupinline
       
     )
@@ -91,6 +91,7 @@ list_ind <- reactive({
 
 
 new_grouppca <- reactive({
+  
   inFile <- input$file
   if (is.null(inFile))
     return(NULL)
@@ -162,7 +163,7 @@ content <- function(file) {
   png(
     file,
     width = 1200,
-    height = 1200,
+    height = 1000,
     units = "px",
     pointsize = 12,
     res = 100
@@ -175,9 +176,10 @@ content <- function(file) {
 
 
 output$eigpca <- renderPlot({
+  print(length(input$indivpca))
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(length(new_grouppca()) > 0, 'You need to select groups!') %next%
+      need(length(input$indivpca) >0 ,'You need to select groups!') %next%
       need(length(unique(
         new_grouppca()$Grp
       )) > 1, 'You need to select more than one group!')

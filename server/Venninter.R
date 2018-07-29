@@ -55,7 +55,11 @@ venninter <- reactive({
 #'
 
 vennfinal <- reactive({
-  req(vennchoice())
+  
+  validate(
+    need(vennchoice(), 'You need to select in the Specify your interaction widget the comparisons defining your intersections!'))
+  
+  #req(vennchoice())
   if (is.null(vennchoice))
     return(NULL)
   

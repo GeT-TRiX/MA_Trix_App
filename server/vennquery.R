@@ -4,7 +4,13 @@ observe({
 })
 
 output$clusterPlot <- renderPlot({
+  validate(
+    need(csvf(), 'You need to import data to visualize this plot!') %next%
+      need(vennchoice(), 'You need to select in the Specify your interaction widget the comparisons defining your intersections!')%next%
+      need(input$GOvenn ,'You need to click on the run Go button!'))
   req(Venncluster())
+  print(Venncluster())
+  print(Venncluster()[[1]])
   if(input$clusterNumber == 1)
     shinyjs::alert("There's not enough genes in your interaction(s) for this cluster!")
   plot2D(Venncluster(), input$clusterNumber)

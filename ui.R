@@ -402,8 +402,11 @@ body <- dashboardBody(
                                      DT::dataTableOutput("vennresintergen"))
                     ),
                     
+                    tags$head(tags$style("#dontwanttoshow  .shiny-output-error {visibility: hidden;color: #3c8dbc;}")),
+                    
+                    
                     column(6,
-                    div(style="display:inline-block",
+                    div(style="display:inline-block", id ="dontwanttoshow",
                         fluidRow(
                           tags$head(
                             tags$style(type="text/css", ".topgeness label{ display: table-cell; text-align: left; vertical-align: middle; } 
@@ -500,7 +503,7 @@ body <- dashboardBody(
             ),
             div(id="pass",style = "word-wrap: break-word;",
                 column(width=3,
-                       box(id="boxpassvenn",title = strong("Venn settings", style ="font-size:25px;"), width = NULL, background = "light-blue",
+                       box(id="boxpassvenn",title = strong("Venn settings", style ="font-size:25px;"), width = NULL, background = "light-blue",height = "100%",
                            inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
                            uiOutput("contout"),
                            actionButton(
@@ -564,22 +567,16 @@ body <- dashboardBody(
                       strong("Functional Annotation Clustering",style = "font-family: 'times'; font-size:20px; font-style: strong; "),
                       
                       br(),br(),
-                      fluidRow(column(8, br(),
-                              checkboxInput("meandup",
-                                            "Compute the mean for the same duplicated genes",
-                                            FALSE)),
-                      column(4,
+                      fluidRow(column(6, br(),sliderInput("clusterNumber",label = "Cluster",
+                                                          value = 1, min = 1,max = 5
+                      )),
+                      column(6,br(),
                       selectInput("Speciesvenn", "Choose your Species:", selected = "Mus musculus", 
                                   c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
                                     "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa", 
                                     "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" )))),
-                      
-                      fluidRow(column(8,
-                      sliderInput("clusterNumber",label = "Cluster",
-                        value = 1, min = 1,max = 5
-                      )), 
-                      column(4,br(), br(),
-                      actionButton("GOvenn", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")))
+                      column(6,br(),
+                      actionButton("GOvenn", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"))
                       
                        ))))),
 

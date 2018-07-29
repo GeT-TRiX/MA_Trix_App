@@ -15,14 +15,14 @@ observe({
   
   req(input$dispvenn)
   if(input$dispvenn == "probes")
-    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')), options = list(scrollX = TRUE)), server = F)
+    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')), options = list(scrollX = TRUE,  pageLength = 15)), server = F)
   else
-    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('15', '30', '50','100')), options = list(scrollX = TRUE)), server = F)
+    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('15', '30', '50','100')), options = list(scrollX = TRUE ,pageLength = 15)), server = F)
 })
     
 observe({
   if(input$dispvenn == "genes")
-    output$vennresintergen <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')),options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons'), server = F)
+    output$vennresintergen <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')),options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis'), pageLength = 15), extensions = 'Buttons'), server = F)
 })
 
 
@@ -53,7 +53,7 @@ myrenderedtop <- reactive({
     mutate_if(is.numeric, funs(round(., digits = 3)))
 })
 
-output$new_group <- DT::renderDataTable(DT::datatable(myrenderedtop()[,-c(4:9)] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons') )
+output$new_group <- DT::renderDataTable(DT::datatable(myrenderedtop()[,-c(4:9)] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons',filter =c("none")) )
 
 
 observe({
