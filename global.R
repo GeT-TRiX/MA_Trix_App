@@ -13,7 +13,7 @@ categoerygen = c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_
 
 #sudo apt-get install libv8-dev
 
- list.of.packages <- c("AnnotationDbi","shiny","shinythemes","shinyjs","ggplot2","shinyBS","markdown","plyr",
+ list.of.packages <- c("AnnotationDbi","shiny","shinythemes","shinyjs","ggplot2","shinyBS","plyr",
                       "BH","data.table","DT","readr","colourpicker","shinydashboard","shinytoastr",
                       "tools","devEMF","R.devices","FactoMineR","factoextra","gplots","V8",
                       "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly","dplyr","reticulate","Hmisc")
