@@ -713,8 +713,11 @@ MATRiX app is working with specific data produced by the limma package name, res
                                   c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
                                     "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa", 
                                     "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" )))),
-                      column(6,br(),
-                      actionButton("GOvenn", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"))
+                      fluidRow(
+                        column(5),
+                        
+                      column(4,br(),
+                      actionButton("GOvenn", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")))
                       
                        ))))),
 
