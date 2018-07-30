@@ -240,11 +240,7 @@ MATRiX app is working with specific data produced by the limma package name, res
 
                                              tags$h1("Tips"),
                                              tags$ul(
-                                               tags$li("You can select a region by handling the left click button if the files are stacked together, if it's not the case you can select the different files by maintening the Ctrl button and clicked on the files."),
-                                               tags$li("After the pop up has appeared, you will have to select the files within the access path that is given in the report produced by Yannick. "),
-                                               tags$li("You will then find three distinct csv files, these files are respectively named xxx<em>pData, xxx</em>topTableAll and xxx_WorkingSet."),
-                                               tags$li("The final step consist to select all the data at once and then confirm the selection by clicking on the open button."),
-                                               tags$li("A green message will then appear to confirm the data loading with a summary table.")
+                                               tags$li("You can select a region by handling the left click button if the files are stacked together, if it's not the case you can select the different files by maintening the Ctrl button and clicked on the files.")
                                              ),  
                                              tags$h1("Warning"),
                                              tags$ul(
