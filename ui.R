@@ -1090,7 +1090,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                                            "Add reactivity",
                                            FALSE))
                            ),
-                          shinyjs::disabled(actionButton("stop", "Stop")),
+                          #shinyjs::disabled(actionButton("stop", "Stop")),
                           
                            helpText("Note: It is highly advised to check this box if you're working with a set of genes close to 1000.",style="color:White; font-size:15px;"),
                            
