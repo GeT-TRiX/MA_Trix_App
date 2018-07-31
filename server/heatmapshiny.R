@@ -145,8 +145,8 @@ observe({
     validate(need(
       csvf(),
       'You need to import data to visualize to plot the Heatmap' ) %next% 
-      need(length(choix_test()) >0, 'You need to select a contrast(s), then click on the heatmap button down below the heatmap settings')
-
+      need(length(choix_test()) >0, 'You need to select a contrast(s)') %next% 
+      need(input$heatm , 'You need to click on the heatmap button down below the heatmap settings')
     )
   })
   
