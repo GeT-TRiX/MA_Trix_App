@@ -96,7 +96,7 @@ body <- dashboardBody(
                                 tabPanel("About", style = "background-color: #ffffff;",
                                          tags$h3("MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics."),
                                          p("This project initiated by Yannick Lippi aims to facilitate access to biologist in order to publish graphs such as heatmap, PCA or Venn diagram related to specifics data produced by TRiX's facility 
-MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarize microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querrying the DWS (DAVID WEB SERVICES).
+MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querrying the DWS (DAVID WEB SERVICES).
 
 MATRiX app is working with specific data produced by the limma package name, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/downloadData.zip) Here's the global workflow passing by the experiment to the visualization. "),
                                       
@@ -252,7 +252,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                             textOutput("myFileName"),
                             
                             column(12, h3(
-                                "This table summarize the number of significant genes depending on the p-value treshold choosen with the slider bar"
+                                "This table summarizes the number of significant genes depending on the p-value treshold choosen with the slider bar"
                               ),
                               helpText("Choose your p-value treshold to modify the following data table"),
                               div( class= "myslidermain",
@@ -840,7 +840,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                       dataTableOutput("clustering"),
                       
                       
-                      h3("This table summarize the number of significant probes and genes by cluster"),
+                      h3("This table summarizes the number of significant probes and genes by cluster"),
                       helpText(
                         "For the number of genes by cluster the duplicated genes are removed"
                       ),
@@ -1090,6 +1090,8 @@ MATRiX app is working with specific data produced by the limma package name, res
                                            "Add reactivity",
                                            FALSE))
                            ),
+                          #shinyjs::disabled(actionButton("stop", "Stop")),
+                          
                            helpText("Note: It is highly advised to check this box if you're working with a set of genes close to 1000.",style="color:White; font-size:15px;"),
                            
                            
