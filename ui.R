@@ -1099,7 +1099,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                           conditionalPanel(condition = 'output.heatmbool',
                           #conditionalPanel(condition = 'input.button >0', 
                                             
-                                            div(id = 'center', strong("GO Enrichment",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
+                                            div(id = 'center', strong("Functional enrichment analysis",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                             br(),
                                             fluidRow(column( 4,
                                                              selectInput("Species", "Choose your Species:", selected = "Mus musculus", 
@@ -1117,7 +1117,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                                                      )),
                                             fluidRow(
                                               column(4,br(),
-                                                     actionButton("GO", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                                                     actionButton("GO", "Run Analysis",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
                                               column(4,br(),
                                                      uiOutput("DAVID"))
                                             ),br(),
