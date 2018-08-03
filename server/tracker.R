@@ -8,11 +8,15 @@ output$myNUM <- renderPrint({ # number of signficant genes in the heatmap produc
 
 output$indivcol <-  renderText({ # Groups selected
   my_final <<- paste(choix_grp(),as.character(),  sep=",") 
+  my_final[length(choix_grp())] <<- gsub(",","",my_final[length(choix_grp())])
+  print(my_final)
 })
 
 
 output$testtt <- renderText({ #Contrast selected
   my_final <<- paste(choix_test(),as.character(),  sep=",") 
+  my_final[length(choix_test())] <<- gsub(",","",my_final[length(choix_test())])
+  print(my_final)
 })
 
 

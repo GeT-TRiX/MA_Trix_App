@@ -18,7 +18,7 @@ output$myselvenn <- renderUI({
   req(user_cont())
   selectInput(
     'intscol',
-    'Specify your interaction(s):',
+    'Specify your intersection(s):',
     choices = names(user_cont()),
     multiple = TRUE
   )

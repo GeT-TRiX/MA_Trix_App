@@ -186,7 +186,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                            addNews("Jul 17th 2018", "Tutorial/Video", "Soon will be added a video to summarise the application"),
                            addNews("Jul 16th 2018", "Venn" ,"You can now choose your color for the venn diagram"),
                            addNews("Jul 16th 2018","Bug fixes","Venn diagram display erros when filtering"),
-                           addNews("Jul 5th 2018","Venn/DAVID","Add Gene functionnal classification for selected interaction(s)"),
+                           addNews("Jul 5th 2018","Venn/DAVID","Add Gene functionnal classification for selected intersection(s)"),
                            addNews("Jun 26th 2018","Add features","It's now possible to interact with the rendering table to filter the table in the aim of plotting the top n genes.
                           For the GO enrichment it is now possible to select the rows in order to display the gene symbol according to the entrez ids"),
                            addNews("Jun 22th 2018","Bug fixes","For two contrasts the venn.draw function was not ordering the contrast names in the right order."),
@@ -310,7 +310,7 @@ MATRiX app is working with specific data produced by the limma package name, res
 	          addNews("Jul 17th 2018", "Tutorial/Video", "Soon will be added a video to summarise the application"),
                   addNews("Jul 16th 2018", "Venn" ,"You can now choose your color for the venn diagram"),
                   addNews("Jul 16th 2018","Bug fixes","Venn diagram display erros when filtering"),
-                  addNews("Jul 5th 2018","Venn/DAVID","Add Gene functionnal classification for selected interaction(s)"),
+                  addNews("Jul 5th 2018","Venn/DAVID","Add Gene functionnal classification for selected intersection(s)"),
                   addNews("Jun 26th 2018","Add features","It's now possible to interact with the rendering table to filter the table in the aim of plotting the top n genes.
                           For the GO enrichment it is now possible to select the rows in order to display the gene symbol according to the entrez ids"),
                   addNews("Jun 22th 2018","Bug fixes","For two contrasts the venn.draw function was not ordering the contrast names in the right order."),
@@ -601,7 +601,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                         p("There are"),
                         htmlOutput("venngenes"),
                         p("significant genes"),
-                        p("for this interaction"),
+                        p("for this intersection"),
                         htmlOutput("continter"),
                         p("if you click on the top DE genes button you will plot the top"),
                         htmlOutput("topgenesdf"),
