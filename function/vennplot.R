@@ -93,6 +93,7 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
   reguser = ifelse(regulation == "up", T, F)
   reguserboth = ifelse(regulation == "both", T, F)
   lapply(1:ncol(adj), FUN = function(x){
+   # parLapply(cl,1:ncol(adj),function(x){
     if(reguser && !reguserboth)
       return(as.character(which(adj[[x]] < cutoffpval & fc[[x]] > log2(cutofffc))))
     else if(!reguser && !reguserboth)

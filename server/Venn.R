@@ -36,9 +36,18 @@ vennlist <- reactive({
   
   if (is.null(csvf()))
     return(NULL)
+
+  # adj <- user_cont()
+  # fc <- user_fc()
+  # cutoffpval <-input$pvalvenn
+  # cutofffc <- input$fcvenn
+  # reg <- input$regulation
+  # cl <- makeCluster(getOption("cl.cores", 2))
+  # clusterExport(cl,c("adj","fc","cutoffpval","cutofffc","reg","cutoffpval"),envir=environment())
+  #mycont = Vennlist(adj,fc, reg, cutoffpval, cutofffc,cl)
+  #stopCluster(cl)
   mycont = Vennlist(user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
   probven = rowtoprob(mycont,csvf()[[3]], user_cont())
-
   return(probven)
 })
 
