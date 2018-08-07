@@ -7,7 +7,7 @@
 
 
 DftoHighjson <- function(data, param) {
-  
+  #View(data)
   foldEnrichment <- param$search 
   tempData <- (data[grep(param$search,colnames(data))])
   colnames(tempData) <- paste0("y",1)

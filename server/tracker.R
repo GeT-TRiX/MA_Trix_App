@@ -13,6 +13,12 @@ output$myNUM <- renderPrint({ # number of signficant genes in the heatmap produc
 })
 
 
+output$maxGen <- renderPrint({ # number of signficant genes in the heatmap produced
+  req(input$maxgen)
+  cat(input$maxgen)
+})
+
+
 output$indivcol <-  renderText({ # Groups selected
   my_final <<- paste(choix_grp(),as.character(),  sep=",") 
   my_final[length(choix_grp())] <<- gsub(",","",my_final[length(choix_grp())])

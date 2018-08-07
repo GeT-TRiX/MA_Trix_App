@@ -806,6 +806,14 @@ MATRiX app is working with specific data produced by the limma package name, res
                             p('and'),
                             textOutput("myFC")
                           ),
+                    
+                    conditionalPanel(condition = "input.maxgen != null",
+                     div(
+                       id = "container",
+                      p("You have chosen to regulate your comparison to "),
+                      textOutput("maxGen"),
+                      p(" genes maximum"))),
+                     
                           div(
                             id = "container",
                             p('The'),
@@ -963,7 +971,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                                                 # Create an input control for entry of numeric values
                                                 'maxgen',
                                                 'Maximal number of genes by comparison(s)',
-                                                NULL,min = 100,max = 1500
+                                                NULL,min = 100,max = 2500
                                               )),column(6,
                                                         br(),
                                                         selectInput(
