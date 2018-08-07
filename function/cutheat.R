@@ -1,3 +1,12 @@
+### Author: Franck Soubès
+### Bioinformatics Master Degree - University of Bordeaux, France
+### Link: https://github.com/fsoubes/MA_Trix_App
+### Where: GET-TRiX's facility
+### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
+### Licence: GPL-3.0
+
+
+
 #' cutHeatmaps if a function that takes as input an heatmap object and depending on the cut height and the cluster
 #' choosen render a ggplot object or an heatmap object
 #'

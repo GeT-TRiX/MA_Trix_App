@@ -1,7 +1,16 @@
+### Author: Franck Soubès
+### Bioinformatics Master Degree - University of Bordeaux, France
+### Link: https://github.com/fsoubes/MA_Trix_App
+### Where: GET-TRiX's facility
+### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
+### Licence: GPL-3.0
+
+
 ###############################
 ######## dashboardsidebar     #
 ###############################  
-#Author: Franck Soubès
+
+
 
 dbHeader <- dashboardHeader(title = "MATRiX")
 dbHeader$children[[2]]$children <-  tags$a(tags$img(src='matrix.png',height='40',width='40',style="margin:5px 0 5px 0;",align='left'), 

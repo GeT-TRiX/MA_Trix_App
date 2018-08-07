@@ -1,3 +1,10 @@
+### Author: Franck Soubès
+### Bioinformatics Master Degree - University of Bordeaux, France
+### Link: https://github.com/fsoubes/MA_Trix_App
+### Where: GET-TRiX's facility
+### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
+### Licence: GPL-3.0
+
 #' This function returns a data frame of the significant genes associated with the corresponding cluster index
 #'
 #' @param hmp01_All a heatmap object

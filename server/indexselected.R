@@ -1,3 +1,12 @@
+### Author: Franck Soubès
+### Bioinformatics Master Degree - University of Bordeaux, France
+### Link: https://github.com/fsoubes/MA_Trix_App
+### Where: GET-TRiX's facility
+### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
+### Licence: GPL-3.0
+
+
+
 #' formated is a reactive function that return the indexes for the signficant genes
 #'
 #' @param user_group a list of three data frame with rows selected according to the contrasts selected

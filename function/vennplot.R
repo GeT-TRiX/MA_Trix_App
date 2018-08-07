@@ -1,4 +1,9 @@
-
+### Author: Franck Soubès
+### Bioinformatics Master Degree - University of Bordeaux, France
+### Link: https://github.com/fsoubes/MA_Trix_App
+### Where: GET-TRiX's facility
+### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
+### Licence: GPL-3.0
 
 #Intersect, Union and Setdiff (https://stackoverflow.com/questions/23559371/how-to-get-the-list-of-items-in-venn-diagram-in-r)
 
