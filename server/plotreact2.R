@@ -51,7 +51,8 @@ hmbis <- reactive({
                    Rowdistfun = input$dist ,
                    Coldistfun = input$dist,
                    meanGrp = input$meangrp,
-                   genename =  csvf()[[3]]
+                   genename =  csvf()[[3]],
+                   algo = input$algomet
                  )
                  
                })

@@ -1017,7 +1017,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                                                        min = 1, max = 15)),
                                    column(6,
                                           selectInput(
-                                            "dist","Choose your matrix distance",choices = c("correlation", "euclidian"))
+                                            "dist","Choose your matrix distance",choices = c("correlation", "euclidian","manhattan", "cosine"))
                                    )),
                                  fluidRow(
                                    column(6,
@@ -1025,9 +1025,8 @@ MATRiX app is working with specific data produced by the limma package name, res
                                                         "Compute the mean for the different groups",
                                                         FALSE)),
                                    column(6,
-                                          checkboxInput("scalcol",
-                                                        "Apply scaling to columns",
-                                                        FALSE))
+                                          selectInput(
+                                            "algomet","Choose your hierarchical clustering method",choices = c("ward.D2", "single","complete","average")))
                                    
                                  )))
                              ,br(),

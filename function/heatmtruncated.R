@@ -58,7 +58,17 @@ disteucl<-function(x) {dist(x,method="euclidian")}
 #' 
 #' @export
 
-hclustfun=function(d) {hclust(d,method="ward.D2")} 
+hclustfun=function(d,e = "ward.D2") {hclust(d,method=e)} 
+
+#' disteuc is a function that computes the euclidean distance matrices
+#'
+#' @param x 
+#'
+#' @return a matrix distance
+#' 
+#' @export
+
+distman<-function(x) {dist(x,method="manhattan")}
 
 #require("Biobase")  
 #require("marray") 
@@ -119,7 +129,7 @@ num2cols=function(numVector,colp=palette()){
 #' 
 
 
-truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="png",
+truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="png",algo = "ward.D2",
                       colOrder=NULL,na.color="black",hclustGenes=T,meanGrp=F,plotRowSideColor=T,mypal=NULL,
                       RowSideColor=c("gray25","gray75"), Rowdistfun="correlation",Coldistfun="correlation" ,palette.col=NULL , notplot = T,genename=pval){
   
@@ -128,12 +138,8 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   
   if( any(rownames(exprData) != rownames(exprData)[order(as.numeric(rownames(exprData)))])) stop("Error: 'exprData' must have rownames in numerical ascending order!");
   if(length(RowSideColor)==1) RowSideColor=gray.colors(k, start = 0.2, end = 0.9)
-  if(!Rowdistfun %in% c("correlation","euclidian")) stop("Rowdistfun must be one of 'cor' or 'euclidian'!")
-  if(!Coldistfun %in% c("correlation","euclidian")) stop("Coldistfun must be one of 'cor' or 'euclidian'!")
-  
-  #library(gplots)
-  #library(marray)
-  
+  #if(!Rowdistfun %in% c("correlation","euclidian")) stop("Rowdistfun must be one of 'cor' or 'euclidian'!")
+  #if(!Coldistfun %in% c("correlation","euclidian")) stop("Coldistfun must be one of 'cor' or 'euclidian'!")
   
   
   if(is.null(mypal))
@@ -157,14 +163,24 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   ##-----------------------##
   cat("\n -> Hierarchical clustering on genes... \n")
   if(Rowdistfun=="correlation"){	
-    hc=hclustfun(distcor(exprData))
+    hc=hclustfun(distcor(exprData),algo)
     subdist="dist method: 1-cor";
     distfunTRIX= distcor;
   } 
   if(Rowdistfun=="euclidian"){
-    hc=hclustfun(disteucl(exprData))
+    hc=hclustfun(disteucl(exprData),algo)
     subdist="dist method: euclidian";
     distfunTRIX = disteucl;
+  }
+  if(Rowdistfun=="manhattan"){
+    hc=hclustfun(disteucl(exprData),algo)
+    subdist="dist method: manhattan";
+    distfunTRIX = distman;
+  }
+  if(Rowdistfun=="cosine"){
+    hc=hclustfun(disteucl(exprData),algo)
+    subdist="dist method: cosine";
+    distfunTRIX = distcos;
   }
   
   rowv=as.dendrogram(hc)
@@ -203,6 +219,21 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
     ColvOrd = exprData %>%
     t() %>%
     disteucl()%>%
+    hclustfun()%>%
+    as.dendrogram()
+  
+  if(Coldistfun=="manhattan")
+    ColvOrd = exprData %>%
+    t() %>%
+    distman()%>%
+    hclustfun()%>%
+    as.dendrogram()
+  
+  
+  if(Coldistfun=="cosine")
+    ColvOrd = exprData %>%
+    t() %>%
+    distcos()%>%
     hclustfun()%>%
     as.dendrogram()
   

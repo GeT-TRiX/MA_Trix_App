@@ -27,3 +27,9 @@ mean_grp <- reactive({
 })
 
 
+myalgo <- reactive({
+  return(input$algomet)
+  
+})
+
+
