@@ -3,6 +3,15 @@ library(plotly)
 
 
 toptable <- read.csv2("data/All_topTableAll.csv")
+View(toptable)
+colnames(toptable)
+toptable %>%
+  dplyr::select(GeneName,adj.P.Val_LWT_CARBO.LWT_CTRL )
+
+
+test = select(toptable, adj.P.Val_LWT_CARBO.LWT_CTRL ) %>% top_n(.,n=10) %>% select(GeneName)
+test$GeneName
+
 head(toptable)
 with(toptable, plot(logFC_LKO_CTRL.LWT_CTRL, -log10(adj.P.Val_LKO_CTRL.LWT_CTRL), pch=20, main="Volcano plot", xlim=c(-2.5,2)))
 colnames(toptable)
@@ -54,4 +63,19 @@ p <- plot_ly(data = toptable, x =x , y = y , text = gene, mode = "markers") %>%
   layout(title ="Volcano Plot") %>%
   layout(annotations = a)
 p
+
+colnames(toptable)
+?EnhancedVolcano
+rownames(toptable) = toptable$ProbeName
+View(toptable)
+EnhancedVolcano(toptable, lab= toptable$GeneName, x ="logFC_LWT_CARBO.LWT_CTRL" , y = "adj.P.Val_LWT_CARBO.LWT_CTRL",  pCutoff = 1,
+                FCcutoff = 1, topgenes = 5,
+                transcriptPointSize = 1,
+                transcriptLabSize = 3.0,
+                title = "N061011 versus N61311",
+                cutoffLineType = "twodash",
+                cutoffLineCol = "black",
+                cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
+                                             "P value & Log (base 2) fold-change")
+                )
 

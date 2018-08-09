@@ -7,9 +7,6 @@
 
 
 
-
-
-
 shinyServer(function(input, output,session) {
   
   hide(id = "loading-content", anim = TRUE, animType = "fade",time=2)
@@ -22,10 +19,6 @@ shinyServer(function(input, output,session) {
   #######################################################
   
   source(file.path("server", "csvFile.R"), local = TRUE)$value #
-  
-  
-  
-  
   #csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE)
 
   ##########################################
@@ -41,6 +34,29 @@ shinyServer(function(input, output,session) {
   source(file.path("server", "datasummary.R"), local = TRUE)$value #
   source(file.path("server", "renderertable.R"), local = TRUE)$value #
   source(file.path("server", "checkboxgrp.R"), local = TRUE)$value #
+  
+  ##########################################
+  ######## Volcano page                   ##
+  ##########################################
+
+  
+  output$volcanoplot <- renderPlot({
+    
+  req(csvf())
+  
+  EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), topgenes = input$topvolc, 
+                  ,  pCutoff = 0.05,FCcutoff = 1,transcriptPointSize = 1,transcriptLabSize = 3.0,
+                  title =  gsub("-"," versus " ,input$volcacomp),
+                  cutoffLineType = "twodash",
+                  cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
+                                               "P value & Log (base 2) fold-change"))
+  })
+  
+  output$compvolc <- renderUI({
+    req(adjusted())
+    selectInput("volcacomp", "Choose a comparison", choices = colnames(adjusted()[[1]][,-1]))
+  })
+  
   
   ################################
   ######## PCA page             ##

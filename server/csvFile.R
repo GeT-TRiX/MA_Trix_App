@@ -33,6 +33,7 @@ observe({
   
 outputOptions(output,"boolmark",suspendWhenHidden=F) 
 
+
 #' Reactive function in the aim of loading csv files
 #'
 #' @param file html id for files loaded in csv format

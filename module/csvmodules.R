@@ -1,3 +1,11 @@
+### Author: Franck Soubès
+### Bioinformatics Master Degree - University of Bordeaux, France
+### Link: https://github.com/fsoubes/MA_Trix_App
+### Where: GET-TRiX's facility
+### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
+### Licence: GPL-3.0
+
+
 chartofa = function(datach){
   
   datach[] <- lapply( datach, factor)
@@ -71,7 +79,6 @@ csvFile <- function(input, output, session, stringsAsFactors) {
   
     observe({
       print(showmark)
-      print("ok")
     })
 
   
@@ -176,20 +183,11 @@ csvFile <- function(input, output, session, stringsAsFactors) {
       csv <- lapply(
         csvtest,
         
-        #' apply the fread method for each element in the csvtest list
-        #'
-        #' @return \csv a data frame object
-        #'
+
         FUN = function (x)
-          
-          
-          fread(
-            x,
-            data.table = F,
-            check.names = F,
-            header = T,
-            sep = ";",
-            dec = ","
+
+          fread(data.table = F,check.names = F,
+            header = T,sep = ";",dec = ","
           ) 
       )
       
@@ -233,8 +231,8 @@ csvFile <- function(input, output, session, stringsAsFactors) {
       title = "Sucess",
       content = " Your files have been loaded, you can choose your data now",
       append = FALSE
-      
     )
+    
     
     Sys.sleep(1)
     closeAlert(session, "succeeded")

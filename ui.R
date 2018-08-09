@@ -225,10 +225,12 @@ MATRiX app is working with specific data produced by the limma package name, res
       .myslidermain .irs-max{color: #333;font-size: 10px;line-height: 1.333;text-shadow: none;top: 0;padding: 1px 3px;
       background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px}")
               ),
-              
+              #div(style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;",
               column(width=9,
-                div( style = "width:100% ; max-width: 1200px; height: 100%" ,
-               
+                div( style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;" , id = "upload",
+                     tabBox(title="Upload your data", width=NULL,id = "upload",
+                            
+                            tabPanel("Import your data", style = "background-color: #ffffff;",
                             conditionalPanel(condition = 'output.boolmark', #Hide or Show event depending on the loading data success or failure
                                              #includeMarkdown("markdown/help.md")
                                              tags$h1("How to import ?"),
@@ -276,9 +278,10 @@ MATRiX app is working with specific data produced by the limma package name, res
                               dataTableOutput("new_test")
                             )
 
+                   )),
+                     tabPanel("Volcano plot",value="volcano", style = "background-color: #ffffff;", conditionalPanel(condition = '!output.boolmark', plotOutput(outputId = "volcanoplot", height = 900))
                    )
-              )
-            ),  
+            ))),  
             div(id="pass",style = "word-wrap: break-word;",
             column(width = 3,
             box(id="boxpass",title = strong("Upload data", style="font-size:25px;"), width = NULL, background = "light-blue",
@@ -311,8 +314,14 @@ MATRiX app is working with specific data produced by the limma package name, res
                 
               conditionalPanel(condition = '!output.boolmark',
                 selectInput(
-                  "method","Choose your statistical method",choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None"))
-                )
+                  "method","Choose your statistical method",choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None")),
+                
+              uiOutput("compvolc"),
+              numericInput(
+                'topvolc',
+                'Maximal number of genes by comparison(s)',
+                NULL,min = 0,max = 5000
+              ))
               ),
             box(
               title = "What's new in MATRiX", width = NULL, status = "primary",
