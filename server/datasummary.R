@@ -21,8 +21,6 @@
 #' @export
 
 data_summary <- reactive({
-  inFile <- input$file
-  if (is.null(inFile))
-    return(NULL)
+  req(csvf())
   myfinalfc(csvf()[[3]], input$pval1, input$method)
 })

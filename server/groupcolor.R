@@ -19,6 +19,7 @@
 #' @export
 
 mycolgrp <- reactive  ({
+  req(new_group())
   mygrpcol <- new_group()$Grp %>%
     sort() %>%
     unique() %>%
@@ -39,7 +40,7 @@ mycolgrp <- reactive  ({
 #' @export
 
 cols <- reactive({
-
+  req(mycolgrp())
   if (is.null(mypal()) )
     lapply(seq_along(mycolgrp()), function(i) {
       
@@ -109,7 +110,7 @@ mypal <- reactive({
 
 
 colorfluidhm <- reactive({
-
+  req(cols())
   lapply(1:length(cols()), function(i){
 
     j = length(cols())
@@ -149,6 +150,7 @@ output$myPanel <- renderUI({
 #' 
 
 colors <- reactive({
+  req(mycolgrp())
   lapply(seq_along(mycolgrp()), function(i) {
     input[[paste("col", i, sep = "_")]]
   })

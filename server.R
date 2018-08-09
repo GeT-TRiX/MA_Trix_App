@@ -23,6 +23,11 @@ shinyServer(function(input, output,session) {
   
   source(file.path("server", "csvFile.R"), local = TRUE)$value #
   
+  
+  
+  
+  #csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE)
+
   ##########################################
   ######## Widget update and info         ##
   ##########################################
@@ -67,9 +72,8 @@ shinyServer(function(input, output,session) {
   
   
   file_name <- reactive({
-    inFile <- input$file
-    
-    if (is.null(inFile))
+    req(csvf())
+    if (is.null(csvf()))
       return(NULL)
     else
       return (tools::file_path_sans_ext(inFile$name))

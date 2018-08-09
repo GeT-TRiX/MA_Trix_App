@@ -64,12 +64,8 @@ observeEvent(input$noIndividuspca, {
 #' @export
 
 choix_grpca <- reactive({
+  req(csvf())
   req(input$indivpca)
-  
-  inFile <- input$file
-  if (is.null(inFile))
-    return(NULL)
-  
   return(input$indivpca)
 })
 
@@ -100,11 +96,15 @@ list_ind <- reactive({
 
 
 new_grouppca <- reactive({
+  req(csvf())
+  csvf()[[2]][csvf()[[2]]$Grp %in% choix_grpca(),]
+})
+
+observe({
+  req(new_grouppca())
+  print(choix_grpca())
+  print("ok")
   
-  inFile <- input$file
-  if (is.null(inFile))
-    return(NULL)
-  csvf()[[2]][csvf()[[2]]$Grp %in% choix_grpca(), ]
 })
 
 
@@ -120,9 +120,6 @@ new_grouppca <- reactive({
 
 PCAres <- reactive({
   req(csvf())
-  if (is.null(csvf()[[1]]))
-    return(NULL)
-  
   mypca = res.pca(new_datapca(), scale = F)
   return(mypca)
 })
@@ -156,9 +153,7 @@ Scree_plot <- reactive({
 
 
 new_datapca <- reactive({
-  inFile <- input$file
-  if (is.null(inFile))
-    return(NULL)
+  req(csvf())
   #subset(csvf()[[1]],select = choix_individus())
   select(csvf()[[1]], as.character(factor(new_grouppca()$X)))
 })

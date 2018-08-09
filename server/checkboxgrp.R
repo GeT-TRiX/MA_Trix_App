@@ -70,12 +70,7 @@ observeEvent(input$allIndividus, {
 #' @export
 
 choix_grp <- reactive({
-  req(input$indiv)
-  
-  inFile <- input$file
-  if (is.null(inFile))
-    return(NULL)
-  
+  req(input$indiv, csvf())
   return(input$indiv)
 })
 
@@ -107,9 +102,7 @@ list_ind <- reactive({
 
 
 new_group <- reactive({
-  inFile <- input$file
-  if (is.null(inFile))
-    return(NULL)
+  req(csvf())
   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
 })
 
@@ -125,9 +118,7 @@ new_group <- reactive({
 
 
 new_data <- reactive({
-  inFile <- input$file
-  if (is.null(inFile))
-    return(NULL)
+  req(csvf())
   #subset(csvf()[[1]],select = choix_individus())
   select(csvf()[[1]], as.character(factor(new_group()$X)))
 })

@@ -23,23 +23,16 @@
 
 formated <- reactive({
   
-  req(user_group())
-
-  df <- csvf()
-  if (is.null(df))
-    return(NULL)
-  
-  else
-    treated = decTestTRiX(
+  req(user_group(), csvf())
+    
+  treated = decTestTRiX(
       user_group()[[1]],
       user_group()[[2]],
       user_group()[[3]],
       DEGcutoff = input$pval,
       FC = input$fc,
       cutoff_meth = input$method2,
-      maxDE = input$maxgen
-      
-    )
+      maxDE = input$maxgen)
   
   return(treated)
   

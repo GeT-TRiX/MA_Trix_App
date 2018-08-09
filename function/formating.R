@@ -179,7 +179,6 @@ createdfsign = function(adj) {
 myfinalfc = function(alltop, pval, testrix) {
   
   j = 1
-  
   whatest  = ifelse(testrix == "FDR", T, F)
   if (whatest)
     adj = alltop[, grep("^X|^adj.P.Val", names(alltop), value = TRUE)]

@@ -143,15 +143,6 @@ csvf <- reactive({
         #' @export
 
       FUN = function (x)
-        
-        # read.table( # benchmark read.table
-        #   x,
-        #   sep = ";" ,
-        #   dec = ",",
-        #   header = T,
-        #   check.names = F # good col names
-        # )
-        
         fread(
           x,
           data.table = F,

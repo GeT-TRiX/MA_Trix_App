@@ -18,11 +18,8 @@
 
 user_group <- reactive({ 
   
-  req(choix_test())
+  req(choix_test(),adjusted())
   
- inFile <- input$file
-  if (is.null(inFile))
-    return(NULL)
   
   myfinal = list()
   for (i in 1:3)
@@ -45,11 +42,7 @@ user_group <- reactive({
 
 
 new_group <- reactive({ 
-  req(choix_grp())
-  
-  inFile <- input$file
-  if (is.null(inFile))
-    return(NULL)
+  req(choix_grp(),csvf())
   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(),]
 })
 

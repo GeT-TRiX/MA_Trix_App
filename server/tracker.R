@@ -6,6 +6,7 @@
 ### Licence: GPL-3.0
 
 output$myNUM <- renderPrint({ # number of signficant genes in the heatmap produced
+  req(formated())
   if(is.null(formated()[[1]]))
     return("X")
   else

@@ -18,9 +18,7 @@
 
 adjusted <- reactive({
   
-  df <- csvf()
-  if (is.null(df))
-    return(NULL)
+  req(csvf())
   
   myrpl = c("^adj.P.Val_","^logFC_","^P.value_")
   grepdf = c("X|^adj.P.Val","X|^logFC","X|^P.value")

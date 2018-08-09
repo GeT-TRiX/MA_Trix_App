@@ -22,7 +22,7 @@
 #' 
 
 colspca <- reactive({
-    
+    req(mycolgrppca())
     pcapal = brewer.pal(8,"Dark2") %>%
     list(brewer.pal(10,"Paired")) %>%
     unlist()
@@ -53,7 +53,7 @@ colspca <- reactive({
 
 
 colorfluidpca <- reactive({
-  
+  req(colspca())
   lapply(1:length(colspca()), function(i){
     
     j = length(colspca())
@@ -94,6 +94,7 @@ output$myPanelpca <- renderUI({ # display the colourInput in the UI
 
 
 colorspca <- reactive({
+  req(mycolgrppca())
   lapply(seq_along(unique(mycolgrppca())), function(i) {
     input[[paste("colpca", i, sep = "_")]]
   })
