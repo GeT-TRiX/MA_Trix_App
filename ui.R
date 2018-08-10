@@ -104,14 +104,14 @@ body <- dashboardBody(
 
                                 tabPanel("About", style = "background-color: #ffffff;",
                                          tags$h3("MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics."),
-                                         p("This project initiated by Yannick Lippi aims to facilitate access to biologist in order to publish graphs such as heatmap, PCA or Venn diagram related to specifics data produced by TRiX's facility 
-MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querrying the DWS (DAVID WEB SERVICES).
+                                         p("This project initiated by Yannick Lippi aims to facilitate access to biologist in order to publish graphs such as heatmap, PCA or Venn diagram related to specifics data produced by TRiX's facility.", tags$br(),"  
 
-MATRiX app is working with specific data produced by the limma package name, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/downloadData.zip) Here's the global workflow passing by the experiment to the visualization. "),
+MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querrying the DWS (DAVID WEB SERVICES).",tags$br(),"
+
+MATRiX app is working with specific data produced by the limma package name, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/downloadData.zip)."),
                                       
-                                         p("Hereafter is the global workflow of the MATRiX application:"),
+                                         p("Hereafter is the global workflow passing by the statistical analysis to the visualization:"),tags$br(),
                                          tags$p(
-                                           
                                            tags$img(src = "whatma.png"))
                                          ),
                                 tabPanel("Authors", h3("The main contributors to MATRiX:"),
