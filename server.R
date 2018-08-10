@@ -40,14 +40,15 @@ shinyServer(function(input, output,session) {
   ##########################################
 
   
+  
   output$volcanoplot <- renderPlot({
     
   req(csvf())
-  
-  EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), topgenes = input$topvolc, 
-                  ,  pCutoff = 0.05,FCcutoff = 1,transcriptPointSize = 1,transcriptLabSize = 3.0,
-                  title =  gsub("-"," versus " ,input$volcacomp),
-                  cutoffLineType = "twodash",
+  EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
+                  y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
+                  topgenes = input$topvolc, DrawConnectors = ifelse(is.na(input$topvolc),F,T),
+                  pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = 1,transcriptLabSize = 3.0,
+                  title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash",
                   cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
                                                "P value & Log (base 2) fold-change"))
   })

@@ -315,33 +315,37 @@ MATRiX app is working with specific data produced by the limma package name, res
               conditionalPanel(condition = '!output.boolmark',
                 selectInput(
                   "method","Choose your statistical method",choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None")),
-                
+                strong("VOLCANO plot",style="font-size:18px;"),
+                br(),br(),
               uiOutput("compvolc"),
               numericInput(
                 'topvolc',
                 'Maximal number of genes by comparison(s)',
-                NULL,min = 0,max = 5000
-              ))
-              ),
-            box(
-              title = "What's new in MATRiX", width = NULL, status = "primary",
-              div(style = 'overflow-y: scroll; height: 550px',
-	          addNews("Jul 17th 2018", "Tutorial/Video", "Soon will be added a video to summarise the application"),
-                  addNews("Jul 16th 2018", "Venn" ,"You can now choose your color for the venn diagram"),
-                  addNews("Jul 16th 2018","Bug fixes","Venn diagram display erros when filtering"),
-                  addNews("Jul 5th 2018","Venn/DAVID","Add Gene functionnal classification for selected intersection(s)"),
-                  addNews("Jun 26th 2018","Add features","It's now possible to interact with the rendering table to filter the table in the aim of plotting the top n genes.
-                          For the GO enrichment it is now possible to select the rows in order to display the gene symbol according to the entrez ids"),
-                  addNews("Jun 22th 2018","Bug fixes","For two contrasts the venn.draw function was not ordering the contrast names in the right order."),
-                  addNews("Jun 20th 2018","MATRiX","First public release of MATRiX. 
-                                                              Enhancement of the gui with the use of dashboard package"),
-                  addNews("Jun 18th 2018","GO enrichment","It is now possible to query the DWS for the Heatmap and save the result in xlsx format for the different clusters"),
-                  addNews("Jun 15th 2018","DNS ","Adding DNS for the MATRiX application (matrix.toulouse.inra.fr)"),
-                  addNews("Jun 10th 2018","Venn diagram","The venn diagram FC and display of the top n genes
-                                                                have been added to compare the results of 2 or more contrasts."), 
-                  addNews("Jun 5th 2018","PCA/Heatmap","Display color groups side by side in the gui"), 
-                  addNews("May 29th 2018","beta-test","The service will be made available once the beta test phase is officially completed.")
-              )))
+                NULL,min = 0,max = 5000),
+              fluidRow(column(6, sliderInput('volcfc', "Choose your cutoff FC",min = 1, max=10, step = 1,value=1)),
+                       column(6,sliderInput('volcpval', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05)))
+              )
+              )
+#             box(
+#               title = "What's new in MATRiX", width = NULL, status = "primary",
+#               div(style = 'overflow-y: scroll; height: 550px',
+# 	          addNews("Jul 17th 2018", "Tutorial/Video", "Soon will be added a video to summarise the application"),
+#                   addNews("Jul 16th 2018", "Venn" ,"You can now choose your color for the venn diagram"),
+#                   addNews("Jul 16th 2018","Bug fixes","Venn diagram display erros when filtering"),
+#                   addNews("Jul 5th 2018","Venn/DAVID","Add Gene functionnal classification for selected intersection(s)"),
+#                   addNews("Jun 26th 2018","Add features","It's now possible to interact with the rendering table to filter the table in the aim of plotting the top n genes.
+#                           For the GO enrichment it is now possible to select the rows in order to display the gene symbol according to the entrez ids"),
+#                   addNews("Jun 22th 2018","Bug fixes","For two contrasts the venn.draw function was not ordering the contrast names in the right order."),
+#                   addNews("Jun 20th 2018","MATRiX","First public release of MATRiX. 
+#                                                               Enhancement of the gui with the use of dashboard package"),
+#                   addNews("Jun 18th 2018","GO enrichment","It is now possible to query the DWS for the Heatmap and save the result in xlsx format for the different clusters"),
+#                   addNews("Jun 15th 2018","DNS ","Adding DNS for the MATRiX application (matrix.toulouse.inra.fr)"),
+#                   addNews("Jun 10th 2018","Venn diagram","The venn diagram FC and display of the top n genes
+#                                                                 have been added to compare the results of 2 or more contrasts."), 
+#                   addNews("Jun 5th 2018","PCA/Heatmap","Display color groups side by side in the gui"), 
+#                   addNews("May 29th 2018","beta-test","The service will be made available once the beta test phase is officially completed.")
+#               ))
+              )
             ),
             conditionalPanel(condition = '!output.boolmark',
             column(12,

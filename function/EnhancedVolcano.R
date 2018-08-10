@@ -1,6 +1,7 @@
 # Author: Kevin Blighe
 # Title: Publication-ready volcano plots with enhanced colouring and labelign
 # Github: https://github.com/kevinblighe/EnhancedVolcano
+# Modified by Franck Soubès (add topgenes)
 
 EnhancedVolcano <- function(
     toptable,
@@ -65,14 +66,13 @@ EnhancedVolcano <- function(
         (abs(toptable[,x])>FCcutoff)] <- "FC_P"
     toptable$Sig <- factor(toptable$Sig,
         levels=c("NS","FC","P","FC_P"))
+
     
-    print(x)
-    
-    if(!is.null(topgenes)){
-      myval <- toptable %>%
-        dplyr::select(GeneName,x ) %>%
-       top_n(topgenes)
-      selectLab <- myval$GeneName
+    if(!is.na(topgenes)){
+      
+      toptable$abs <- unlist(abs(toptable[x])) 
+      myval <- toptable %>% dplyr::select(GeneName,abs) %>% top_n(.,topgenes)
+      selectLab <- as.character(myval$GeneName)
     }
     
       
@@ -84,14 +84,19 @@ EnhancedVolcano <- function(
     toptable$lab <- lab
     toptable$xvals <- toptable[,x]
     toptable$yvals <- toptable[,y]
-
+    
     if (!is.null(selectLab)) {
         names.new <- rep("", length(toptable$lab))
         indices <- which(toptable$lab %in% selectLab)
-        names.new[indices] <- toptable$lab[indices]
+        names.new[indices] <- as.character(toptable$GeneName[indices])
         toptable$lab <- names.new
+        
     }
-    View(toptable$lab)
+    
+    
+    tot = subset(toptable,
+           toptable[,y]<pLabellingCutoff &
+             abs(toptable[,x])>FCcutoff)[,"lab"]
     
     plot <- ggplot2::ggplot(toptable,
             ggplot2::aes(x=xvals, y=-log10(yvals))) +
@@ -178,7 +183,7 @@ EnhancedVolcano <- function(
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff)[,"lab"]),
                 size = transcriptLabSize,
-		check_overlap = TRUE,
+		check_overlap = T,
                 vjust = 1.0)
     } else if (DrawConnectors == FALSE && is.null(selectLab)) {
         plot <- plot + ggplot2::geom_text(data=subset(toptable,
@@ -188,7 +193,7 @@ EnhancedVolcano <- function(
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff)[,"lab"]),
                 size = transcriptLabSize,
-                check_overlap = TRUE,
+                check_overlap = T,
                 vjust = 1.0)
     }
 

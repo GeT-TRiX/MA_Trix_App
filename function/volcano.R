@@ -3,6 +3,11 @@ library(plotly)
 
 
 toptable <- read.csv2("data/All_topTableAll.csv")
+
+test <- toptable$GeneName[2663]
+test
+
+
 View(toptable)
 colnames(toptable)
 toptable %>%
@@ -68,10 +73,33 @@ colnames(toptable)
 ?EnhancedVolcano
 rownames(toptable) = toptable$ProbeName
 View(toptable)
-EnhancedVolcano(toptable, lab= toptable$GeneName, x ="logFC_LWT_CARBO.LWT_CTRL" , y = "adj.P.Val_LWT_CARBO.LWT_CTRL",  pCutoff = 1,
-                FCcutoff = 1, topgenes = 5,
+library(dplyr)
+toptable <- read.csv2("data/All_topTableAll.csv")
+test = "logFC_LWT_CARBO.LWT_CTRL"
+as.numeric(as.character(test))
+as.numeric(as.character(factor(test)))
+noquote(test)
+gsub('"', '', test)
+as.numeric(gsub("(^')|('$)", "", test))
+
+
+mutate_values <- function(new_name, name1, name2){
+  mtcars %>% 
+    mutate(UQ(rlang::sym(new_name)) :=  UQ(rlang::sym(name1)) +  UQ(rlang::sym(name2)))
+}
+
+toptable %>% dplyr::select(GeneName,logFC_LWT_CARBO.LWT_CTRL) %>% mutate(logFC_LWT_CARBO.LWT_CTRL= abs(as.numeric(test))) %>%
+  top_n(5)
+class(toptable$Row)
+test$GeneName
+library(dplyr)
+test <- toptable$GeneName[2663]
+
+EnhancedVolcano(toptable, lab= toptable$GeneName, x ="logFC_LWT_CARBO.LWT_CTRL" , y = "adj.P.Val_LWT_CARBO.LWT_CTRL", 
+                pCutoff = 0.05,
+                FCcutoff = 3, topgenes = 10,
                 transcriptPointSize = 1,
-                transcriptLabSize = 3.0,
+                transcriptLabSize = 3.0,DrawConnectors = T,
                 title = "N061011 versus N61311",
                 cutoffLineType = "twodash",
                 cutoffLineCol = "black",
