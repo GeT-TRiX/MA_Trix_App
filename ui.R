@@ -24,7 +24,7 @@ sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptom
   tags$style(type="text/css", Errorcss),
   tags$style(type="text/css", inactivity),
   
-  
+tags$head(includeScript("google-analytics.js")),
 tags$head(
      #tags$script(src = inactivity),   
      tags$script(src = "custom.js")),
@@ -162,10 +162,14 @@ MATRiX app is working with specific data produced by the limma package name, res
                                                        )))
                                          
                                          
-                                )
-                                
-                                
-                                )))),
+                                )), 
+                                tabPanel("Video",
+                                         fluidRow(
+                                           column(8, align="center", offset = 2,
+                                         tags$iframe(src = "https://www.youtube.com/embed/EqPtz5qN7HM", width="560", height="360", align= "middle" )                                         
+                                         )))
+
+                                ))),
               column(width=3,
                      div(id="pass",style = "word-wrap: break-word;",
                          box(id="boxpass",title = strong("Session information", style="font-size:25px;"), width = NULL, background = "light-blue",
@@ -185,14 +189,20 @@ MATRiX app is working with specific data produced by the limma package name, res
                                  p("Chat source code is available ", 
                                    tags$a(href = "https://github.com/trestletech/ShinyChat",target="_blank",
                                           "here"))
-                                 
                              ))
-                         
                      ),
+                     
                      box(
                        title = "What's new in MATRiX", width = NULL, status = "primary",
                        div(style = 'overflow-y: scroll; height: 550px',
-                           addNews("Jul 17th 2018", "Tutorial/Video", "Soon will be added a video to summarise the application"),
+                           addNews("Aug 10th 2018", "Tutorial/Video", "Soon will be added a video summarizing the application"),
+                           addNews("Aug 10th 2018", "Upload/Volcano", "You can explore your different comparisons with a volcano plot"),
+                           addNews("Aug 6th 2018", "Venn Diagram/Enrichment", "Add acyclic graph if download"),
+                           addNews("Aug 4th 2018", "Heatmap/Bubble graph", "You can display or not the labels within the bubbles"),
+                           addNews("Aug 3th 2018", "Heatmap/Go(Analysis)", "You can now plot a bubble graph (Highcharts) that summarizes the top categories from the resulting datatable"),
+                           addNews("Jul 28th 2018", "Home/Support", "You can asks your questions directly in the Support"),
+                           addNews("Jul 25th 2018", "Tutorial/Video", "Soon will be added a video to summarise the application"),
+                           addNews("Jul 20th 2018", "New page", "Add a Home page regrouping informatios about the app"),
                            addNews("Jul 16th 2018", "Venn" ,"You can now choose your color for the venn diagram"),
                            addNews("Jul 16th 2018","Bug fixes","Venn diagram display erros when filtering"),
                            addNews("Jul 5th 2018","Venn/DAVID","Add Gene functionnal classification for selected intersection(s)"),
@@ -279,7 +289,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                             )
 
                    )),
-                     tabPanel("Volcano plot",value="volcano", style = "background-color: #ffffff;", conditionalPanel(condition = '!output.boolmark', plotOutput(outputId = "volcanoplot", height = 900))
+                     tabPanel("Volcano plot",value="volcano", style = "background-color: #ffffff;", plotOutput(outputId = "volcanoplot", height = 900)
                    )
             ))),  
             div(id="pass",style = "word-wrap: break-word;",
@@ -1190,7 +1200,6 @@ MATRiX app is working with specific data produced by the limma package name, res
                 )
       
     ))
-  
  )
 )
 )
@@ -1199,8 +1208,7 @@ MATRiX app is working with specific data produced by the limma package name, res
 ######## END dashboardbody    # 
 ############################### 
 
- ## GOOGLE ANALYTIC
- #tags$head(includeScript("google-analytics.js"))
+ 
 
   
   
