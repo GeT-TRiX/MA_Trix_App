@@ -24,7 +24,7 @@ sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptom
   tags$style(type="text/css", Errorcss),
   tags$style(type="text/css", inactivity),
   
-tags$head(includeScript("google-analytics.js")),
+tags$head(includeScript("www/google-analytics.js")),
 tags$head(
      #tags$script(src = inactivity),   
      tags$script(src = "custom.js")),
