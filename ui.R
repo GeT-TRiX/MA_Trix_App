@@ -289,7 +289,17 @@ MATRiX app is working with specific data produced by the limma package name, res
                             )
 
                    )),
-                     tabPanel("Volcano plot",value="volcano", style = "background-color: #ffffff;", plotOutput(outputId = "volcanoplot", height = 900)
+                     tabPanel("Volcano plot",value="volcano", style = "background-color: #ffffff;", 
+                              conditionalPanel(condition = '!output.boolmark',
+                                      
+                              fluidRow(column(6, style="width:15%;",
+                              downloadButton("savevolcano", "Save your Volcano plot" , style =
+                                               "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                              column( 1, 
+                                      selectInput(
+                                        "formvolc",label = NULL,
+                                        choices = c("png", "eps", "pdf"))))),
+                              plotOutput(outputId = "volcanoplot", height = 900)
                    )
             ))),  
             div(id="pass",style = "word-wrap: break-word;",

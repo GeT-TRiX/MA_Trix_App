@@ -40,23 +40,73 @@ shinyServer(function(input, output,session) {
   ##########################################
 
   
+  volcano <- reactive({
+    req(csvf())
+    
+    EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
+                    y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
+                    topgenes = input$topvolc, DrawConnectors = ifelse(is.na(input$topvolc),F,T),
+                    pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = 1,transcriptLabSize = 3.0,
+                    title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash",
+                    cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
+                                                                         "P value & Log (base 2) fold-change"))
+  })
+  
+  
   output$volcanoplot <- renderPlot({
    
   validate(need(csvf(), 'You need to import data to visualize this plot!'))
-
-  EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
-                  y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
-                  topgenes = input$topvolc, DrawConnectors = ifelse(is.na(input$topvolc),F,T),
-                  pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = 1,transcriptLabSize = 3.0,
-                  title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash",
-                  cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
-                                               "P value & Log (base 2) fold-change"))
+    volcano()
+    req(input$volcacomp)
+  # EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
+  #                 y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
+  #                 topgenes = input$topvolc, DrawConnectors = ifelse(is.na(input$topvolc),F,T),
+  #                 pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = 1,transcriptLabSize = 3.0,
+  #                 title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash",
+  #                 cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
+  #                                              "P value & Log (base 2) fold-change"))
   })
   
   output$compvolc <- renderUI({
     req(adjusted())
     selectInput("volcacomp", "Choose a comparison", choices = colnames(adjusted()[[1]][,-1]))
   })
+  
+  
+  output$savevolcano <- downloadHandler(filename <- function() {
+    paste0(basename(file_path_sans_ext(projectname())), '_volcano.', input$formvolc, sep =
+             '')
+  },
+  content <- function(file) {
+    if (input$formvolc == "pdf")
+      
+      pdf(file,
+          width = 12,
+          height = 12,
+          pointsize = 12)
+    
+    
+    else if (input$formvolc == "png")
+      
+      png(
+        file,
+        width = 2500,
+        height = 2500,
+        units = "px",
+        pointsize = 12,
+        res = 100
+      )
+    else
+      ggsave(file,device=cairo_ps, fallback_resolution = 600)
+
+    
+    plot(volcano())
+    dev.off()
+  })
+  
+  
+  
+  
   
   
   ################################
@@ -90,6 +140,7 @@ shinyServer(function(input, output,session) {
   
   file_name <- reactive({
     req(csvf())
+    inFile <- input$file
     if (is.null(csvf()))
       return(NULL)
     else
