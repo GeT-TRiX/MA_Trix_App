@@ -98,7 +98,7 @@ body <- dashboardBody(
     tabItem(tabName = "Home",
             fluidRow(
               column(width=9,
-                     div(style="width:100% ; max-width: 1200px; height: 550px",id = "homepage",
+                     div(style="width:100% ;max-width: 1500px; height: 1500px max-height: 2200px;",id = "homepage",
                          
                          tabBox(title="Welcome to MATRiX", width=NULL,id = "homepage",
 
@@ -109,7 +109,10 @@ MATRiX is an application dedicated to DNA chip analysis, this application incorp
 
 MATRiX app is working with specific data produced by the limma package name, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/downloadData.zip) Here's the global workflow passing by the experiment to the visualization. "),
                                       
-                                         p("Hereafter is the global workflow of the MATRiX application:")
+                                         p("Hereafter is the global workflow of the MATRiX application:"),
+                                         tags$p(
+                                           
+                                           tags$img(src = "whatma.png"))
                                          ),
                                 tabPanel("Authors", h3("The main contributors to MATRiX:"),
                                          p(a("Yannick Lippi",href="mailto:yannick.lippi@inra.fr"), "(Initiator, beta-testing, feature suggestions)"),

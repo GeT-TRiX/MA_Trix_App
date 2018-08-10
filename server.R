@@ -56,8 +56,9 @@ shinyServer(function(input, output,session) {
   output$volcanoplot <- renderPlot({
    
   validate(need(csvf(), 'You need to import data to visualize this plot!'))
-    volcano()
+    
     req(input$volcacomp)
+    volcano()
   # EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
   #                 y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
   #                 topgenes = input$topvolc, DrawConnectors = ifelse(is.na(input$topvolc),F,T),
