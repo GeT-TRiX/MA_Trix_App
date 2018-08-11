@@ -112,7 +112,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                                       
                                          p("Hereafter is the global workflow passing by the statistical analysis to the visualization:"),tags$br(),
                                          tags$p(
-                                           tags$img(src = "whatma.png"))
+                                           tags$img(src = "whatmaen.png"))
                                          ),
                                 tabPanel("Authors", h3("The main contributors to MATRiX:"),
                                          p(a("Yannick Lippi",href="mailto:yannick.lippi@inra.fr"), "(Initiator, beta-testing, feature suggestions)"),
