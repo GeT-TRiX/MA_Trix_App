@@ -61,6 +61,7 @@ output$distPlot <- renderPlot({
     if ( input$reactheat == T){
       
       hmbis()
+      hmsize$cut <- hmbis()[[8]]
       observe({boolhm <<-T})
       output$heatmbool <- reactive({
         boolhm
@@ -72,10 +73,7 @@ output$distPlot <- renderPlot({
       
     }
     else{
-      #isolate(heatmapfinal(isplot = F))
-      #isolate(heatmapfinal())
-      #isolate(isisolatehm())
-      print("ok")
+      
       validate(
           need(input$heatm, 'You are not in reactive mod anymore, please click on the heatmap button in order to update the heatmap' )
       )
