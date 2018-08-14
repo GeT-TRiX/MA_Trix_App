@@ -18,8 +18,8 @@ shinyServer(function(input, output,session) {
   ##                                                   ##
   #######################################################
   
-  source(file.path("server", "csvFile.R"), local = TRUE)$value #
-  #csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE)
+  #source(file.path("server", "csvFile.R"), local = TRUE)$value #
+  csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE)
 
   ##########################################
   ######## Widget update and info         ##

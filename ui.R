@@ -271,6 +271,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                                              tags$ul(
                                                tags$li("It is highly recommanded to not modify these files (removed columns, change column names ...) in the aim of not disturbing the well functionning of the application.")
                                              )
+                                             ,ns = NS("datafile")
                                              ),
                             conditionalPanel(condition = '!output.boolmark',
                             
@@ -291,6 +292,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                               h3("This table shows the samples with the corresponding groups"),
                               dataTableOutput("new_test")
                             )
+                            ,ns = NS("datafile")
 
                    )),
                      tabPanel("Volcano plot",value="volcano", style = "background-color: #ffffff;", 
@@ -325,15 +327,15 @@ MATRiX app is working with specific data produced by the limma package name, res
                 
                 downloadLink("downloadData", label = "download sample data", style="color:red; float:right;"),
                 br(),br(),
-                #csvFileInput("datafile", "User data (.csv format)"),
+                csvFileInput("datafile", "User data (.csv format)"),
                 #csvFileInput("file", "Choose your csv files"),
-                fileInput(
-                  "file",
-                  "Choose your csv files",
-                  accept = c("text/csv","text/comma-separated-values,text/plain",".csv"
-                  ),
-                  multiple = T # Attribute to load multiple data at once
-                ),
+                # fileInput(
+                #   "file",
+                #   "Choose your csv files",
+                #   accept = c("text/csv","text/comma-separated-values,text/plain",".csv"
+                #   ),
+                #   multiple = T # Attribute to load multiple data at once
+                # ),
                 br(),
                 
               conditionalPanel(condition = '!output.boolmark',
@@ -348,7 +350,8 @@ MATRiX app is working with specific data produced by the limma package name, res
                 NULL,min = 0,max = 5000),
               fluidRow(column(6, sliderInput('volcfc', "Choose your cutoff FC",min = 1, max=10, step = 1,value=1)),
                        column(6,sliderInput('volcpval', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05)))
-              )
+              ,ns = NS("datafile")
+                )
               )
 #             box(
 #               title = "What's new in MATRiX", width = NULL, status = "primary",

@@ -1,35 +1,59 @@
-#' ### Author: Franck Soubès
-#' ### Bioinformatics Master Degree - University of Bordeaux, France
-#' ### Link: https://github.com/fsoubes/MA_Trix_App
-#' ### Where: GET-TRiX's facility
-#' ### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
-#' ### Licence: GPL-3.0
-#' 
+chartofa = function(datach){
+  
+  datach[] <- lapply( datach, factor)
+  col_names <- names(datach)
+  datach[col_names] <- lapply(datach[col_names] , factor)
+  
+  return(datach)
+}
 
-#' chartofa = function(datach){
-#'   
-#'   datach[] <- lapply( datach, factor)
-#'   col_names <- names(datach)
-#'   datach[col_names] <- lapply(datach[col_names] , factor)
-#'   
-#'   return(datach)
-#' }
-#' 
 
+
+dataTabUI <- function(id, input, output) {
+  ns <- NS(id)
+  
+  tagList(sidebarLayout(sidebarPanel(input),
+                        
+                        mainPanel(dataTableOutput(output))))
+  
+}
+
+plotTabUI <- function(id, input, output) {
+  ns <- NS(id)
+  
+  tagList(sidebarLayout(sidebarPanel(input),
+                        
+                        mainPanel(plotOutput(output))))
+  
+}
+
+dataTab <- function(input, output, session) {
+  # do nothing...
+  # Should there be some logic?
+  
+  
+}
 
 # File input module
 # This module takes as input csv file and outputs dataframe
 # Module UI function
-
 csvFileInput <- function(id, label = "CSV file") {
   # Create a namespace function using the provided id
   ns <- NS(id)
   
-  #tagList(
-    
-    fileInput(ns("file"),multiple = T, accept = c("text/csv","text/comma-separated-values,text/plain",".csv"), label)
-
-  #)
+  tagList(
+    fileInput(ns("file"),multiple = T, label),
+    checkboxInput(ns("heading"), "Has heading"),
+    selectInput(
+      ns("quote"),
+      "Quote",
+      c(
+        "None" = "",
+        "Double quote" = "\"",
+        "Single quote" = "'"
+      )
+    )
+  )
 }
 
 # Module server function
@@ -229,9 +253,8 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     
     Sys.sleep(1)
     closeAlert(session, "succeeded")
-    
+
     return (csvord)
   })
-  
-  
+
 }
