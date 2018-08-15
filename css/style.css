@@ -160,3 +160,35 @@ div.outer  {
     opacity: 1;
 }
 
+
+* {padding:0;margin:0;box-sizing:border-box;}
+#Video {
+	position: relative;
+	padding-bottom: 100%; /* 16:9 */
+	height: 0;
+}
+
+.iframe-box {
+    max-width: 1280px; /* video width */
+    max-height: 720px; /* video height */
+}
+
+
+
+.fittobox {                /* give fit to box an aspect ratio */
+    display: inline-block; /* let it be styled thusly */
+    padding: 0;            /* get rid of pre-styling */
+    margin: 0;
+    width: 100%;           /* take up full width available */
+    padding-top: 56.25%;   /* give aspect ratio of 16:9; "720 / 1280 = 0.5625" */
+    height: 0px;           /* don't want it to expand beyond padding */
+    position: relative;    /* allow for absolute positioning of child elements */
+}
+
+.fittobox > iframe {
+    position: absolute;    /* expand to fill */
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
