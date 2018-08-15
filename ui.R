@@ -200,7 +200,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                      box(
                        title = "What's new in MATRiX", width = NULL, status = "primary",
                        div(style = 'overflow-y: scroll; height: 550px',
-                           addNews("Aug 10th 2018", "Tutorial/Video", "Soon will be added a video summarizing the application"),
+                           addNews("Aug 15th 2018", "Presentation/Video", "Added a video to present MATRiX and add modules to import files"),
                            addNews("Aug 10th 2018", "Upload/Volcano", "You can explore your different comparisons with a volcano plot"),
                            addNews("Aug 6th 2018", "Venn Diagram/Enrichment", "Add acyclic graph if download"),
                            addNews("Aug 4th 2018", "Heatmap/Bubble graph", "You can display or not the labels within the bubbles"),
