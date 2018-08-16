@@ -171,7 +171,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                                          div( id="video",
                                          fluidRow(
                                            column(8, align="center", offset = 2,
-                                         tags$iframe(src = "https://www.youtube.com/embed/lfI0zRYzeJs?vq=hd1080", width="800", height="600", align= "middle", frameborder="0",allowfullscreen ="1" )                                         
+                                         tags$iframe(src = "https://www.youtube.com/embed/lfI0zRYzeJs?vq=hd1080", width="960", height="540", align= "middle", frameborder="0",allowfullscreen ="1" )                                         
                                          ))))
 
                                 ))),
