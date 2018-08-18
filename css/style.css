@@ -74,6 +74,23 @@ p {
 #upload .nav-tabs-custom>.tab-content{background:#fff;padding:10px;border-bottom-right-radius:3px;border-bottom-left-radius:3px}
 #ACP .nav-tabs-custom>.tab-content{background:#ecf0f5;padding:10px;border-bottom-right-radius:3px;border-bottom-left-radius:3px}
 
+#advancedjvenn .btn{
+  border: none;
+  outline: none;
+  padding: 6px 11px;
+  cursor: pointer;
+  background-color: #337ab7;
+  
+}
+
+#advancedjvenn .élément{
+  color:black;
+}
+
+#advancedjvenn .active, .btn:hover {
+  background-color: #666;
+  color: white;
+}
 
 .nav-tabs-custom > .nav-tabs > li.active:hover > a, .nav-tabs-custom > .nav-tabs > li.active > a {
     background-color: #3c8dbc;

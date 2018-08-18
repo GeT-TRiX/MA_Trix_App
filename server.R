@@ -126,17 +126,22 @@ shinyServer(function(input, output,session) {
   
   observe({
     req(vennlist(),user_cont())
-    #print(vennlist())
-    mycont = Vennlist(user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
-    Rtojs <- toJvenn(mycont,user_cont())
+    if(input$dispvenn == "genes")
+      isolate(
+      Rtojs <- toJvenn(vennlist()[[2]],user_cont()))
+    else
+      isolate(
+      Rtojs <- toJvenn(vennlist()[[1]],user_cont()))
+    
+    #thisiswhy <-input$typejv
+    Mymode <-  input$updamod # Mode
+    Myfont <-  input$myfont # Font size
+    Mystat <-  input$mystat # Stat
     session$sendCustomMessage(type="updatejvenn", Rtojs)
+
+    
   })
   
-  observe({
-    req(input$testons,input$together)
-    print(input$testons)
-    print(input$together)
-  })
   
   output$renderer <- renderPrint({
     req(input$testons)
@@ -145,9 +150,8 @@ shinyServer(function(input, output,session) {
   
   output$renderer2 <- renderText({
     req(input$testons)
-    cat(input$testons,sep="\n")
-    #paste0(input$testons,sep ="\n"
-    
+    cat(input$testons)
+
   })
   
   ################################

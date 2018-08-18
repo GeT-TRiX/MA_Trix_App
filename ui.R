@@ -9,7 +9,7 @@
 ###############################
 ######## dashboardsidebar     #
 ###############################  
-
+library(shinyWidgets)
 
 
 dbHeader <- dashboardHeader(title = "MATRiX")
@@ -546,11 +546,14 @@ MATRiX app is working with specific data produced by the limma package name, res
                     plotOutput(outputId = "myVenn", height = 800),
                     tags$script(src="libraries/bootstrap.min.js") ,  
                     tags$script(src="libraries/jvenn.min.js")  ,
+                    tags$script(src="libraries/canvas2svg.js")  ,
+                    #tags$script(src="libraries/jquery.ui.widget.js")  ,
+                    #tags$script(src="libraries/ jquery.iframe-transport.js")  ,
                     tags$script(src="jvenn.js"),
                     tags$div(id="jvenn-container"),
                     wellPanel(
                       htmlOutput("renderer"),br(),
-                      verbatimTextOutput("renderer2"))
+                      htmlOutput("renderer2"))
                     )
                   ),
                   tabPanel(
@@ -754,6 +757,41 @@ MATRiX app is working with specific data produced by the limma package name, res
                            
                            br(),
                            uiOutput("myselvenn"),
+                          
+                          shiny::actionButton(
+                            "toggleAdvancedJvenn",
+                            "Advanced Jvenn Options",
+                            href = "#",
+                            style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+                          ),
+                          br(),
+                          
+
+                          #actionGroupButtons(inputIds = c("dm_classic", "dm_edwards"),labels = list("Action 1", "Action 2"),status = "primary"),
+                          
+                          
+                          
+                          shinyjs::hidden(div(
+                            id = "advancedjvenn",
+                            br(),
+
+                            fluidRow(
+                              column(6,
+                                     p("Select your Type of Venn",style="color:white; font-weight: 700; font-size: 14px;"),
+                                     includeHTML("jvenntype.html")),
+                              column(6,
+                                     p("Display the stat",style="color:white; font-weight: 700; font-size: 14px;"),
+                                     includeHTML("displaystat.html"))),
+                            br(),
+                             p("Police's size", style="color:white; font-weight: 700; font-size: 14px;"),
+                              includeHTML("fontsize.html"),
+                            br(),
+                               p("Find an element in list(s)",style="color:white; font-weight: 700; font-size: 14px;"),
+                             includeHTML("seekgene.html")
+                              
+                            )),
+                          br(),
+
                       # uiOutput("topgenesvenn"),
                       
                       strong("Functional Annotation Clustering",style = "font-family: 'times'; font-size:20px; font-style: strong; "),

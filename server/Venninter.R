@@ -64,23 +64,33 @@ venninter <- reactive({
 
 vennfinal <- reactive({
   
-  validate(
-    need(vennchoice(), 'You need to select in the Specify your interaction widget the comparisons defining your intersections!'))
+  # validate(
+  #   need(vennchoice(), 'You need to select in the Specify your interaction widget the comparisons defining your intersections!'))
   
+  validate(
+    need( input$together, 'You need to select in the Specify your interaction widget the comparisons defining your intersections!'))
+  #req(input$testons)
   #req(vennchoice())
   if (is.null(vennchoice))
     return(NULL)
   
+
+  
+    
   reslist = list()
   reordchoice <- vennchoice() %>%
     factor(levels = names(adjusted()[[1]][,-1])) %>%
     sort() %>%
     paste(collapse = "")
-  
+  print("ok")
+  print(reordchoice)
+  print(input$testons)
   
   resfinal = csvf()[[3]] %>%
-    filter(ProbeName %in% venninter()[[reordchoice]]) %>%
-    select(ProbeName, GeneName, paste0("logFC_", vennchoice())) %>%
+    #filter(ProbeName %in% venninter()[[reordchoice]]) %>%
+    filter(ProbeName %in% venninter()[[input$together]]) %>%
+    #select(ProbeName, GeneName, paste0("logFC_", vennchoice())) %>%
+    select(ProbeName, GeneName, paste0("logFC_", input$together)) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
   
   reslist[[1]] = resfinal

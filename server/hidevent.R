@@ -18,5 +18,8 @@ shinyjs::onclick("toggleAdvanced",
 shinyjs::onclick("toggleAdvancedcolors",
                  shinyjs::toggle(id = "advancedcol", anim = TRUE))
 
+shinyjs::onclick("toggleAdvancedJvenn",
+                 shinyjs::toggle(id = "advancedjvenn", anim = TRUE))
+
 # shinyjs::onclick("toggleAdvancedgo",
 #                  shinyjs::toggle(id = "advancedgo", anim = TRUE))
