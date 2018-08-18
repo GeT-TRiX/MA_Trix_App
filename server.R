@@ -59,13 +59,7 @@ shinyServer(function(input, output,session) {
     
     req(input$volcacomp)
     volcano()
-  # EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
-  #                 y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
-  #                 topgenes = input$topvolc, DrawConnectors = ifelse(is.na(input$topvolc),F,T),
-  #                 pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = 1,transcriptLabSize = 3.0,
-  #                 title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash",
-  #                 cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
-  #                                              "P value & Log (base 2) fold-change"))
+
   })
   
   output$compvolc <- renderUI({
@@ -106,10 +100,6 @@ shinyServer(function(input, output,session) {
   })
   
   
-  
-  
-  
-  
   ################################
   ######## PCA page             ##
   ################################
@@ -127,6 +117,38 @@ shinyServer(function(input, output,session) {
   source(file.path("server", "grepcol.R"), local = TRUE)$value # adjusted
   source(file.path("server", "Venninter.R"), local = TRUE)$value # adjusted
   source(file.path("server", "trackervenn.R"), local = TRUE)$value #
+  
+  
+  ################################
+  ######## Jvenn                ##
+  ################################
+  
+  
+  observe({
+    req(vennlist(),user_cont())
+    #print(vennlist())
+    mycont = Vennlist(user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
+    Rtojs <- toJvenn(mycont,user_cont())
+    session$sendCustomMessage(type="updatejvenn", Rtojs)
+  })
+  
+  observe({
+    req(input$testons,input$together)
+    print(input$testons)
+    print(input$together)
+  })
+  
+  output$renderer <- renderPrint({
+    req(input$testons)
+    cat("The intersection is", input$together,"With the following genes \n")
+  })
+  
+  output$renderer2 <- renderText({
+    req(input$testons)
+    cat(input$testons,sep="\n")
+    #paste0(input$testons,sep ="\n"
+    
+  })
   
   ################################
   ######## Venn GO              ##

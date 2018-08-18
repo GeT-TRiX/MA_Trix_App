@@ -321,6 +321,23 @@ rowtoprob <- function(myven,pval,adj) {
   return(list(probesel, genesel))
 }
 
+
+toJvenn <- function(myven, adj){
+  
+  
+  names(myven) = colnames(adj)
+  name   <- rep(names(myven), sapply(myven, FUN=function(x)return(length(x))))
+  names(myven) <- NULL
+  data <- sapply(myven, FUN=function(x)return(x)) %>% unlist()
+  df  <- data.frame(name,data)
+  
+  return(df %>% group_by(name) %>% 
+           summarise(data = list(as.character(data))) %>% 
+           jsonlite::toJSON())
+  
+}
+
+
 #' topngenes is a function to plot the top n genes for a defined intersection between comparison.s
 #'
 #' @param dfinter list of intersection.s
@@ -330,6 +347,7 @@ rowtoprob <- function(myven,pval,adj) {
 #'
 #' @return ggplot2 barplot
 #' @export
+#'
 #'
 
 topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F) {

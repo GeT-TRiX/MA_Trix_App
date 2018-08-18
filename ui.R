@@ -68,7 +68,7 @@ tags$head(
   ############################### 
 
 body <- dashboardBody(
-  tags$head(includeScript("google-analytics.js")),
+  #tags$head(includeScript("google-analytics.js")),
   tags$style(type="text/css", inactivity),
   tags$style(type="text/css", Errorcss),
   
@@ -543,7 +543,14 @@ MATRiX app is working with specific data produced by the limma package name, res
                                      uiOutput(outputId = "image")
                                      , uiOutput("sorry")),
                     div(id="vennerro" , style= "font size: 20px;",
-                    plotOutput(outputId = "myVenn", height = 800)
+                    plotOutput(outputId = "myVenn", height = 800),
+                    tags$script(src="libraries/bootstrap.min.js") ,  
+                    tags$script(src="libraries/jvenn.min.js")  ,
+                    tags$script(src="jvenn.js"),
+                    tags$div(id="jvenn-container"),
+                    wellPanel(
+                      htmlOutput("renderer"),br(),
+                      verbatimTextOutput("renderer2"))
                     )
                   ),
                   tabPanel(
@@ -930,10 +937,10 @@ MATRiX app is working with specific data produced by the limma package name, res
                     # ))
                     
                     tags$script(src="libraries/jquery-1.9.1.min.js"),
-                    tags$script(src="https://code.highcharts.com/highcharts.js"),
-                    tags$script(src="https://code.highcharts.com/highcharts-more.js"),
-                    tags$script(src="https://code.highcharts.com/modules/exporting.js"), 
-                    tags$script(src="https://code.highcharts.com/modules/export-data.js"),
+                    tags$script(src="libraries/highcharts.js"),
+                    tags$script(src="libraries/highcharts-more.js"),
+                    tags$script(src="libraries/modules/exporting.js"), 
+                    tags$script(src="libraries/modules/export-data.js"),
                     
                     
                     tags$div(id="highChart")  ,
