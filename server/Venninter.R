@@ -75,22 +75,21 @@ vennfinal <- reactive({
     return(NULL)
   
 
-  
+
     
   reslist = list()
-  reordchoice <- vennchoice() %>%
+  #reordchoice <- vennchoice() %>%
+  reordchoice <- input$selcontjv %>%
     factor(levels = names(adjusted()[[1]][,-1])) %>%
     sort() %>%
     paste(collapse = "")
-  print("ok")
-  print(reordchoice)
-  print(input$testons)
+
   
   resfinal = csvf()[[3]] %>%
-    #filter(ProbeName %in% venninter()[[reordchoice]]) %>%
-    filter(ProbeName %in% venninter()[[input$together]]) %>%
+    filter(ProbeName %in% venninter()[[reordchoice]]) %>%
+    #filter(ProbeName %in% venninter()[[input$together]]) %>%
     #select(ProbeName, GeneName, paste0("logFC_", vennchoice())) %>%
-    select(ProbeName, GeneName, paste0("logFC_", input$together)) %>%
+    select(ProbeName, GeneName, paste0("logFC_",  input$selcontjv)) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
   
   reslist[[1]] = resfinal
@@ -114,8 +113,9 @@ vennfinal <- reactive({
 
 
 output$topgenesvenn <- renderUI({
-  req(vennfinal(), vennchoice())
-  
+  #req(vennfinal(), vennchoice())
+  req(vennfinal(), input$selcontjv)
+
   tags$div(
     class = "topgeness",numericInput('topgenes',
                'Top genes', value = 50,
@@ -175,8 +175,7 @@ venntopgenes <- reactive({
       return(input$topgenes)
   })
 
-output$downloadvennset = downloadHandler(
-  'venns-filtered.csv',
+output$downloadvennset = downloadHandler('venns-filtered.csv',
   content = function(file) {
     s = input$vennresinter_rows_all
     if(input$dispvenn == "probes")
@@ -199,8 +198,10 @@ output$downloadvennset = downloadHandler(
 #'
 
 plottopgenes <- eventReactive(input$topdegenes, {
-  req(vennfinal(), vennchoice(), venntopgenes())
-  mycont = paste0("logFC_", vennchoice())
+ # req(vennfinal(), vennchoice(), venntopgenes())
+  req(vennfinal(), venntopgenes(), input$selcontjv)
+  #mycont = paste0("logFC_", vennchoice())
+  mycont = paste0("logFC_", input$selcontjv)
   if(input$dispvenn == "probes")
     myplot <- topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE], mycont, venntopgenes(), input$dispvenn)
   else

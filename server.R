@@ -144,7 +144,9 @@ shinyServer(function(input, output,session) {
   
   
   output$renderer <- renderPrint({
-    req(input$testons)
+    req(input$together,input$selcontjv)
+    #print(typeof(input$together))
+    #print(class(input$together))
     cat("The intersection is", input$together,"With the following genes \n")
   })
   
@@ -152,6 +154,16 @@ shinyServer(function(input, output,session) {
     req(input$testons)
     cat(input$testons)
 
+  })
+  
+  
+  observe({
+    req(input$together)
+    print(typeof(input$together))
+    print(class(input$together))
+    print(input$together)
+    
+    
   })
   
   ################################

@@ -9,7 +9,7 @@
 ###############################
 ######## dashboardsidebar     #
 ###############################  
-library(shinyWidgets)
+#library(shinyWidgets)
 
 
 dbHeader <- dashboardHeader(title = "MATRiX")
