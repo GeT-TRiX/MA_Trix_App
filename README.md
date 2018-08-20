@@ -21,6 +21,8 @@ Here's the global workflow passing by the experiment to the visualization:
 
 ![](./www/whatmaen.png)
 
+and also a [video Presentation](https://www.youtube.com/watch?v=lfI0zRYzeJs)
+
 ## Installation
 
 MATRiX is available for R>3.5.0. The installation, download and execution can all be performed with a small R script :
@@ -59,6 +61,8 @@ The main contributors to MATRiX:
 Yannick Lippi, (Initiator, beta-testing, feature suggestions),
 
 Franck Soubès, (Coding, Unit testing, documentation, packaging, feature suggestions),
+
+Didier Laborie, (Virtual machine and DNS),lin
 
 TOXALIM Team: BioToMyc & TIM, (beta-testing, feature suggestions)  
 
