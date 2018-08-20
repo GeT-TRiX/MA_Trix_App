@@ -165,6 +165,32 @@ $(document).ready(function () {
 				updateJvenn();				
 			});
 			
+			$('[id^="colorp"]').colorpicker().on('changeColor.colorpicker', function(event) {
+				var type = $(this).attr("id").split("_")[1],
+					index = $(this).attr("id").split("_")[2];
+				$("#name_" + type + "_" + index).css("color",        event.color.toHex());
+  				$("#name_" + type + "_" + index).css("border-color", event.color.toHex());
+  				if (type == "pa") {
+  					$("#area_" + type + "_" + index).css("color",        event.color.toHex());
+  	  				$("#area_" + type + "_" + index).css("border-color", event.color.toHex());
+  				}
+  				updateJvenn();				
+			});
+			
+			$('[id^="colord"]').click(function() {
+				var type = $(this).attr("id").split("_")[1],
+					index = $(this).attr("id").split("_")[2];
+				$("#name_" + type + "_" + index).css("color",        colorDefault[index-1]);
+  				$("#name_" + type + "_" + index).css("border-color", colorDefault[index-1]);
+  				if (type == "pa") {
+					$("#area_" + type + "_" + index).css("color",        colorDefault[index-1]);
+	  				$("#area_" + type + "_" + index).css("border-color", colorDefault[index-1]);
+  				}
+  				$("#colorp_" + type + "_" + index).colorpicker('setValue', colorDefault[index-1]);
+				updateJvenn();				
+			});
+
+			
 			updateJvenn();
 
 });
