@@ -560,7 +560,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                     #tags$script(src="libraries/jquery.ui.widget.js")  ,
                     #tags$script(src="libraries/ jquery.iframe-transport.js")  ,
                     tags$script(src="jvenn.js"),
-                    tags$div(id="jvenn-container"),
+                    tags$div(id="jvenn-container",style ='width: 1000px;height: 730px;'),
                     wellPanel(
                       htmlOutput("renderer"),br(),
                       htmlOutput("renderer2"))
@@ -639,6 +639,9 @@ MATRiX app is working with specific data produced by the limma package name, res
                       tags$head(
                         tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
                       ),
+                    tags$head(
+                      tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap-responsive.css") # add style.css in order to add better police
+                    ),
                     tags$head(tags$style("
                                   #container * {
                                   display: inline;
@@ -788,16 +791,16 @@ MATRiX app is working with specific data produced by the limma package name, res
                             fluidRow(
                               column(6,
                                      p("Select your Type of Venn",style="color:white; font-weight: 700; font-size: 14px;"),
-                                     includeHTML("jvenntype.html")),
+                                     includeHTML("HTML/jvenntype.html")),
                               column(6,
                                      p("Display the stat",style="color:white; font-weight: 700; font-size: 14px;"),
-                                     includeHTML("displaystat.html"))),
+                                     includeHTML("HTML/displaystat.html"))),
                             br(),
                              p("Police's size", style="color:white; font-weight: 700; font-size: 14px;"),
-                              includeHTML("fontsize.html"),
+                              includeHTML("HTML/fontsize.html"),
                             br(),
                                p("Find an element in list(s)",style="color:white; font-weight: 700; font-size: 14px;"),
-                             includeHTML("seekgene.html")
+                             includeHTML("HTML/seekgene.html")
                               
                             )),
                           br(),
@@ -991,7 +994,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                     tags$script(src="libraries/modules/export-data.js"),
                     
                     
-                    tags$div(id="highChart")  ,
+                    tags$div(id="highChart",style="width: 100%;, height: 600px;")  ,
                     checkboxInput("addlabelhigh", "add label", FALSE),
                     tags$script(src="bubble.js")
                     

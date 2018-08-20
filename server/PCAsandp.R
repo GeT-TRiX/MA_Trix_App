@@ -227,7 +227,7 @@ output$PCA <- renderPlot({
   
   plot(PCAplot() + theme_minimal())
   
-})
+},  height = plotHeight)
 
 
 output$savepca <- downloadHandler(filename <- function() {

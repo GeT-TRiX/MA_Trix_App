@@ -26,7 +26,7 @@ shinyServer(function(input, output,session) {
   
   
   plotHeight <- reactive({ 
-    ifelse(is.null(input$plotHeight), 0, (input$plotHeight/1.4))
+    ifelse(is.null(input$plotHeight), 0, (input$plotHeight/1.25))
     #print(input$plotHeight)
   })
   
@@ -79,7 +79,7 @@ shinyServer(function(input, output,session) {
     req(input$volcacomp)
     volcano()
 
-  })
+  },  height = plotHeight)
   
   output$compvolc <- renderUI({
     req(adjusted())
@@ -181,8 +181,6 @@ shinyServer(function(input, output,session) {
     print(typeof(input$together))
     print(class(input$together))
     print(input$together)
-    
-    
   })
   
   ################################
@@ -221,13 +219,6 @@ shinyServer(function(input, output,session) {
   })
   
   
-  observe({
-    
-    req(projectname())
-    print(projectname())
-    
-    
-  })
 
   ################################
   ######## Heatmap page         ##

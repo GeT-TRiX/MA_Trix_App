@@ -43,13 +43,7 @@ plotDataenrichment <- reactive({
   
 })
 
-observe({
-  req(filteredata())
-  print(length(filteredata()))
-  print(filteredata())
-  print(typeof(filteredata()))
-  print(class(filteredata()))
-})
+
 
 observe({
   req(plotDataenrichment())

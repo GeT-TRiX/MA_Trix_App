@@ -24,7 +24,7 @@ output$myVenn <- renderPlot({
   
   Vennplot()
   
-})
+},  height = plotHeight)
 
 observe({
   validate(need(csvf(), 'You need to import data to visualize this plot!'))

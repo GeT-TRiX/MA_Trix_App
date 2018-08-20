@@ -12,8 +12,8 @@ var defaultOptions = {
     series: null,
     chart: {
 	  zoomType: "xy",
-	  width: 1100,
-	  height: 600,
+	  //width: 1100,
+	  //height: 600,
 	  renderTo: "highChart",
 	  type: 'bubble'
 
@@ -35,7 +35,7 @@ var defaultOptions = {
     },
 
     subtitle: {
-        text: 'Source: <a href="http://www.euromonitor.com/">fuck</a> and <a href="https://data.oecd.org/">OECD</a>'
+        text: 'Source: <a href="http://www.euromonitor.com/">ok</a> and <a href="https://data.oecd.org/">OECD</a>'
     },
 
     xAxis: {
@@ -135,7 +135,10 @@ var defaultOptions = {
   );
   */
   
+  function updatechart() {
+  
   Shiny.addCustomMessageHandler("updateVariable", function(newData) {
+  
   var newOptions = defaultOptions;
   newOptions.subtitle.text = newData.min;
   newOptions.subtitle.text = newData.max;
@@ -143,14 +146,29 @@ var defaultOptions = {
   newOptions.subtitle.text = newData.legend;
   newOptions.yAxis.title.text = newData.title;
 
-  var nolabels = Shiny.addCustomMessageHandler("handler1", 
-  function (message){
+  Shiny.addCustomMessageHandler("handler1", function (message){
   newOptions.plotOptions.series.dataLabels.enabled = message;
   var chartObj = new Highcharts.Chart(newOptions);
   
-  });
+      });
   
-});
+    });
+  }
+    var printUpdate = function () {
+        $('#container').highcharts().reflow();
+    };
+
+    if (window.matchMedia) {
+        var mediaQueryList = window.matchMedia('print');
+        mediaQueryList.addListener(function (mql) {
+            printUpdate();
+        });
+      
+    }
+
+    
+    
+updatechart();
 
 });
   
