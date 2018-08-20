@@ -89,6 +89,7 @@ $(document).ready(function () {
 						     
 						     
 						     Shiny.onInputChange("testons",mylist);// renvoyer dans R
+						     console.log(mylist.length);
 						     Shiny.onInputChange("together",nameslis.join(""));// renvoyer dans R
 						     Shiny.onInputChange("selcontjv",nameslis);
 						     return(mylist); 

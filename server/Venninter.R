@@ -75,8 +75,6 @@ vennfinal <- reactive({
     return(NULL)
   
 
-
-    
   reslist = list()
   #reordchoice <- vennchoice() %>%
   reordchoice <- input$selcontjv %>%
@@ -93,14 +91,16 @@ vennfinal <- reactive({
     mutate_if(is.numeric, funs(format(., digits = 3)))
   
   reslist[[1]] = resfinal
-  
-  mycont = paste0("logFC_", vennchoice())
+  print(reslist)
+  #mycont = paste0("logFC_", vennchoice())
+  mycont = paste0("logFC_",input$selcontjv)
   if(input$dispvenn == "genes"){
     for (i in mycont) {
       resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
     }
-  
+    
     resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] 
+    print(resfinal)
     resfinal = as.data.frame(resfinal)
     reslist[[2]] = resfinal
   }

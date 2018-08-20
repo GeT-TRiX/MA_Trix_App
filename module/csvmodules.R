@@ -89,7 +89,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     }
     
     #req(input$file)
-    print(inFile)
+    #print(inFile)
     
     
     
@@ -152,7 +152,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
           for (elem in input$file[[i, 'datapath']]) {
             cat("loading file number" , i, "\n")
           }
-          csvtest[i] = elem
+          csvtest[i] <- elem
         }
       }
       
@@ -180,22 +180,22 @@ csvFile <- function(input, output, session, stringsAsFactors) {
       print("ok")
       for (i in 1:length(csv)) {
         if (colnames(csv[[i]][2]) == "Grp") {
-          csvord[[2]] = csv[[i]]
+          csvord[[2]] <- csv[[i]]
           
         }
         else if (any(grepl("adj.P.Val" , colnames(csv[[i]]))))
         {
-          csvord[[3]] = csv[[i]]
+          csvord[[3]] <- csv[[i]]
           
         }
         else
-          csvord[[1]] = csv[[i]]
+          csvord[[1]] <- csv[[i]]
       }
       
-      csvord[[2]] = chartofa(csvord[[2]]) # transform dataframe containing characters to factors
-      row.names(csvord[[1]]) = csvord[[1]][, 1]
-      colnames(csvord[[3]])[1] = "X"
-      colnames(csvord[[2]])[1] = "X"
+      csvord[[2]] <- chartofa(csvord[[2]]) # transform dataframe containing characters to factors
+      row.names(csvord[[1]]) <- csvord[[1]][, 1]
+      colnames(csvord[[3]])[1] <- "X"
+      colnames(csvord[[2]])[1] <- "X"
       
     }
     
@@ -229,7 +229,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     
     Sys.sleep(1)
     closeAlert(session, "succeeded")
-    
+    csvord[[4]] <- inFile
     return (csvord)
   })
   

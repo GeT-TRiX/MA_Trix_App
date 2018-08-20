@@ -7,10 +7,29 @@
 
 
 
+shinyjscode <- "
+shinyjs.init = function() {
+  $(window).resize(shinyjs.calcHeight);
+}
+shinyjs.calcHeight = function() { 
+  Shiny.onInputChange('plotHeight', $(window).height());
+}
+"
+
+
+
 shinyServer(function(input, output,session) {
   
   hide(id = "loading-content", anim = TRUE, animType = "fade",time=2)
   hide(id = "loading-content-bar", anim = TRUE, animType = "fade",time=2)
+  
+  
+  
+  plotHeight <- reactive({ 
+    ifelse(is.null(input$plotHeight), 0, (input$plotHeight/1.4))
+    #print(input$plotHeight)
+  })
+  
   
   #######################################################
   ##                                                   ##
@@ -179,7 +198,8 @@ shinyServer(function(input, output,session) {
   
   file_name <- reactive({
     req(csvf())
-    inFile <- input$file
+    inFile <- csvf()[[4]]
+    print(inFile)
     if (is.null(csvf()))
       return(NULL)
     else
@@ -197,6 +217,15 @@ shinyServer(function(input, output,session) {
     }
     else
       return(myproj)
+    
+  })
+  
+  
+  observe({
+    
+    req(projectname())
+    print(projectname())
+    
     
   })
 

@@ -11,6 +11,15 @@
 ###############################  
 #library(shinyWidgets)
 
+shinyjscode <- "
+shinyjs.init = function() {
+  $(window).resize(shinyjs.calcHeight);
+}
+shinyjs.calcHeight = function() { 
+  Shiny.onInputChange('plotHeight', $(window).height());
+}
+"
+
 
 dbHeader <- dashboardHeader(title = "MATRiX")
 dbHeader$children[[2]]$children <-  tags$a(tags$img(src='matrix.png',height='40',width='40',style="margin:5px 0 5px 0;",align='left'), 
@@ -23,6 +32,7 @@ sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptom
   
   tags$style(type="text/css", Errorcss),
   tags$style(type="text/css", inactivity),
+  shinyjs::extendShinyjs(text = shinyjscode),
 
 #tags$head(includeHTML("www/google-analytics.html")),
 tags$head(

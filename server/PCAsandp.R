@@ -191,7 +191,9 @@ output$eigpca <- renderPlot({
   
   plot(Scree_plot())
   
-})
+},  height = plotHeight)
+
+js$calcHeight()
 
 
 #' labeled is a reactive function which aim is to display or not the labels in the PCA render plot

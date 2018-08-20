@@ -1,8 +1,14 @@
 source("./function/vennplot.R")
 library(dplyr)
-
+colnames(pval)
 
 pval <- read.csv2("data/All_topTableAll.csv")
+
+filter(pval, ProbeName %in% "A_55_P1964332") %>% 
+  select(logFC_LKO_CTRL.LWT_CTRL)
+
+
+
 adj = pval[,grep("^adj.P.Val", names(pval), value=TRUE)]
 fc = pval[,grep("^logFC", names(pval), value=TRUE)]
 mylog = (fc[1:2])
