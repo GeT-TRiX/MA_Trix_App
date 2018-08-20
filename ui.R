@@ -997,6 +997,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                     tags$div(id="highChart",style="width: 100%;, height: 600px;")  ,
                     checkboxInput("addlabelhigh", "add label", FALSE),
                     tags$script(src="bubble.js")
+                    #includeHTML("HTML/bubbleresize.html")
                     
                     
                     #,

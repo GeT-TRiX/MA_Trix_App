@@ -46,23 +46,7 @@ var defaultOptions = {
         labels: {
             format: '{value}'
         }
-      /*
-        plotLines: [{
-            color: 'black',
-            dashStyle: 'dot',
-            width: 2,
-            value: 80,
-            label: {
-                rotation: 0,
-                y: 15,
-                style: {
-                    fontStyle: 'italic'
-                },
-                text: 'Mean of the fold enrichment'
-            },
-            zIndex: 3
-        }]
-        */
+
     },
 
     yAxis: {
@@ -126,14 +110,7 @@ var defaultOptions = {
   };
 
   
-  /*
-  var test = Shiny.addCustomMessageHandler("testmessage",
-  function(message) {
-    console.log("tst");
-    alert(JSON.stringify(message));
-    }
-  );
-  */
+
   
   function updatechart() {
   
@@ -150,7 +127,18 @@ var defaultOptions = {
   newOptions.plotOptions.series.dataLabels.enabled = message;
   var chartObj = new Highcharts.Chart(newOptions);
   
+  /*
+  chartObj.reflowNow = function(){
+    this.containerHeight = this.options.chartObj.height || window.window.HighchartsAdapter.adapterRun(this.renderTo, 'height');
+    this.containerWidth = this.options.chartObj.width || window.window.HighchartsAdapter.adapterRun(this.renderTo, 'width');
+    this.setSize(this.containerWidth, this.containerHeight, false);
+    this.hasUserSize = null;
+    };
+    */
+  
       });
+      
+
   
     });
   }
@@ -163,10 +151,22 @@ var defaultOptions = {
         mediaQueryList.addListener(function (mql) {
             printUpdate();
         });
-      
     }
-
     
+    /*
+    Shiny.addCustomMessageHandler("iscollapse", function(test) {
+      
+        $('#container').highcharts().reflow();
+         var chartObj = new Highcharts.Chart(newOptions);
+     });
+     
+     $('#secondClick').click(function () {
+    updatechart();
+    });
+    
+     */
+     
+
     
 updatechart();
 

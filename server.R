@@ -23,7 +23,11 @@ shinyServer(function(input, output,session) {
   hide(id = "loading-content", anim = TRUE, animType = "fade",time=2)
   hide(id = "loading-content-bar", anim = TRUE, animType = "fade",time=2)
   
-  
+  # observe({
+  #   test <- input$sidebarCollapsed
+  #   session$sendCustomMessage(type="iscollapse", test)
+  # })
+  # 
   
   plotHeight <- reactive({ 
     ifelse(is.null(input$plotHeight), 0, (input$plotHeight/1.25))

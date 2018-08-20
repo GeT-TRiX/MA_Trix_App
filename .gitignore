@@ -80,6 +80,7 @@ packrat/src/*
 !packrat/src/org.Rn.eg.db
 !packrat/src/org.Ss.eg.db
 
+etc
 
 google-analytics.js
 www/google-analytics.html
