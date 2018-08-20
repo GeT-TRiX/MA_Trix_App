@@ -26,7 +26,7 @@
 ***************************************************************/
 
 /***************************************************************
-*  
+*                         
 * Adapted to Shiny by Franck Soubès.
 * 
 ****************************************************************/
@@ -89,7 +89,7 @@ $(document).ready(function () {
 						     
 						     
 						     Shiny.onInputChange("testons",mylist);// renvoyer dans R
-						     console.log(mylist.length);
+						     //console.log(mylist.length);
 						     Shiny.onInputChange("together",nameslis.join(""));// renvoyer dans R
 						     Shiny.onInputChange("selcontjv",nameslis);
 						     return(mylist); 
@@ -164,7 +164,7 @@ $(document).ready(function () {
 				Shiny.onInputChange("myfont",fontSize);
 				updateJvenn();				
 			});
-			
+			/*
 			$('[id^="colorp"]').colorpicker().on('changeColor.colorpicker', function(event) {
 				var type = $(this).attr("id").split("_")[1],
 					index = $(this).attr("id").split("_")[2];
@@ -189,6 +189,7 @@ $(document).ready(function () {
   				$("#colorp_" + type + "_" + index).colorpicker('setValue', colorDefault[index-1]);
 				updateJvenn();				
 			});
+			*/
 
 			
 			updateJvenn();
