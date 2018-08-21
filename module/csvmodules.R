@@ -91,7 +91,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
   
   outputOptions(output,"boolmark",suspendWhenHidden=F) 
   
-  
+  test <- eventReactive(input$files, { print(parseFilePaths(root, input$files)$datapath)})
   
   #' Reactive function in the aim of loading csv files
   #'
@@ -99,11 +99,11 @@ csvFile <- function(input, output, session, stringsAsFactors) {
   #'
   #' @return \csvf a reactive value of type list containing three data frames toptable and workingset and the pData 
   #'
-
-  
   csvf <- reactive({
 
-     inFile <- input$file
+    inFile <- input$file
+    if(!is.null(input$file)){
+      
     if (is.null(inFile)) {
       createAlert(
         session,
@@ -258,15 +258,16 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     Sys.sleep(1)
     closeAlert(session, "succeeded")
     csvord[[4]] <- inFile
-    myreturn$txt <- csvord
+
     return (csvord)
-  })
+    }
+  #})
   
   
-  test <- eventReactive(input$files, { print(parseFilePaths(root, input$files)$datapath)})
-  
+ 
+  else{
   #csvff <- eventReactive(input$files,{
-  csvf <- reactive({
+  #csvf <- reactive({
     
     req(test())
     
@@ -366,13 +367,9 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     Sys.sleep(1)
     closeAlert(session, "succeeded")
     csvord[[4]] <- test()
-    
-    myreturn$txt <- csvord
     return (csvord)
-    
-    })
 
-  
- # return(myreturn$txt)
+   }
+  })
   
 }
