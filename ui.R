@@ -340,7 +340,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                 br(),br(),
                 csvFileInput("datafile", "User data (.csv format)"),
                 dirModuleUI("datafile"),
-                actionButton("loadlocal","click here for load example"),
+
               
               
                 #csvFileInput("file", "Choose your csv files"),

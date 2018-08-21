@@ -254,8 +254,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
  
   else{
 
-    req(test())
-    
+    req(length(test())==3)
     
     csvtest <- list()
     csvtest[1] <-test()[[1]]
