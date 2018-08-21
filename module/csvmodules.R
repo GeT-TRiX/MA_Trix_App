@@ -55,15 +55,6 @@ csvFile <- function(input, output, session, stringsAsFactors) {
 
   myreturn <- reactiveValues()
   
-  #observeEvent(input$files, { print(parseFilePaths(root, input$files)$datapath)})
-  #test <- eventReactive(input$files, { print(parseFilePaths(root, input$files)$datapath)})
-  
-  
-  # observe({
-  #   req(test())
-  #   print(test())
-  #   
-  # })
   
   userFile <- reactive({
     # If no file is selected, don't do anything
@@ -136,7 +127,6 @@ csvFile <- function(input, output, session, stringsAsFactors) {
         content = "Are you sure you're importing csv files ?",
         append = FALSE
       )
-      #return(NULL)
       return()
     }
     
@@ -242,8 +232,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     #' @return \showmark a reactive value of type boolean set to False
     #'
     
-    
-    
+ 
     createAlert(
       session,
       "alert",
@@ -260,15 +249,11 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     csvord[[4]] <- inFile
 
     return (csvord)
-    }
-  #})
-  
-  
+  }
+
  
   else{
-  #csvff <- eventReactive(input$files,{
-  #csvf <- reactive({
-    
+
     req(test())
     
     
@@ -276,13 +261,6 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     csvtest[1] <-test()[[1]]
     csvtest[2] <-test()[[2]]
     csvtest[3] <-test()[[3]]
-    
-    print(csvtest)
-    print("ok")
-    #iscsv = grep(pattern = '.csv$', name, value = T)
-    
-    
-    #csv <- lapply(csvtest, read.csv2, check.names = F) # benchmark read.csv wrapper
     
     csv <- lapply(
       csvtest,
@@ -294,15 +272,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
       #' @export
       
       FUN = function (x)
-        
-        # read.table( # benchmark read.table
-        #   x,
-        #   sep = ";" ,
-        #   dec = ",",
-        #   header = T,
-        #   check.names = F # good col names
-        # )
-        
+
         fread(
           x,
           data.table = F,
@@ -310,7 +280,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
           header = T,
           sep = ";",
           dec = ","
-        ) #benchmark fread memory speed
+        ) 
     )
     
     csvord = list()
@@ -350,9 +320,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     #'
     #' @return \showmark a reactive value of type boolean set to False
     #'
-    
-    
-    
+
     createAlert(
       session,
       "alert",
