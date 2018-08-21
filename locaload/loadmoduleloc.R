@@ -19,23 +19,40 @@ ui = fluidPage(
   #shinyFilesButton('directory', 'Folder select', 'Please select a folder', multiple = T),
   
   shinyDirButton('directory', 'Folder select', 'Please select a folder'),
+  actionButton("importlocal", "import example"),
                tableOutput(outputId = "datpat")
 )
 
+
+
+
 ### extracting the folder path
 server = function(input, output, session) {
-  volumes <- c(root = "/home/franck/MA_Trix_App/data")
-  shinyDirChoose(input, 'directory', roots=volumes, session=session)
-  path1 <- reactive({
-    return(print(parseDirPath(volumes, input$directory)))
-  })
-  ### constructing the 3 file paths
+  
+  
+  volumes <- c(data = "/home/franck/MA_Trix_App/data/")
 
-      csvf <- reactive({
+  shinyDirChoose(input, 'directory', roots=volumes, session=session)
+  
+    path1 <- reactive({
+    return(print(parseDirPath(volumes, input$directory)))
+    })
+    
+  ### constructing the 3 file paths
+      observe({
         req(path1())
+        print(path1())
+        print('caca')
+        
+        
+      })
+        
+      csvf <- eventReactive(input$importlocal,{
+
+        
         csvtest <- list()
-        csvtest[1] <- paste0(path1(),"/TOXA_HEGU_MA0191_AllChip_pData.csv")
-        csvtest[2] <- paste0(path1(),"/TOXA_HEGU_MA0191_AllChip_WorkingSet.csv")
+        csvtest[1] <- paste0(path1(),"/TOXA_TELL_MA0020_AllChip_pData.csv")
+        csvtest[2] <- paste0(path1(),"/TOXA_TELL_MA0020_AllChip_WorkingSet.csv")
         csvtest[3] <- paste0(path1(),"/All_topTableAll.csv")
         
           
@@ -86,8 +103,7 @@ server = function(input, output, session) {
               csvord[[1]] = csv[[i]]
           }
           
-          csvord[[2]] = chartofa(csvo
-                                 rd[[2]]) # transform dataframe containing characters to factors
+          csvord[[2]] = chartofa(csvord[[2]]) # transform dataframe containing characters to factors
           row.names(csvord[[1]]) = csvord[[1]][, 1]
           colnames(csvord[[3]])[1] = "X"
           colnames(csvord[[2]])[1] = "X"
@@ -96,6 +112,9 @@ server = function(input, output, session) {
         return (csvord)
         
       })
+      
+    
+      
       
   
 }

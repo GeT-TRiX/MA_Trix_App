@@ -5,7 +5,7 @@
 ### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
 ### Licence: GPL-3.0
 
-
+library(shinyFiles)
 
 shinyjscode <- "
 shinyjs.init = function() {
@@ -15,8 +15,6 @@ shinyjs.calcHeight = function() {
   Shiny.onInputChange('plotHeight', $(window).height());
 }
 "
-
-
 
 shinyServer(function(input, output,session) {
   
@@ -31,7 +29,6 @@ shinyServer(function(input, output,session) {
   
   plotHeight <- reactive({ 
     ifelse(is.null(input$plotHeight), 0, (input$plotHeight/1.25))
-    #print(input$plotHeight)
   })
   
   
@@ -42,8 +39,11 @@ shinyServer(function(input, output,session) {
   #######################################################
   
   #source(file.path("server", "csvFile.R"), local = TRUE)$value #
+  
   csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE)
+  #csvf <- callModule(dirModule, "datafile",stringsAsFactors = FALSE)
 
+  
   ##########################################
   ######## Widget update and info         ##
   ##########################################
