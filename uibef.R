@@ -525,7 +525,7 @@ MATRiX app is working with specific data produced by the limma package name, res
             fluidRow(column(
               width = 9,
               div(
-                style = "width:100% ; max-width: 1500px; height: 1700px; max-height: 2500px;",
+                style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;",
                 tabsetPanel(
                 id = "Vennd",    
 
@@ -534,66 +534,72 @@ MATRiX app is working with specific data produced by the limma package name, res
                     strong("Visualize the Venn diagram"),
                   
                     div(style="display:inline-block",
-                        fluidRow(column(3, style= "width:14.2%;",
+                        fluidRow(column(3, style= "width:18.5%;",
 
                                         downloadButton('downloadvenn', "Download the data",
                                                        style =
                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                 column(3, style="width:14.2%;",
+                                 column(3, style="width:18.5%;",
                                         downloadButton("downloadsetven", "Download venn set" , style =
                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                 column(3, style="width:11.8%;",
+                                 column(3, style="width:15.3%;",
                                         downloadButton("savevenn", "Save your plot" , style =
                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
                                  
-                                     column(3,style="width:10%;", selectInput(
+                                     column(3,style="width:19%;", selectInput(
                                        "formven",label = NULL,
-                                       choices = c("png", "eps", "pdf"))),
-                                 column(3 ,style="width:5%;"),
-                                 column(3,
-                                        downloadButton('downloadvennset', "Download the filtered data",
-                                                style ="color: #fff; background-color: #337ab7; border-color: #2e6da4;"))
-                                 
+                                       choices = c("png", "eps", "pdf")))
                         )),
 
                     conditionalPanel(condition = '!output.bool',
                                      uiOutput(outputId = "image")
                                      , uiOutput("sorry")),
                     #div(id="vennerro" , style= "font size: 20px;",
-                    #plotOutput(outputId = "myVenn", height = 800),
+                    plotOutput(outputId = "myVenn", height = 800),
                     tags$script(src="libraries/bootstrap.min.js") ,  
                     tags$script(src="libraries/jvenn.min.js")  ,
                     tags$script(src="libraries/canvas2svg.js")  ,
                     #tags$script(src="libraries/jquery.ui.widget.js")  ,
                     #tags$script(src="libraries/ jquery.iframe-transport.js")  ,
-                    fluidRow(column(6,br(),br(),
+                    
                     tags$script(src="jvenn.js"),
-                    tags$div(id="jvenn-container")
-                    # wellPanel(
-                    #   htmlOutput("renderer"),br(),
-                    #   htmlOutput("renderer2"))
+                    tags$div(id="jvenn-container",style ='width: 1000px;height: 730px;')
+                    #)
+                  ),
+                  tabPanel(
+                    value = "vennbarplotpan",
+                    strong("Visualize the intersection table"),
+                    fluidRow( 
+                      # tags$head(
+                      #   tags$style(type="text/css", " #topgenes .label {display: inline-block;max-width: 100%;margin-bottom: 0px;font-weight: 700;}")),
+                      column(6,br(),
+                    downloadButton('downloadvennset', "Download the filtered data",
+                                   style =
+                                     "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                    div(class= "dfvenn" , style="font-size:24px; margin-top: 17px;",
+                        htmlOutput("dfvenn")),
+                    helpText(
+                      "You can directly filtered the table by fold change and save the output table"
                     ),
+                    
+                    DT::dataTableOutput("vennresinter"),br(),br(),br(),
+                    conditionalPanel(condition = "input.dispvenn == 'genes'", 
+                                     div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; ",
+                                         htmlOutput("dfvennbef")),
+                                     DT::dataTableOutput("vennresintergen"))
+                    ),
+                    
+                    tags$head(tags$style("#dontwanttoshow  .shiny-output-error {visibility: hidden;color: #3c8dbc;}")),
+                    
+                    
                     column(6,
-                           div(class= "dfvenn" , style="font-size:24px; margin-top: 17px;",
-                               htmlOutput("dfvenn")),
-                           helpText(
-                             "You can directly filtered the table by fold change and save the output table"
-                           ),
-                           
-                           DT::dataTableOutput("vennresinter"),br(),br(),br(),
-                           conditionalPanel(condition = "input.dispvenn == 'genes'", 
-                                            div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; ",
-                                                htmlOutput("dfvennbef")),
-                                            DT::dataTableOutput("vennresintergen"))
-                    )),
-                    column(6,
-                           div(style="display:inline-block", id ="dontwanttoshow",
-                               fluidRow(
-                                 tags$head(
-                                   tags$style(type="text/css", ".topgeness label{ display: table-cell; text-align: left; vertical-align: middle; } 
+                    div(style="display:inline-block", id ="dontwanttoshow",
+                        fluidRow(
+                          tags$head(
+                            tags$style(type="text/css", ".topgeness label{ display: table-cell; text-align: left; vertical-align: middle; } 
                  .inline .form-group{display: table-row;} ")
-                                 ),
-                                 column(4,br(),style= "width:22%;",
+                          ),
+                          column(4,br(),style= "width:22%;",
                                         actionButton(
                                           inputId = "topdegenes",
                                           label = "Plot top DE genes",
@@ -609,35 +615,23 @@ MATRiX app is working with specific data produced by the limma package name, res
                                                      choices = c("png", "eps", "pdf"))),
                                  
                                  column(2,style= "width:12%; padding: 0%;", 
-                                        
+
                                         uiOutput("topgenesvenn", style= "padding: 0px;"))
-                               ))),
-                 
-                           plotOutput(outputId ="barplotvenn", height = "500px")
-                  ),
-                  tabPanel(
-                    value = "vennbarplotpan",
-                    strong("Visualize the intersection table"),
-                    fluidRow( 
-                      # tags$head(
-                      #   tags$style(type="text/css", " #topgenes .label {display: inline-block;max-width: 100%;margin-bottom: 0px;font-weight: 700;}")),
-                     
-                    
-                    tags$head(tags$style("#dontwanttoshow  .shiny-output-error {visibility: hidden;color: #3c8dbc;}")),
-                    
-                    
-                    
+                        )),
                     
                     div(class= "highvenn" , style="font-size:24px; margin-top: -8px;",
                         htmlOutput("venntitle")),
                     br(),br(),
+
+                    plotOutput(outputId ="barplotvenn", height = 700),
+                    
 
                     br(),br(),
                     conditionalPanel(condition = "input.dispvenn == 'genes'",  
                                     # DT::dataTableOutput("vennresintergen"),
                                     div(class= "beforedf" , style="font-size:24px; margin-top: -8px;",
                                         htmlOutput("venngenesbef")),
-                                     plotOutput(outputId ="barplotvennmean", height = 700))),
+                                     plotOutput(outputId ="barplotvennmean", height = 700)))),
                     
                   
                     br(),

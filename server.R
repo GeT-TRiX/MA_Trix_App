@@ -136,7 +136,7 @@ shinyServer(function(input, output,session) {
   ################################
   
   source(file.path("server", "Venn.R"), local = TRUE)$value #
-  source(file.path("server", "Vennrender.R"), local = TRUE)$value #
+  #source(file.path("server", "Vennrender.R"), local = TRUE)$value #
   source(file.path("server", "grepcol.R"), local = TRUE)$value # adjusted
   source(file.path("server", "Venninter.R"), local = TRUE)$value # adjusted
   source(file.path("server", "trackervenn.R"), local = TRUE)$value #
@@ -166,26 +166,26 @@ shinyServer(function(input, output,session) {
   })
   
   
-  output$renderer <- renderPrint({
-    req(input$together,input$selcontjv)
-    cat("The intersection is", input$together,"With the following genes \n")
-  })
+  # output$renderer <- renderPrint({
+  #   req(input$together,input$selcontjv)
+  #   cat("The intersection is", input$together,"With the following genes \n")
+  # })
+  # 
+  # 
+  # 
+  # output$renderer2 <- renderText({
+  #   req(input$testons)
+  #   cat(input$testons)
+  # 
+  # })
   
   
-  
-  output$renderer2 <- renderText({
-    req(input$testons)
-    cat(input$testons)
-
-  })
-  
-  
-  observe({
-    req(input$together)
-    print(typeof(input$together))
-    print(class(input$together))
-    print(input$together)
-  })
+  # observe({
+  #   req(input$together)
+  #   print(typeof(input$together))
+  #   print(class(input$together))
+  #   print(input$together)
+  # })
   
   ################################
   ######## Venn GO              ##
@@ -201,15 +201,16 @@ shinyServer(function(input, output,session) {
   file_name <- reactive({
     req(csvf())
     inFile <- csvf()[[4]]
-    print(inFile)
-    if (is.null(csvf()))
-      return(NULL)
+    if (class(inFile)== "character")
+      return(tools::file_path_sans_ext(inFile))
     else
       return (tools::file_path_sans_ext(inFile$name))
   })
   
   projectname <- reactive({
     req(file_name())
+    print("oko")
+    print(file_name())
     projed <- strsplit(file_name(), "_")
     proj = grepl("^MA", projed[[2]])
     index = which(proj == T)

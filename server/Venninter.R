@@ -69,8 +69,7 @@ vennfinal <- reactive({
   
   validate(
     need( input$together, 'You need to select in the Specify your interaction widget the comparisons defining your intersections!'))
-  #req(input$testons)
-  #req(vennchoice())
+  
   if (is.null(vennchoice))
     return(NULL)
   
@@ -91,7 +90,6 @@ vennfinal <- reactive({
     mutate_if(is.numeric, funs(format(., digits = 3)))
   
   reslist[[1]] = resfinal
-  print(reslist)
   #mycont = paste0("logFC_", vennchoice())
   mycont = paste0("logFC_",input$selcontjv)
   if(input$dispvenn == "genes"){
