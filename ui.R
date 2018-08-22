@@ -586,32 +586,32 @@ MATRiX app is working with specific data produced by the limma package name, res
                                                 htmlOutput("dfvennbef")),
                                             DT::dataTableOutput("vennresintergen"))
                     )),
-                    column(6,
+                   # column(6,
                            div(style="display:inline-block", id ="dontwanttoshow",
                                fluidRow(
                                  tags$head(
                                    tags$style(type="text/css", ".topgeness label{ display: table-cell; text-align: left; vertical-align: middle; } 
                  .inline .form-group{display: table-row;} ")
                                  ),
-                                 column(4,br(),style= "width:22%;",
+                                 column(3,br(),style= "width:14.1%;",
                                         actionButton(
                                           inputId = "topdegenes",
                                           label = "Plot top DE genes",
                                           style =
                                             "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                         )),
-                                 column(3, style= "width:24.5%;",br(),
+                                 column(3, style= "width:17.6%;",br(),
                                         
                                         downloadButton("savebarplot", "Save your barplot" , style =
                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                 column(2 ,br(),style= "width:16.5%; , padding: 0%;",
+                                 column(3 ,br(),style= "width:14.5%;  padding: 0%;",
                                         selectInput( "formvenbar",label = NULL,
                                                      choices = c("png", "eps", "pdf"))),
                                  
-                                 column(2,style= "width:12%; padding: 0%;", 
+                                 column(3,style= "width:9%; padding: 0%;", 
                                         
                                         uiOutput("topgenesvenn", style= "padding: 0px;"))
-                               ))),
+                               )),
                  
                            plotOutput(outputId ="barplotvenn", height = "500px")
                   ),
