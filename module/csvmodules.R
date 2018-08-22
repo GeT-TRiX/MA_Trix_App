@@ -48,7 +48,7 @@ csvFileInput <- function(id, label = "CSV file") {
 csvFile <- function(input, output, session, stringsAsFactors) {
   # The selected file, if any
   
-  root = c(data = "/home/franck/MA_Trix_App/data")
+  root = c(data = "//home/franck1337/mydashexp/madash/MA_Trix_App/data")
   shinyFileChoose(input, 'files', roots = root, session = session,filetype=c("csv"))
   shinyDirChoose(input, "directory", roots = root, session = session)
   shinyFileSave(input, "fileSave", roots = root, session = session)
@@ -253,7 +253,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
 
  
   else{
-
+  
     req(length(test())==3)
     
     csvtest <- list()

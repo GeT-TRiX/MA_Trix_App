@@ -62,7 +62,7 @@ Yannick Lippi, (Initiator, beta-testing, feature suggestions),
 
 Franck Soubès, (Coding, Unit testing, documentation, packaging, feature suggestions),
 
-Didier Laborie, (Virtual machine and DNS),lin
+Didier Laborie, (Virtual machine and DNS),
 
 TOXALIM Team: BioToMyc & TIM, (beta-testing, feature suggestions)  
 

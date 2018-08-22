@@ -27,6 +27,7 @@ shinyServer(function(input, output,session) {
   })
 
   
+  
   plotHeight <- reactive({ 
     ifelse(is.null(input$plotHeight), 0, (input$plotHeight/1.25))
   })
