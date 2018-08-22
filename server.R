@@ -63,14 +63,30 @@ shinyServer(function(input, output,session) {
   ##########################################
 
   
+  genetodisplay <- reactive({
+    #req(input$fillvolc)
+    if(is.null(input$fillvolc))
+      return(NULL)
+    else{
+    
+    if(!input$fillvolc == "")
+          mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(input$fillvolc, ",")))
+        else
+          mycol = ""
+        
+    return(mycol)
+    }
+  })
+  
+  
   volcano <- reactive({
     req(csvf())
-    
+ 
     EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
                     y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
-                    topgenes = input$topvolc, DrawConnectors = ifelse(is.na(input$topvolc),F,T),
+                    topgenes = input$topvolc,DrawConnectors = ifelse(is.na(input$topvolc),F,T),
                     pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = 1,transcriptLabSize = 3.0,
-                    title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash",
+                    title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", displaylab = ifelse(is.na(genetodisplay()),NULL,genetodisplay()),legendLabSize = 10,
                     cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
                                                                          "P value & Log (base 2) fold-change"))
   })

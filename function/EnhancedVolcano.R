@@ -9,6 +9,7 @@ EnhancedVolcano <- function(
     x,
     y,
     selectLab = NULL,
+    displaylab = NULL,
     topgenes = NULL,
     xlim = c(min(toptable[,x], na.rm=TRUE),
         max(toptable[,x], na.rm=TRUE)),
@@ -66,21 +67,39 @@ EnhancedVolcano <- function(
         (abs(toptable[,x])>FCcutoff)] <- "FC_P"
     toptable$Sig <- factor(toptable$Sig,
         levels=c("NS","FC","P","FC_P"))
+  
 
+    # if(!is.na(topgenes) ){
+    #   toptable$abs <- unlist(abs(toptable[x]))
+    #   myval <- toptable %>% dplyr::select(GeneName,abs) %>% top_n(.,topgenes)
+    #   selectLab <- as.character(myval$GeneName)
+    # }
     
-    if(!is.na(topgenes)){
-      
-      toptable$abs <- unlist(abs(toptable[x])) 
-      myval <- toptable %>% dplyr::select(GeneName,abs) %>% top_n(.,topgenes)
-      selectLab <- as.character(myval$GeneName)
+    # if(!is.na(displaylab) ){
+    # 
+    #   myval <- toptable %>% dplyr::select(GeneName) %>% filter(GeneName == displaylab)
+    #   selectLab <- as.character(myval$GeneName)
+    #   
+    # }
+    
+    if(is.na(topgenes) && !is.na(displaylab) ){
+      selectLab <- as.character(displaylab)
+    }
+    else{
+      toptable$abs <- unlist(abs(toptable[x]))
+         myval <- toptable %>% dplyr::select(GeneName,abs) %>% top_n(.,topgenes)
+         selectLab <- as.character(myval$GeneName)
     }
     
+
       
     if (min(toptable[,y], na.rm=TRUE) == 0) {
         warning("One or more P values is 0. Converting to minimum possible value...", call. = FALSE)
         toptable[which(toptable[,y] == 0), y] <- .Machine$double.xmin
     }
-
+    
+    
+    
     toptable$lab <- lab
     toptable$xvals <- toptable[,x]
     toptable$yvals <- toptable[,y]
@@ -89,15 +108,15 @@ EnhancedVolcano <- function(
         names.new <- rep("", length(toptable$lab))
         indices <- which(toptable$lab %in% selectLab)
         names.new[indices] <- as.character(toptable$GeneName[indices])
+        print(names.new[indices])
         toptable$lab <- names.new
-        
     }
-    
+
     
     tot = subset(toptable,
            toptable[,y]<pLabellingCutoff &
              abs(toptable[,x])>FCcutoff)[,"lab"]
-    
+   
     plot <- ggplot2::ggplot(toptable,
             ggplot2::aes(x=xvals, y=-log10(yvals))) +
 
@@ -183,7 +202,7 @@ EnhancedVolcano <- function(
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff)[,"lab"]),
                 size = transcriptLabSize,
-		check_overlap = T,
+		check_overlap = F,
                 vjust = 1.0)
     } else if (DrawConnectors == FALSE && is.null(selectLab)) {
         plot <- plot + ggplot2::geom_text(data=subset(toptable,

@@ -96,6 +96,15 @@ p {
   color: white;
 }
 
+#mytextvolc p{
+font-weight: 700;
+font-size: 14px;
+ line-height: 1.5;
+color: white;
+position: static;
+}
+
+
 .nav-tabs-custom > .nav-tabs > li.active:hover > a, .nav-tabs-custom > .nav-tabs > li.active > a {
     background-color: #3c8dbc;
     color: #3c8dbc;

@@ -9,6 +9,7 @@
 ###############################
 ######## dashboardsidebar     #
 ###############################  
+
 #library(shinyWidgets)
 
 shinyjscode <- "
@@ -303,7 +304,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                               dataTableOutput("new_test")
                             )
                             ,ns = NS("datafile")
-
+                            
                    )),
                      tabPanel("Volcano plot",value="volcano", style = "background-color: #ffffff;", 
                               conditionalPanel(condition = '!output.boolmark',
@@ -358,6 +359,13 @@ MATRiX app is working with specific data produced by the limma package name, res
                 strong("VOLCANO plot",style="font-size:18px;"),
                 br(),br(),
               uiOutput("compvolc"),
+              div(id = "mytextvolc", 
+                  p(" Highlight your selected gene(s) in the volcano plot with a comma-separated list of input ")
+                  ),
+              
+              textInput(inputId = "fillvolc",label = NULL,value = "",
+                        placeholder = "FOXP2,OT,AVPR1a",width = "100%"
+              ),
               numericInput(
                 'topvolc',
                 'Maximal number of genes by comparison(s)',
