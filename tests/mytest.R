@@ -1,59 +1,71 @@
-### Author: Franck Soubès
-### Bioinformatics Master Degree - University of Bordeaux, France
-### Link: https://github.com/fsoubes/MA_Trix_App
-### Where: GET-TRiX's facility
-### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
-### Licence: GPL-3.0
-
-
-
 app <- ShinyDriver$new("../", loadTimeout = 1e+05)
 app$snapshotInit("mytest")
 
 app$setInputs(sidebarCollapsed = FALSE)
+app$setInputs(side = "Upload")
 app$snapshot()
-app$uploadFile(file = c("All_topTableAll.csv", "TOXA_HEGU_MA0191_AllChip_pData.csv", "TOXA_HEGU_MA0191_AllChip_WorkingSet.csv")) # <-- This should be the path to the file, relative to the app's tests/ directory
+app$uploadFile(`datafile-file` = c("All_topTableAll.csv", "TOXA_TELL_MA0020_AllChip_pData.csv", "TOXA_TELL_MA0020_AllChip_WorkingSet.csv"))
+# Input 'new_group_rows_current' was set, but doesn't have an input binding.
+# Input 'new_group_rows_all' was set, but doesn't have an input binding.
+# Input 'data_summary_rows_current' was set, but doesn't have an input binding.
+# Input 'data_summary_rows_all' was set, but doesn't have an input binding.
+# Input 'new_test_rows_current' was set, but doesn't have an input binding.
+# Input 'new_test_rows_all' was set, but doesn't have an input binding.
+app$setInputs(pval1 = 0.03)
+# Input 'data_summary_rows_current' was set, but doesn't have an input binding.
+# Input 'data_summary_rows_all' was set, but doesn't have an input binding.
 app$snapshot()
-app$setInputs(pval1 = 0.01)
-app$setInputs(method = "None")
-Sys.sleep(2)
+app$setInputs(volcfc = 3)
+app$setInputs(volcfc = 2)
+app$setInputs(volcpval = 0.01)
+app$setInputs(topvolc = 5)
 app$snapshot()
 app$setInputs(side = "PCA")
-app$setInputs(indivpca = c("LKO_CTRL", "LKO_MCD ", "LWT_CTRL"))
-app$setInputs(colpca_2 = "#7570B3")
+app$setInputs(allIndividuspca = "click")
+app$snapshot()
+app$setInputs(pointsiize = 5)
+app$setInputs(pointsiize = 4)
+app$setInputs(label = FALSE)
+app$setInputs(jitter = TRUE)
+app$setInputs(ellipse = TRUE)
+app$setInputs(dim2 = "3")
 app$snapshot()
 app$setInputs(side = "Venn")
 app$setInputs(allCont = "click")
+app$setInputs(fcvenn = 2.3)
+app$setInputs(fcvenn = 3.1)
+app$snapshot()
+app$setInputs(fill = "red,blue,green,orange")
 app$setInputs(dispvenn = "genes")
-app$setInputs(fcvenn = 2.8)
-app$setInputs(fcvenn = 1)
-Sys.sleep(2)
 app$snapshot()
-app$setInputs(fcvenn = 2.7)
-Sys.sleep(2)
-app$snapshot()
-app$setInputs(intscol = "LWT_MCD-LWT_CTRL")
-app$setInputs(intscol = c("LWT_MCD-LWT_CTRL", "LKO_MCD-LKO_CTRL"))
 app$setInputs(Vennd = "vennbarplotpan")
+app$setInputs(intscol = "LWT_CARBO-LWT_CTRL")
+app$setInputs(intscol = c("LWT_CARBO-LWT_CTRL", "LKO_CTRL-LWT_CTRL"))
+# Input 'vennresinter_rows_current' was set, but doesn't have an input binding.
+# Input 'vennresinter_rows_all' was set, but doesn't have an input binding.
+# Input 'vennresinter_rows_current' was set, but doesn't have an input binding.
+# Input 'vennresinter_rows_all' was set, but doesn't have an input binding.
+app$setInputs(topgenes = 25)
 app$setInputs(topdegenes = "click")
 app$snapshot()
 app$setInputs(side = "Heatmap")
-app$setInputs(test = "LKO_CTRL-LWT_CTRL")
 app$setInputs(allTests = "click")
-app$setInputs(fc = 2.7)
-app$setInputs(pval = 0.03)
-app$setInputs(maxgen = 99)
-app$setInputs(maxgen = 100)
-app$setInputs(heatm = "click")
-Sys.sleep(2)
+app$setInputs(maxgen = 150)
+app$setInputs(fc = 1.5)
 app$snapshot()
-app$setInputs(clusters = 4)
-app$setInputs(meangrp = TRUE)
-app$setInputs(colname = "hide")
-app$setInputs(colname = "show")
-app$setInputs(rowname = "show")
 app$setInputs(heatm = "click")
 app$snapshot()
-app$setInputs(indiv = c("LKO_CTRL", "LKO_MCD ", "LWT_CTRL"))
-app$setInputs(heatm = "click")
+app$setInputs(indiv = c("LKO_CARBO", "LKO_CTRL", "LWT_CARBO"))
+app$setInputs(toggleAdvanced = "click")
+# Input '`shinyjs-toggleAdvanced-610410161-input-click`' was set, but doesn't have an input binding.
+app$setInputs(toggleAdvancedcolors = "click")
+# Input '`shinyjs-toggleAdvancedcolors-492719652-input-click`' was set, but doesn't have an input binding.
+app$setInputs(reactheat = TRUE)
+app$snapshot()
+# Input 'totalgenbyc_rows_current' was set, but doesn't have an input binding.
+# Input 'totalgenbyc_rows_all' was set, but doesn't have an input binding.
+# Input 'clustering_rows_current' was set, but doesn't have an input binding.
+# Input 'clustering_rows_all' was set, but doesn't have an input binding.
+app$snapshot()
+app$setInputs(tabset25 = "test3")
 app$snapshot()

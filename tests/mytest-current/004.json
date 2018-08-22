@@ -1,8 +1,10 @@
 {
   "input": {
+    "addlabelhigh": false,
+    "algomet": "ward.D2",
     "allCont": 0,
     "allIndividus": 0,
-    "allIndividuspca": 0,
+    "allIndividuspca": 1,
     "allTests": 0,
     "catinfo": [
       "GOTERM_BP_ALL",
@@ -15,10 +17,6 @@
     "col1": "green",
     "col3": "red",
     "colname": "show",
-    "colpca_1": "#1B9E77",
-    "colpca_2": "#7570B3",
-    "colpca_3": "#7570B3",
-    "colpca_4": "#E7298A",
     "colsize": 0.9,
     "cutinfo": "Boxplot",
     "data_summary_cell_clicked": {
@@ -41,23 +39,16 @@
     "data_summary_rows_selected": null,
     "data_summary_search": "",
     "data_summary_state": null,
-    "dim1": "1",
-    "dim2": "2",
-    "dispvenn": "probes",
-    "dist": "correlation",
-    "ellipse": false,
-    "fc": 1,
-    "fcvenn": 1,
-    "file": {
+    "datafile-file": {
       "name": [
         "All_topTableAll.csv",
-        "TOXA_HEGU_MA0191_AllChip_pData.csv",
-        "TOXA_HEGU_MA0191_AllChip_WorkingSet.csv"
+        "TOXA_TELL_MA0020_AllChip_pData.csv",
+        "TOXA_TELL_MA0020_AllChip_WorkingSet.csv"
       ],
       "size": [
-        20667511,
-        549,
-        12456592
+        20667571,
+        585,
+        12456616
       ],
       "type": [
         "text/csv",
@@ -70,28 +61,38 @@
         "2.csv"
       ]
     },
+    "dim1": "1",
+    "dim2": "2",
+    "dispvenn": "probes",
+    "dist": "correlation",
+    "ellipse": false,
+    "entry": "",
+    "fc": 1,
+    "fcvenn": 1,
+    "fill": "",
     "formcut": "pdf",
     "formhm": "png",
     "formpca": "png",
     "formven": "png",
     "formvenbar": "png",
+    "formvennclus": "png",
+    "formvolc": "png",
     "GO": 0,
     "GOvenn": 0,
     "indivpca": [
+      "LKO_CARBO",
       "LKO_CTRL",
-      "LKO_MCD ",
+      "LWT_CARBO",
       "LWT_CTRL"
     ],
     "jitter": false,
     "label": true,
     "labelsiize": 4,
     "legsize": 0.8,
-    "mainhmtabset": "hmmainpan",
     "maxgen": null,
-    "meandup": false,
     "meangrp": false,
     "meanpoint": true,
-    "method": "None",
+    "method": "FDR",
     "method2": "FDR",
     "methodforvenn": "FDR",
     "new_group_cell_clicked": {
@@ -30316,30 +30317,56 @@
     "noTests": 0,
     "pointsiize": 2,
     "pval": 0.05,
-    "pval1": 0.01,
+    "pval1": 0.03,
     "pvalvenn": 0.05,
     "reactheat": false,
     "regulation": "both",
     "resetAll": 0,
     "rowname": "hide",
     "rowsize": 0.9,
-    "scalcol": false,
+    "send": 0,
     "session": 0,
     "side": "PCA",
     "sidebarCollapsed": false,
     "sidebarItemExpanded": null,
     "Species": "Mus musculus",
     "Speciesvenn": "Mus musculus",
-    "tabset25": "hmpan",
+    "submit": 0,
+    "tabset1": "hmmainpan",
+    "tabset25": "widgetheat",
+    "text": "yellow",
     "toggleAdvanced": 0,
     "toggleAdvancedcolors": 0,
     "topdegenes": 0,
+    "topvolc": 5,
+    "user": "User44178",
     "Vennd": "vennset",
-    "vennsize": 1
+    "vennsize": 1,
+    "volcacomp": "LWT_CARBO-LWT_CTRL",
+    "volcfc": 2,
+    "volcpval": 0.01
   },
   "output": {
     "bool": true,
-    "boolmark": false,
+    "compvolc": {
+      "html": "<div class=\"form-group shiny-input-container\">\n  <label class=\"control-label\" for=\"volcacomp\">Choose a comparison<\/label>\n  <div>\n    <select id=\"volcacomp\"><option value=\"LWT_CARBO-LWT_CTRL\" selected>LWT_CARBO-LWT_CTRL<\/option>\n<option value=\"LKO_CARBO-LKO_CTRL\">LKO_CARBO-LKO_CTRL<\/option>\n<option value=\"LKO_CARBO-LWT_CARBO\">LKO_CARBO-LWT_CARBO<\/option>\n<option value=\"LKO_CTRL-LWT_CTRL\">LKO_CTRL-LWT_CTRL<\/option>\n<option value=\"(LWT_CARBO-LWT_CTRL)-(LKO_CARBO-LKO_CTRL)\">(LWT_CARBO-LWT_CTRL)-(LKO_CARBO-LKO_CTRL)<\/option><\/select>\n    <script type=\"application/json\" data-for=\"volcacomp\" data-nonempty=\"\">{}<\/script>\n  <\/div>\n<\/div>",
+      "deps": [
+        {
+          "name": "selectize",
+          "version": "0.11.2",
+          "src": {
+            "href": "shared/selectize"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "css/selectize.bootstrap3.css",
+          "head": "<!--[if lt IE 9]>\n<script src=\"shared/selectize/js/es5-shim.min.js\"><\/script>\n<![endif]-->\n<script src=\"shared/selectize/js/selectize.min.js\"><\/script>",
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
     "data_summary": {
       "x": {
         "filter": "none",
@@ -30434,8 +30461,9 @@
         }
       ]
     },
+    "datafile-boolmark": false,
     "eigpca": {
-      "src": "[image data sha1: 12210266fceebbddcde31a70bce402c79db06952]",
+      "src": "[image data sha1: c64d2677e0a59a0670c1415567528cf96907e238]",
       "width": 542,
       "height": 700,
       "coordmap": [
@@ -30464,13 +30492,13 @@
     },
     "heatmbool": false,
     "individuselpca": {
-      "html": "<div id=\"indivpca\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LKO_CTRL\" checked=\"checked\"/>\n        <span>LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LKO_MCD \" checked=\"checked\"/>\n        <span>LKO_MCD <\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LWT_CTRL\" checked=\"checked\"/>\n        <span>LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LWT_MCD \" checked=\"checked\"/>\n        <span>LWT_MCD <\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
+      "html": "<div id=\"indivpca\" class=\"form-group shiny-input-checkboxgroup shiny-input-container\">\n  <div class=\"shiny-options-group\">\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LKO_CARBO\"/>\n        <span>LKO_CARBO<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LKO_CTRL\"/>\n        <span>LKO_CTRL<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LWT_CARBO\"/>\n        <span>LWT_CARBO<\/span>\n      <\/label>\n    <\/div>\n    <div class=\"checkbox\">\n      <label>\n        <input type=\"checkbox\" name=\"indivpca\" value=\"LWT_CTRL\"/>\n        <span>LWT_CTRL<\/span>\n      <\/label>\n    <\/div>\n  <\/div>\n<\/div>",
       "deps": [
 
       ]
     },
     "myPanelpca": {
-      "html": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_1\">LKO_CTRL<\/label>\n      <input id=\"colpca_1\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#1B9E77\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_2\">LKO_MCD <\/label>\n      <input id=\"colpca_2\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#D95F02\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>\n<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_3\">LWT_CTRL<\/label>\n      <input id=\"colpca_3\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#7570B3\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>",
+      "html": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_1\">LKO_CARBO<\/label>\n      <input id=\"colpca_1\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#1B9E77\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_2\">LKO_CTRL<\/label>\n      <input id=\"colpca_2\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#D95F02\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>\n<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_3\">LWT_CARBO<\/label>\n      <input id=\"colpca_3\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#7570B3\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"form-group shiny-input-container\" data-shiny-input-type=\"colour\">\n      <label for=\"colpca_4\">LWT_CTRL<\/label>\n      <input id=\"colpca_4\" type=\"text\" class=\"form-control shiny-colour-input\" data-init-value=\"#E7298A\" data-show-colour=\"both\" data-palette=\"limited\" data-allowed-cols=\"[&quot;#1B9E77&quot;,&quot;#D95F02&quot;,&quot;#7570B3&quot;,&quot;#E7298A&quot;,&quot;#66A61E&quot;,&quot;#E6AB02&quot;,&quot;#A6761D&quot;,&quot;#666666&quot;,&quot;#A6CEE3&quot;,&quot;#1F78B4&quot;,&quot;#B2DF8A&quot;,&quot;#33A02C&quot;,&quot;#FB9A99&quot;,&quot;#E31A1C&quot;,&quot;#FDBF6F&quot;,&quot;#FF7F00&quot;,&quot;#CAB2D6&quot;,&quot;#6A3D9A&quot;]\" data-return-name=\"true\"/>\n    <\/div>\n  <\/div>\n<\/div>",
       "deps": [
         {
           "name": "colourpicker-binding",
@@ -30505,9 +30533,16 @@
     "new_group": {
       "x": {
         "filter": "none",
-        "container": "<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>ProbeName<\/th>\n      <th>GeneName<\/th>\n      <th>SystematicName<\/th>\n      <th>Amean<\/th>\n      <th>logFC_LWT_MCD-LWT_CTRL<\/th>\n      <th>logFC_LKO_MCD-LKO_CTRL<\/th>\n      <th>logFC_LKO_MCD-LWT_MCD<\/th>\n      <th>logFC_LKO_CTRL-LWT_CTRL<\/th>\n      <th>logFC_(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/th>\n      <th>t_LWT_MCD-LWT_CTRL<\/th>\n      <th>t_LKO_MCD-LKO_CTRL<\/th>\n      <th>t_LKO_MCD-LWT_MCD<\/th>\n      <th>t_LKO_CTRL-LWT_CTRL<\/th>\n      <th>t_(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/th>\n      <th>P.value_LWT_MCD-LWT_CTRL<\/th>\n      <th>P.value_LKO_MCD-LKO_CTRL<\/th>\n      <th>P.value_LKO_MCD-LWT_MCD<\/th>\n      <th>P.value_LKO_CTRL-LWT_CTRL<\/th>\n      <th>P.value_(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/th>\n      <th>adj.P.Val_LWT_MCD-LWT_CTRL<\/th>\n      <th>adj.P.Val_LKO_MCD-LKO_CTRL<\/th>\n      <th>adj.P.Val_LKO_MCD-LWT_MCD<\/th>\n      <th>adj.P.Val_LKO_CTRL-LWT_CTRL<\/th>\n      <th>adj.P.Val_(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/th>\n      <th>q.value_LWT_MCD-LWT_CTRL<\/th>\n      <th>q.value_LKO_MCD-LKO_CTRL<\/th>\n      <th>q.value_LKO_MCD-LWT_MCD<\/th>\n      <th>q.value_LKO_CTRL-LWT_CTRL<\/th>\n      <th>q.value_(LWT_MCD-LWT_CTRL)-(LKO_MCD-LKO_CTRL)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "extensions": [
+          "Buttons"
+        ],
+        "container": "<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>ProbeName<\/th>\n      <th>GeneName<\/th>\n      <th>SystematicName<\/th>\n      <th>Amean<\/th>\n      <th>logFC_LWT_CARBO-LWT_CTRL<\/th>\n      <th>logFC_LKO_CARBO-LKO_CTRL<\/th>\n      <th>logFC_LKO_CARBO-LWT_CARBO<\/th>\n      <th>logFC_LKO_CTRL-LWT_CTRL<\/th>\n      <th>logFC_(LWT_CARBO-LWT_CTRL)-(LKO_CARBO-LKO_CTRL)<\/th>\n      <th>t_LWT_CARBO-LWT_CTRL<\/th>\n      <th>t_LKO_CARBO-LKO_CTRL<\/th>\n      <th>t_LKO_CARBO-LWT_CARBO<\/th>\n      <th>t_LKO_CTRL-LWT_CTRL<\/th>\n      <th>t_(LWT_CARBO-LWT_CTRL)-(LKO_CARBO-LKO_CTRL)<\/th>\n      <th>P.value_LWT_CARBO-LWT_CTRL<\/th>\n      <th>P.value_LKO_CARBO-LKO_CTRL<\/th>\n      <th>P.value_LKO_CARBO-LWT_CARBO<\/th>\n      <th>P.value_LKO_CTRL-LWT_CTRL<\/th>\n      <th>P.value_(LWT_CARBO-LWT_CTRL)-(LKO_CARBO-LKO_CTRL)<\/th>\n      <th>adj.P.Val_LWT_CARBO-LWT_CTRL<\/th>\n      <th>adj.P.Val_LKO_CARBO-LKO_CTRL<\/th>\n      <th>adj.P.Val_LKO_CARBO-LWT_CARBO<\/th>\n      <th>adj.P.Val_LKO_CTRL-LWT_CTRL<\/th>\n      <th>adj.P.Val_(LWT_CARBO-LWT_CTRL)-(LKO_CARBO-LKO_CTRL)<\/th>\n      <th>q.value_LWT_CARBO-LWT_CTRL<\/th>\n      <th>q.value_LKO_CARBO-LKO_CTRL<\/th>\n      <th>q.value_LKO_CARBO-LWT_CARBO<\/th>\n      <th>q.value_LKO_CTRL-LWT_CTRL<\/th>\n      <th>q.value_(LWT_CARBO-LWT_CTRL)-(LKO_CARBO-LKO_CTRL)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollX": true,
+          "dom": "Bfrtip",
+          "buttons": [
+            "colvis"
+          ],
           "order": [
 
           ],
@@ -30551,6 +30586,26 @@
             "css/jquery.dataTables.min.css",
             "css/jquery.dataTables.extra.css"
           ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-ext-buttons",
+          "version": "1.10.16",
+          "src": {
+            "href": "dt-ext-buttons-1.10.16"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.buttons.min.js",
+            "js/buttons.flash.min.js",
+            "js/buttons.html5.min.js",
+            "js/buttons.colVis.min.js",
+            "js/buttons.print.min.js"
+          ],
+          "stylesheet": "css/buttons.dataTables.min.css",
           "head": null,
           "attachment": null,
           "package": null,
@@ -30667,6 +30722,12 @@
           "package": null,
           "all_files": true
         }
+      ]
+    },
+    "userList": {
+      "html": "<ul>\n  <li>User44178<\/li>\n<\/ul>",
+      "deps": [
+
       ]
     }
   },
