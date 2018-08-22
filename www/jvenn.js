@@ -62,7 +62,6 @@ $(document).ready(function () {
 					searchInput:  $("#search-field"),
 					searchStatus: $("#search-status"),
 					displayMode: displayMode,
-					//displayMode: thisiswhy,//"edwards",
 					displayStat: displayStat,
 					
 					fnClickCallback: function() {
@@ -76,20 +75,17 @@ $(document).ready(function () {
 						}
 						
 						for (name in this.listnames) {
-							//value += this.listnames[name] + " ";
 							nameslis.push(this.listnames[name]);
 						}
 						     value += ":\n";
 						     mylist =[];
 						for (val in this.list) {
-						     //value += this.list[val] + "\n";
 						     mylist.push( this.list[val]);
 						  }
 						     $("#names").val(value);
 						     
 						     
 						     Shiny.onInputChange("testons",mylist);// renvoyer dans R
-						     //console.log(mylist.length);
 						     Shiny.onInputChange("together",nameslis.join(""));// renvoyer dans R
 						     Shiny.onInputChange("selcontjv",nameslis);
 						     return(mylist); 

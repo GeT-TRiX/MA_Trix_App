@@ -38,8 +38,8 @@ sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptom
 tags$head(
      #tags$script(src = inactivity),   
      tags$script(src = "custom.js")),
-  div(id = "loading-content-bar",
-      p()),
+  div(id = "loading-content-bar",p()),
+
   div(
     id = "matrixapp",
     sidebarMenu(id = "side",
@@ -174,7 +174,6 @@ MATRiX app is working with specific data produced by the limma package name, res
                                                            )
                                                          )
                                                        )))
-                                         
                                          
                                 )), 
                                 tabPanel("Video",
@@ -339,10 +338,9 @@ MATRiX app is working with specific data produced by the limma package name, res
                 downloadLink("downloadData", label = "download sample data", style="color:red; float:right;"),
                 br(),br(),
                 csvFileInput("datafile", "User data (.csv format)"),
+                p("Import local example",style="color:white; font-weight: 700; font-size: 14px;"),
                 dirModuleUI("datafile"),
 
-              
-              
                 #csvFileInput("file", "Choose your csv files"),
                 # fileInput(
                 #   "file",
@@ -396,7 +394,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                       "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
                     ),
                     dataTableOutput("new_group")
-            ))
+            ),ns = NS("datafile"))
           
             
             )),
@@ -994,18 +992,17 @@ MATRiX app is working with specific data produced by the limma package name, res
                     tags$script(src="libraries/jquery-1.9.1.min.js"),
                     tags$script(src="libraries/highcharts.js"),
                     tags$script(src="libraries/highcharts-more.js"),
-                    tags$script(src="libraries/modules/exporting.js"), 
-                    tags$script(src="libraries/modules/export-data.js"),
+                    #tags$script(src="libraries/modules/exporting.js"), 
+                    #tags$script(src="libraries/modules/export-data.js"),
+                    tags$script(src="https://code.highcharts.com/modules/exporting.js"), 
+                    tags$script(src="https://code.highcharts.com/modules/export-data.js"),
                     
                     
-                    tags$div(id="highChart",style="width: 100%;, height: 600px;")  ,
+                    tags$div(id="highChart")  ,
+                    #tags$div(id="highChart",style="width: 100%;, height: 600px;")  ,
                     checkboxInput("addlabelhigh", "add label", FALSE),
                     tags$script(src="bubble.js")
-                    #includeHTML("HTML/bubbleresize.html")
-                    
-                    
-                    #,
-                    #verbatimTextOutput("clustgo")
+
                   )),
                   tabPanel(
                     strong("Cut heatmap"),#icon("table"), 

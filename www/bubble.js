@@ -2,6 +2,8 @@
 Author: Franck Soubès
 */
 
+
+
 $(document).ready(function () {
 
 var xTitle = "top genes enriched";
@@ -10,6 +12,7 @@ var defaultOptions = {
   
   
     series: null,
+    
     chart: {
 	  zoomType: "xy",
 	  reflow: true,
@@ -128,12 +131,13 @@ var defaultOptions = {
   newOptions.plotOptions.series.dataLabels.enabled = message;
 
   var chartObj = new Highcharts.Chart(newOptions);
-  Shiny.addCustomMessageHandler("iscollapse", function(test) {
+  
+  Shiny.addCustomMessageHandler("iscollapse", function(collapsestate) {
     var chartObj = new Highcharts.Chart(newOptions);
     chartObj.reflow();
-    });
+      });
     
-  });
+    });
   });
   
   }
@@ -146,23 +150,14 @@ var defaultOptions = {
     var mediaQueryList = window.matchMedia('print');
     mediaQueryList.addListener(function (mql) {
     printUpdate();
-        });
+      });
     }
     
-    /*
-    Shiny.addCustomMessageHandler("iscollapse", function(test) {
-      
-        $('#container').highcharts().reflow();
-         var chartObj = new Highcharts.Chart(newOptions);
-     });
-     
-     
-     $('#secondClick').click(function () {
-    updatechart();
-    });
-    */
   
 updatechart();
 
 });
+
+
+
   

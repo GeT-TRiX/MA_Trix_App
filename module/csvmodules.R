@@ -6,35 +6,8 @@
 #' ### Licence: GPL-3.0
 #' 
 
-#' chartofa = function(datach){
-#'   
-#'   datach[] <- lapply( datach, factor)
-#'   col_names <- names(datach)
-#'   datach[col_names] <- lapply(datach[col_names] , factor)
-#'   
-#'   return(datach)
-#' }
-#' 
-
-# dirModuleUI = function(id) {
-#   ns = NS(id)
-#   
-#   fluidPage(
-#     fluidRow(
-#       shinyFilesButton(ns('files'), label='File select', title='Please select a file', multiple=T),
-#       shinyDirButton(ns("directory"), label="Directory select", title = "Select directory"),
-#       shinySaveButton(ns("fileSave"), label = "File save", title = "Save file as", filetype=list(text='txt'))
-#     )
-#   )
-# }
-
-
-# File input module
-# This module takes as input csv file and outputs dataframe
-# Module UI function
 
 csvFileInput <- function(id, label = "CSV file") {
-  # Create a namespace function using the provided id
   ns <- NS(id)
   
   #tagList(
@@ -46,7 +19,6 @@ csvFileInput <- function(id, label = "CSV file") {
 
 # Module server function
 csvFile <- function(input, output, session, stringsAsFactors) {
-  # The selected file, if any
   
   root = c(data = "//home/franck1337/mydashexp/madash/MA_Trix_App/data")
   shinyFileChoose(input, 'files', roots = root, session = session,filetype=c("csv"))
@@ -57,7 +29,6 @@ csvFile <- function(input, output, session, stringsAsFactors) {
   
   
   userFile <- reactive({
-    # If no file is selected, don't do anything
     validate(need(input$file, message = FALSE))
     input$file
   })
@@ -195,7 +166,6 @@ csvFile <- function(input, output, session, stringsAsFactors) {
       )
       
       csvord = list()
-      print("ok")
       for (i in 1:length(csv)) {
         if (colnames(csv[[i]][2]) == "Grp") {
           csvord[[2]] <- csv[[i]]
@@ -339,4 +309,17 @@ csvFile <- function(input, output, session, stringsAsFactors) {
    }
   })
   
+}
+
+
+dirModuleUI = function(id) {
+  ns = NS(id)
+  
+  fluidPage(
+    fluidRow(
+      shinyFilesButton(ns('files'), label='File select', title='Please select all the files', multiple=T)
+      #shinyDirButton(ns("directory"), label="Directory select", title = "Select directory")
+      #shinySaveButton(ns("fileSave"), label = "File save", title = "Save file as", filetype=list(text='txt'))
+    )
+  )
 }

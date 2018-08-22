@@ -22,8 +22,8 @@ shinyServer(function(input, output,session) {
   hide(id = "loading-content-bar", anim = TRUE, animType = "fade",time=2)
   
   observe({
-    test <- input$sidebarCollapsed
-    session$sendCustomMessage(type="iscollapse", test)
+    collapsestate <- input$sidebarCollapsed
+    session$sendCustomMessage(type="iscollapse", collapsestate)
   })
 
   
@@ -42,7 +42,6 @@ shinyServer(function(input, output,session) {
   #source(file.path("server", "csvFile.R"), local = TRUE)$value #
   
   csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE)
-  #csvf <- callModule(dirModule, "datafile",stringsAsFactors = FALSE)
 
   
   ##########################################
@@ -169,10 +168,10 @@ shinyServer(function(input, output,session) {
   
   output$renderer <- renderPrint({
     req(input$together,input$selcontjv)
-    #print(typeof(input$together))
-    #print(class(input$together))
     cat("The intersection is", input$together,"With the following genes \n")
   })
+  
+  
   
   output$renderer2 <- renderText({
     req(input$testons)
