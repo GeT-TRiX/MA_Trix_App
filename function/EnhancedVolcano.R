@@ -91,14 +91,15 @@ EnhancedVolcano <- function(
          selectLab <- as.character(myval$GeneName)
     }
     
-
+    if(is.na(topgenes) && is.na(displaylab))
+      selectLab <- NULL
+    
+    
       
     if (min(toptable[,y], na.rm=TRUE) == 0) {
         warning("One or more P values is 0. Converting to minimum possible value...", call. = FALSE)
         toptable[which(toptable[,y] == 0), y] <- .Machine$double.xmin
     }
-    
-    
     
     toptable$lab <- lab
     toptable$xvals <- toptable[,x]
@@ -183,7 +184,7 @@ EnhancedVolcano <- function(
             size=cutoffLineWidth)
 
     if (DrawConnectors == TRUE) {
-        plot <- plot + ggrepel::geom_text_repel(
+        plot <- plot + ggrepel::geom_text_repel(max.iter = 100,
             data=subset(toptable,
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff),
@@ -202,7 +203,7 @@ EnhancedVolcano <- function(
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff)[,"lab"]),
                 size = transcriptLabSize,
-		check_overlap = F,
+		check_overlap = T,
                 vjust = 1.0)
     } else if (DrawConnectors == FALSE && is.null(selectLab)) {
         plot <- plot + ggplot2::geom_text(data=subset(toptable,
@@ -212,7 +213,7 @@ EnhancedVolcano <- function(
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff)[,"lab"]),
                 size = transcriptLabSize,
-                check_overlap = T,
+                check_overlap = F,
                 vjust = 1.0)
     }
 
