@@ -63,7 +63,15 @@ var defaultOptions = {
         },
 
         labels: {
-            format: 'top {value}',
+               formatter: function () {
+            if(this.value === 0){
+            return "";
+            }
+            else{
+                return 'top' + this.value ;
+              }
+            },
+            //format: 'top {value}',
             step:1,
         },
         maxPadding: 0.2,
