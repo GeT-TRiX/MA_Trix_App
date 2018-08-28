@@ -35,7 +35,7 @@ sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptom
   tags$style(type="text/css", inactivity),
   shinyjs::extendShinyjs(text = shinyjscode),
 
-#tags$head(includeHTML("www/google-analytics.html")),
+tags$head(includeHTML("www/google-analytics.html")),
 tags$head(
      #tags$script(src = inactivity),   
      tags$script(src = "custom.js")),
@@ -118,7 +118,7 @@ body <- dashboardBody(
                                          tags$h3("MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics."),
                                          p("This project initiated by Yannick Lippi aims to facilitate access to biologist in order to publish graphs such as heatmap, PCA or Venn diagram related to specifics data produced by TRiX's facility.", tags$br(),"  
 
-MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querrying the DWS (DAVID WEB SERVICES).",tags$br(),"
+MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).",tags$br(),"
 
 MATRiX app is working with specific data produced by the limma package name, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/downloadData.zip)."),
                                       
@@ -324,18 +324,7 @@ MATRiX app is working with specific data produced by the limma package name, res
             column(width = 3,
             box(id="boxpass",title = strong("Upload data", style="font-size:25px;"), width = NULL, background = "light-blue",
                 inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
-                
-              #shinydashboard::box(
-              # sidebarPanel(
-              #   id = "sideloadpan",
-              #   title = "Upload widget",
-              #   width = NULL,
-              #   status = "primary",
-                #div(style = 'overflow-y: scroll; height: 550px',
-                #sidebarPanel( #Create a rectangular region containing the different widgets
-                # style = " font-size:100%; font-family:Arial;
-                # border-color: #2e6da4; background-color: #337ab7, width: 28px; ", #CSS attributes for the sidebarPanel
-                # width = 3,
+
                 
                 downloadLink("downloadData", label = "download sample data", style="color:red; float:right;"),
                 br(),br(),
@@ -375,25 +364,7 @@ MATRiX app is working with specific data produced by the limma package name, res
               ,ns = NS("datafile")
                 )
               )
-#             box(
-#               title = "What's new in MATRiX", width = NULL, status = "primary",
-#               div(style = 'overflow-y: scroll; height: 550px',
-# 	          addNews("Jul 17th 2018", "Tutorial/Video", "Soon will be added a video to summarise the application"),
-#                   addNews("Jul 16th 2018", "Venn" ,"You can now choose your color for the venn diagram"),
-#                   addNews("Jul 16th 2018","Bug fixes","Venn diagram display erros when filtering"),
-#                   addNews("Jul 5th 2018","Venn/DAVID","Add Gene functionnal classification for selected intersection(s)"),
-#                   addNews("Jun 26th 2018","Add features","It's now possible to interact with the rendering table to filter the table in the aim of plotting the top n genes.
-#                           For the GO enrichment it is now possible to select the rows in order to display the gene symbol according to the entrez ids"),
-#                   addNews("Jun 22th 2018","Bug fixes","For two contrasts the venn.draw function was not ordering the contrast names in the right order."),
-#                   addNews("Jun 20th 2018","MATRiX","First public release of MATRiX. 
-#                                                               Enhancement of the gui with the use of dashboard package"),
-#                   addNews("Jun 18th 2018","GO enrichment","It is now possible to query the DWS for the Heatmap and save the result in xlsx format for the different clusters"),
-#                   addNews("Jun 15th 2018","DNS ","Adding DNS for the MATRiX application (matrix.toulouse.inra.fr)"),
-#                   addNews("Jun 10th 2018","Venn diagram","The venn diagram FC and display of the top n genes
-#                                                                 have been added to compare the results of 2 or more contrasts."), 
-#                   addNews("Jun 5th 2018","PCA/Heatmap","Display color groups side by side in the gui"), 
-#                   addNews("May 29th 2018","beta-test","The service will be made available once the beta test phase is officially completed.")
-#               ))
+
               )
             ),
             conditionalPanel(condition = '!output.boolmark',

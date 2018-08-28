@@ -172,7 +172,6 @@ shinyServer(function(input, output,session) {
       isolate(
       Rtojs <- toJvenn(vennlist()[[1]],user_cont()))
     
-    #thisiswhy <-input$typejv
     Mymode <-  input$updamod # Mode
     Myfont <-  input$myfont # Font size
     Mystat <-  input$mystat # Stat
@@ -225,8 +224,6 @@ shinyServer(function(input, output,session) {
   
   projectname <- reactive({
     req(file_name())
-    print("oko")
-    print(file_name())
     projed <- strsplit(file_name(), "_")
     proj = grepl("^MA", projed[[2]])
     index = which(proj == T)
