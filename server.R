@@ -81,12 +81,13 @@ shinyServer(function(input, output,session) {
   
   volcano <- reactive({
     req(csvf())
- 
+    
     EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
                     y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
-                    topgenes = input$topvolc,DrawConnectors = ifelse(is.na(input$topvolc),F,T),
+                    topgenes = input$topvolc,DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),
                     pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = 1,transcriptLabSize = 3.0,
-                    title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", displaylab = ifelse(is.na(genetodisplay()),NULL,genetodisplay()),legendLabSize = 10,
+                    title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", 
+                    displaylab = ifelse(is.na(genetodisplay()),NULL,genetodisplay()),legendLabSize = 10,
                     cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
                                                                          "P value & Log (base 2) fold-change"))
   })
@@ -172,6 +173,7 @@ shinyServer(function(input, output,session) {
       isolate(
       Rtojs <- toJvenn(vennlist()[[1]],user_cont()))
     
+    #thisiswhy <-input$typejv
     Mymode <-  input$updamod # Mode
     Myfont <-  input$myfont # Font size
     Mystat <-  input$mystat # Stat
@@ -224,6 +226,8 @@ shinyServer(function(input, output,session) {
   
   projectname <- reactive({
     req(file_name())
+    print("oko")
+    print(file_name())
     projed <- strsplit(file_name(), "_")
     proj = grepl("^MA", projed[[2]])
     index = which(proj == T)

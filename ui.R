@@ -35,7 +35,7 @@ sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptom
   tags$style(type="text/css", inactivity),
   shinyjs::extendShinyjs(text = shinyjscode),
 
-tags$head(includeHTML("www/google-analytics.html")),
+#tags$head(includeHTML("www/google-analytics.html")),
 tags$head(
      #tags$script(src = inactivity),   
      tags$script(src = "custom.js")),
@@ -79,7 +79,7 @@ tags$head(
   ############################### 
 
 body <- dashboardBody(
-  #tags$head(includeScript("google-analytics.js")),
+  tags$head(includeScript("google-analytics.js")),
   tags$style(type="text/css", inactivity),
   tags$style(type="text/css", Errorcss),
   
