@@ -5,15 +5,7 @@ app$setInputs(sidebarCollapsed = FALSE)
 app$setInputs(side = "Upload")
 app$snapshot()
 app$uploadFile(`datafile-file` = c("All_topTableAll.csv", "TOXA_TELL_MA0020_AllChip_pData.csv", "TOXA_TELL_MA0020_AllChip_WorkingSet.csv"))
-# Input 'new_group_rows_current' was set, but doesn't have an input binding.
-# Input 'new_group_rows_all' was set, but doesn't have an input binding.
-# Input 'data_summary_rows_current' was set, but doesn't have an input binding.
-# Input 'data_summary_rows_all' was set, but doesn't have an input binding.
-# Input 'new_test_rows_current' was set, but doesn't have an input binding.
-# Input 'new_test_rows_all' was set, but doesn't have an input binding.
 app$setInputs(pval1 = 0.03)
-# Input 'data_summary_rows_current' was set, but doesn't have an input binding.
-# Input 'data_summary_rows_all' was set, but doesn't have an input binding.
 app$snapshot()
 app$setInputs(volcfc = 3)
 app$setInputs(volcfc = 2)
@@ -41,10 +33,6 @@ app$snapshot()
 app$setInputs(Vennd = "vennbarplotpan")
 app$setInputs(intscol = "LWT_CARBO-LWT_CTRL")
 app$setInputs(intscol = c("LWT_CARBO-LWT_CTRL", "LKO_CTRL-LWT_CTRL"))
-# Input 'vennresinter_rows_current' was set, but doesn't have an input binding.
-# Input 'vennresinter_rows_all' was set, but doesn't have an input binding.
-# Input 'vennresinter_rows_current' was set, but doesn't have an input binding.
-# Input 'vennresinter_rows_all' was set, but doesn't have an input binding.
 app$setInputs(topgenes = 25)
 app$setInputs(topdegenes = "click")
 app$snapshot()
@@ -57,15 +45,9 @@ app$setInputs(heatm = "click")
 app$snapshot()
 app$setInputs(indiv = c("LKO_CARBO", "LKO_CTRL", "LWT_CARBO"))
 app$setInputs(toggleAdvanced = "click")
-# Input '`shinyjs-toggleAdvanced-610410161-input-click`' was set, but doesn't have an input binding.
 app$setInputs(toggleAdvancedcolors = "click")
-# Input '`shinyjs-toggleAdvancedcolors-492719652-input-click`' was set, but doesn't have an input binding.
 app$setInputs(reactheat = TRUE)
 app$snapshot()
-# Input 'totalgenbyc_rows_current' was set, but doesn't have an input binding.
-# Input 'totalgenbyc_rows_all' was set, but doesn't have an input binding.
-# Input 'clustering_rows_current' was set, but doesn't have an input binding.
-# Input 'clustering_rows_all' was set, but doesn't have an input binding.
 app$snapshot()
 app$setInputs(tabset25 = "test3")
 app$snapshot()
