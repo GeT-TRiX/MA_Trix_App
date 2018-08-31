@@ -1,3 +1,7 @@
+# Source https://www.r-bloggers.com/a-shiny-app-serves-as-shiny-server-load-balancer/
+
+
+
 lapply(1:60, function(x) {
   tops <- system("top -n 1 -b -u shiny", intern = TRUE)
   if(length(tops) > 0) {
