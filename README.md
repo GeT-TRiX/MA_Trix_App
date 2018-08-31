@@ -13,7 +13,7 @@
 This project initiate by Yannick Lippi aims to facilitate access to biologists in order to publish graphs such as heatmap, PCA or Venn diagram related to specific data produced by TRiX's team.
 MATRiX is an application dedicated to  DNA chip analysis, this application incorporates quality control with Principal components analysis to summarize microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).
 
-MATRiX app is working with specific data produced by the limma package [name](citation), resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995].
+MATRiX app is working with specific data produced by the limma package, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995].
 PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN
 This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/downloadData.zip)
 
