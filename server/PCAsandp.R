@@ -100,12 +100,7 @@ new_grouppca <- reactive({
   csvf()[[2]][csvf()[[2]]$Grp %in% choix_grpca(),]
 })
 
-observe({
-  req(new_grouppca())
-  print(choix_grpca())
-  print("ok")
-  
-})
+
 
 
 #' PCAres is a reactive function that computed a PCA of non-normalized data
