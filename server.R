@@ -226,8 +226,6 @@ shinyServer(function(input, output,session) {
   
   projectname <- reactive({
     req(file_name())
-    print("oko")
-    print(file_name())
     projed <- strsplit(file_name(), "_")
     proj = grepl("^MA", projed[[2]])
     index = which(proj == T)
