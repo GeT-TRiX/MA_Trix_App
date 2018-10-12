@@ -235,7 +235,6 @@ observeEvent(input$topdegenes, {
   isolate(output$barplotvenn <- renderPlot({
     req(plottopgenes())
     plotOutput(plottopgenes())
-    
   }))
   
 })

@@ -34,7 +34,7 @@
 $(document).ready(function () {
 
 
-			var colorDefault = ["#006600", "#5a9bd4", "#f15a60", "#cfcf1b", "#ff7500", "#c09853"],
+			var colorDefault = ["#FFA500", "#5a9bd4", "#f15a60", "#cfcf1b", "#ff7500", "#c09853"],
 				displayMode  = "classic",
 				displayStat  = true,
 				displaySwitch= true,
@@ -160,7 +160,21 @@ $(document).ready(function () {
 				Shiny.onInputChange("myfont",fontSize);
 				updateJvenn();				
 			});
+			
+			$('[id^="colorp_pa"]').click(function() {
+				colors : ["rgb(102,102,102)","rgb(90,155,212)","rgb(241,90,96)","rgb(250,220,91)","rgb(255,117,0)","rgb(192,152,83)"]
+				Shiny.onInputChange("myfont",fontSize);
+				updateJvenn();				
+			});
+			
 			/*
+			$('[id^="-data-export"').click(function(){
+			});
+			*/
+			
+			
+
+		/*
 			$('[id^="colorp"]').colorpicker().on('changeColor.colorpicker', function(event) {
 				var type = $(this).attr("id").split("_")[1],
 					index = $(this).attr("id").split("_")[2];
@@ -172,6 +186,8 @@ $(document).ready(function () {
   				}
   				updateJvenn();				
 			});
+			
+			*/
 			
 			$('[id^="colord"]').click(function() {
 				var type = $(this).attr("id").split("_")[1],
@@ -185,9 +201,23 @@ $(document).ready(function () {
   				$("#colorp_" + type + "_" + index).colorpicker('setValue', colorDefault[index-1]);
 				updateJvenn();				
 			});
-			*/
+			
+			$('#colorp_pa_1').children("span").children("i").css("background-color", colorDefault[0]);
+			$('#colorp_pa_2').children("span").children("i").css("background-color", colorDefault[1]);
+			$('#colorp_pa_3').children("span").children("i").css("background-color", colorDefault[2]);
+			$('#colorp_pa_4').children("span").children("i").css("background-color", colorDefault[3]);
+			$('#colorp_pa_5').children("span").children("i").css("background-color", colorDefault[4]);
+			$('#colorp_pa_6').children("span").children("i").css("background-color", colorDefault[5]);
+			$('#colorp_up_1').children("span").children("i").css("background-color", colorDefault[0]);
+			$('#colorp_up_2').children("span").children("i").css("background-color", colorDefault[1]);
+			$('#colorp_up_3').children("span").children("i").css("background-color", colorDefault[2]);
+			$('#colorp_up_4').children("span").children("i").css("background-color", colorDefault[3]);
+			$('#colorp_up_5').children("span").children("i").css("background-color", colorDefault[4]);
+			$('#colorp_up_6').children("span").children("i").css("background-color", colorDefault[5]);
 
 			
+			
+
 			updateJvenn();
 
 });

@@ -79,7 +79,7 @@ tags$head(
   ############################### 
 
 body <- dashboardBody(
-  tags$head(includeScript("google-analytics.js")),
+  #tags$head(includeScript("google-analytics.js")),
   tags$style(type="text/css", inactivity),
   tags$style(type="text/css", Errorcss),
   
@@ -501,11 +501,11 @@ MATRiX app is working with specific data produced by the limma package name, res
     tabItem(tabName = "Venn",
             
             tags$style(type='text/css', ".well { max-width: 25em; }"),
-            tags$style(type='text/css', ".well { max-height: 50em; }"),
+            tags$style(type='text/css', ".well { max-height: 70em; }"),
             fluidRow(column(
               width = 9,
               div(
-                style = "width:100% ; max-width: 1500px; height: 1700px; max-height: 2500px;",
+                style = "width:100% ; max-width: 1500px; height: 1700px; max-height: 2800px;",
                 tabsetPanel(
                 id = "Vennd",    
 
@@ -548,7 +548,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                     #tags$script(src="libraries/ jquery.iframe-transport.js")  ,
                     fluidRow(column(6,br(),br(),
                     tags$script(src="jvenn.js"),
-                    tags$div(id="jvenn-container")
+                    tags$div(id="jvenn-container", style = "background-color: white;")
                     # wellPanel(
                     #   htmlOutput("renderer"),br(),
                     #   htmlOutput("renderer2"))
@@ -562,9 +562,9 @@ MATRiX app is working with specific data produced by the limma package name, res
                            
                            DT::dataTableOutput("vennresinter"),br(),br(),br(),
                            conditionalPanel(condition = "input.dispvenn == 'genes'", 
-                                            div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; ",
-                                                htmlOutput("dfvennbef")),
-                                            DT::dataTableOutput("vennresintergen"))
+                                            div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; "))
+                                                #htmlOutput("dfvennbef")),
+                                            #DT::dataTableOutput("vennresintergen"))
                     )),
                    # column(6,
                            div(style="display:inline-block", id ="dontwanttoshow",
@@ -592,8 +592,56 @@ MATRiX app is working with specific data produced by the limma package name, res
                                         
                                         uiOutput("topgenesvenn", style= "padding: 0px;"))
                                )),
-                 
-                           plotOutput(outputId ="barplotvenn", height = "500px")
+                   plotOutput(outputId ="barplotvenn", height = "500px", width ="100%"),
+                    #plotOutput(outputId ="barplotvenn", height = "auto"),
+                   br(),
+                   h1("Here's a tracker for your different selections:"),
+                   tags$head(
+                     tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
+                   ),
+                   tags$head(
+                     tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap-responsive.css") # add style.css in order to add better police
+                   ),
+                   tags$head(tags$style("
+                                        #container * {
+                                        display: inline;
+                                        }")),
+                      
+                   tags$head(tags$style("
+                                        #mytext p{
+                                        font-weight: 500;
+                                        font-size: 17px;
+                                        line-height: 1.5;
+                                        color: white;
+                                        position: static;
+                                        }
+                                        #mytext a{
+                                        color: red;}")),
+                   
+                   div(
+                     id = "container",
+                     p("You have chosen the following comparisons"),
+                     htmlOutput("contvenn"),
+                     p("for a total of"),
+                     htmlOutput("totalgenes"),
+                     p("genes  with a P-value and FC treshold respectively set to "),
+                     htmlOutput("myPVALvenn"),
+                     p("and"),
+                     htmlOutput("myFCvenn")
+                     
+                   ),
+                   div(
+                     id = "container",
+                     p("There are"),
+                     htmlOutput("venngenes"),
+                     p("significant genes"),
+                     p("for this intersection"),
+                     htmlOutput("continter"),
+                     p("if you click on the top DE genes button you will plot the top"),
+                     htmlOutput("topgenesdf"),
+                     p("rows the of the previous table")
+                   )
+                   
                   ),
                   tabPanel(
                     value = "vennbarplotpan",
@@ -605,9 +653,6 @@ MATRiX app is working with specific data produced by the limma package name, res
                     
                     tags$head(tags$style("#dontwanttoshow  .shiny-output-error {visibility: hidden;color: #3c8dbc;}")),
                     
-                    
-                    
-                    
                     div(class= "highvenn" , style="font-size:24px; margin-top: -8px;",
                         htmlOutput("venntitle")),
                     br(),br(),
@@ -617,58 +662,59 @@ MATRiX app is working with specific data produced by the limma package name, res
                                     # DT::dataTableOutput("vennresintergen"),
                                     div(class= "beforedf" , style="font-size:24px; margin-top: -8px;",
                                         htmlOutput("venngenesbef")),
-                                     plotOutput(outputId ="barplotvennmean", height = 700))),
+                                     plotOutput(outputId ="barplotvennmean", height = 700)))),
                     
                   
-                    br(),
-                    h1("Here's a tracker for your different selections:"),
-                      tags$head(
-                        tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
-                      ),
-                    tags$head(
-                      tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap-responsive.css") # add style.css in order to add better police
-                    ),
-                    tags$head(tags$style("
-                                  #container * {
-                                  display: inline;
-                                  }")),
-                      
-                    tags$head(tags$style("
-                                  #mytext p{
-                                         font-weight: 500;
-                                         font-size: 17px;
-                                         line-height: 1.5;
-                                         color: white;
-                                         position: static;
-                                         }
-                                         #mytext a{
-                                         color: red;}")),
-                      
-                      div(
-                        id = "container",
-                        p("You have chosen the following comparisons"),
-                        htmlOutput("contvenn"),
-                        p("for a total of"),
-                        htmlOutput("totalgenes"),
-                        p("genes  with a P-value and FC treshold respectively set to "),
-                        htmlOutput("myPVALvenn"),
-                        p("and"),
-                        htmlOutput("myFCvenn")
-                        
-                      ),
-                      div(
-                        id = "container",
-                        p("There are"),
-                        htmlOutput("venngenes"),
-                        p("significant genes"),
-                        p("for this intersection"),
-                        htmlOutput("continter"),
-                        p("if you click on the top DE genes button you will plot the top"),
-                        htmlOutput("topgenesdf"),
-                        p("rows the of the previous table")
-                      ),
-                    br(),br()
-                  ), tabPanel(strong("Venn GO enrichment"),
+                  #   br(),
+                  #   h1("Here's a tracker for your different selections:"),
+                  #     tags$head(
+                  #       tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
+                  #     ),
+                  #   tags$head(
+                  #     tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap-responsive.css") # add style.css in order to add better police
+                  #   ),
+                  #   tags$head(tags$style("
+                  #                 #container * {
+                  #                 display: inline;
+                  #                 }")),
+                  #     
+                  #   tags$head(tags$style("
+                  #                 #mytext p{
+                  #                        font-weight: 500;
+                  #                        font-size: 17px;
+                  #                        line-height: 1.5;
+                  #                        color: white;
+                  #                        position: static;
+                  #                        }
+                  #                        #mytext a{
+                  #                        color: red;}")),
+                  #     
+                  #     div(
+                  #       id = "container",
+                  #       p("You have chosen the following comparisons"),
+                  #       htmlOutput("contvenn"),
+                  #       p("for a total of"),
+                  #       htmlOutput("totalgenes"),
+                  #       p("genes  with a P-value and FC treshold respectively set to "),
+                  #       htmlOutput("myPVALvenn"),
+                  #       p("and"),
+                  #       htmlOutput("myFCvenn")
+                  #       
+                  #     ),
+                  #     div(
+                  #       id = "container",
+                  #       p("There are"),
+                  #       htmlOutput("venngenes"),
+                  #       p("significant genes"),
+                  #       p("for this intersection"),
+                  #       htmlOutput("continter"),
+                  #       p("if you click on the top DE genes button you will plot the top"),
+                  #       htmlOutput("topgenesdf"),
+                  #       p("rows the of the previous table")
+                  #     ),
+                  #   br(),br()
+                  # )
+                tabPanel(strong("Venn GO enrichment"),
                             value = "venngopanel",
                             useShinyjs(),
                             
