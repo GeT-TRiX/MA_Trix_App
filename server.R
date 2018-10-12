@@ -276,6 +276,31 @@ shinyServer(function(input, output,session) {
   
   source(file.path("server", "shinychat.R"), local = TRUE)$value #
   
+  ##########################################
+  ######## TEST                           ##
+  ##########################################
+  
+  
+  mycol <- reactive({
+  if(!input$fill == "")
+        mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(input$fill, ",")))
+      else
+        mycol = ""
+  })
+  
+    
+  ##TODO try catch  Error in col2rgb(x) : nom de couleur
+  observe({
+    
+    req(mycol())
+    mycol = lapply(mycol(), FUN= function(x)return(col2rgb(x))) 
+    test = col2rgb(c(mycol = 1:length(mycol()))) %>%  lapply(.,function(x)return(x)) %>% as.list()
+    print(test)
+    #test = col2rgb(c(mycol = 1:length(mycol()))) %>% as.data.frame() %>% lapply(.,function(x)return(x)) 
+    session$sendCustomMessage(type="updatejcol", test)
+  })
+  
+
   
 })
 

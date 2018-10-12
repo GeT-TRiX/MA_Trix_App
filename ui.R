@@ -541,14 +541,14 @@ MATRiX app is working with specific data produced by the limma package name, res
                                      , uiOutput("sorry")),
                     #div(id="vennerro" , style= "font size: 20px;",
                     #plotOutput(outputId = "myVenn", height = 800),
-                    tags$script(src="libraries/bootstrap.min.js") ,  
+                    tags$script(src="libraries/bootstrap.min.js") , 
+                    tags$script(src="libraries/prettify.js") , 
+                    tags$script(src="libraries/bootstrap-colorpicker.min.js") , 
                     tags$script(src="libraries/jvenn.min.js")  ,
                     tags$script(src="libraries/canvas2svg.js")  ,
-                    #tags$script(src="libraries/jquery.ui.widget.js")  ,
-                    #tags$script(src="libraries/ jquery.iframe-transport.js")  ,
                     fluidRow(column(6,br(),br(),
                     tags$script(src="jvenn.js"),
-                    tags$div(id="jvenn-container", style = "background-color: white;")
+                    tags$div(id="jvenn-container", style = "background-color: white;  width: 600px;")
                     # wellPanel(
                     #   htmlOutput("renderer"),br(),
                     #   htmlOutput("renderer2"))
@@ -595,6 +595,8 @@ MATRiX app is working with specific data produced by the limma package name, res
                    plotOutput(outputId ="barplotvenn", height = "500px", width ="100%"),
                     #plotOutput(outputId ="barplotvenn", height = "auto"),
                    br(),
+                   ##includeHTML("HTML/colorandname.html"),
+                   
                    h1("Here's a tracker for your different selections:"),
                    tags$head(
                      tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
@@ -643,77 +645,8 @@ MATRiX app is working with specific data produced by the limma package name, res
                    )
                    
                   ),
-                  tabPanel(
-                    value = "vennbarplotpan",
-                    strong("Visualize the intersection table"),
-                    fluidRow( 
-                      # tags$head(
-                      #   tags$style(type="text/css", " #topgenes .label {display: inline-block;max-width: 100%;margin-bottom: 0px;font-weight: 700;}")),
-                     
-                    
-                    tags$head(tags$style("#dontwanttoshow  .shiny-output-error {visibility: hidden;color: #3c8dbc;}")),
-                    
-                    div(class= "highvenn" , style="font-size:24px; margin-top: -8px;",
-                        htmlOutput("venntitle")),
-                    br(),br(),
-
-                    br(),br(),
-                    conditionalPanel(condition = "input.dispvenn == 'genes'",  
-                                    # DT::dataTableOutput("vennresintergen"),
-                                    div(class= "beforedf" , style="font-size:24px; margin-top: -8px;",
-                                        htmlOutput("venngenesbef")),
-                                     plotOutput(outputId ="barplotvennmean", height = 700)))),
-                    
-                  
-                  #   br(),
-                  #   h1("Here's a tracker for your different selections:"),
-                  #     tags$head(
-                  #       tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
-                  #     ),
-                  #   tags$head(
-                  #     tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap-responsive.css") # add style.css in order to add better police
-                  #   ),
-                  #   tags$head(tags$style("
-                  #                 #container * {
-                  #                 display: inline;
-                  #                 }")),
-                  #     
-                  #   tags$head(tags$style("
-                  #                 #mytext p{
-                  #                        font-weight: 500;
-                  #                        font-size: 17px;
-                  #                        line-height: 1.5;
-                  #                        color: white;
-                  #                        position: static;
-                  #                        }
-                  #                        #mytext a{
-                  #                        color: red;}")),
-                  #     
-                  #     div(
-                  #       id = "container",
-                  #       p("You have chosen the following comparisons"),
-                  #       htmlOutput("contvenn"),
-                  #       p("for a total of"),
-                  #       htmlOutput("totalgenes"),
-                  #       p("genes  with a P-value and FC treshold respectively set to "),
-                  #       htmlOutput("myPVALvenn"),
-                  #       p("and"),
-                  #       htmlOutput("myFCvenn")
-                  #       
-                  #     ),
-                  #     div(
-                  #       id = "container",
-                  #       p("There are"),
-                  #       htmlOutput("venngenes"),
-                  #       p("significant genes"),
-                  #       p("for this intersection"),
-                  #       htmlOutput("continter"),
-                  #       p("if you click on the top DE genes button you will plot the top"),
-                  #       htmlOutput("topgenesdf"),
-                  #       p("rows the of the previous table")
-                  #     ),
-                  #   br(),br()
-                  # )
+   
+  
                 tabPanel(strong("Venn GO enrichment"),
                             value = "venngopanel",
                             useShinyjs(),
@@ -833,6 +766,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                             br(),
                                p("Find an element in list(s)",style="color:white; font-weight: 700; font-size: 14px;"),
                              includeHTML("HTML/seekgene.html")
+                           
                               
                             )),
                           br(),
