@@ -26,6 +26,14 @@ and also a [video Presentation](https://www.youtube.com/watch?v=lfI0zRYzeJs)
 ## Installation
 
 MATRiX is available for R>3.5.0. The installation, download and execution can all be performed with a small R script :
+First you'll need to install RJava in the aim of using RDAVIDWebService.
+You can download it with the following commands:
+```
+sudo apt-get install default-jdk
+sudo R CMD javareconf to associate it with R
+sudo apt-get install r-cran-rjava
+sudo apt-get install libgdal1-dev libproj-dev
+```
 ```
 ## Download RDAVIDWebService
 source("https://bioconductor.org/biocLite.R")
