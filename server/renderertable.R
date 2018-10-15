@@ -23,9 +23,9 @@ observe({
   
   req(input$dispvenn)
   if(input$dispvenn == "probes")
-    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')), options = list(scrollX = TRUE,  pageLength = 15)), server = F)
+    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('5', '10', '15')), options = list(scrollX = TRUE,  pageLength = 15, scrollY=530)), server = F)
   else
-    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('15', '30', '50','100')), options = list(scrollX = TRUE ,pageLength = 15)), server = F)
+    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('5', '10', '15')), options = list(scrollX = TRUE ,pageLength = 15, scrollY=530)), server = F)
 })
     
 observe({

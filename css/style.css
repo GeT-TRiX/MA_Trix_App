@@ -105,6 +105,8 @@ position: static;
 }
 
 
+
+
 .nav-tabs-custom > .nav-tabs > li.active:hover > a, .nav-tabs-custom > .nav-tabs > li.active > a {
     background-color: #3c8dbc;
     color: #3c8dbc;
@@ -220,4 +222,16 @@ div.outer  {
     left: 0px;
     right: 0px;
     bottom: 0px;
+}
+
+
+#topgenesvenn .élément{
+font-weight: 400;
+font-size: 14px;
+line-height:20px;
+top: -83px;
+right: -240px;
+left: -280px;
+color: #3c8dbc;
+position: absolute;
 }

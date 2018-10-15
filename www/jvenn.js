@@ -33,7 +33,8 @@
 
 $(document).ready(function () {
 
-
+      //$( "#jvenn-container-label1" ).draggable();
+      //$('#jvenn-container-label1').addClass('draggable');
 			var colorDefault = ["#FFA500", "#FFA500", "#FFA500", "#FFA500", "#FFA500", "#FFA500"],
 				displayMode  = "classic",
 				displayStat  = true,
@@ -42,82 +43,85 @@ $(document).ready(function () {
 				fontSize     = "12px",
 				fontFamily   = "Arial",
         uploadSeries = new Array();
+  
+ 
         
-    /*
-    Shiny.addCustomMessageHandler("updatejcol", function(coljvenn) {	
-      
-      let mypalette = coljvenn;
-      mypalette = mypalette.map(() => mypalette.splice(0,3)).filter(a => a)
-      let R2jspal =new Array();
-      for (let i = 0 ; i< mypalette.length; i++ ){
-      R2jspal[i] = "rgb(".concat(mypalette[i]).concat(")");
-      }
-      console.log(R2jspal);
-      return(R2jspal);
-    });
-    */
+  function updateJvenn() {
+    Shiny.addCustomMessageHandler("updatejvenn", function(final) {	
+	    let seriesTable = final;//jsonData;
+      Shiny.addCustomMessageHandler("updatejcol", function(coljvenn) {	
+        let arraylen = (coljvenn.length/3)
+        let R2jspal =new Array(arraylen);
         
-    function updateJvenn() {
+        let mypalette = new Array(Math.ceil(coljvenn.length / 3)).fill("").map(function() { return this.splice(0, 3) }, coljvenn.slice());
 
-		Shiny.addCustomMessageHandler("updatejvenn", function(final) {	
-		  let seriesTable = final;//jsonData;
-    
-     Shiny.addCustomMessageHandler("updatejcol", function(coljvenn) {	
-        let mypalette = coljvenn;
-        console.log(mypalette);
-        mypalette = mypalette.map(() => mypalette.splice(0,3)).filter(a => a);
-        let R2jspal =new Array();
-        for (let i = 0 ; i< mypalette.length; i++ ){
+        for (let i = 0 ; i< arraylen ; i++ ){
           R2jspal[i] = "rgb(".concat(mypalette[i]).concat(")");
-          }
-          console.log(R2jspal);
-      
-			    $("#jvenn-container").jvenn({
-					series: seriesTable,
-					//colors:  ["rgb(0,102,0)","rgb(90,155,212)","rgb(241,90,96)","rgb(250,220,91)","rgb(255,117,0)","rgb(192,152,83)"] ,
-					colors : R2jspal,
-					fontSize:   fontSize,
-					fontFamily: fontFamily,
-					searchInput:  $("#search-field"),
-					searchStatus: $("#search-status"),
-					displayMode: displayMode,
-					displayStat: displayStat,
+        }
+
+        console.log(R2jspal);
+			  $("#jvenn-container").jvenn({
+			  series: seriesTable,
+			  colors : R2jspal,
+			  fontSize:   fontSize,
+			  fontFamily: fontFamily,
+			  searchInput:  $("#search-field"),
+			  searchStatus: $("#search-status"),
+			  displayMode: displayMode,
+			  displayStat: displayStat,
 					
-					fnClickCallback: function() {
-						let value = "";
-						nameslis = [];
-						if (this.listnames.length == 1) {
-							value += "Elements only in ";
-							
-						} else {
-							value += "Common elements in ";
-						}
-						
-						for (name in this.listnames) {
-							nameslis.push(this.listnames[name]);
-						}
-						     value += ":\n";
-						     mylist =[];
-						for (val in this.list) {
-						     mylist.push( this.list[val]);
-						  }
-						     $("#names").val(value);
-						     
-						     
-						     Shiny.onInputChange("testons",mylist);// renvoyer dans R
-						     Shiny.onInputChange("together",nameslis.join(""));// renvoyer dans R
-						     Shiny.onInputChange("selcontjv",nameslis);
-						     return(mylist); 
-					}
+			  fnClickCallback: function() {
+			    let value = "";
+				  nameslis = [];
+				  if (this.listnames.length == 1) {
+				    value += "Elements only in ";
+				  } 
+				  else {
+					  value += "Common elements in ";
+			    }
+				  for (name in this.listnames) {
+				    nameslis.push(this.listnames[name]);
+				  }
+				  value += ":\n";
+				  mylist =[];
+				  for (val in this.list) {
+				    mylist.push( this.list[val]);
+				  }
+				  $("#names").val(value);
+          Shiny.onInputChange("testons",mylist);// renvoyer dans R
+				  Shiny.onInputChange("together",nameslis.join(""));// renvoyer dans R
+				  Shiny.onInputChange("selcontjv",nameslis);
+				  return(mylist); 
+	        }
+			  });
+		  });
+    
+	  });
+  }
+    
+      $( function() {
+      $( "#jvenn-container-label1" ).draggable();
+      } );
+      
+      $('.draggable').addClass('draggable');
+      $('.draggable').draggable();
+      
+      
+      $('#jvenn-container').addClass('parent');
+      $('.children').draggable({ containment: "parent" });
 
-				});
-		 });
-		});
-	}
 
-			
-		
+      
+      $("#jvenn-container" ).draggable();
+      $('#jvenn-container').addClass('draggable');
+      
+      //$("div#jvenn-container .test").addClass('draggable');
+      //$("div#jvenn-container .test").draggable();
 
+      $('#jvenn-container-frame').find('.test').addClass('draggable');
+      $('#jvenn-container-frame').find('.test').draggable();
+      
+      
 			$('[id^="clear"]').click(function() {
 				let index = $(this).attr("id").split("_")[1];
 				$("#area" + index).val("");
@@ -181,35 +185,7 @@ $(document).ready(function () {
 				updateJvenn();				
 			});
 		
-			/*
-			$('[id^="colorp"]').colorpicker().on('changeColor.colorpicker', function(event) {
-				var index = $(this).attr("id").split("_")[1];
-				$("#name" + index).css("color",        event.color.toHex());
-  				$("#name" + index).css("border-color", event.color.toHex());
-				$("#area" + index).css("color",        event.color.toHex());
-  				$("#area" + index).css("border-color", event.color.toHex());
-  				updateJvenn();				
-			});
-			
-			$('[id^="colord"]').click(function() {
-				var index = $(this).attr("id").split("_")[1];
-				$("#name" + index).css("color",        colorDefault[index-1]);
-  				$("#name" + index).css("border-color", colorDefault[index-1]);
-				  $("#area" + index).css("color",        colorDefault[index-1]);
-  				$("#area" + index).css("border-color", colorDefault[index-1]);
-  				$("#colorp_" + index).colorpicker('setValue', colorDefault[index-1]);
-				updateJvenn();				
-      });
-        
-      
-			 
-			$('#colorp_1').children("span").children("i").css("background-color", colorDefault[0]);
-			$('#colorp_2').children("span").children("i").css("background-color", colorDefault[1]);
-			$('#colorp_3').children("span").children("i").css("background-color", colorDefault[2]);
-			$('#colorp_4').children("span").children("i").css("background-color", colorDefault[3]);
-			$('#colorp_5').children("span").children("i").css("background-color", colorDefault[4]);
-      $('#colorp_6').children("span").children("i").css("background-color", colorDefault[5]);
-        */
+
 			updateJvenn();
 
 });

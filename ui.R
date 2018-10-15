@@ -359,12 +359,12 @@ MATRiX app is working with specific data produced by the limma package name, res
                 'topvolc',
                 'Maximal number of genes by comparison(s)',
                 NULL,min = 0,max = 5000),
+              fluidRow(column(6, sliderInput('volclab', "Choose your lab size",min = 1, max=6, step = 0.5,value=3.0)),
+                       column(6,sliderInput('volcpt', "Choose your point size", min=0.5, max=3, step=0.1,value=1))),
               fluidRow(column(6, sliderInput('volcfc', "Choose your cutoff FC",min = 1, max=10, step = 1,value=1)),
                        column(6,sliderInput('volcpval', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05)))
               ,ns = NS("datafile")
-                )
-              )
-
+                ))
               )
             ),
             conditionalPanel(condition = '!output.boolmark',
@@ -505,7 +505,7 @@ MATRiX app is working with specific data produced by the limma package name, res
             fluidRow(column(
               width = 9,
               div(
-                style = "width:100% ; max-width: 1500px; height: 1700px; max-height: 2800px;",
+                style = "width:100% ; max-width: 1500px; height: 1780px; max-height: 2800px;",
                 tabsetPanel(
                 id = "Vennd",    
 
@@ -573,24 +573,25 @@ MATRiX app is working with specific data produced by the limma package name, res
                                    tags$style(type="text/css", ".topgeness label{ display: table-cell; text-align: left; vertical-align: middle; } 
                  .inline .form-group{display: table-row;} ")
                                  ),
-                                 column(3,br(),style= "width:14.1%;",
+                                 column(3,br(),style= "width:21%;",
                                         actionButton(
                                           inputId = "topdegenes",
                                           label = "Plot top DE genes",
                                           style =
                                             "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                         )),
-                                 column(3, style= "width:17.6%;",br(),
+                                 column(3, style= "width:26.6%;",br(),
                                         
                                         downloadButton("savebarplot", "Save your barplot" , style =
                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                 column(3 ,br(),style= "width:14.5%;  padding: 0%;",
+                                 column(3 ,br(),style= "width:11.5%;  padding: 0%;",
                                         selectInput( "formvenbar",label = NULL,
                                                      choices = c("png", "eps", "pdf"))),
                                  
                                  column(3,style= "width:9%; padding: 0%;", 
                                         
-                                        uiOutput("topgenesvenn", style= "padding: 0px;"))
+                                        uiOutput("topgenesvenn", style= "padding: 0px;font-weight: 400;top: -83px;
+                                                 right: -240px;left: -280px;color: #3c8dbc;position: absolute;"))
                                )),
                    plotOutput(outputId ="barplotvenn", height = "500px", width ="100%"),
                     #plotOutput(outputId ="barplotvenn", height = "auto"),
@@ -707,7 +708,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                                 tags$a(href = "https://en.wikipedia.org/wiki/Web_colors#Hex_triplet",target="_blank",
                                   "hex colors."))),
                           
-                           textInput(inputId = "fill",label = NULL,value = "",
+                           textInput(inputId = "fill",label = NULL,value = c( "green,blue,red,purple,orange,brown"),
                              placeholder = "grey70, white, steelblue4",width = "100%"
                            ),
                            
@@ -721,20 +722,22 @@ MATRiX app is working with specific data produced by the limma package name, res
                                             sliderInput("fcvenn","FC treshold",min = 1, max = 10,
                                               value = 1,step = 1
                                             ))),
-                           br(),br(),
+                           br(),
                            
-                           fluidRow( column(6,
-                           sliderInput(
-                             "vennsize","Size of the police",
-                             min = 0.3,max = 2,value = 1,step = 0.1
-                           )),
-                           column(6,
+                           fluidRow(
+                           #   column(6,
+                           # sliderInput(
+                           #   "vennsize","Size of the police",
+                           #   min = 0.3,max = 2,value = 1,step = 0.1
+                           # )),
+                           column(12,
                                   selectInput("dispvenn", #  Create a select list that can be used to choose a single or multiple items from a list of values.
                                               "Choose if you want to display probes or genes",
                                               choices = c("probes", "genes")))),
                            
                            br(),
-                           uiOutput("myselvenn"),
+                          
+                           #uiOutput("myselvenn"),
                           
                           shiny::actionButton(
                             "toggleAdvancedJvenn",
@@ -954,6 +957,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                     # ))
                     
                     tags$script(src="libraries/jquery-1.9.1.min.js"),
+                    tags$script(src="libraries/jquery-ui.min.js"),
                     tags$script(src="libraries/highcharts.js"),
                     tags$script(src="libraries/highcharts-more.js"),
                     #tags$script(src="libraries/modules/exporting.js"), 

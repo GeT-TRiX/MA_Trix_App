@@ -53,7 +53,7 @@ content <- function(file) {
 output$clusterPlot <- renderPlot({
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(vennchoice(), 'You need to select in the Specify your interaction widget the comparisons defining your intersections!')%next%
+      need(vennchoice(), 'You need to select in the Specifyy your interaction widget the comparisons defining your intersections!')%next%
       need(input$GOvenn ,'You need to click on the run Go button!'))
   req(Venncluster())
 

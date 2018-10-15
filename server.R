@@ -42,7 +42,7 @@ shinyServer(function(input, output,session) {
   #source(file.path("server", "csvFile.R"), local = TRUE)$value #
   
   csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE)
-
+  
   
   ##########################################
   ######## Widget update and info         ##
@@ -85,7 +85,7 @@ shinyServer(function(input, output,session) {
     EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
                     y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
                     topgenes = input$topvolc,DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),
-                    pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = 1,transcriptLabSize = 3.0,
+                    pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = input$volcpt,transcriptLabSize = input$volclab,
                     title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", 
                     displaylab = ifelse(is.na(genetodisplay()),NULL,genetodisplay()),legendLabSize = 10,
                     cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
@@ -166,6 +166,11 @@ shinyServer(function(input, output,session) {
   
   observe({
     req(vennlist(),user_cont())
+    
+    wrongcol <- function(y)
+      if (any(grepl("col2rgb", y)))
+        invokeRestart("muffleWarning")
+    
     if(input$dispvenn == "genes")
       isolate(
       Rtojs <- toJvenn(vennlist()[[2]],user_cont()))
@@ -173,14 +178,39 @@ shinyServer(function(input, output,session) {
       isolate(
       Rtojs <- toJvenn(vennlist()[[1]],user_cont()))
     
-    #thisiswhy <-input$typejv
     Mymode <-  input$updamod # Mode
     Myfont <-  input$myfont # Font size
     Mystat <-  input$mystat # Stat
+    
+    col2js =  tryCatch({
+      col2rgb(mycol()) %>%  lapply(.,function(x)return(x)) %>% withCallingHandlers(error = wrongcol)
+    }, error = function(e) {shinyjs::alert("Wrong color")}) 
+    
+    
     session$sendCustomMessage(type="updatejvenn", Rtojs)
-
+    session$sendCustomMessage(type="updatejcol", col2js)
     
   })
+  
+  
+  mycol <- reactive({
+    if(!input$fill == "")
+      mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(input$fill, ",")))
+    else
+      mycol = ""
+  })
+  
+  
+  ##TODO try catch  Error in col2rgb(x) : nom de couleur
+  # observe({
+  #   
+  #   req(mycol())
+  #   col2js = col2rgb(mycol()) %>%  lapply(.,function(x)return(x)) %>% as.list()
+  #   session$sendCustomMessage(type="updatejcol", col2js)
+  #   
+  # })
+  
+  
   
   
   # output$renderer <- renderPrint({
@@ -281,25 +311,7 @@ shinyServer(function(input, output,session) {
   ##########################################
   
   
-  mycol <- reactive({
-  if(!input$fill == "")
-        mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(input$fill, ",")))
-      else
-        mycol = ""
-  })
-  
-    
-  ##TODO try catch  Error in col2rgb(x) : nom de couleur
-  observe({
-    
-    req(mycol())
-    mycol = lapply(mycol(), FUN= function(x)return(col2rgb(x))) 
-    test = col2rgb(c(mycol = 1:length(mycol()))) %>%  lapply(.,function(x)return(x)) %>% as.list()
-    print(test)
-    #test = col2rgb(c(mycol = 1:length(mycol()))) %>% as.data.frame() %>% lapply(.,function(x)return(x)) 
-    session$sendCustomMessage(type="updatejcol", test)
-  })
-  
+ 
 
   
 })

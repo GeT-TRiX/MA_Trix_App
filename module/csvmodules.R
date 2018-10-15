@@ -64,7 +64,10 @@ csvFile <- function(input, output, session, stringsAsFactors) {
   #' @return \csvf a reactive value of type list containing three data frames toptable and workingset and the pData 
   #'
   csvf <- reactive({
-
+    
+    if(is.null(input$file))
+      return(NULL)
+    
     inFile <- input$file
     if(!is.null(input$file)){
       
@@ -100,7 +103,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
         content = "Are you sure you're importing csv files ?",
         append = FALSE
       )
-      return()
+      return(NULL)
     }
     
     else{
@@ -158,12 +161,8 @@ csvFile <- function(input, output, session, stringsAsFactors) {
           
           
           fread(
-            x,
-            data.table = F,
-            check.names = F,
-            header = T,
-            sep = ";",
-            dec = ","
+            x,data.table = F,check.names = F,header = T,
+            sep = ";",dec = ","
           ) 
       )
       
@@ -220,15 +219,13 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     closeAlert(session, "succeeded")
     csvord[[4]] <- inFile
     print(inFile$name)
-    print("ok")
 
     return (csvord)
   }
 
- 
-  else{
-  
+ else{
     req(length(test())==3)
+
     
     csvtest <- list()
     csvtest[1] <-test()[[1]]
@@ -246,18 +243,12 @@ csvFile <- function(input, output, session, stringsAsFactors) {
       
       FUN = function (x)
 
-        fread(
-          x,
-          data.table = F,
-          check.names = F,
-          header = T,
-          sep = ";",
-          dec = ","
+        fread(x,data.table = F,check.names = F,header = T,
+          sep = ";", dec = ","
         ) 
     )
     
     csvord = list()
-    print("ok")
     
     for (i in 1:length(csv)) {
       if (colnames(csv[[i]][2]) == "Grp") {
@@ -310,7 +301,9 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     csvord[[4]] <- test()
     return (csvord)
 
-   }
+  }
+
+  
   })
   
 }

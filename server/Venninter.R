@@ -22,15 +22,15 @@ vennchoice <- reactive({
     return(input$intscol)
 })
 
-output$myselvenn <- renderUI({
-  req(user_cont())
-  selectInput(
-    'intscol',
-    'Specify your intersection(s):',
-    choices = names(user_cont()),
-    multiple = TRUE
-  )
-})
+# output$myselvenn <- renderUI({
+#   req(user_cont())
+#   selectInput(
+#     'intscol',
+#     'Specify your intersection(s):',
+#     choices = names(user_cont()),
+#     multiple = TRUE
+#   )
+# })
 
 #' venninter is a reactive function which aim is to return a set of lists for each possible logical relations between a finite collection of different sets
 #'
@@ -64,11 +64,11 @@ venninter <- reactive({
 
 vennfinal <- reactive({
   
-  # validate(
-  #   need(vennchoice(), 'You need to select in the Specify your interaction widget the comparisons defining your intersections!'))
   
   validate(
-    need( input$together, 'You need to select in the Specify your interaction widget the comparisons defining your intersections!'))
+    need(csvf(), 'You need to import data to visualize this plot!') %next%
+      need(choix_cont(), 'You need to choose your comparison to display the Venn diagram!')%next%
+      need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!'))
   
   if (is.null(vennchoice))
     return(NULL)
