@@ -112,8 +112,8 @@ vennfinal <- reactive({
 
 output$topgenesvenn <- renderUI({
   #req(vennfinal(), vennchoice())
-  req(vennfinal(), input$selcontjv)
-
+  #req(vennfinal(), input$selcontjv)
+  req( input$selcontjv)
   tags$div(
     class = "topgeness",numericInput('topgenes',
                'Top genes', value = 50,

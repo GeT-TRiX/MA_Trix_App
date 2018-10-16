@@ -30,9 +30,9 @@ dbHeader$children[[2]]$children <-  tags$a(tags$img(src='matrix.png',height='40'
 sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptomique des xénobiotiques
   useShinyjs(),
   inlineCSS(appCSS),
-  
   tags$style(type="text/css", Errorcss),
   tags$style(type="text/css", inactivity),
+  includeCSS("./css/style.css"),
   shinyjs::extendShinyjs(text = shinyjscode),
 
 #tags$head(includeHTML("www/google-analytics.html")),
@@ -80,8 +80,10 @@ tags$head(
 
 body <- dashboardBody(
   #tags$head(includeScript("google-analytics.js")),
+  
   tags$style(type="text/css", inactivity),
   tags$style(type="text/css", Errorcss),
+  includeCSS("./css/style.css"),
   
   #tags$head(tags$style(HTML("div.col-sm-10 {padding:1px}"))),
   #tags$head(tags$style(HTML("div.col-sm-2 {padding:0px}"))),
@@ -98,7 +100,7 @@ body <- dashboardBody(
   
   useToastr(),
   inlineCSS(appCSS),
-  includeCSS("./css/style.css"),
+  #includeCSS("./css/style.css"),
   div(
     id = "loading-content",
     br(),br(),
@@ -587,18 +589,18 @@ MATRiX app is working with specific data produced by the limma package name, res
                                           style =
                                             "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                         )),
-                                 column(3, style= "width:26.6%;",br(),
+                                 column(3, style= "width:26.0%;",br(),
                                         
                                         downloadButton("savebarplot", "Save your barplot" , style =
                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                 column(3 ,br(),style= "width:11.5%;  padding: 0%;",
+                                 column(3 ,br(),style= "width:11%;  padding: 0%;",
                                         selectInput( "formvenbar",label = NULL,
                                                      choices = c("png", "eps", "pdf"))),
                                  
                                  column(3,style= "width:9%; padding: 0%;", 
                                         
-                                        uiOutput("topgenesvenn", style= "padding: 0px;font-weight: 400;top: -83px;
-                                                 right: -240px;left: -280px;color: #3c8dbc;position: absolute;"))
+                                        uiOutput("topgenesvenn", style= "padding: 0px;font-weight: 400;top: 0px;
+                                                 right: -22px;left: 0px;color: #3c8dbc;position: absolute;"))
                                )),
                    plotOutput(outputId ="barplotvenn", height = "500px", width ="100%"),
                     #plotOutput(outputId ="barplotvenn", height = "auto"),

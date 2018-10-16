@@ -8,6 +8,7 @@
 library(shinyFiles)
 
 shinyjscode <- "
+
 shinyjs.init = function() {
   $(window).resize(shinyjs.calcHeight);
 }
@@ -64,7 +65,6 @@ shinyServer(function(input, output,session) {
 
   
   genetodisplay <- reactive({
-    #req(input$fillvolc)
     if(is.null(input$fillvolc))
       return(NULL)
     else{
@@ -83,8 +83,7 @@ shinyServer(function(input, output,session) {
       return(NULL)
     else{
       if(!input$findfamily == ""){
-        
-        genfam = grep(pattern =findfamily(), csvf()[[3]]$GeneName) %>% slice(csvf()[[3]],.) %>% select(GeneName)  %>% unlist() %>% as.character()
+        genfam = grep(pattern =findfamily(), csvf()[[3]]$GeneName) %>% slice(csvf()[[3]],.)%>% select(GeneName)  %>% unlist() %>% as.character()
       }
       else
         genfam =""
@@ -97,7 +96,6 @@ shinyServer(function(input, output,session) {
   volcano <- reactive({
     req(csvf())
 
-    #splitoptable <- csvf()[[3]] %>% select(., GeneName, paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp ), paste0("logFC_",input$volcacomp))
     EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
                     y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
                     topgenes = input$topvolc,DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),
@@ -212,7 +210,6 @@ shinyServer(function(input, output,session) {
   mycol <- reactive({
     if(!input$fill == ""){
       jvenncol <- debounce(input$fill, 1000)
-      #mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(input$fill, ",")))
       mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(jvenncol(), ",")))
     }
     else
@@ -220,38 +217,7 @@ shinyServer(function(input, output,session) {
   })
   
   
-  ##TODO try catch  Error in col2rgb(x) : nom de couleur
-  # observe({
-  #   
-  #   req(mycol())
-  #   col2js = col2rgb(mycol()) %>%  lapply(.,function(x)return(x)) %>% as.list()
-  #   session$sendCustomMessage(type="updatejcol", col2js)
-  #   
-  # })
-  
-  
-  
-  
-  # output$renderer <- renderPrint({
-  #   req(input$together,input$selcontjv)
-  #   cat("The intersection is", input$together,"With the following genes \n")
-  # })
-  # 
-  # 
-  # 
-  # output$renderer2 <- renderText({
-  #   req(input$testons)
-  #   cat(input$testons)
-  # 
-  # })
-  
-  
-  # observe({
-  #   req(input$together)
-  #   print(typeof(input$together))
-  #   print(class(input$together))
-  #   print(input$together)
-  # })
+
   
   ################################
   ######## Venn GO              ##
@@ -331,7 +297,6 @@ shinyServer(function(input, output,session) {
   
   
  
-
   
 })
 

@@ -43,11 +43,17 @@ background-color: #fff;
 
 Errorcss <- 
 ".shiny-output-error { visibility: visible;  color: #3c8dbc;}
+
 .shiny-output-error:before {
 color: #3c8dbc;
 visibility: visible;
 #content: 'An error occurred. Please contact us at franck.soubes@inra.fr'; }
 content: 'ok'; }
+}
+#topgenesvenn .shiny-output-error {
+
+    visibility: visible;
+    color: #3c8dbc;
 }
 "
 
