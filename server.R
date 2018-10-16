@@ -81,7 +81,7 @@ shinyServer(function(input, output,session) {
   
   volcano <- reactive({
     req(csvf())
-    
+    #splitoptable <- csvf()[[3]] %>% select(., GeneName, paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp ), paste0("logFC_",input$volcacomp))
     EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
                     y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
                     topgenes = input$topvolc,DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),

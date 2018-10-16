@@ -68,27 +68,16 @@ EnhancedVolcano <- function(
     toptable$Sig <- factor(toptable$Sig,
         levels=c("NS","FC","P","FC_P"))
   
-
-    # if(!is.na(topgenes) ){
-    #   toptable$abs <- unlist(abs(toptable[x]))
-    #   myval <- toptable %>% dplyr::select(GeneName,abs) %>% top_n(.,topgenes)
-    #   selectLab <- as.character(myval$GeneName)
-    # }
     
-    # if(!is.na(displaylab) ){
-    # 
-    #   myval <- toptable %>% dplyr::select(GeneName) %>% filter(GeneName == displaylab)
-    #   selectLab <- as.character(myval$GeneName)
-    #   
-    # }
     
     if(is.na(topgenes) && !is.na(displaylab) ){
       selectLab <- as.character(displaylab)
     }
     else{
       toptable$abs <- unlist(abs(toptable[x]))
-         myval <- toptable %>% dplyr::select(GeneName,abs) %>% top_n(.,topgenes)
+         myval <- toptable %>% dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,abs)  %>% top_n(.,topgenes)
          selectLab <- as.character(myval$GeneName)
+         print(selectLab)
     }
     
     if(is.na(topgenes) && is.na(displaylab))
