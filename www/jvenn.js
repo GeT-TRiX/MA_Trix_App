@@ -98,28 +98,24 @@ $(document).ready(function () {
     
 	  });
   }
-    
-      $( function() {
-      $( "#jvenn-container-label1" ).draggable();
-      } );
+  
       
-      $('.draggable').addClass('draggable');
-      $('.draggable').draggable();
+      //$('.draggable').addClass('draggable');
+      //$('.draggable').draggable();
       
       
-      $('#jvenn-container').addClass('parent');
-      $('.children').draggable({ containment: "parent" });
+      //$('#jvenn-container').addClass('parent');
+      //$('.children').draggable({ containment: "parent" });
 
-
+      //$('.children1').addClass('draggable');
+      //$('.children1').draggable();
       
-      $("#jvenn-container" ).draggable();
-      $('#jvenn-container').addClass('draggable');
+      //$("#jvenn-container" ).draggable();
+      //$('#jvenn-container').addClass('draggable');
       
       //$("div#jvenn-container .test").addClass('draggable');
       //$("div#jvenn-container .test").draggable();
 
-      $('#jvenn-container-frame').find('.test').addClass('draggable');
-      $('#jvenn-container-frame').find('.test').draggable();
       
       
 			$('[id^="clear"]').click(function() {

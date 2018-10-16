@@ -232,21 +232,3 @@ div.outer  {
 }
 
 
-#topgenesvenn .élément{
-font-weight: 400;
-font-size: 14px;
-line-height:20px;
-top: -83px;
-right: -240px;
-left: -280px;
-color: #3c8dbc;
-position: absolute;
-}
-
-
-#topgenesvenn .shiny-output-error {
-
-    visibility: visible;
-    color: #3c8dbc;
-}
-#topgenesvenn .shiny-output-error:before { visibility: hidden; }

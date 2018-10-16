@@ -32,7 +32,6 @@ sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptom
   inlineCSS(appCSS),
   tags$style(type="text/css", Errorcss),
   tags$style(type="text/css", inactivity),
-  includeCSS("./css/style.css"),
   shinyjs::extendShinyjs(text = shinyjscode),
 
 #tags$head(includeHTML("www/google-analytics.html")),
@@ -83,7 +82,7 @@ body <- dashboardBody(
   
   tags$style(type="text/css", inactivity),
   tags$style(type="text/css", Errorcss),
-  includeCSS("./css/style.css"),
+
   
   #tags$head(tags$style(HTML("div.col-sm-10 {padding:1px}"))),
   #tags$head(tags$style(HTML("div.col-sm-2 {padding:0px}"))),
@@ -100,7 +99,7 @@ body <- dashboardBody(
   
   useToastr(),
   inlineCSS(appCSS),
-  #includeCSS("./css/style.css"),
+  includeCSS("./css/style.css"),
   div(
     id = "loading-content",
     br(),br(),

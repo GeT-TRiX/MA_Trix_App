@@ -179,6 +179,7 @@ shinyServer(function(input, output,session) {
   
   
   observe({
+    
     req(vennlist(),user_cont())
     
     wrongcol <- function(y)

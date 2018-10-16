@@ -50,13 +50,7 @@ visibility: visible;
 #content: 'An error occurred. Please contact us at franck.soubes@inra.fr'; }
 content: 'ok'; }
 }
-#topgenesvenn .shiny-output-error {
-
-    visibility: visible;
-    color: #3c8dbc;
-}
 "
-
 
 
 appCSS <- "
