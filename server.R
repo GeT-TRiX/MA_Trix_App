@@ -68,13 +68,23 @@ shinyServer(function(input, output,session) {
     if(is.null(input$fillvolc))
       return(NULL)
     else{
-    
     if(!input$fillvolc == "")
           mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(input$fillvolc, ",")))
         else
           mycol = ""
-        
     return(mycol)
+    }
+  })
+  
+  familytopdisp <- reactive({
+    if(is.null(input$findfamily))
+      return(NULL)
+    else{
+      if(!input$findfamily == "")
+        genfam = grep(pattern =input$findfamily, csvf()[[3]]$GeneName) %>% slice(csvf()[[3]],.) %>% select(GeneName)
+      else
+        genfam =""
+    return(genfam)
     }
   })
   
@@ -86,7 +96,7 @@ shinyServer(function(input, output,session) {
                     y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
                     topgenes = input$topvolc,DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),
                     pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = input$volcpt,transcriptLabSize = input$volclab,
-                    title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", 
+                    title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", findfamily =  ifelse(is.na(familytopdisp()),NULL,familytopdisp()),
                     displaylab = ifelse(is.na(genetodisplay()),NULL,genetodisplay()),legendLabSize = 10,
                     cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
                                                                          "P value & Log (base 2) fold-change"))

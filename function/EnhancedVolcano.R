@@ -10,6 +10,7 @@ EnhancedVolcano <- function(
     y,
     selectLab = NULL,
     displaylab = NULL,
+    findfamily = NULL,
     topgenes = NULL,
     xlim = c(min(toptable[,x], na.rm=TRUE),
         max(toptable[,x], na.rm=TRUE)),
@@ -73,17 +74,23 @@ EnhancedVolcano <- function(
     if(is.na(topgenes) && !is.na(displaylab) ){
       selectLab <- as.character(displaylab)
     }
+    else if(is.na(topgenes) && is.na(displaylab) && !is.na(findfamily)){
+      selectLab <- as.character(findfamily)
+      print("ko")
+    }
     else{
       toptable$abs <- unlist(abs(toptable[x]))
          myval <- toptable %>% dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,abs)  %>% top_n(.,topgenes)
          selectLab <- as.character(myval$GeneName)
-         print(selectLab)
     }
     
-    if(is.na(topgenes) && is.na(displaylab))
+    if(is.na(topgenes) && is.na(displaylab)&& is.na(findfamily)){
+      print("ok")
       selectLab <- NULL
+    }
     
     
+    print(selectLab)
       
     if (min(toptable[,y], na.rm=TRUE) == 0) {
         warning("One or more P values is 0. Converting to minimum possible value...", call. = FALSE)

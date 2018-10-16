@@ -104,6 +104,13 @@ color: white;
 position: static;
 }
 
+#mytextvolcgrep p{
+font-weight: 700;
+font-size: 14px;
+ line-height: 1.5;
+color: white;
+position: static;
+}
 
 
 

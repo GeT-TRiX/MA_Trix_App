@@ -355,6 +355,13 @@ MATRiX app is working with specific data produced by the limma package name, res
               textInput(inputId = "fillvolc",label = NULL,value = "",
                         placeholder = "FOXP2,OT,AVPR1a",width = "100%"
               ),
+              div(id = "mytextvolcgrep", 
+                  p(" Highlight a family of gene in the volcano plot with a comma-separated list of input ")
+              ),
+              
+              textInput(inputId = "findfamily",label = NULL,value = "",
+                        placeholder = "Cyp",width = "100%"
+              ),
               numericInput(
                 'topvolc',
                 'Maximal number of genes by comparison(s)',
