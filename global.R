@@ -19,7 +19,7 @@ categoerygen = c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_
 # Loading packages
 
 #sudo apt-get install libv8-dev
-list.of.packages <- c("shiny","shinythemes","shinyjs","ggplot2","shinyBS","plyr","shinyFiles",
+list.of.packages <- c("AnnotationDbi","shiny","shinythemes","shinyjs","ggplot2","shinyBS","plyr","shinyFiles",
                       "BH","data.table","DT","readr","colourpicker","shinydashboard","shinytoastr",
                       "tools","devEMF","R.devices","FactoMineR","factoextra","gplots","V8",
                       "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly","dplyr","reticulate","Hmisc")
@@ -36,7 +36,6 @@ suppressPackageStartupMessages(library(x,character.only=TRUE))})
 
 library(shinyFiles)
 source("css/owncss.R")
-source("function/delayinput.R")
 source("function/formating.R")
 source("function/PCA.R")
 source("function/heatmtruncated.R")
@@ -50,6 +49,7 @@ source("function/gosearch.R")
 source("function/highchartconverter.R")
 source("function/EnhancedVolcano.R")
 source("./module/csvmodules.R")
+source("function/delayinput.R")
 
 
 
