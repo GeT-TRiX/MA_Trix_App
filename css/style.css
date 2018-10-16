@@ -242,3 +242,11 @@ left: -280px;
 color: #3c8dbc;
 position: absolute;
 }
+
+
+#topgenesvenn .shiny-output-error {
+
+    visibility: visible;
+    color: #3c8dbc;
+}
+#topgenesvenn .shiny-output-error:before { visibility: hidden; }

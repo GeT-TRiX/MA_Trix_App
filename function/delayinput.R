@@ -41,18 +41,18 @@ debounce <- function(expr, millis, env = parent.frame(), quoted = FALSE,
 
 
 #@examples
-library(shiny)
-
-ui <- fluidPage(
-  textInput("val", "Change this rapidly, then pause", 5),
-  textOutput("out")
-)
-
-server <- function(input, output, session) {
-  debounced <- debounce(input$val, 1000)
-  output$out <- renderText(
-    debounced()
-  )
-}
-
-shinyApp(ui, server)
+# library(shiny)
+# 
+# ui <- fluidPage(
+#   textInput("val", "Change this rapidly, then pause", 5),
+#   textOutput("out")
+# )
+# 
+# server <- function(input, output, session) {
+#   debounced <- debounce(input$val, 1000)
+#   output$out <- renderText(
+#     debounced()
+#   )
+# }
+# 
+# shinyApp(ui, server)

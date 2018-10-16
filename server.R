@@ -81,23 +81,25 @@ shinyServer(function(input, output,session) {
       return(NULL)
     else{
       if(!input$findfamily == "")
-        genfam = grep(pattern =input$findfamily, csvf()[[3]]$GeneName) %>% slice(csvf()[[3]],.) %>% select(GeneName)
+        genfam = grep(pattern =input$findfamily, csvf()[[3]]$GeneName) %>% slice(csvf()[[3]],.) %>% select(GeneName)  %>% unlist() %>% as.character()
       else
         genfam =""
     return(genfam)
     }
   })
   
+
   
   volcano <- reactive({
     req(csvf())
+
     #splitoptable <- csvf()[[3]] %>% select(., GeneName, paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp ), paste0("logFC_",input$volcacomp))
     EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
                     y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
                     topgenes = input$topvolc,DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),
                     pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = input$volcpt,transcriptLabSize = input$volclab,
-                    title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", findfamily =  ifelse(is.na(familytopdisp()),NULL,familytopdisp()),
-                    displaylab = ifelse(is.na(genetodisplay()),NULL,genetodisplay()),legendLabSize = 10,
+                    title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", findfamily =  ifelse(familytopdisp() == "" , NA,familytopdisp()),
+                    displaylab = ifelse(genetodisplay() =="",NA,genetodisplay()),legendLabSize = 10,
                     cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
                                                                          "P value & Log (base 2) fold-change"))
   })
@@ -202,10 +204,13 @@ shinyServer(function(input, output,session) {
     
   })
   
-  
+
   mycol <- reactive({
-    if(!input$fill == "")
-      mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(input$fill, ",")))
+    if(!input$fill == ""){
+      jvenncol <- debounce(input$fill, 1000)
+      #mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(input$fill, ",")))
+      mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(jvenncol(), ",")))
+    }
     else
       mycol = ""
   })

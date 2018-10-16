@@ -68,29 +68,20 @@ EnhancedVolcano <- function(
         (abs(toptable[,x])>FCcutoff)] <- "FC_P"
     toptable$Sig <- factor(toptable$Sig,
         levels=c("NS","FC","P","FC_P"))
-  
+
     
-    
-    if(is.na(topgenes) && !is.na(displaylab) ){
+    if(is.na(topgenes) && !is.na(displaylab) )
       selectLab <- as.character(displaylab)
-    }
-    else if(is.na(topgenes) && is.na(displaylab) && !is.na(findfamily)){
+    else if(is.na(topgenes) && is.na(displaylab) && !is.na(findfamily) )
       selectLab <- as.character(findfamily)
-      print("ko")
-    }
+    else if(is.na(topgenes)&& is.na(displaylab)&& is.na(findfamily))
+      selectLab <- ""
     else{
       toptable$abs <- unlist(abs(toptable[x]))
          myval <- toptable %>% dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,abs)  %>% top_n(.,topgenes)
          selectLab <- as.character(myval$GeneName)
     }
-    
-    if(is.na(topgenes) && is.na(displaylab)&& is.na(findfamily)){
-      print("ok")
-      selectLab <- NULL
-    }
-    
-    
-    print(selectLab)
+  
       
     if (min(toptable[,y], na.rm=TRUE) == 0) {
         warning("One or more P values is 0. Converting to minimum possible value...", call. = FALSE)

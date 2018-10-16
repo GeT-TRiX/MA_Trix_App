@@ -36,6 +36,7 @@ suppressPackageStartupMessages(library(x,character.only=TRUE))})
 
 library(shinyFiles)
 source("css/owncss.R")
+source("function/delayinput.R")
 source("function/formating.R")
 source("function/PCA.R")
 source("function/heatmtruncated.R")
