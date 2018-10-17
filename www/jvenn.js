@@ -50,16 +50,14 @@ $(document).ready(function () {
     Shiny.addCustomMessageHandler("updatejvenn", function(final) {	
 	    let seriesTable = final;//jsonData;
       Shiny.addCustomMessageHandler("updatejcol", function(coljvenn) {	
+        
         let arraylen = (coljvenn.length/3)
         let R2jspal =new Array(arraylen);
-        
         let mypalette = new Array(Math.ceil(coljvenn.length / 3)).fill("").map(function() { return this.splice(0, 3) }, coljvenn.slice());
 
         for (let i = 0 ; i< arraylen ; i++ ){
           R2jspal[i] = "rgb(".concat(mypalette[i]).concat(")");
         }
-
-        console.log(R2jspal);
 			  $("#jvenn-container").jvenn({
 			  series: seriesTable,
 			  colors : R2jspal,

@@ -12,6 +12,28 @@
 
 #library(shinyWidgets)
 
+
+inactivity <- "function idleTimer() {
+  var t = setTimeout(logout, 5000);
+  window.onmousemove = resetTimer; // catches mouse movements
+  window.onmousedown = resetTimer; // catches mouse movements
+  window.onclick = resetTimer;     // catches mouse clicks
+  window.onscroll = resetTimer;    // catches scrolling
+  window.onkeypress = resetTimer;  //catches keyboard actions
+
+  function logout() {
+    window.close();  //close the window
+  }
+
+  function resetTimer() {
+    clearTimeout(t);
+    t = setTimeout(logout, 5000);  // time is in milliseconds (1000 is 1 second)
+  }
+}
+idleTimer();"
+
+
+
 shinyjscode <- "
 shinyjs.init = function() {
   $(window).resize(shinyjs.calcHeight);
@@ -360,9 +382,8 @@ MATRiX app is working with specific data produced by the limma package name, res
                   p(" Highlight a family of gene in the volcano plot with a comma-separated list of input ")
               ),
               
-              textInput(inputId = "findfamily",label = NULL,value = "",
-                        placeholder = "Cyp",width = "100%"
-              ),
+              textInput(inputId = "findfamily",label = NULL,
+                        placeholder = "Cyp",width = "100%"),
               numericInput(
                 'topvolc',
                 'Maximal number of genes by comparison(s)',

@@ -44,12 +44,12 @@ debounce <- function(expr, millis, env = parent.frame(), quoted = FALSE,
 # library(shiny)
 # 
 # ui <- fluidPage(
-#   textInput("val", "Change this rapidly, then pause", 5),
+#   textInput("val", "Change this rapidly, then pause"),
 #   textOutput("out")
 # )
 # 
 # server <- function(input, output, session) {
-#   debounced <- debounce(input$val, 1000)
+#   debounced <- debounce(input$val, 5000)
 #   output$out <- renderText(
 #     debounced()
 #   )

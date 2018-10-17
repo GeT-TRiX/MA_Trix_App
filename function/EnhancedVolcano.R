@@ -96,7 +96,6 @@ EnhancedVolcano <- function(
         names.new <- rep("", length(toptable$lab))
         indices <- which(toptable$lab %in% selectLab)
         names.new[indices] <- as.character(toptable$GeneName[indices])
-        print(names.new[indices])
         toptable$lab <- names.new
     }
 

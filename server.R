@@ -76,7 +76,7 @@ shinyServer(function(input, output,session) {
     }
   })
   
-  findfamily <- debounce(input$findfamily, 1500)
+  findfamily <- debounce(input$findfamily, 2000)
   
   familytopdisp <- reactive({
     if(is.null(input$findfamily))
@@ -207,10 +207,11 @@ shinyServer(function(input, output,session) {
     
   })
   
-
+  jvenncol <- debounce(input$fill, 1000)
+  
   mycol <- reactive({
     if(!input$fill == ""){
-      jvenncol <- debounce(input$fill, 1000)
+      
       mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(jvenncol(), ",")))
     }
     else

@@ -35,6 +35,7 @@ lapply(list.of.packages,function(x){
 suppressPackageStartupMessages(library(x,character.only=TRUE))}) 
 
 library(shinyFiles)
+source("function/delayinput.R")
 source("css/owncss.R")
 source("function/formating.R")
 source("function/PCA.R")
@@ -49,7 +50,7 @@ source("function/gosearch.R")
 source("function/highchartconverter.R")
 source("function/EnhancedVolcano.R")
 source("./module/csvmodules.R")
-source("function/delayinput.R")
+
 
 
 
