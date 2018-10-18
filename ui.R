@@ -379,7 +379,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                         placeholder = "FOXP2,OT,AVPR1a",width = "100%"
               ),
               div(id = "mytextvolcgrep", 
-                  p(" Highlight a family of gene in the volcano plot with a comma-separated list of input ")
+                  p(" Highlight a family of gene in the volcano plot")
               ),
               
               textInput(inputId = "findfamily",label = NULL,
@@ -585,12 +585,13 @@ MATRiX app is working with specific data produced by the limma package name, res
                     column(6,
                            div(class= "dfvenn" , style="font-size:24px; margin-top: 17px;",
                                htmlOutput("dfvenn")),
+                  conditionalPanel(condition = "input.dispvenn == 'genes'", 
                            helpText(
                              "You can directly filtered the table by fold change and save the output table"
-                           ),
+                           )),
                            
                            DT::dataTableOutput("vennresinter"),br(),br(),br(),
-                           conditionalPanel(condition = "input.dispvenn == 'genes'", 
+                           conditionalPanel(condition = "input.selcontjv", 
                                             div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; "))
                                                 #htmlOutput("dfvennbef")),
                                             #DT::dataTableOutput("vennresintergen"))
