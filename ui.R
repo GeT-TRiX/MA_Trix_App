@@ -568,8 +568,6 @@ MATRiX app is working with specific data produced by the limma package name, res
                     conditionalPanel(condition = '!output.bool',
                                      uiOutput(outputId = "image")
                                      , uiOutput("sorry")),
-                    #div(id="vennerro" , style= "font size: 20px;",
-                    #plotOutput(outputId = "myVenn", height = 800),
                     tags$script(src="libraries/bootstrap.min.js") , 
                     tags$script(src="libraries/prettify.js") , 
                     tags$script(src="libraries/bootstrap-colorpicker.min.js") , 
@@ -578,9 +576,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                     fluidRow(column(6,br(),br(),
                     tags$script(src="jvenn.js"),
                     tags$div(id="jvenn-container", style = "background-color: white;  width: 600px;")
-                    # wellPanel(
-                    #   htmlOutput("renderer"),br(),
-                    #   htmlOutput("renderer2"))
+
                     ),
                     column(6,
                            div(class= "dfvenn" , style="font-size:24px; margin-top: 17px;",
@@ -593,10 +589,8 @@ MATRiX app is working with specific data produced by the limma package name, res
                            DT::dataTableOutput("vennresinter"),br(),br(),br(),
                            conditionalPanel(condition = "input.selcontjv", 
                                             div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; "))
-                                                #htmlOutput("dfvennbef")),
-                                            #DT::dataTableOutput("vennresintergen"))
+
                     )),
-                   # column(6,
                            div(style="display:inline-block", id ="dontwanttoshow",
                                fluidRow(
                                  tags$head(
@@ -640,16 +634,10 @@ MATRiX app is working with specific data produced by the limma package name, res
                                         display: inline;
                                         }")),
                       
-                   tags$head(tags$style("
-                                        #mytext p{
-                                        font-weight: 500;
-                                        font-size: 17px;
-                                        line-height: 1.5;
-                                        color: white;
-                                        position: static;
-                                        }
-                                        #mytext a{
-                                        color: red;}")),
+                   tags$head(tags$style("#mytext p{font-weight: 500;font-size: 17px;line-height: 1.5;color: white;
+                                        position: static;}
+                                        #mytext a{color: red;}"
+                                        )),
                    
                    div(
                      id = "container",
@@ -876,10 +864,6 @@ MATRiX app is working with specific data produced by the limma package name, res
                         conditionalPanel(condition = 'output.heatmbool',
                                          plotOutput("distPlot", width = "100%" , height = 1300)
                                          
-                                         ### Adding white spaces between the heatmap plot and the tracker
-                                         
-                                         # br(),br(),br(),br(),br(),br(),br(),br(),br(),
-                                         # br(),br(),br(),br(),br(),br(),br(),br(),br(),
                                          ),
                         
                         h1("Here's a tracker for your different selections:"),
@@ -1284,10 +1268,6 @@ MATRiX app is working with specific data produced by the limma package name, res
 ######## END dashboardbody    # 
 ############################### 
 
- 
-
-  
-  
  shinyUI( 
     dashboardPage(skin="blue",title = "MATRiX app",
     dbHeader,
