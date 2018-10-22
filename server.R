@@ -8,7 +8,6 @@
 library(shinyFiles)
 
 shinyjscode <- "
-
 shinyjs.init = function() {
   $(window).resize(shinyjs.calcHeight);
 }
@@ -123,8 +122,7 @@ shinyServer(function(input, output,session) {
   
   
   output$savevolcano <- downloadHandler(filename <- function() {
-    paste0(basename(file_path_sans_ext(projectname())), '_volcano.', input$formvolc, sep =
-             '')
+    paste0(basename(file_path_sans_ext(projectname())), '_volcano.', input$formvolc, sep ='')
   },
   content <- function(file) {
     if (input$formvolc == "pdf")
@@ -292,10 +290,6 @@ shinyServer(function(input, output,session) {
   ##########################################
   
   source(file.path("server", "shinychat.R"), local = TRUE)$value #
-  
-  ##########################################
-  ######## TEST                           ##
-  ##########################################
   
   
  

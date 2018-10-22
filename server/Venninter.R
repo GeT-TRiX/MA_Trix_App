@@ -22,15 +22,6 @@ vennchoice <- reactive({
     return(input$intscol)
 })
 
-# output$myselvenn <- renderUI({
-#   req(user_cont())
-#   selectInput(
-#     'intscol',
-#     'Specify your intersection(s):',
-#     choices = names(user_cont()),
-#     multiple = TRUE
-#   )
-# })
 
 #' venninter is a reactive function which aim is to return a set of lists for each possible logical relations between a finite collection of different sets
 #'
@@ -75,35 +66,37 @@ vennfinal <- reactive({
   
 
   reslist = list()
-  #reordchoice <- vennchoice() %>%
   reordchoice <- input$selcontjv %>%
     factor(levels = names(adjusted()[[1]][,-1])) %>%
     sort() %>%
     paste(collapse = "")
 
   
-  resfinal = csvf()[[3]] %>%
+  resfinal <- csvf()[[3]] %>%
     filter(ProbeName %in% venninter()[[reordchoice]]) %>%
-    #filter(ProbeName %in% venninter()[[input$together]]) %>%
-    #select(ProbeName, GeneName, paste0("logFC_", vennchoice())) %>%
     select(ProbeName, GeneName, paste0("logFC_",  input$selcontjv)) %>%
-    mutate_if(is.numeric, funs(format(., digits = 3)))
+    mutate_if(is.numeric, funs(format(., digits = 3))) 
   
-  reslist[[1]] = resfinal
-  #mycont = paste0("logFC_", vennchoice())
+  if(input$Notanno){
+    resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:",GeneName)) %>% as.data.frame()
+  }
+  
+  reslist[[1]] <- resfinal
   mycont = paste0("logFC_",input$selcontjv)
+  
   if(input$dispvenn == "genes"){
     for (i in mycont) {
       resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
     }
     
-    resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] 
-    print(resfinal)
-    resfinal = as.data.frame(resfinal)
-    reslist[[2]] = resfinal
+    if(input$Notanno)
+      resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] %>% filter(., !grepl( "^chr[A-z0-9]{1,}:",GeneName)) %>% as.data.frame()
+    else 
+      resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] %>% as.data.frame()
+    
+    reslist[[2]] <- resfinal
   }
-  #mutate_if(is.numeric, funs(formatC(., format = "f")))
-  
+
   return(reslist)
 })
 
@@ -200,6 +193,7 @@ plottopgenes <- eventReactive(input$topdegenes, {
   req(vennfinal(), venntopgenes(), input$selcontjv)
   #mycont = paste0("logFC_", vennchoice())
   mycont = paste0("logFC_", input$selcontjv)
+  #View(vennfinal()[[1]])
   if(input$dispvenn == "probes")
     myplot <- topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE], mycont, venntopgenes(), input$dispvenn)
   else

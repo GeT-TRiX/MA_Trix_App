@@ -1,7 +1,7 @@
 # Author: Kevin Blighe
 # Title: Publication-ready volcano plots with enhanced colouring and labelign
 # Github: https://github.com/kevinblighe/EnhancedVolcano
-# Modified by Franck Soubès (add topgenes)
+# Modified by Franck Soubès (add 74-85;  modify 98-107, add 3 parameters displayLab, findfamily, topgenes)
 
 EnhancedVolcano <- function(
     toptable,
@@ -68,7 +68,8 @@ EnhancedVolcano <- function(
         (abs(toptable[,x])>FCcutoff)] <- "FC_P"
     toptable$Sig <- factor(toptable$Sig,
         levels=c("NS","FC","P","FC_P"))
-
+  
+    
     
     if(is.na(topgenes) && !is.na(displaylab) )
       selectLab <- as.character(displaylab)
@@ -78,8 +79,9 @@ EnhancedVolcano <- function(
       selectLab <- ""
     else{
       toptable$abs <- unlist(abs(toptable[x]))
-         myval <- toptable %>% dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,abs)  %>% top_n(.,topgenes)
-         selectLab <- as.character(myval$GeneName)
+      myval <- toptable %>%   dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,X,abs)  %>% top_n(.,topgenes)
+      myvalueind <- myval$X
+      selectLab <- as.character(myval$GeneName)
     }
   
       
@@ -91,14 +93,19 @@ EnhancedVolcano <- function(
     toptable$lab <- lab
     toptable$xvals <- toptable[,x]
     toptable$yvals <- toptable[,y]
+
     
     if (!is.null(selectLab)) {
-        names.new <- rep("", length(toptable$lab))
-        indices <- which(toptable$lab %in% selectLab)
-        names.new[indices] <- as.character(toptable$GeneName[indices])
-        toptable$lab <- names.new
+      names.new <- rep("", length(toptable$lab))
+      
+      if(!is.na(topgenes) && is.na(displaylab)&& is.na(findfamily))
+         indices <- which(toptable$X %in% myvalueind)
+      else
+        indices <- which(toptable$X %in% selectLab)
+      names.new[indices] <- as.character(toptable$GeneName[indices])
+      toptable$lab <- names.new
     }
-
+    
     
     tot = subset(toptable,
            toptable[,y]<pLabellingCutoff &

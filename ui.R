@@ -143,7 +143,7 @@ body <- dashboardBody(
 
 MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).",tags$br(),"
 
-MATRiX app is working with specific data produced by the limma package name, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/downloadData.zip)."),
+MATRiX app is working with specific data produced by the limma package, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/downloadData.zip)."),
                                       
                                          p("Hereafter is the global workflow passing by the statistical analysis to the visualization:"),tags$br(),
                                          tags$p(
@@ -156,7 +156,7 @@ MATRiX app is working with specific data produced by the limma package name, res
                                          h3("Acknowledgements"),
                                          p("Thanks to the Toxalim's team BioToMyc & TIM and especially to the following people for their helps reporting errors, proposing new features and beta testing of MATRiX:"),
                                          p("Laura Costes,", "Anne Fougerat,","Claire Naylies,", "Philippe Pinton,","Arnaud Polizzi," ,"Marion Regnier," , "Sandrine Ellero-Simatos,","Sarra Smati."),
-                                         p("Special Thanks to Didier Laborie for installing the virtual machine with Ubuntu and for answering to my questions")
+                                         p("Special Thanks to Didier Laborie for installing the virtual machine with Ubuntu and for answering my questions")
                                          
                                 ),
                                 tabPanel("Packages",
@@ -748,10 +748,12 @@ MATRiX app is working with specific data produced by the limma package name, res
                            #   "vennsize","Size of the police",
                            #   min = 0.3,max = 2,value = 1,step = 0.1
                            # )),
-                           column(12,
+                           column(6,
                                   selectInput("dispvenn", #  Create a select list that can be used to choose a single or multiple items from a list of values.
                                               "Choose if you want to display probes or genes",
-                                              choices = c("probes", "genes")))),
+                                              choices = c("probes", "genes"))),
+                           column(6, br(),
+                                  checkboxInput("Notanno","Remove the genes that are not annotated ",FALSE))),
                            
                            br(),
                           
