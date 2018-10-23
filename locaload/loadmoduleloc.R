@@ -39,13 +39,7 @@ server = function(input, output, session) {
     })
     
   ### constructing the 3 file paths
-      observe({
-        req(path1())
-        print(path1())
-        print('caca')
-        
-        
-      })
+
         
       csvf <- eventReactive(input$importlocal,{
 
