@@ -71,7 +71,6 @@ vennfinal <- reactive({
     sort() %>%
     paste(collapse = "")
 
-  #myselcont <- ifelse(input$Allcont, choix_cont(), input$selcontjv)
 
   if(!input$Allcont)
     resfinal <- csvf()[[3]] %>%
@@ -83,11 +82,7 @@ vennfinal <- reactive({
     filter(ProbeName %in% venninter()[[reordchoice]]) %>%
     select(ProbeName, GeneName, paste0("logFC_", choix_cont())) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
-  
-  # resfinal <- csvf()[[3]] %>%
-  #   filter(ProbeName %in% venninter()[[reordchoice]]) %>%
-  #   select(ProbeName, GeneName, paste0("logFC_", myselcont)) %>%
-  #   mutate_if(is.numeric, funs(format(., digits = 3)))
+
   
   if(input$Notanno){
     resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:",GeneName)) %>% as.data.frame()
@@ -116,8 +111,7 @@ vennfinal <- reactive({
 
 
 output$topgenesvenn <- renderUI({
-  #req(vennfinal(), vennchoice())
-  #req(vennfinal(), input$selcontjv)
+
   req( input$selcontjv)
   tags$div(
     class = "topgeness",numericInput('topgenes',
@@ -202,15 +196,13 @@ output$downloadvennset = downloadHandler('venns-filtered.csv',
 
 plottopgenes <- eventReactive(input$topdegenes, {
   req(vennfinal(), venntopgenes(), input$selcontjv)
-  print(ifelse(input$Allcont,paste("logFC_", choix_cont()),paste("logFC_", input$selcontjv)))
+
   if(input$Allcont)
     mycont <- paste0("logFC_", choix_cont())
   else 
     mycont <- paste0("logFC_", input$selcontjv)
     
-  #print( ifelse(input$Allcont,paste0("logFC_", choix_cont()),paste0("logFC_", input$selcontjv)))
-  #print(sapply(length(choix_cont()),return(ifelse(input$Allcont,paste0("logFC_", choix_cont()),paste0("logFC_", input$selcontjv)))))
-  print("test")
+
   if(input$dispvenn == "probes")
     myplot <- topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
   else

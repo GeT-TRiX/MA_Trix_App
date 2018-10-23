@@ -58,7 +58,6 @@ myrenderedtop <- reactive({
   req(csvf())
   select( csvf()[[3]], ProbeName:SystematicName, everything() ) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
-    #mutate_if(is.numeric, funs(round(., digits = 3)))
 })
 
 output$new_group <- DT::renderDataTable(DT::datatable(myrenderedtop()[,-c(4:9)] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons',filter =c("none")) )
