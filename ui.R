@@ -748,12 +748,14 @@ MATRiX app is working with specific data produced by the limma package, resultin
                            #   "vennsize","Size of the police",
                            #   min = 0.3,max = 2,value = 1,step = 0.1
                            # )),
-                           column(6,
+                           column(12,
                                   selectInput("dispvenn", #  Create a select list that can be used to choose a single or multiple items from a list of values.
                                               "Choose if you want to display probes or genes",
                                               choices = c("probes", "genes"))),
-                           column(6, br(),
-                                  checkboxInput("Notanno","Remove the genes that are not annotated ",FALSE))),
+                           column(6, 
+                                  checkboxInput("Notanno","Remove the genes that are not annotated",FALSE)),
+                           column(6, 
+                                  checkboxInput("Allcont","Parse all the resulting logFC values depending on the comparison(s) selected",FALSE))),
                            
                            br(),
                           
