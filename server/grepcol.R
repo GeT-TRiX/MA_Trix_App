@@ -34,11 +34,11 @@ adjusted <- reactive({
   pval = csvf()[[3]][, grep("^X|^P.value",
                             names(csvf()[[3]]),
                             value = TRUE)]
-  
+print("?")
+print(colnames(adj))
   
   mygrep = list(adj,logfc,pval)
-  
-  
+
   for(i in 1:length(mygrep))
     names(mygrep[[i]]) = gsub(
       pattern = myrpl[i],
@@ -46,6 +46,7 @@ adjusted <- reactive({
       x = names(mygrep[[i]]),
       perl = T
     )
+
   
   return(mygrep)
   

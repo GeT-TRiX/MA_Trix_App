@@ -10,8 +10,6 @@
 ######## dashboardsidebar     #
 ###############################  
 
-#library(shinyWidgets)
-
 
 inactivity <- "function idleTimer() {
   var t = setTimeout(logout, 5000);
@@ -743,12 +741,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                            br(),
                            
                            fluidRow(
-                           #   column(6,
-                           # sliderInput(
-                           #   "vennsize","Size of the police",
-                           #   min = 0.3,max = 2,value = 1,step = 0.1
-                           # )),
-                           column(12,
+                             column(12,
                                   selectInput("dispvenn", #  Create a select list that can be used to choose a single or multiple items from a list of values.
                                               "Choose if you want to display probes or genes",
                                               choices = c("probes", "genes"))),
@@ -759,7 +752,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                            
                            br(),
                           
-                           #uiOutput("myselvenn"),
+                          
                           
                           shiny::actionButton(
                             "toggleAdvancedJvenn",
@@ -768,12 +761,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                             style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                           ),
                           br(),
-                          
-
-                          #actionGroupButtons(inputIds = c("dm_classic", "dm_edwards"),labels = list("Action 1", "Action 2"),status = "primary"),
-                          
-                          
-                          
+                  
                           shinyjs::hidden(div(
                             id = "advancedjvenn",
                             br(),
@@ -796,7 +784,6 @@ MATRiX app is working with specific data produced by the limma package, resultin
                             )),
                           br(),
 
-                      # uiOutput("topgenesvenn"),
                       
                       strong("Functional Annotation Clustering",style = "font-family: 'times'; font-size:20px; font-style: strong; "),
                       
@@ -829,16 +816,10 @@ MATRiX app is working with specific data produced by the limma package, resultin
             fluidRow(column(
               width = 8,
               div(
-                #style = "width:100% ; max-width: 1200px; height: 1300px; max-height: 1800px;",
-                #tabBox(
                 tabsetPanel(
-                  #id = "mainhmtabset",
-                  #title = "Heatmap and GO enrichment",
                   id = "tabset1",
-                  #width = NULL,
                   tabPanel(
                      strong("Visualize the Heatmap"),value = "hmmainpan",
-                    #"Visualize the Heatmap",
                     div(style="display:inline-block",
                         fluidRow( column(1 ,
                                          downloadButton(
@@ -963,17 +944,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     verbatimTextOutput("printselected"),
                     div(class= "highvenn" , style="font-size:24px; text-align: center;",
                         htmlOutput("titlegotop")),
-                    #strong("Top 10 significantly enriched GO and KEGG terms"),
-                    
-                    # fluidRow(
-                    #   column(6,DT::dataTableOutput("cat_MF") ),
-                    #   column(6,DT::dataTableOutput("cat_BP") )),
-                    # fluidRow(
-                    #   column(6,DT::dataTableOutput("cat_CC") ),
-                    #   column(6,DT::dataTableOutput("cat_KEGG") )
-                    # 
-                    # ))
-                    
+
                     tags$script(src="libraries/jquery-1.9.1.min.js"),
                     tags$script(src="libraries/jquery-ui.min.js"),
                     tags$script(src="libraries/highcharts.js"),
@@ -1004,12 +975,8 @@ MATRiX app is working with specific data produced by the limma package, resultin
                   )
             )
             ),
-           # div(id="pass",style = "word-wrap: break-word;",
                 column(width=4,
-  
-                       # box(id="boxpassvenn",title = strong("Heatmap settings"), width = NULL, background = "light-blue",
-                       #      inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
-                       
+
                        div(id="mypanheat", style="color: white;",
                       tabBox(
                          
@@ -1227,17 +1194,8 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                             ),br(),
                                             helpText("Run GO results are obtained by querying DWS (DAVID Web Services)", style="font-size:15px; color:white;")
                                             
-                                            ),
-                           
-                           #actionButton("resetAll", "Reset all"),
-                           
-                           br(),br()
-                           # shiny::actionButton("heatm", "Print Heatmap", style =
-                           #                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-                           
-                           # Render input from server.R
-                           #shinyjs::disabled(actionButton("stop", "Stop"))
-                   #)
+                                            ),br(),br()
+
                    ),
                 
                 tabPanel(

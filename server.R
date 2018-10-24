@@ -75,14 +75,14 @@ shinyServer(function(input, output,session) {
     }
   })
   
-  findfamily <- debounce(input$findfamily, 2000)
+  #findfamily <- debounce(input$findfamily, 2000)
   
   familytopdisp <- reactive({
     if(is.null(input$findfamily))
       return(NULL)
     else{
       if(!input$findfamily == ""){
-        genfam = grep(pattern =findfamily(), csvf()[[3]]$GeneName) %>% slice(csvf()[[3]],.)%>% select(GeneName)  %>% unlist() %>% as.character()
+        genfam = grep(pattern =input$findfamily, csvf()[[3]]$GeneName) %>% slice(csvf()[[3]],.)%>% select(GeneName)  %>% unlist() %>% as.character()
       }
       else
         genfam =""
@@ -94,7 +94,7 @@ shinyServer(function(input, output,session) {
   
   volcano <- reactive({
     req(csvf())
-
+    print(input$volcacomp)
     EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
                     y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
                     topgenes = input$topvolc,DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),
@@ -105,19 +105,20 @@ shinyServer(function(input, output,session) {
                                                                          "P value & Log (base 2) fold-change"))
   })
   
+
   
   output$volcanoplot <- renderPlot({
    
   validate(need(csvf(), 'You need to import data to visualize this plot!'))
     
-    req(input$volcacomp)
+    req(volcano())
     volcano()
 
   },  height = plotHeight)
   
   output$compvolc <- renderUI({
     req(adjusted())
-    selectInput("volcacomp", "Choose a comparison", choices = colnames(adjusted()[[1]][,-1]))
+    selectInput("volcacomp", "Choose a comparison", choices = colnames(adjusted()[[1]][,-1,drop = FALSE]))
   })
   
   

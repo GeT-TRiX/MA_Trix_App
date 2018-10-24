@@ -71,17 +71,20 @@ EnhancedVolcano <- function(
   
     
     
-    if(is.na(topgenes) && !is.na(displaylab) )
+    if(is.na(topgenes) && !is.na(displaylab) ){
       selectLab <- as.character(displaylab)
+    }
     else if(is.na(topgenes) && is.na(displaylab) && !is.na(findfamily) )
       selectLab <- as.character(findfamily)
-    else if(is.na(topgenes)&& is.na(displaylab)&& is.na(findfamily))
+    else if(is.na(topgenes)&& is.na(displaylab)&& is.na(findfamily)){
       selectLab <- ""
+    }
     else{
       toptable$abs <- unlist(abs(toptable[x]))
       myval <- toptable %>%   dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,X,abs)  %>% top_n(.,topgenes)
       myvalueind <- myval$X
       selectLab <- as.character(myval$GeneName)
+      
     }
   
       
@@ -93,19 +96,39 @@ EnhancedVolcano <- function(
     toptable$lab <- lab
     toptable$xvals <- toptable[,x]
     toptable$yvals <- toptable[,y]
-
     
-    if (!is.null(selectLab)) {
-      names.new <- rep("", length(toptable$lab))
-      
-      if(!is.na(topgenes) && is.na(displaylab)&& is.na(findfamily))
-         indices <- which(toptable$X %in% myvalueind)
-      else
-        indices <- which(toptable$X %in% selectLab)
-      names.new[indices] <- as.character(toptable$GeneName[indices])
-      toptable$lab <- names.new
+    print(is.na(topgenes))
+    print(is.na(displaylab))
+    print(is.na(findfamily))
+    
+    
+   if (!is.null(selectLab)) {
+    if(!is.na(topgenes) && is.na(displaylab)&& is.na(findfamily)){
+   names.new <- rep("", length(toptable$lab))
+    indices <- which(toptable$X %in% myvalueind)
+    names.new[indices] <- as.character(toptable$GeneName[indices])
+    toptable$lab <- names.new
     }
-    
+    else {
+      print("ok")
+      print(selectLab)
+        names.new <- rep("", length(toptable$lab))
+        print(toptable$X)
+        indices <- which(toptable$GeneName %in% selectLab)
+        print(indices)
+        names.new[indices] <- as.character(toptable$GeneName[indices])
+        toptable$lab <- names.new
+      }
+    }
+
+    # if (!is.null(selectLab)) {
+    #   names.new <- rep("", length(toptable$lab))
+    #   indices <- which(toptable$lab %in% selectLab)
+    #   names.new[indices] <- as.character(toptable$GeneName[indices])
+    #   print(names.new[indices])
+    #   toptable$lab <- names.new
+    # }
+    # 
     
     tot = subset(toptable,
            toptable[,y]<pLabellingCutoff &

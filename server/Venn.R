@@ -163,7 +163,7 @@ output$contout <- renderUI(
   checkboxGroupInput(
     inputId = "cont" ,
     label =  "Choose your comparison",
-    choices = colnames(adjusted()[[1]][,-1][myindex()]),
+    choices = colnames(adjusted()[[1]][,-1,drop = FALSE][myindex()]),
     #selected = colnames(adjusted()[[1]][,-1][myindex()])
     inline = groupinline
   )
@@ -176,7 +176,7 @@ observe({
   
   req(myindex())
   print("check")
-  print(colnames(adjusted()[[1]][,-1][myindex()]))
+  print(colnames(adjusted()[[1]][,-1,drop = FALSE][myindex()]))
   
 })
 
@@ -188,9 +188,9 @@ observeEvent(input$allCont, {
     "cont",
     label = "Choose your comparison",
 
-    choices = colnames(adjusted()[[1]][,-1][myindex()]),
+    choices = colnames(adjusted()[[1]][,-1,drop = FALSE][myindex()]),
     #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())]),
-    selected = colnames(adjusted()[[1]][,-1][myindex()]),
+    selected = colnames(adjusted()[[1]][,-1,drop = FALSE][myindex()]),
     inline = groupinline
   )
 })
@@ -201,7 +201,7 @@ observeEvent(input$noCont, {
                            "cont",
                            label = "Choose your comparison",
                            #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())]),
-                           choices = colnames(adjusted()[[1]][,-1][myindex()]),
+                           choices = colnames(adjusted()[[1]][,-1,drop = FALSE][myindex()]),
                            inline=groupinline
   )
 })
@@ -350,7 +350,7 @@ myindex<- reactive({
     return(which(adjusted()[[1]][[x]] < 0.05)))
     
   indexnull = which( sapply(myl ,length) == 0)
-  final = colnames(adjusted()[[1]][,-c(indexnull)])
+  final = colnames(adjusted()[[1]][,-c(indexnull),drop = FALSE])
   return(final)
   
 })

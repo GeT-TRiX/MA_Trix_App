@@ -14,18 +14,20 @@
 
 observe({
   
-  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
+groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
 
 output$testout <- renderUI(
   checkboxGroupInput(
     inputId = "test" ,
     label =  "Choose your comparison",
-    choices =  colnames(adjusted()[[1]][,-1]),
+    choices =  colnames(adjusted()[[1]][,-1,drop = FALSE]),
     #,selected = colnames(adjusted()[, -1])
     inline = groupinline
   )
 )
 })
+
+
 
 #Select all the contrasts
 
@@ -35,8 +37,8 @@ observeEvent(input$allTests, {
     session,
     "test",
     label = "Choose your comparison",
-    choices = colnames(adjusted()[[1]][,-1]),
-    selected = colnames(adjusted()[[1]][,-1]),
+    choices = colnames(adjusted()[[1]][,-1,drop = FALSE]),
+    selected = colnames(adjusted()[[1]][,-1,drop = FALSE]),
     inline = groupinline
   )
 })
@@ -47,7 +49,7 @@ observeEvent(input$noTests, {
   updateCheckboxGroupInput(session,
                            "test",
                            label = "Choose your comparison",
-                           choices = colnames(adjusted()[[1]][, -1]),
+                           choices = colnames(adjusted()[[1]][, -1,drop = FALSE]),
                            inline= groupinline
                            )
 })
