@@ -174,7 +174,7 @@ content <- function(file) {
 
 
 
-output$eigpca <- renderPlot({s
+output$eigpca <- renderPlot({
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
       need(length(input$indivpca) >0 ,'You need to select groups!') %next%

@@ -141,7 +141,7 @@ body <- dashboardBody(
 
 MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).",tags$br(),"
 
-MATRiX app is working with specific data produced by the limma package, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/downloadData.zip)."),
+MATRiX app is working with specific data produced by the limma package, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/sampleData.zip)."),
                                       
                                          p("Hereafter is the global workflow passing by the statistical analysis to the visualization:"),tags$br(),
                                          tags$p(
@@ -284,16 +284,18 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                              tags$ul(
                                                tags$li("First click on the browse button to load the data"),
                                                tags$li("After the pop up has appeared, you will have to select the files within the access path that is given in the report produced by Yannick. "),
-                                               tags$li("You will then find three distinct csv files, these files are respectively named xxx_pData, xxx_topTableAll and xxx_WorkingSet."),
+                                               tags$li("You will then find three distinct csv files, these files are respectively named xxx_pData, xxx_WorkingSet and xxx_ResTable."),
                                                tags$li("The final step consist to select all the data at once and then confirm the selection by clicking on the open button."),
                                                tags$li("A green message will then appear to confirm the data loading with a summary table.")
                                              ),
 
                                                tags$p(
-    
+                                                 
                                                 tags$img(src = "pdata.png"),
-                                                 tags$img(src = "toptable.png"),
-                                                 tags$img(src = "workingset.png")),
+                                                tags$img(src = "workingset.png"),
+                                                 tags$img(src = "restable.png")
+                                                
+                                                 ),
 
                                              tags$h1("Tips"),
                                              tags$ul(
