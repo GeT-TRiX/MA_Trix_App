@@ -172,14 +172,6 @@ output$contout <- renderUI(
 
 })
 
-observe({
-  
-  req(myindex())
-  print("check")
-  print(colnames(adjusted()[[1]][,-1,drop = FALSE][myindex()]))
-  
-})
-
 
 observeEvent(input$allCont, {
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)

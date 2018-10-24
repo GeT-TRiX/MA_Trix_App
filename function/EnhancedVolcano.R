@@ -59,8 +59,13 @@ EnhancedVolcano <- function(
     requireNamespace("ggrepel")
     requireNamespace("dplyr")
     i <- xvals <- yvals <- Sig <- NULL
-
+    
     toptable <- as.data.frame(toptable)
+    toptable$GeneName <- sapply(toptable$GeneName, function(v) {
+      if (is.character(v)) return(toupper(v))
+      else return(v)
+    })
+
     toptable$Sig <- "NS"
     toptable$Sig[(abs(toptable[,x]) > FCcutoff)] <- "FC"
     toptable$Sig[(toptable[,y]<pCutoff)] <- "P"
@@ -93,42 +98,33 @@ EnhancedVolcano <- function(
         toptable[which(toptable[,y] == 0), y] <- .Machine$double.xmin
     }
     
-    toptable$lab <- lab
+    toptable$lab <-  sapply(toptable$GeneName, function(v) {
+      if (is.character(v)) return(toupper(v))
+      else return(v)
+    })
+    
     toptable$xvals <- toptable[,x]
     toptable$yvals <- toptable[,y]
     
-    print(is.na(topgenes))
-    print(is.na(displaylab))
-    print(is.na(findfamily))
+    
+    
     
     
    if (!is.null(selectLab)) {
     if(!is.na(topgenes) && is.na(displaylab)&& is.na(findfamily)){
-   names.new <- rep("", length(toptable$lab))
+    names.new <- rep("", length(toptable$lab))
     indices <- which(toptable$X %in% myvalueind)
     names.new[indices] <- as.character(toptable$GeneName[indices])
     toptable$lab <- names.new
     }
     else {
-      print("ok")
-      print(selectLab)
         names.new <- rep("", length(toptable$lab))
-        print(toptable$X)
         indices <- which(toptable$GeneName %in% selectLab)
-        print(indices)
         names.new[indices] <- as.character(toptable$GeneName[indices])
         toptable$lab <- names.new
       }
     }
 
-    # if (!is.null(selectLab)) {
-    #   names.new <- rep("", length(toptable$lab))
-    #   indices <- which(toptable$lab %in% selectLab)
-    #   names.new[indices] <- as.character(toptable$GeneName[indices])
-    #   print(names.new[indices])
-    #   toptable$lab <- names.new
-    # }
-    # 
     
     tot = subset(toptable,
            toptable[,y]<pLabellingCutoff &

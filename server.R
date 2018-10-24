@@ -71,7 +71,7 @@ shinyServer(function(input, output,session) {
           mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(input$fillvolc, ",")))
         else
           mycol = ""
-    return(mycol)
+    return(toupper(mycol))
     }
   })
   
@@ -82,11 +82,11 @@ shinyServer(function(input, output,session) {
       return(NULL)
     else{
       if(!input$findfamily == ""){
-        genfam = grep(pattern =input$findfamily, csvf()[[3]]$GeneName) %>% slice(csvf()[[3]],.)%>% select(GeneName)  %>% unlist() %>% as.character()
+        genfam = grep(pattern = toupper(input$findfamily), toupper(csvf()[[3]]$GeneName)) %>% slice(csvf()[[3]],.)%>% select(GeneName)  %>% unlist() %>% as.character()
       }
       else
         genfam =""
-    return(genfam)
+    return(toupper(genfam))
     }
   })
   
@@ -94,7 +94,6 @@ shinyServer(function(input, output,session) {
   
   volcano <- reactive({
     req(csvf())
-    print(input$volcacomp)
     EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) , 
                     y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp), 
                     topgenes = input$topvolc,DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),

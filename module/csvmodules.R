@@ -47,10 +47,6 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     showmark
   })
   
-  observe({
-    print(showmark)
-  })
-  
   
   
   outputOptions(output,"boolmark",suspendWhenHidden=F) 
@@ -189,7 +185,6 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     }
     
     observe({showmark <<-F
-    print(showmark)
     }) # modify and lock the bool value to false
     
     output$boolmark <- reactive({
@@ -270,9 +265,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     colnames(csvord[[2]])[1] = "X"
     
     
-    observe({showmark <<-F
-    print(showmark)
-    }) # modify and lock the bool value to false
+    observe({showmark <<-F}) # modify and lock the bool value to false
     
     output$boolmark <- reactive({
       showmark

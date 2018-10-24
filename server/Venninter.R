@@ -226,7 +226,6 @@ plottopgenes <- eventReactive(input$topdegenes, {
 
 plottopgenesmean <- eventReactive(input$topdegenes, {
   req(vennfinal(), vennchoice(), venntopgenes())
-  print("okkkkk")
   #myselcont <- ifelse(input$Allcont, choix_cont(), input$selcontjv)
   mycont = paste0("logFC_", vennchoice())
     myplot <- topngenes(vennfinal()[[1]][input$vennresintergen_rows_all, , drop = FALSE], mycont, venntopgenes(), input$dispvenn, mean = T)

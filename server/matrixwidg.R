@@ -24,24 +24,6 @@ isolate(
 })
 
 
-# observeEvent(input$tabset1,{
-#   isolate(
-#   if (grepl("cuthmmainpan", input$tabset1)) {
-#     print("ko")
-#     updateTabsetPanel(session, "tabset25",
-#                       selected = "widgetheat")
-#   }
-#   else if (grepl("hmmainpan", input$tabset1)) {
-#     print("koo")
-#     updateTabsetPanel(session, "tabset25",
-#                       selected = "test3")
-#   }
-#   )
-# })
-
-
-
-
 
 observe({
   

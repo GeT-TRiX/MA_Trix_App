@@ -162,13 +162,11 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = 
 
   if(length(indexnull)>0){
     if(length(myl)==5){
-      print(colnames(adj[,-c(indexnull)]))
       g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1, cat.just= list(c(0.6,1) , c(0,0) , c(0,0) , c(1,1) , c(1,0)),
                        category.names = mynames,fill = list(mycolven) , alpha = 0.3, sub=mynumb, cex=1, 
                        fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop
     }
     else{
-      print(colnames(adj[,-c(indexnull)]))
       g = venn.diagram(x = myl, filename = NULL, scaled = F,lty =1,
                        category.names = mynames,fill = mycolven, alpha = 0.3, sub=mynumb, cex=1, 
                        fontface = 2, cat.fontface = 1, cat.cex = cex, na="stop")# na= stop

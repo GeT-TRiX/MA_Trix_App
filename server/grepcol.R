@@ -34,8 +34,6 @@ adjusted <- reactive({
   pval = csvf()[[3]][, grep("^X|^P.value",
                             names(csvf()[[3]]),
                             value = TRUE)]
-print("?")
-print(colnames(adj))
   
   mygrep = list(adj,logfc,pval)
 
