@@ -67,7 +67,7 @@ vennfinal <- reactive({
 
   reslist = list()
   reordchoice <- input$selcontjv %>%
-    factor(levels = names(adjusted()[[1]][,-1])) %>%
+    factor(levels = names(adjusted()[[1]][,-1,drop = FALSE])) %>%
     sort() %>%
     paste(collapse = "")
 

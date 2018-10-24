@@ -187,13 +187,13 @@ myfinalfc = function(alltop, pval, testrix) {
     
   logfc = alltop[, grep("^X|^logFC", names(alltop), value = TRUE)]
   myfc = c(1, 1.2, 2, 4, 6, 10)
-  fcpval = data.frame(matrix(ncol = length(myfc), nrow = length(adj[, -1])))
+  fcpval = data.frame(matrix(ncol = length(myfc), nrow = length(adj[, -1,drop = FALSE])))
   mycolnames = c("FC>1.0", "FC >1.2" , "FC >2", "FC >4", "FC >6", "FC >10")
 
   
   for (fc in myfc) {
-    fcpval[j] = cbind.data.frame(colSums(adj[,-1] < pval &
-                                          2 ** abs(logfc[,-1]) > fc))
+    fcpval[j] = cbind.data.frame(colSums(adj[,-1,drop = FALSE] < pval &
+                                          2 ** abs(logfc[,-1,drop = FALSE]) > fc))
     j = j + 1
   }
 
@@ -205,7 +205,7 @@ myfinalfc = function(alltop, pval, testrix) {
   )
 
   colnames(fcpval) = mycolnames
-  rownames(fcpval) = colnames(logfc[, -1])
+  rownames(fcpval) = colnames(logfc[, -1,drop = FALSE])
   
   return(fcpval)
 }
