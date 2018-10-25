@@ -89,15 +89,22 @@ vennfinal <- reactive({
   }
   
   reslist[[1]] <- resfinal
-  mycont = paste0("logFC_",input$selcontjv)
   
+  if(!input$Allcont)
+    mycont = paste0("logFC_",input$selcontjv)
+  else 
+    mycont = paste0("logFC_",choix_cont())
+
   if(input$dispvenn == "genes"){
+    options(datatable.optimize=1)
     for (i in mycont) {
+      print(i)
       resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
     }
     
-    if(input$Notanno)
+    if(input$Notanno){
       resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] %>% filter(., !grepl( "^chr[A-z0-9]{1,}:",GeneName)) %>% as.data.frame()
+    }
     else 
       resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] %>% as.data.frame()
     
@@ -202,7 +209,8 @@ plottopgenes <- eventReactive(input$topdegenes, {
   else 
     mycont <- paste0("logFC_", input$selcontjv)
     
-
+  print(mycont)
+  
   if(input$dispvenn == "probes")
     myplot <- topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
   else
