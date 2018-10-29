@@ -36,6 +36,7 @@ shinyjscode <- "
 shinyjs.init = function() {
   $(window).resize(shinyjs.calcHeight);
 }
+
 shinyjs.calcHeight = function() { 
   Shiny.onInputChange('plotHeight', $(window).height());
 }

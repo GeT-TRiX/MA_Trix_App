@@ -85,7 +85,7 @@ vennfinal <- reactive({
 
   
   if(input$Notanno){
-    resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:",GeneName)) %>% as.data.frame()
+    resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}",GeneName)) %>% as.data.frame()
   }
   
   reslist[[1]] <- resfinal
