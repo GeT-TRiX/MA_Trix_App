@@ -3,15 +3,15 @@
 *
 *  (c) 2014 PF bioinformatique de Toulouse
 *  All rights reserved
-* 
+*
 *
 *  This script is an adaptation of the venny script developed by
 *  Juan Carlos Oliveros, BioinfoGP, CNB-CSIC:
-*  Oliveros, J.C. (2007) VENNY. An interactive tool for comparing 
+*  Oliveros, J.C. (2007) VENNY. An interactive tool for comparing
 *  lists with Venn Diagrams.
 *  http://bioinfogp.cnb.csic.es/tools/venny/index.html.
-*  It is distributed under the terms of the GNU General Public 
-*  License as published by the Free Software Foundation; either 
+*  It is distributed under the terms of the GNU General Public
+*  License as published by the Free Software Foundation; either
 *  version 2 of the License, or (at your option) any later version.
 *
 *  The GNU General Public License can be found at
@@ -26,9 +26,9 @@
 ***************************************************************/
 
 /***************************************************************
-*                         
+*
 * Adapted to Shiny by Franck Soubès.
-* 
+*
 ****************************************************************/
 
 $(document).ready(function () {
@@ -43,14 +43,14 @@ $(document).ready(function () {
 				fontSize     = "12px",
 				fontFamily   = "Arial",
         uploadSeries = new Array();
-  
- 
-        
+
+
+
   function updateJvenn() {
-    Shiny.addCustomMessageHandler("updatejvenn", function(final) {	
+    Shiny.addCustomMessageHandler("updatejvenn", function(final) {
 	    let seriesTable = final;//jsonData;
-      Shiny.addCustomMessageHandler("updatejcol", function(coljvenn) {	
-        
+      Shiny.addCustomMessageHandler("updatejcol", function(coljvenn) {
+
         let arraylen = (coljvenn.length/3)
         let R2jspal =new Array(arraylen);
         let mypalette = new Array(Math.ceil(coljvenn.length / 3)).fill("").map(function() { return this.splice(0, 3) }, coljvenn.slice());
@@ -58,6 +58,7 @@ $(document).ready(function () {
         for (let i = 0 ; i< arraylen ; i++ ){
           R2jspal[i] = "rgb(".concat(mypalette[i]).concat(")");
         }
+				
 			  $("#jvenn-container").jvenn({
 			  series: seriesTable,
 			  colors : R2jspal,
@@ -67,13 +68,13 @@ $(document).ready(function () {
 			  searchStatus: $("#search-status"),
 			  displayMode: displayMode,
 			  displayStat: displayStat,
-					
+
 			  fnClickCallback: function() {
 			    let value = "";
 				  nameslis = [];
 				  if (this.listnames.length == 1) {
 				    value += "Elements only in ";
-				  } 
+				  }
 				  else {
 					  value += "Common elements in ";
 			    }
@@ -81,48 +82,49 @@ $(document).ready(function () {
 				    nameslis.push(this.listnames[name]);
 				  }
 				  value += ":\n";
-				  mylist =[];
+				  jvennlist =[];
 				  for (val in this.list) {
-				    mylist.push( this.list[val]);
+				    jvennlist.push( this.list[val]);
 				  }
 				  $("#names").val(value);
-          Shiny.onInputChange("testons",mylist);// renvoyer dans R
+
+          Shiny.onInputChange("testons",jvennlist);// renvoyer dans R
 				  Shiny.onInputChange("together",nameslis.join(""));// renvoyer dans R
 				  Shiny.onInputChange("selcontjv",nameslis);
-				  return(mylist); 
+				  return(jvennlist);
 	        }
 			  });
 		  });
-    
+
 	  });
   }
-  
-      
+
+
       //$('.draggable').addClass('draggable');
       //$('.draggable').draggable();
-      
-      
+
+
       //$('#jvenn-container').addClass('parent');
       //$('.children').draggable({ containment: "parent" });
 
       //$('.children1').addClass('draggable');
       //$('.children1').draggable();
-      
+
       //$("#jvenn-container" ).draggable();
       //$('#jvenn-container').addClass('draggable');
-      
+
       //$("div#jvenn-container .test").addClass('draggable');
       //$("div#jvenn-container .test").draggable();
 
-      
-      
+
+
 			$('[id^="clear"]').click(function() {
 				let index = $(this).attr("id").split("_")[1];
 				$("#area" + index).val("");
 				$("#name" + index).val("List " + index);
 				updateJvenn();
 			});
-			
+
 			// update the view when any fields change
 			$("[id^=name]").change(function() {
 				updateJvenn();
@@ -130,55 +132,55 @@ $(document).ready(function () {
 			$("[id^=area]").change(function() {
 				updateJvenn();
 			});
-			
+
 			$("#venn-type").change(function() {
 				updateJvenn();
 			});
 				$("#ds_yes").click(function() {
 				displayStat = true;
 				Shiny.onInputChange("mystat",displayStat);
-				updateJvenn();				
+				updateJvenn();
 			});
 			$("#ds_no").click(function() {
 				displayStat = false;
 				Shiny.onInputChange("mystat",displayStat);
-				updateJvenn();				
+				updateJvenn();
 			});
-			
+
 			$("#dsw_yes").click(function() {
 				displaySwitch = true;
-				updateJvenn();				
+				updateJvenn();
 			});
 			$("#dsw_no").click(function() {
 				displaySwitch = false;
-				updateJvenn();				
+				updateJvenn();
 			});
-			
+
 			$("#dm_classic").click(function() {
 				displayMode = "classic";
         Shiny.onInputChange("updamod",displayMode);
-				updateJvenn();				
+				updateJvenn();
 			});
-			
-			
+
+
 			$("#dm_edwards").click(function() {
 				displayMode = "edwards";
 				Shiny.onInputChange("updamod",displayMode);
-				updateJvenn();				
+				updateJvenn();
 			});
-			
+
 			$('[id^="ff"]').click(function() {
 				fontFamily = $(this).html();
 				//Shiny.onInputChange("updamod",fontFamily);
-				updateJvenn();				
+				updateJvenn();
 			});
-			
+
 			$('[id^="fs"]').click(function() {
 				fontSize = $(this).html();
 				Shiny.onInputChange("myfont",fontSize);
-				updateJvenn();				
+				updateJvenn();
 			});
-		
+
 
 			updateJvenn();
 

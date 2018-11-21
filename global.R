@@ -8,7 +8,7 @@
 
 # increase loading files
 options(shiny.maxRequestSize=128000000)
-
+options(digits=3)
 
 cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"), 
                      Stripchart=c(`Without boxplot`="LB", `With boxplot` = "WB"))

@@ -145,8 +145,10 @@ MATRiX is an application dedicated to DNA chip analysis, this application incorp
 MATRiX app is working with specific data produced by the limma package, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/sampleData.zip)."),
                                       
                                          p("Hereafter is the global workflow passing by the statistical analysis to the visualization:"),tags$br(),
+                                         div(id="workflow",
                                          tags$p(
-                                           tags$img(src = "whatmaen.png"))
+                                           tags$img(src = "whatmaen.png",style="width: 100%; height: 100%"))
+                                         )
                                          ),
                                 tabPanel("Authors", h3("The main contributors to MATRiX:"),
                                          p(a("Yannick Lippi",href="mailto:yannick.lippi@inra.fr"), "(Initiator, beta-testing, feature suggestions)"),
@@ -231,7 +233,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                      
                      box(
                        title = "What's new in MATRiX", width = NULL, status = "primary",
-                       div(style = 'overflow-y: scroll; height: 550px',
+                       div(style = 'overflow-y: scroll; height: 500px',
                            addNews("Aug 15th 2018", "Presentation/Video", "Added a video to present MATRiX and add modules to import files"),
                            addNews("Aug 10th 2018", "Upload/Volcano", "You can explore your different comparisons with a volcano plot"),
                            addNews("Aug 6th 2018", "Venn Diagram/Enrichment", "Add acyclic graph if download"),
@@ -400,9 +402,6 @@ MATRiX app is working with specific data produced by the limma package, resultin
             conditionalPanel(condition = '!output.boolmark',
             column(12,
                     h3("Show the actual data frame with the columns selected"),
-                    helpText(
-                      "Warning according to the number of NA for a given parameter, the analysis should be strongly biased"
-                    ),
                     dataTableOutput("new_group")
             ),ns = NS("datafile"))
           

@@ -18,6 +18,8 @@ shinyjs.calcHeight = function() {
 
 shinyServer(function(input, output,session) {
   
+  
+  
   hide(id = "loading-content", anim = TRUE, animType = "fade",time=2)
   hide(id = "loading-content-bar", anim = TRUE, animType = "fade",time=2)
   

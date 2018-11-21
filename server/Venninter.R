@@ -103,10 +103,10 @@ vennfinal <- reactive({
     }
     
     if(input$Notanno){
-      resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] %>% filter(., !grepl( "^chr[A-z0-9]{1,}:",GeneName)) %>% as.data.frame()
+      resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,function(x) list(mean=round(mean(x), 3))),"GeneName"] %>% filter(., !grepl( "^chr[A-z0-9]{1,}:",GeneName)) %>% as.data.frame()
     }
     else 
-      resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"] %>% as.data.frame()
+      resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,function(x) list(mean=round(mean(x), 3))),"GeneName"] %>% as.data.frame()
     
     reslist[[2]] <- resfinal
   }
