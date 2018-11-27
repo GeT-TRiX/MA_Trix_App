@@ -622,9 +622,9 @@ MATRiX app is working with specific data produced by the limma package, resultin
                    tags$head(
                      tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
                    ),
-                   tags$head(
-                     tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap-responsive.css") # add style.css in order to add better police
-                   ),
+                   # tags$head(
+                   #   tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap-responsive.css") # add style.css in order to add better police
+                   # ),
                    tags$head(tags$style("
                                         #container * {
                                         display: inline;
@@ -775,8 +775,13 @@ MATRiX app is working with specific data produced by the limma package, resultin
                              p("Police's size", style="color:white; font-weight: 700; font-size: 14px;"),
                               includeHTML("HTML/fontsize.html"),
                             br(),
+                            fluidRow(
+                              column(6,
                                p("Find an element in list(s)",style="color:white; font-weight: 700; font-size: 14px;"),
-                             includeHTML("HTML/seekgene.html")
+                             includeHTML("HTML/seekgene.html")),
+                             column(6,
+                              p("Display switch",style="color:white; font-weight: 700; font-size: 14px;"),
+                            includeHTML("HTML/dispswitch.html")))
 
 
                             )),
@@ -852,9 +857,6 @@ MATRiX app is working with specific data produced by the limma package, resultin
                         h1("Here's a tracker for your different selections:"),
                           tags$head(
                             tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
-                          ),
-                          tags$head(
-                            tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.css") # add style.css in order to add better police
                           ),
 
                           tags$head(tags$style("

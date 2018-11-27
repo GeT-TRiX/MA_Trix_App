@@ -72,17 +72,21 @@ vennfinal <- reactive({
     paste(collapse = "")
 
 
-  if(!input$Allcont)
-    resfinal <- csvf()[[3]] %>%
-      filter(ProbeName %in% venninter()[[reordchoice]]) %>%
-      select(ProbeName, GeneName, paste0("logFC_",  input$selcontjv)) %>%
-      mutate_if(is.numeric, funs(format(., digits = 3)))
-  else
+  if(!input$Allcont){
     resfinal <- csvf()[[3]] %>%
     filter(ProbeName %in% venninter()[[reordchoice]]) %>%
+      #filter(ProbeName %in% input$jvennlist) %>%
+      select(ProbeName, GeneName, paste0("logFC_",  input$selcontjv)) %>%
+      mutate_if(is.numeric, funs(format(., digits = 3)))
+
+    }
+  else{
+    resfinal <- csvf()[[3]] %>%
+    filter(ProbeName %in% venninter()[[reordchoice]]) %>%
+    #filter(ProbeName %in% input$jvennlist) %>%
     select(ProbeName, GeneName, paste0("logFC_", choix_cont())) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
-
+  }
 
   if(input$Notanno){
     resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}|[0-9]{7,}",GeneName)) %>% as.data.frame()
@@ -98,7 +102,6 @@ vennfinal <- reactive({
   if(input$dispvenn == "genes"){
     options(datatable.optimize=1)
     for (i in mycont) {
-      print(i)
       resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
     }
 

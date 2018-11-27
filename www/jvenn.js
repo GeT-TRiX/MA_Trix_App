@@ -69,6 +69,7 @@ $(document).ready(function () {
 			  searchStatus: $("#search-status"),
 			  displayMode: displayMode,
 			  displayStat: displayStat,
+				displaySwitch:displaySwitch,
 
 			  fnClickCallback: function() {
 			    let value = "";
@@ -83,13 +84,12 @@ $(document).ready(function () {
 				    nameslis.push(this.listnames[name]);
 				  }
 				  value += ":\n";
-				  jvennlist =[];
-				  for (val in this.list) {
-				    jvennlist.push( this.list[val]);
-				  }
+				  // jvennlist =[];
+				  // for (val in this.list) {
+				  //   jvennlist.push( this.list[val]);
+				  // }
 				  $("#names").val(value);
-
-          Shiny.onInputChange("testons",jvennlist);// renvoyer dans R
+          //Shiny.onInputChange("jvennlist",jvennlist);// renvoyer dans R
 				  Shiny.onInputChange("together",nameslis.join(""));// renvoyer dans R
 				  Shiny.onInputChange("selcontjv",nameslis);
 				  return(jvennlist);
@@ -159,10 +159,12 @@ $(document).ready(function () {
 
 			$("#dsw_yes").click(function() {
 				displaySwitch = true;
+				Shiny.onInputChange("dispswitch",displaySwitch);
 				updateJvenn();
 			});
 			$("#dsw_no").click(function() {
 				displaySwitch = false;
+				Shiny.onInputChange("dispswitch",displaySwitch);
 				updateJvenn();
 			});
 
