@@ -35,14 +35,14 @@ vennchoice <- reactive({
 venninter <- reactive({
   req(vennlist(), user_cont())
   myelist <- setvglobalvenn(vennlist()[[1]], user_cont())
-  
+
   return(myelist)
 })
 
 
 #' vennfinal is a reactive function which return a list of data frame corresponding to the computationnal mean of each logFC for the possible logical relations between a finite collection of different sets
 #' and a data frame with as primary key the probenames associated with the corresponding gene names and logFC
-#' 
+#'
 #'
 #' @param vennchoice reactive character vector
 #' @param adjusted dataframe subset of the alltoptable
@@ -54,16 +54,16 @@ venninter <- reactive({
 #'
 
 vennfinal <- reactive({
-  
-  
+
+
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(choix_cont(), 'You need to choose your comparison to display the Venn diagram!')%next%
+      need(choix_cont(), 'Set your thresholds and then select your comparison to display the Venn diagram!')%next%
       need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!'))
-  
+
   if (is.null(vennchoice))
     return(NULL)
-  
+
 
   reslist = list()
   reordchoice <- input$selcontjv %>%
@@ -83,16 +83,16 @@ vennfinal <- reactive({
     select(ProbeName, GeneName, paste0("logFC_", choix_cont())) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
 
-  
+
   if(input$Notanno){
     resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}|[0-9]{7,}",GeneName)) %>% as.data.frame()
   }
-  
+
   reslist[[1]] <- resfinal
-  
+
   if(!input$Allcont)
     mycont = paste0("logFC_",input$selcontjv)
-  else 
+  else
     mycont = paste0("logFC_",choix_cont())
 
   if(input$dispvenn == "genes"){
@@ -101,13 +101,13 @@ vennfinal <- reactive({
       print(i)
       resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
     }
-    
+
     if(input$Notanno){
       resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,function(x) list(mean=round(mean(x), 3))),"GeneName"] %>% filter(., !grepl( "^chr[A-z0-9]{1,}:",GeneName)) %>% as.data.frame()
     }
-    else 
+    else
       resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,function(x) list(mean=round(mean(x), 3))),"GeneName"] %>% as.data.frame()
-    
+
     reslist[[2]] <- resfinal
   }
 
@@ -142,7 +142,7 @@ output$venngenesbef <- renderText({
   req(input$topgenes)
   if(input$dispvenn == "genes")
   mytitlevenn <<- print(paste("Barplot showing the computationnal logFC mean of the top " ,input$topgenes , " genes after the rendering table"))
-  
+
 })
 
 
@@ -152,15 +152,15 @@ output$dfvenn <- renderText({
     mytitlevenn <<- print(paste("Table showing the ProbeNames and GeneNames associated with their respective logFC for the intersection(s) selected"))
   else
     mytitlevenn <<- print(paste("Table showing the GeneNames associated with the average logFC for the intersection(s) selected"))
-    
-  
+
+
 })
 
 output$dfvennbef <- renderText({
   req(input$topgenes)
   if(input$dispvenn == "genes")
     mytitlevenn <<- print(paste("Table showing the GeneNames associated with their respective logFC for the intersection(s) selected"))
-  
+
 })
 
 
@@ -206,17 +206,17 @@ plottopgenes <- eventReactive(input$topdegenes, {
 
   if(input$Allcont)
     mycont <- paste0("logFC_", choix_cont())
-  else 
+  else
     mycont <- paste0("logFC_", input$selcontjv)
-    
+
   print(mycont)
-  
+
   if(input$dispvenn == "probes")
     myplot <- topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
   else
     myplot <- topngenes(vennfinal()[[2]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
-  
-  
+
+
   return(myplot)
 })
 
@@ -237,7 +237,7 @@ plottopgenesmean <- eventReactive(input$topdegenes, {
   #myselcont <- ifelse(input$Allcont, choix_cont(), input$selcontjv)
   mycont = paste0("logFC_", vennchoice())
     myplot <- topngenes(vennfinal()[[1]][input$vennresintergen_rows_all, , drop = FALSE], mycont, venntopgenes(), input$dispvenn, mean = T)
-  
+
   return(myplot)
 })
 
@@ -248,7 +248,7 @@ observeEvent(input$topdegenes, {
     req(plottopgenes())
     plotOutput(plottopgenes())
   }))
-  
+
 })
 
 
@@ -256,16 +256,16 @@ observeEvent(input$topdegenes, {
   isolate(output$barplotvennmean <- renderPlot({
     req(plottopgenesmean(), input$dispvenn == "genes")
     plotOutput(plottopgenesmean())
-    
+
   }))
-  
+
 })
 
 
 
 observe({
   validate(need(csvf(), 'You need to import data to visualize this plot!'))
-  
+
   output$savebarplot <- downloadHandler(filename <- function() {
     paste0(
       basename(tools::file_path_sans_ext(projectname())),
@@ -276,12 +276,12 @@ observe({
   },
   content <- function(file) {
     if (input$formvenbar == "pdf")
-      
+
       pdf(file,
           width = 16,
           height = 7,
           pointsize = 12)
-    
+
     else if (input$formvenbar == "png")
       png(
         file,
@@ -296,10 +296,10 @@ observe({
           width = 16,
           height = 7,
           pointsize = 12)
-    
+
     print(plottopgenes())
-    
+
     dev.off()
   })
-  
+
 })

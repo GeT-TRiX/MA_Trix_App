@@ -8,7 +8,7 @@
 
 ###############################
 ######## dashboardsidebar     #
-###############################  
+###############################
 
 
 inactivity <- "function idleTimer() {
@@ -37,14 +37,14 @@ shinyjs.init = function() {
   $(window).resize(shinyjs.calcHeight);
 }
 
-shinyjs.calcHeight = function() { 
+shinyjs.calcHeight = function() {
   Shiny.onInputChange('plotHeight', $(window).height());
 }
 "
 
 
 dbHeader <- dashboardHeader(title = "MATRiX")
-dbHeader$children[[2]]$children <-  tags$a(tags$img(src='matrix.png',height='40',width='40',style="margin:5px 0 5px 0;",align='left'), 
+dbHeader$children[[2]]$children <-  tags$a(tags$img(src='matrix.png',height='40',width='40',style="margin:5px 0 5px 0;",align='left'),
                                            tags$h3("MATRiX",style="font-family:Purisa; margin:15px 25px 5px 0;color:white; "))
 
 
@@ -57,14 +57,14 @@ sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptom
 
 #tags$head(includeHTML("www/google-analytics.html")),
 tags$head(
-     #tags$script(src = inactivity),   
+     #tags$script(src = inactivity),
      tags$script(src = "custom.js")),
   div(id = "loading-content-bar",p()),
 
   div(
     id = "matrixapp",
     sidebarMenu(id = "side",
-      menuItem("Home", tabName = "Home", icon = icon("home")),      
+      menuItem("Home", tabName = "Home", icon = icon("home")),
       menuItem("Upload Data", tabName = "Upload", icon = icon("upload")),
       menuItem("PCA", tabName = "PCA", icon = icon("line-chart")),
       menuItem("Venn diagram", tabName = "Venn", icon = icon("line-chart")),
@@ -86,39 +86,36 @@ tags$head(
         width = 168,
         style = "position:absolute;bottom:0;margin:0 0 15px 10px;"
       ) , href="https://www6.toulouse.inra.fr/toxalim", target="_blank")
-      
+
       )
   )
 )
 
   ###############################
   ######## dashboardbody        #
-  ###############################  
+  ###############################
   ###############################
   ######## Upload Page          #
-  ############################### 
+  ###############################
 
 body <- dashboardBody(
   #tags$head(includeScript("google-analytics.js")),
-  
+
   tags$style(type="text/css", inactivity),
   tags$style(type="text/css", Errorcss),
 
-  
-  #tags$head(tags$style(HTML("div.col-sm-10 {padding:1px}"))),
-  #tags$head(tags$style(HTML("div.col-sm-2 {padding:0px}"))),
+
   useShinyjs(),
-  extendShinyjs(text = 'shinyjs.hideSidebar = function(params) { $("body").addClass("sidebar-collapse"); 
+  extendShinyjs(text = 'shinyjs.hideSidebar = function(params) { $("body").addClass("sidebar-collapse");
               $(window).trigger("resize"); }'),
-  extendShinyjs(text='shinyjs.showSidebar = function(params) { $("body").removeClass("sidebar-collapse"); 
+  extendShinyjs(text='shinyjs.showSidebar = function(params) { $("body").removeClass("sidebar-collapse");
               $(window).trigger("resize"); }'),
-  
+
   tags$style(HTML("
     .tabbable > .nav > li > a[data-value='hmpan'] {background-color: red;   color:white}
     .tabbable > .nav > li > a[data-value='cutpan'] {background-color: blue;  color:white}
   ")),
-  
-  useToastr(),
+
   inlineCSS(appCSS),
   includeCSS("./css/style.css"),
   div(
@@ -133,17 +130,17 @@ body <- dashboardBody(
             fluidRow(
               column(width=9,
                      div(style="width:100% ;max-width: 1500px; height: 1500px max-height: 2200px;",id = "homepage",
-                         
+
                          tabBox(title="Welcome to MATRiX", width=NULL,id = "homepage",
 
                                 tabPanel("About", style = "background-color: #ffffff;",
                                          tags$h3("MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics."),
-                                         p("This project initiated by Yannick Lippi aims to facilitate access to biologist in order to publish graphs such as heatmap, PCA or Venn diagram related to specifics data produced by TRiX's facility.", tags$br(),"  
+                                         p("This project initiated by Yannick Lippi aims to facilitate access to biologist in order to publish graphs such as heatmap, PCA or Venn diagram related to specifics data produced by TRiX's facility.", tags$br(),"
 
 MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).",tags$br(),"
 
 MATRiX app is working with specific data produced by the limma package, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/sampleData.zip)."),
-                                      
+
                                          p("Hereafter is the global workflow passing by the statistical analysis to the visualization:"),tags$br(),
                                          div(id="workflow",
                                          tags$p(
@@ -158,11 +155,11 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                          p("Thanks to the Toxalim's team BioToMyc & TIM and especially to the following people for their helps reporting errors, proposing new features and beta testing of MATRiX:"),
                                          p("Laura Costes,", "Anne Fougerat,","Claire Naylies,", "Philippe Pinton,","Arnaud Polizzi," ,"Marion Regnier," , "Sandrine Ellero-Simatos,","Sarra Smati."),
                                          p("Special Thanks to Didier Laborie for installing the virtual machine with Ubuntu and for answering my questions")
-                                         
+
                                 ),
                                 tabPanel("Packages",
                                          tags$h3("If you are using MATRiX in your work, you can cite some of the packages by clicking on the link down below."),
-                                         
+
                                          actionLink("session",
                                                     "Print version information about R, the OS and attached or loaded packages."),
                                          br(), br(), br(),
@@ -172,11 +169,11 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                          tags$head(
                                            tags$style(
                                              "#entry {width: 100%;position: relative;left: 4%;}
-              #users ul li {font-family: 'Inconsolata', cursive;font-weight: 500;line-height: 1.5;color: white;position: static;font-size: 18px;} 
-              #users a{color: red;} #users p{color:white;}")), 
-                                         
+              #users ul li {font-family: 'Inconsolata', cursive;font-weight: 500;line-height: 1.5;color: white;position: static;font-size: 18px;}
+              #users a{color: red;} #users p{color:white;}")),
+
                                          includeCSS("www/shinychat.css"),
-                                         
+
                                          # And custom JavaScript -- just to send a message when a user hits "enter"
                                          # and automatically scroll the chat window for us. Totally optional.
                                          includeScript("www/sendOnEnter.js"),
@@ -185,10 +182,10 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                                   div( style = "width:100% ; max-width: 1200px; height: 500px",
                                                        #tags$h2("Support client"),
                                                        div(
-                                                         class = "row-fluid", 
+                                                         class = "row-fluid",
                                                          # Create a spot for a dynamic UI containing the chat contents.
                                                          uiOutput("chat"),
-                                                         
+
                                                          # Create the bottom bar to allow users to chat.
                                                          fluidRow(
                                                            div(class="span8",
@@ -199,20 +196,20 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                                            )
                                                          )
                                                        )))
-                                         
-                                )), 
+
+                                )),
                                 tabPanel("Video",
                                          div( id="video",
                                          fluidRow(
                                            column(8, align="center", offset = 2,
-                                         tags$iframe(src = "https://www.youtube.com/embed/lfI0zRYzeJs?vq=hd1080", width="960", height="540", align= "middle", frameborder="0",allowfullscreen ="1" )                                         
+                                         tags$iframe(src = "https://www.youtube.com/embed/lfI0zRYzeJs?vq=hd1080", width="960", height="540", align= "middle", frameborder="0",allowfullscreen ="1" )
                                          ))))
 
                                 ))),
               column(width=3,
                      div(id="pass",style = "word-wrap: break-word;",
                          box(id="boxpass",title = strong("Session information", style="font-size:25px;"), width = NULL, background = "light-blue",
-                             
+
                              # The right sidebar
                              # Let the user define his/her own ID
                              textInput("user", "Your User ID:", value=""),
@@ -225,12 +222,12 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                  #helpText(HTML("<p>Built using R & <a href = \"http://rstudio.com/shiny/\">Shiny</a>.<p>Source code available <a href =\"https://github.com/trestletech/ShinyChat\">on GitHub</a>.")),
                                  p("Built using R and" ,tags$a(href = "http://rstudio.com/shiny/",target="_blank",
                                                                "Shiny")),
-                                 p("Chat source code is available ", 
+                                 p("Chat source code is available ",
                                    tags$a(href = "https://github.com/trestletech/ShinyChat",target="_blank",
                                           "here"))
                              ))
                      ),
-                     
+
                      box(
                        title = "What's new in MATRiX", width = NULL, status = "primary",
                        div(style = 'overflow-y: scroll; height: 500px',
@@ -248,29 +245,29 @@ MATRiX app is working with specific data produced by the limma package, resultin
                            addNews("Jun 26th 2018","Add features","It's now possible to interact with the rendering table to filter the table in the aim of plotting the top n genes.
                           For the GO enrichment it is now possible to select the rows in order to display the gene symbol according to the entrez ids"),
                            addNews("Jun 22th 2018","Bug fixes","For two contrasts the venn.draw function was not ordering the contrast names in the right order."),
-                           addNews("Jun 20th 2018","MATRiX","First public release of MATRiX. 
+                           addNews("Jun 20th 2018","MATRiX","First public release of MATRiX.
                                                               Enhancement of the gui with the use of dashboard package"),
                            addNews("Jun 18th 2018","GO enrichment","It is now possible to query the DWS for the Heatmap and save the result in xlsx format for the different clusters"),
                            addNews("Jun 15th 2018","DNS ","Adding DNS for the MATRiX application (matrix.toulouse.inra.fr)"),
                            addNews("Jun 10th 2018","Venn diagram","The venn diagram FC and display of the top n genes
-                                                                have been added to compare the results of 2 or more contrasts."), 
-                           addNews("Jun 5th 2018","PCA/Heatmap","Display color groups side by side in the gui"), 
+                                                                have been added to compare the results of 2 or more contrasts."),
+                           addNews("Jun 5th 2018","PCA/Heatmap","Display color groups side by side in the gui"),
                            addNews("May 29th 2018","beta-test","The service will be made available once the beta test phase is officially completed.")
                        )
                      )
-                    
+
               )
             )
             ),
-    
+
     tabItem(tabName = "Upload",
             bsAlert("alert"),
             tags$style(type='text/css', ".well { max-width: 2em; }"),
             fluidRow(
               tags$head(
-                tags$style(type="text/css", ".myslidermain .irs-grid-text {bottom: 5px;color: #333;} 
+                tags$style(type="text/css", ".myslidermain .irs-grid-text {bottom: 5px;color: #333;}
       .myslidermain .irs-min{color: #333;font-size: 10px;line-height: 1.333;text-shadow: none;top: 0;padding: 1px 3px;
-      background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px} 
+      background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px}
       .myslidermain .irs-max{color: #333;font-size: 10px;line-height: 1.333;text-shadow: none;top: 0;padding: 1px 3px;
       background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px}")
               ),
@@ -278,7 +275,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
               column(width=9,
                 div( style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;" , id = "upload",
                      tabBox(title="Upload your data", width=NULL,id = "upload",
-                            
+
                             tabPanel("Import your data", style = "background-color: #ffffff;",
                             conditionalPanel(condition = 'output.boolmark', #Hide or Show event depending on the loading data success or failure
                                              #includeMarkdown("markdown/help.md")
@@ -293,17 +290,17 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                              ),
 
                                                tags$p(
-                                                 
+
                                                 tags$img(src = "pdata.png"),
                                                 tags$img(src = "workingset.png"),
                                                  tags$img(src = "restable.png")
-                                                
+
                                                  ),
 
                                              tags$h1("Tips"),
                                              tags$ul(
                                                tags$li("You can select a region by handling the left click button if the files are stacked together, if it's not the case you can select the different files by maintening the Ctrl button and clicked on the files.")
-                                             ),  
+                                             ),
                                              tags$h1("Warning"),
                                              tags$ul(
                                                tags$li("It is highly recommanded to not modify these files (removed columns, change column names ...) in the aim of not disturbing the well functionning of the application.")
@@ -311,9 +308,9 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                              ,ns = NS("datafile")
                                              ),
                             conditionalPanel(condition = '!output.boolmark',
-                            
+
                             textOutput("myFileName"),
-                            
+
                             column(12, h3(
                                 "This table summarizes the number of significant genes depending on the p-value treshold choosen with the slider bar"
                               ),
@@ -324,17 +321,17 @@ MATRiX app is working with specific data produced by the limma package, resultin
                               ),
                               dataTableOutput("data_summary") # render a renderTable or renderDataTable within an application page
                             )),
-                            
+
                             column(12,
                               h3("This table shows the samples with the corresponding groups"),
                               dataTableOutput("new_test")
                             )
                             ,ns = NS("datafile")
-                            
+
                    )),
-                     tabPanel("Volcano plot",value="volcano", style = "background-color: #ffffff;", 
+                     tabPanel("Volcano plot",value="volcano", style = "background-color: #ffffff;",
                               conditionalPanel(condition = '!output.boolmark',
-                             div(style="display:inline-block;",           
+                             div(style="display:inline-block;",
                               fluidRow(column(3, style="width:33.5%;",
                               downloadButton("savevolcano", "Save your Volcano plot" , style =
                                                "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
@@ -345,13 +342,13 @@ MATRiX app is working with specific data produced by the limma package, resultin
                               ),
                               plotOutput(outputId = "volcanoplot", height = 900)
                    )
-            ))),  
+            ))),
             div(id="pass",style = "word-wrap: break-word;",
             column(width = 3,
             box(id="boxpass",title = strong("Upload data", style="font-size:25px;"), width = NULL, background = "light-blue",
                 inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
 
-                
+
                 downloadLink("downloadData", label = "download sample data", style="color:red; float:right;"),
                 br(),br(),
                 csvFileInput("datafile", "User data (.csv format)"),
@@ -367,24 +364,24 @@ MATRiX app is working with specific data produced by the limma package, resultin
                 #   multiple = T # Attribute to load multiple data at once
                 # ),
                 br(),
-                
+
               conditionalPanel(condition = '!output.boolmark',
                 selectInput(
                   "method","Choose your statistical method",choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None")),
                 strong("VOLCANO plot",style="font-size:18px;"),
                 br(),br(),
               uiOutput("compvolc"),
-              div(id = "mytextvolc", 
+              div(id = "mytextvolc",
                   p(" Highlight your selected gene(s) in the volcano plot with a comma-separated list of input ")
                   ),
-              
+
               textInput(inputId = "fillvolc",label = NULL,value = "",
                         placeholder = "FOXP2,OT,AVPR1a",width = "100%"
               ),
-              div(id = "mytextvolcgrep", 
+              div(id = "mytextvolcgrep",
                   p(" Highlight a family of gene in the volcano plot")
               ),
-              
+
               textInput(inputId = "findfamily",label = NULL,
                         placeholder = "Cyp",width = "100%"),
               numericInput(
@@ -404,14 +401,14 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     h3("Show the actual data frame with the columns selected"),
                     dataTableOutput("new_group")
             ),ns = NS("datafile"))
-          
-            
+
+
             )),
-    
+
   ###############################
   ######## PCA page             #
-  ############################### 
-    
+  ###############################
+
     tabItem(tabName = "PCA",
             tags$style(type='text/css', ".well { max-width: 20em; }"),
             tags$style(type='text/css', ".well { max-height: 50em; }"),
@@ -435,23 +432,23 @@ MATRiX app is working with specific data produced by the limma package, resultin
                   tabPanel(
                     strong("PCA plot"),
                     tags$style(type = "text/css",".shiny-output-error:before { visibility: hidden; }"),
-                    
-                    
+
+
                     div(style="display:inline-block;",
                         fluidRow( column(1 ,
                                          downloadButton("savepca", "Save your PCA" , style =
                                                           "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
                                   column(2),
-                                  column( 3, 
+                                  column( 3,
                                           selectInput(
                                             "formpca",label = NULL,
                                             choices = c("png", "eps", "pdf")))
-                                  
+
                         )),
-                    
+
                     plotOutput(outputId = "PCA", height = 700)
                   )
-                  
+
                 )
               )
             ),
@@ -470,8 +467,8 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     inputId = "noIndividuspca",label = "Clear selection",icon = icon("square-o"),
                     style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
                   ),
-                
-                
+
+
                   fluidRow(column(6,
                     selectInput("dim1",
                       label = h6(gettext("x axis")),
@@ -511,24 +508,24 @@ MATRiX app is working with specific data produced by the limma package, resultin
                   fluidRow(column(3),
                   column(8,checkboxInput("jitter", "Avoid overlap between points", FALSE))),
                   verbatimTextOutput("valued"),
-                  
+
                   sliderInput(
                     "labelsiize","Label size",min = 2,max = 6,value = 4,step = 1
                   ),
-                  
+
                   sliderInput("pointsiize","Point size",min = 2,max = 6,value = 2,step = 1
                   ),
-                  
+
                   uiOutput('myPanelpca'),
                   br()
-            ))))), 
+            ))))),
   ###############################
   ######## Venn Page            #
-  ############################### 
-  
-  
+  ###############################
+
+
     tabItem(tabName = "Venn",
-            
+
             tags$style(type='text/css', ".well { max-width: 25em; }"),
             tags$style(type='text/css', ".well { max-height: 70em; }"),
             fluidRow(column(
@@ -536,12 +533,12 @@ MATRiX app is working with specific data produced by the limma package, resultin
               div(
                 style = "width:100% ; max-width: 1500px; height: 1780px; max-height: 2800px;",
                 tabsetPanel(
-                id = "Vennd",    
+                id = "Vennd",
 
                   tabPanel(
                     value= "vennset",
                     strong("Visualize the Venn diagram"),
-                  
+
                     div(style="display:inline-block",
                         fluidRow(column(3, style= "width:14.2%;",
 
@@ -554,7 +551,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                  column(3, style="width:11.8%;",
                                         downloadButton("savevenn", "Save your plot" , style =
                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                 
+
                                      column(3,style="width:10%;", selectInput(
                                        "formven",label = NULL,
                                        choices = c("png", "eps", "pdf"))),
@@ -562,15 +559,14 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                  column(3,
                                         downloadButton('downloadvennset', "Download the filtered data",
                                                 style ="color: #fff; background-color: #337ab7; border-color: #2e6da4;"))
-                                 
+
                         )),
 
                     conditionalPanel(condition = '!output.bool',
                                      uiOutput(outputId = "image")
                                      , uiOutput("sorry")),
-                    tags$script(src="libraries/bootstrap.min.js") , 
-                    tags$script(src="libraries/prettify.js") , 
-                    tags$script(src="libraries/bootstrap-colorpicker.min.js") , 
+                    tags$script(src="libraries/bootstrap.min.js") ,
+                    tags$script(src="libraries/prettify.js") ,
                     tags$script(src="libraries/jvenn.min.js")  ,
                     tags$script(src="libraries/canvas2svg.js")  ,
                     fluidRow(column(6,br(),br(),
@@ -581,20 +577,20 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     column(6,
                            div(class= "dfvenn" , style="font-size:24px; margin-top: 17px;",
                                htmlOutput("dfvenn")),
-                  conditionalPanel(condition = "input.dispvenn == 'genes'", 
+                  conditionalPanel(condition = "input.dispvenn == 'genes'",
                            helpText(
                              "You can directly filtered the table by fold change and save the output table"
                            )),
-                           
+
                            DT::dataTableOutput("vennresinter"),br(),br(),br(),
-                           conditionalPanel(condition = "input.selcontjv", 
+                           conditionalPanel(condition = "input.selcontjv",
                                             div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; "))
 
                     )),
                            div(style="display:inline-block", id ="dontwanttoshow",
                                fluidRow(
                                  tags$head(
-                                   tags$style(type="text/css", ".topgeness label{ display: table-cell; text-align: left; vertical-align: middle; } 
+                                   tags$style(type="text/css", ".topgeness label{ display: table-cell; text-align: left; vertical-align: middle; }
                  .inline .form-group{display: table-row;} ")
                                  ),
                                  column(3,br(),style= "width:21%;",
@@ -605,15 +601,15 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                             "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                         )),
                                  column(3, style= "width:26.0%;",br(),
-                                        
+
                                         downloadButton("savebarplot", "Save your barplot" , style =
                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
                                  column(3 ,br(),style= "width:11%;  padding: 0%;",
                                         selectInput( "formvenbar",label = NULL,
                                                      choices = c("png", "eps", "pdf"))),
-                                 
-                                 column(3,style= "width:9%; padding: 0%;", 
-                                        
+
+                                 column(3,style= "width:9%; padding: 0%;",
+
                                         uiOutput("topgenesvenn", style= "padding: 0px;font-weight: 400;top: 0px;
                                                  right: -22px;left: 0px;color: #3c8dbc;position: absolute;"))
                                )),
@@ -621,7 +617,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     #plotOutput(outputId ="barplotvenn", height = "auto"),
                    br(),
                    ##includeHTML("HTML/colorandname.html"),
-                   
+
                    h1("Here's a tracker for your different selections:"),
                    tags$head(
                      tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
@@ -633,12 +629,12 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                         #container * {
                                         display: inline;
                                         }")),
-                      
+
                    tags$head(tags$style("#mytext p{font-weight: 500;font-size: 17px;line-height: 1.5;color: white;
                                         position: static;}
                                         #mytext a{color: red;}"
                                         )),
-                   
+
                    div(
                      id = "container",
                      p("You have chosen the following comparisons"),
@@ -649,7 +645,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                      htmlOutput("myPVALvenn"),
                      p("and"),
                      htmlOutput("myFCvenn")
-                     
+
                    ),
                    div(
                      id = "container",
@@ -662,34 +658,34 @@ MATRiX app is working with specific data produced by the limma package, resultin
                      htmlOutput("topgenesdf"),
                      p("rows the of the previous table")
                    )
-                   
+
                   ),
-   
-  
+
+
                 tabPanel(strong("Venn GO enrichment"),
                             value = "venngopanel",
                             useShinyjs(),
-                            
+
                                 fluidRow( column(6 ,
                                                  downloadButton(
                                                    "saveclusterchoose",
                                                    "Download the graph" ,
                                                    style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                                  ),
-                                          column( 3, 
+                                          column( 3,
                                                   selectInput(
                                                     "formvennclus",label = NULL,
                                                     choices = c("png", "eps", "pdf")))
-                                          
+
                                 )),
-                            
-                            
+
+
                           plotOutput("clusterPlot", width = "100%", height = "700px"),
                           br(),br(),br(),
                           #plotOutput("acyclicgo", width = "100%", height = "1200px"),
                           verbatimTextOutput("debug")
                  )
-                          
+
                 )
               )
             ),
@@ -705,7 +701,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                              style =
                                "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                            ),
-                           
+
                           actionButton(inputId = "noCont",label = "Clear selection",
                           icon = icon("square-o"),
                           style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
@@ -718,18 +714,18 @@ MATRiX app is working with specific data produced by the limma package, resultin
                           selectInput("regulation", #  Create a select list that can be used to choose a single or multiple items from a list of values.
                                                 "Choose your regulation",
                                                 choices = c("both","up", "down")))),
-                          div(id = "mytext", 
+                          div(id = "mytext",
                            p("A comma-separated list of ",
                                 tags$a(href = "https://stat.columbia.edu/~tzheng/files/Rcolor.pdf",target="_blank",
                                   "x11"),
                                 "or",
                                 tags$a(href = "https://en.wikipedia.org/wiki/Web_colors#Hex_triplet",target="_blank",
                                   "hex colors."))),
-                          
+
                            textInput(inputId = "fill",label = NULL,value = c( "green,blue,red,purple,orange,brown"),
                              placeholder = "grey70, white, steelblue4",width = "100%"
                            ),
-                           
+
                            fluidRow( column(6,
                                             sliderInput("pvalvenn","P-value treshold",
                                               min = 0.01,max = 0.05,
@@ -741,21 +737,21 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                               value = 1,step = 1
                                             ))),
                            br(),
-                           
+
                            fluidRow(
                              column(12,
                                   selectInput("dispvenn", #  Create a select list that can be used to choose a single or multiple items from a list of values.
                                               "Choose if you want to display probes or genes",
                                               choices = c("probes", "genes"))),
-                           column(6, 
+                           column(6,
                                   checkboxInput("Notanno","Remove the genes that are not annotated",FALSE)),
-                           column(6, 
+                           column(6,
                                   checkboxInput("Allcont","Parse all the resulting logFC values depending on the comparison(s) selected",FALSE))),
-                           
+
                            br(),
-                          
-                          
-                          
+
+
+
                           shiny::actionButton(
                             "toggleAdvancedJvenn",
                             "Advanced Jvenn Options",
@@ -763,7 +759,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                             style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                           ),
                           br(),
-                  
+
                           shinyjs::hidden(div(
                             id = "advancedjvenn",
                             br(),
@@ -781,40 +777,40 @@ MATRiX app is working with specific data produced by the limma package, resultin
                             br(),
                                p("Find an element in list(s)",style="color:white; font-weight: 700; font-size: 14px;"),
                              includeHTML("HTML/seekgene.html")
-                           
-                              
+
+
                             )),
                           br(),
 
-                      
+
                       strong("Functional Annotation Clustering",style = "font-family: 'times'; font-size:20px; font-style: strong; "),
-                      
+
                       br(),br(),
                       fluidRow(column(6, br(),sliderInput("clusterNumber",label = "Cluster",
                                                           value = 1, min = 1,max = 5
                       )),
                       column(6,br(),
-                      selectInput("Speciesvenn", "Choose your Species:", selected = "Mus musculus", 
+                      selectInput("Speciesvenn", "Choose your Species:", selected = "Mus musculus",
                                   c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
-                                    "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa", 
+                                    "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa",
                                     "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" )))),
                       fluidRow(
                         column(5),
-                        
+
                       column(4,br(),
                       actionButton("GOvenn", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")))
-                      
+
                        ))))),
 
   ###############################
   ######## Heatmap Page         #
   ###############################
-  
-  
+
+
     tabItem(tabName = "Heatmap",
             tags$style(type='text/css', ".well { max-width: 25em; }"),
-          
-            
+
+
             fluidRow(column(
               width = 8,
               div(
@@ -830,37 +826,40 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                            style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                          )),
                                   column(2),
-                                  column( 3, 
+                                  column( 3,
                                           selectInput("formhm", label = NULL,
                                                       choices = c("png", "eps", "emf")))
-                                  
+
                         )),
-                        
+
                         conditionalPanel(condition = '!output.heatmbool',  verbatimTextOutput("warningsheat")
                         ),
-                    
+
                     conditionalPanel(
-                      condition = "input.col1 =='blue' && input.col3 =='red' && input.submit == 0 ", 
+                      condition = "input.col1 =='blue' && input.col3 =='red' && input.submit == 0 ",
                       wellPanel(style = "position: absolute; width: 30%; left: 35%; top: 40%;
                          box-shadow: 10px 10px 15px grey;",
                                 selectInput("text", "Choose your intermediate color:", choices = c("yellow", "white")),
                                 actionButton("submit", "Submit"))
                     ),
-                        
+
                         #plotOutput("warningsheat")
                         conditionalPanel(condition = 'output.heatmbool',
                                          plotOutput("distPlot", width = "100%" , height = 1300)
-                                         
+
                                          ),
-                        
+
                         h1("Here's a tracker for your different selections:"),
                           tags$head(
                             tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
                           ),
-                          
+                          tags$head(
+                            tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.css") # add style.css in order to add better police
+                          ),
+
                           tags$head(tags$style("
                              #container * {display: inline;}")),
-                          
+
                           div(
                             id = "container",p("There are"),htmlOutput("myNUM"),
                             p("significant genes"),
@@ -876,14 +875,14 @@ MATRiX app is working with specific data produced by the limma package, resultin
                             p('and'),
                             textOutput("myFC")
                           ),
-                    
+
                     conditionalPanel(condition = "input.maxgen != null",
                      div(
                        id = "container",
                       p("You have chosen to regulate your comparison to "),
                       textOutput("maxGen"),
                       p(" genes maximum"))),
-                     
+
                           div(
                             id = "container",
                             p('The'),
@@ -925,8 +924,8 @@ MATRiX app is working with specific data produced by the limma package, resultin
                       )
                       ,
                       dataTableOutput("clustering"),
-                      
-                      
+
+
                       h3("This table summarizes the number of significant probes and genes by cluster"),
                       helpText(
                         "For the number of genes by cluster the duplicated genes are removed"
@@ -940,23 +939,20 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     conditionalPanel(condition = "input.GO",
                      div(class= "highvenn" , style="font-size:24px; text-align: center;",
                                htmlOutput("titlegomain")),
-                    DT::dataTableOutput("davidgo"), 
-              
+                    DT::dataTableOutput("davidgo"),
+
                     verbatimTextOutput("printmessage"),
                     verbatimTextOutput("printselected"),
                     div(class= "highvenn" , style="font-size:24px; text-align: center;",
                         htmlOutput("titlegotop")),
-
-                    tags$script(src="libraries/jquery-1.9.1.min.js"),
                     tags$script(src="libraries/jquery-ui.min.js"),
                     tags$script(src="libraries/highcharts.js"),
                     tags$script(src="libraries/highcharts-more.js"),
-                    #tags$script(src="libraries/modules/exporting.js"), 
-                    #tags$script(src="libraries/modules/export-data.js"),
-                    tags$script(src="https://code.highcharts.com/modules/exporting.js"), 
+
+                    tags$script(src="https://code.highcharts.com/modules/exporting.js"),
                     tags$script(src="https://code.highcharts.com/modules/export-data.js"),
-                    
-                    
+
+
                     tags$div(id="highChart")  ,
                     #tags$div(id="highChart",style="width: 100%;, height: 600px;")  ,
                     checkboxInput("addlabelhigh", "add label", FALSE),
@@ -964,15 +960,15 @@ MATRiX app is working with specific data produced by the limma package, resultin
 
                   )),
                   tabPanel(
-                    strong("Cut heatmap"),#icon("table"), 
+                    strong("Cut heatmap"),#icon("table"),
                     bsAlert("alert"),value = "cuthmmainpan",
                     plotlyOutput(outputId = "cutheatmap", height = 600),
-                    
-                    
+
+
                     br(),br(),br(),br(),br(),br(),br(),br(),br(),
                     br(),br(),br(),br(),br(),br(),br(),br(),br(),
                     br(),br()
-                    
+
                     )
                   )
             )
@@ -981,17 +977,17 @@ MATRiX app is working with specific data produced by the limma package, resultin
 
                        div(id="mypanheat", style="color: white;",
                       tabBox(
-                         
+
                          title = "",
                          id = "tabset25",
-                         width = NULL, 
-                        
+                         width = NULL,
+
                            tabPanel("Heatmap",id= "heatmpan", ##ADD8E6
                              style="background-color: #3c8dbc;",
                              value="widgetheat",
                           strong("Heatmap settings", style="font-size:25px;") ,
                           br(),
-                             
+
                            actionLink("resetAll",  label = ("reset all"), style="color:orange;float:right;font-size: 18px;"),
                            br(),
                            #wellPanel(
@@ -1036,7 +1032,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                                           "Choose your statistical method",
                                                           choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")
                                                         ))),
-                             
+
                              br(),
                              fluidRow( column(6,
                              sliderInput(
@@ -1084,15 +1080,15 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                    column(6,
                                           selectInput(
                                             "algomet","Choose your hierarchical clustering method",choices = c("ward.D2", "single","complete","average")))
-                                   
+
                                  )))
                              ,br(),
                              shiny::actionButton("toggleAdvancedcolors","Advanced graphical Settings",
                                href = "#",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                              ),
-                             
+
                              br(),
-                             
+
                              shinyjs::hidden(div(
                                id = "advancedcol",
                                  fluidRow(
@@ -1125,21 +1121,21 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                      min = 0.2,max = 1.5,step = 0.1
                                    )
                                  )
-                                 
+
                                  ),
-                                 
+
                                  fluidRow(column(6,
                                    radioButtons("rowname",
                                                 "show/hide rowname",
                                                 c("hide", "show"))
-                                   
+
                                  ),
                                  column(6,
                                    radioButtons("colname",
                                                 "show/hide colnames",
                                                 c("show", "hide"))
                                  )),
- 
+
                               uiOutput('myPanel'),
                                  br()
                              ))), #end of the div "form"
@@ -1148,14 +1144,14 @@ MATRiX app is working with specific data produced by the limma package, resultin
                              # Hide some widgets between the tags
                              id = "advancedgo",
                              wellPanel(
-                               
+
                              )
                            )),
-                           
+
                            br(),
                            div(id = 'center', strong("Print Heatmap",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                            br(),
-                           
+
                            fluidRow(column(6, uiOutput("button")
                            ),
                            column(6,
@@ -1164,24 +1160,24 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                            FALSE))
                            ),
                           #shinyjs::disabled(actionButton("stop", "Stop")),
-                          
+
                            helpText("Note: It is highly advised to check this box if you're working with a set of genes close to 1000.",style="color:White; font-size:15px;"),
-                           
-                           
+
+
                            #conditionalPanel(condition = 'output.heatmbool',
                           conditionalPanel(condition = 'output.heatmbool',
-                          #conditionalPanel(condition = 'input.button >0', 
-                                            
+                          #conditionalPanel(condition = 'input.button >0',
+
                                             div(id = 'center', strong("Functional enrichment analysis",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                             br(),
                                             fluidRow(column( 4,
-                                                             selectInput("Species", "Choose your Species:", selected = "Mus musculus", 
+                                                             selectInput("Species", "Choose your Species:", selected = "Mus musculus",
                                                                          c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
-                                                                           "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa", 
+                                                                           "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa",
                                                                            "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" ))),
                                                      column(4,
                                                        uiOutput("cutgo")),
-                                                     column(3, 
+                                                     column(3,
                                                             selectInput('catinfo','Category: ',
                                                               choices =  c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY"),
                                                               selected=  c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY"),
@@ -1195,11 +1191,11 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                                      uiOutput("DAVID"))
                                             ),br(),
                                             helpText("Run GO results are obtained by querying DWS (DAVID Web Services)", style="font-size:15px; color:white;")
-                                            
+
                                             ),br(),br()
 
                    ),
-                
+
                 tabPanel(
                   "Heatmap clustering",
                   value="test3",
@@ -1210,36 +1206,32 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                  choices = cutheatmlist),
                   # cutheatmlist is a variable defined in the global environment
                   br(),
-                  
+
                   selectInput("formcut","Choose your file format",choices = c("pdf", "png", "eps")
                   ), br(),
                   verbatimTextOutput("event"),
-                  
+
                   br(),
                   downloadButton("savecut", "Save your plot" , style =
                                    "color: #fff; background-color: #337ab7; border-color: #2e6da4")
-                
+
                 ))
                        )
                 )
-      
+
     ))
  )
 )
 )
 
 ###############################
-######## END dashboardbody    # 
-############################### 
+######## END dashboardbody    #
+###############################
 
- shinyUI( 
+ shinyUI(
     dashboardPage(skin="blue",title = "MATRiX app",
     dbHeader,
     sidebar,
     body
   )
  )
-
-
-
-

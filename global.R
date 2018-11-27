@@ -10,7 +10,7 @@
 options(shiny.maxRequestSize=128000000)
 options(digits=3)
 
-cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"), 
+cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"),
                      Stripchart=c(`Without boxplot`="LB", `With boxplot` = "WB"))
 
 
@@ -20,9 +20,9 @@ categoerygen = c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_
 
 #sudo apt-get install libv8-dev
 list.of.packages <- c("AnnotationDbi","shiny","shinythemes","shinyjs","ggplot2","shinyBS","plyr","shinyFiles",
-                      "BH","data.table","DT","readr","colourpicker","shinydashboard","shinytoastr",
+                      "BH","data.table","DT","readr","colourpicker","shinydashboard",
                       "tools","devEMF","R.devices","FactoMineR","factoextra","gplots","V8",
-                      "RColorBrewer","foreach","doParallel","VennDiagram","gridExtra","plotly","dplyr","reticulate","Hmisc")
+                      "RColorBrewer","foreach","doParallel","gridExtra","plotly","dplyr","reticulate","Hmisc")
 
 #"goseq","GO.db","rbenchmark","heatmaply"
 
@@ -32,7 +32,7 @@ list.of.packages <- c("AnnotationDbi","shiny","shinythemes","shinyjs","ggplot2",
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 lapply(list.of.packages,function(x){
-suppressPackageStartupMessages(library(x,character.only=TRUE))}) 
+suppressPackageStartupMessages(library(x,character.only=TRUE))})
 
 library(shinyFiles)
 source("function/delayinput.R")
@@ -101,6 +101,6 @@ palette = brewer.pal(8,"Dark2") %>%
 
 textInputRow<-function (inputId, label, value = "") {
   div(style="display:inline-block",
-      tags$label(label, `for` = inputId), 
+      tags$label(label, `for` = inputId),
       tags$input(id = inputId, type = "text", value = value,class="input-small"))
 }

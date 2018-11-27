@@ -18,7 +18,7 @@ ul li {
   position: static;
   font-size: 18px;
 
-} 
+}
 
 .skin-blue .sidebar-menu > li.active > a,.skin-blue .sidebar-menu > li:hover > a {
 	color:#fff;
@@ -79,20 +79,38 @@ p {
     height: 30%;
 }
 
+
+
 #advancedjvenn .btn{
   border: none;
   outline: none;
   padding: 6px 11px;
   cursor: pointer;
   background-color: #337ab7;
-  
+
+}
+
+#advancedjvenn .btn:hover .btn:active  {
+  background-color: #666;
+  color: white;
+}
+
+#advancedjvenn .activate, .btn:hover , .activated  {
+  background-color: #666;
+  color: white;
+}
+
+
+#advancedjvenn .btn:focus {
+  outline: none;
 }
 
 #advancedjvenn .élément{
   color:black;
 }
 
-#advancedjvenn .active, .btn:hover {
+
+#advancedjvenn .active .btn-mini:hover .btn-mini:focus {
   background-color: #666;
   color: white;
 }
@@ -232,4 +250,4 @@ div.outer  {
     bottom: 0px;
 }
 
-
+/*Jvenn*/
