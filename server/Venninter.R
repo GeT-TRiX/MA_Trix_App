@@ -87,27 +87,26 @@ vennfinal <- reactive({
     select(GeneName, paste0("logFC_", choix_cont())) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
   }
-  else if (!input$Allcont && input$dispvenn == "genes"){
+  else if (!input$Allcont && input$dispvenn == "genes")
+
     resfinal <- csvf()[[3]] %>%
-    #filter(ProbeName %in% venninter()[[reordchoice]]) %>%
       filter(GeneName %in% input$jvennlist) %>%
+      filter(ProbeName %in% unlist(vennlist()[[1]])) %>%
       select( GeneName, paste0("logFC_",  input$selcontjv)) %>%
       mutate_if(is.numeric, funs(format(., digits = 3)))
-
-      print(resfinal)
-  }
-  else{
+      #print(filter(resfinal, GeneName == "Afg3l1"))
+  
+  else
     resfinal <- csvf()[[3]] %>%
-    filter(ProbeName %in% venninter()[[reordchoice]]) %>%
-      #filter(ProbeName %in% input$jvennlist) %>%
-      select(ProbeName, GeneName, paste0("logFC_", choix_cont())) %>%
+      filter(GeneName %in% input$jvennlist) %>%
+      filter(ProbeName %in% unlist(vennlist()[[1]])) %>%
+      select( GeneName, paste0("logFC_", choix_cont())) %>%
       mutate_if(is.numeric, funs(format(., digits = 3)))
-  }
-
+  
   if(input$Notanno){
     resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}|[0-9]{7,}",GeneName)) %>% as.data.frame()
   }
-
+  
   reslist[[1]] <- resfinal
 
   if(!input$Allcont)
@@ -116,24 +115,17 @@ vennfinal <- reactive({
     mycont = paste0("logFC_",choix_cont())
 
   if(input$dispvenn == "genes"){
+    
     options(datatable.optimize=1)
     for (i in mycont) {
       resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
     }
-
-    if(input$Notanno){
-      resfinal <- resfinal %>% as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% filter(., !grepl( "^chr[A-z0-9]{1,}:",GeneName)) %>% as.data.frame()
+    
+    reslist[[2]] <- resfinal %>% as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% as.data.frame()  
     }
-    else
-      resfinal <- resfinal %>% as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% as.data.frame()
-
-    reslist[[2]] <- resfinal
-  }
 
   return(reslist)
 })
-
-
 
 
 output$topgenesvenn <- renderUI({

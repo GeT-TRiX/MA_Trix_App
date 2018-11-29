@@ -7,7 +7,7 @@
 
 
 observe({
-  req(Venncluster())
+  req(Venncluster(),acyclgo())
   updateSliderInput(session, "clusterNumber", max = nrow(summary(Venncluster())))
 })
 
@@ -16,7 +16,7 @@ output$saveclusterchoose <- downloadHandler(filename <- function() {
            '')
 },
 content <- function(file) {
-
+  
 
   if (input$formvennclus == "pdf")
 
@@ -42,8 +42,8 @@ content <- function(file) {
         height = 12,
         pointsize = 12)
 
+  if(typeof(acyclgo()) !="S4") return(NULL)  else acyclgo() 
 
-  acyclgo()
   dev.off()
 })
 
@@ -69,10 +69,16 @@ output$clusterPlot <- renderPlot({
 davidtag<- reactive({req(Venncluster())
   davidGODag<-DAVIDGODag(members(Venncluster())[[input$clusterNumber]],  pvalueCutoff=0.05) })
 
+
 acyclgo <- reactive({
   req(davidtag())
-  plotGOTermGraph(g=goDag(davidtag()),r=davidtag(), max.nchar=40, node.shape="ellipse")
-
+  result = tryCatch({
+    plotGOTermGraph(g=goDag(davidtag()),r=davidtag(), max.nchar=40, node.shape="ellipse")
+  }, warning = function(warning_condition) {
+    cat("web url is wrong, can't get\n")
+    return(NULL)
+  })
+  return(result)
 })
 
 

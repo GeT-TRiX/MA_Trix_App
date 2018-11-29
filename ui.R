@@ -229,8 +229,10 @@ MATRiX app is working with specific data produced by the limma package, resultin
                      box(
                        title = "What's new in MATRiX", width = NULL, status = "primary",
                        div(style = 'overflow-y: scroll; height: 500px',
-                           addNews("Aug 15th 2018", "Presentation/Video", "Added a video to present MATRiX and add modules to import files"),
-                           addNews("Oct 1th 2018", "Presentation/Video", "Added a video to present MATRiX and add modules to import files"),
+                           addNews("Nov 29th 2018", "Venn Diagram/HTML", "Correct bugs"),
+                           addNews("Npv 5th 2018", "Venn Diagram", "Remove non annotated genes"),
+                           addNews("Oct 19th 2018", "Volcano plot", "Search group genes based on regular expression"),
+                           addNews("Oct 15th 2018", "Venn Diagram", "Change the library to Jvenn"),
                            addNews("Aug 15th 2018", "Presentation/Video", "Added a video to present MATRiX and add modules to import files"),
                            addNews("Aug 10th 2018", "Upload/Volcano", "You can explore your different comparisons with a volcano plot"),
                            addNews("Aug 6th 2018", "Venn Diagram/Enrichment", "Add acyclic graph if download"),
@@ -387,11 +389,12 @@ MATRiX app is working with specific data produced by the limma package, resultin
                 'topvolc',
                 'Maximal number of genes by comparison(s)',
                 NULL,min = 0,max = 5000),
+              fluidRow(column(6, sliderInput('volcfc', "Choose your FC cutoff",min = 1, max=10, step = 1,value=1)),
+                       column(6,sliderInput('volcpval', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05))),
               fluidRow(column(6, sliderInput('volclab', "Choose your lab size",min = 1, max=6, step = 0.5,value=3.0)),
                        column(6,sliderInput('volcpt', "Choose your point size", min=0.5, max=3, step=0.1,value=1))),
-              fluidRow(column(6, sliderInput('volcfc', "Choose your cutoff FC",min = 1, max=10, step = 1,value=1)),
-                       column(6,sliderInput('volcpval', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05)))
-              ,ns = NS("datafile")
+              
+              ns = NS("datafile")
                 ))
               )
             ),

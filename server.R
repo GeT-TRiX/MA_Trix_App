@@ -187,11 +187,14 @@ shinyServer(function(input, output,session) {
         invokeRestart("muffleWarning")
 
     if(input$dispvenn == "genes")
-      isolate(
-      Rtojs <- toJvenn(vennlist()[[2]],user_cont()))
+      if(input$Notanno){
+        vennlist <- lapply(vennlist()[[2]], grep, pattern="^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}|[0-9]{7,}", value=TRUE, invert=TRUE)
+        Rtojs <- toJvenn(vennlist,user_cont())
+      }
+      else
+        Rtojs <- toJvenn(vennlist()[[2]],user_cont())
     else
-      isolate(
-      Rtojs <- toJvenn(vennlist()[[1]],user_cont()))
+        Rtojs <- toJvenn(vennlist()[[1]],user_cont())
 
     Mymode <-  input$updamod # Mode
     Myfont <-  input$myfont # Font size

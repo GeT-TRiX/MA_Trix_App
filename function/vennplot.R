@@ -94,7 +94,7 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
   
   if(is.null(adj)) 
     return(NULL)
-
+  
   reguser = ifelse(regulation == "up", T, F)
   reguserboth = ifelse(regulation == "both", T, F)
   lapply(1:ncol(adj), FUN = function(x){
