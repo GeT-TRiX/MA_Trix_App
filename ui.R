@@ -69,8 +69,6 @@ tags$head(
       menuItem("PCA", tabName = "PCA", icon = icon("line-chart")),
       menuItem("Venn diagram", tabName = "Venn", icon = icon("line-chart")),
       menuItem("Heatmap", tabName = "Heatmap", icon = icon("line-chart")),
-      #menuItem("Support", tabName = "Support", icon = icon("question-circle")),
-      #menuItem("About", tabName = "About", icon = icon("info-circle")),
       menuItemOutput("dymMenu"),
       collapsed = TRUE,
 
@@ -232,6 +230,8 @@ MATRiX app is working with specific data produced by the limma package, resultin
                        title = "What's new in MATRiX", width = NULL, status = "primary",
                        div(style = 'overflow-y: scroll; height: 500px',
                            addNews("Aug 15th 2018", "Presentation/Video", "Added a video to present MATRiX and add modules to import files"),
+                           addNews("Oct 1th 2018", "Presentation/Video", "Added a video to present MATRiX and add modules to import files"),
+                           addNews("Aug 15th 2018", "Presentation/Video", "Added a video to present MATRiX and add modules to import files"),
                            addNews("Aug 10th 2018", "Upload/Volcano", "You can explore your different comparisons with a volcano plot"),
                            addNews("Aug 6th 2018", "Venn Diagram/Enrichment", "Add acyclic graph if download"),
                            addNews("Aug 4th 2018", "Heatmap/Bubble graph", "You can display or not the labels within the bubbles"),
@@ -280,10 +280,9 @@ MATRiX app is working with specific data produced by the limma package, resultin
                             conditionalPanel(condition = 'output.boolmark', #Hide or Show event depending on the loading data success or failure
                                              #includeMarkdown("markdown/help.md")
                                              tags$h1("How to import ?"),
-                                             #<h1 id="howtoimport">How to import ?</h1>
                                              tags$ul(
                                                tags$li("First click on the browse button to load the data"),
-                                               tags$li("After the pop up has appeared, you will have to select the files within the access path that is given in the report produced by Yannick. "),
+                                               tags$li("After the pop up has appeared, you will have to select the files within the access path that is given in the report produced by GeT-TRiX. "),
                                                tags$li("You will then find three distinct csv files, these files are respectively named xxx_pData, xxx_WorkingSet and xxx_ResTable."),
                                                tags$li("The final step consist to select all the data at once and then confirm the selection by clicking on the open button."),
                                                tags$li("A green message will then appear to confirm the data loading with a summary table.")
@@ -292,7 +291,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                                tags$p(
 
                                                 tags$img(src = "pdata.png"),
-                                                tags$img(src = "workingset.png"),
+                                                tags$img(src = "wotkingset.png"),
                                                  tags$img(src = "restable.png")
 
                                                  ),
@@ -565,7 +564,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     conditionalPanel(condition = '!output.bool',
                                      uiOutput(outputId = "image")
                                      , uiOutput("sorry")),
-                    tags$script(src="libraries/bootstrap.min.js") ,
+                    #tags$script(src="libraries/bootstrap.min.js") ,
                     tags$script(src="libraries/prettify.js") ,
                     tags$script(src="libraries/jvenn.min.js")  ,
                     tags$script(src="libraries/canvas2svg.js")  ,
@@ -579,7 +578,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                htmlOutput("dfvenn")),
                   conditionalPanel(condition = "input.dispvenn == 'genes'",
                            helpText(
-                             "You can directly filtered the table by fold change and save the output table"
+                             "You can directly filter the table by fold change and save the output table"
                            )),
 
                            DT::dataTableOutput("vennresinter"),br(),br(),br(),
@@ -746,12 +745,9 @@ MATRiX app is working with specific data produced by the limma package, resultin
                            column(6,
                                   checkboxInput("Notanno","Remove the genes that are not annotated",FALSE)),
                            column(6,
-                                  checkboxInput("Allcont","Parse all the resulting logFC values depending on the comparison(s) selected",FALSE))),
+                                  checkboxInput("Allcont","Show the logFC for all comparisons",FALSE))),
 
                            br(),
-
-
-
                           shiny::actionButton(
                             "toggleAdvancedJvenn",
                             "Advanced Jvenn Options",
@@ -803,7 +799,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                         column(5),
 
                       column(4,br(),
-                      actionButton("GOvenn", "Run GO",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")))
+                      actionButton("GOvenn", "Run Analysis",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")))
 
                        ))))),
 
@@ -1192,7 +1188,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                               column(4,br(),
                                                      uiOutput("DAVID"))
                                             ),br(),
-                                            helpText("Run GO results are obtained by querying DWS (DAVID Web Services)", style="font-size:15px; color:white;")
+                                            helpText("Run Gene enrichment analysis, results are obtained by querying DWS (DAVID Web Services)", style="font-size:15px; color:white;")
 
                                             ),br(),br()
 

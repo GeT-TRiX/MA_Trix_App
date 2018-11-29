@@ -84,12 +84,13 @@ $(document).ready(function () {
 				    nameslis.push(this.listnames[name]);
 				  }
 				  value += ":\n";
-				  // jvennlist =[];
-				  // for (val in this.list) {
-				  //   jvennlist.push( this.list[val]);
-				  // }
+				  jvennlist =[];
+				  for (val in this.list) {
+				    jvennlist.push( this.list[val]);
+				  }
+					console.log(jvennlist);
 				  $("#names").val(value);
-          //Shiny.onInputChange("jvennlist",jvennlist);// renvoyer dans R
+          Shiny.onInputChange("jvennlist",jvennlist);// renvoyer dans R
 				  Shiny.onInputChange("together",nameslis.join(""));// renvoyer dans R
 				  Shiny.onInputChange("selcontjv",nameslis);
 				  return(jvennlist);

@@ -86,12 +86,7 @@ output$cutcluster <- renderUI({
 
 output$event <- renderPrint({ # interactive cursor that shows the selected points
   d <- event_data("plotly_hover")
-  if (is.null(d))
-    "Hover on a point!"
-  else {
-
-    round(sort(d),digits=2)
-  }
+  if (is.null(d)) "Hover on a point!" else d
 })
 
 observe({

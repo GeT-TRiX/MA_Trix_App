@@ -24,9 +24,6 @@ list.of.packages <- c("AnnotationDbi","shiny","shinythemes","shinyjs","ggplot2",
                       "tools","devEMF","R.devices","FactoMineR","factoextra","gplots","V8",
                       "RColorBrewer","foreach","doParallel","gridExtra","plotly","dplyr","reticulate","Hmisc")
 
-#"goseq","GO.db","rbenchmark","heatmaply"
-
-#AnnotationDbi
 
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]

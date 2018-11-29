@@ -13,8 +13,8 @@
 
 observe({
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
-  
-  
+
+
   output$individuselpca <- renderUI(
     checkboxGroupInput(
       inputId = "indivpca" ,
@@ -23,10 +23,10 @@ observe({
       choices =  levels(csvf()[[2]]$Grp),
       #selected = levels(csvf()[[2]]$Grp),
       inline   = groupinline
-      
+
     )
   )
-  
+
 })
 # Select all groups
 observeEvent(input$allIndividuspca, {
@@ -132,7 +132,7 @@ Scree_plot <- reactive({
   req(PCAres())
   mybar = eboulis(PCAres())
   return(mybar + theme_classic())
-  
+
 })
 
 
@@ -167,7 +167,7 @@ content <- function(file) {
     pointsize = 12,
     res = 100
   )
-  
+
   plot(Scree_plot())
   dev.off()
 })
@@ -182,9 +182,9 @@ output$eigpca <- renderPlot({
         new_grouppca()$Grp
       )) > 1, 'You need to select more than one group!')
   )
-  
+
   plot(Scree_plot())
-  
+
 },  height = plotHeight)
 
 js$calcHeight()
@@ -203,7 +203,7 @@ labeled <- reactive({
     showlab = "all"
   else
     showlab = "none"
-  
+
   return (showlab)
 })
 
@@ -218,9 +218,9 @@ output$PCA <- renderPlot({
         new_grouppca()$Grp
       )) > 1, 'You need to select more than one group!')
   )
-  
+
   plot(PCAplot() + theme_minimal())
-  
+
 },  height = plotHeight)
 
 
@@ -230,15 +230,15 @@ output$savepca <- downloadHandler(filename <- function() {
 },
 content <- function(file) {
   if (input$formpca == "pdf")
-    
+
     pdf(file,
         width = 12,
         height = 12,
         pointsize = 12)
-  
-  
+
+
   else if (input$formpca == "png")
-    
+
     png(
       file,
       width = 2500,
@@ -252,8 +252,8 @@ content <- function(file) {
         width = 12,
         height = 12,
         pointsize = 12)
-  
-  
+
+
   plot(PCAplot())
   dev.off()
 })

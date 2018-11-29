@@ -347,7 +347,7 @@ toJvenn <- function(myven, adj){
 #'
 #'
 
-topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F) {
+topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F )  {
   
   
   if(meandup == "probes")
@@ -379,16 +379,15 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F) {
     
     return(x)})
   
-
+  
+  
   reshp <-melt(dfinter[1:inputtop, ],
     id.vars = "GeneName",measure.vars = c (mycont),
-    variable.name = "Comparisons",value.name = "logFC"
-  )
-  
+    variable.name = "Comparisons",value.name = "logFC") %>% na.omit()
   reshp <- droplevels(reshp)
   reshp$GeneName <-factor(reshp$GeneName, levels = unique(as.character(reshp$GeneName)))
   
-
+  
   p <- ggplot(reshp, aes(
     x = GeneName,
     y = as.numeric(as.character(formatC(as.double(logFC), digits = 1, format = "f"))),

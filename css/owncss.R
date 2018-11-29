@@ -21,7 +21,7 @@ inactivity <- "function idleTimer() {
 idleTimer();"
 
 #The following html are sourced from https://github.com/aghozlane/shaman/blob/master/css/owncss.R
- 
+
 spincss <- "
   #plot-container {
 z-index: 0;
@@ -41,8 +41,8 @@ background-color: #fff;
 }
 "
 
-Errorcss <- 
-".shiny-output-error { visibility: visible;  color: #3c8dbc;}
+Errorcss <-
+".shiny-output-error { visibility: visible;  color: orange; font-size: larger;}
 
 .shiny-output-error:before {
 color: #3c8dbc;
@@ -90,40 +90,24 @@ margin-bottom: -40px;
 
 #' addNews is a function that render a pretty table for news
 #'
-#' @param date 
-#' @param title 
-#' @param text 
-#' @author Amine Ghozlane 
+#' @param date
+#' @param title
+#' @param text
+#' @author Amine Ghozlane
 #' Source https://github.com/aghozlane/shaman/blob/master/Rfunctions/Data_Management.R
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' 
+#'
 addNews <- function(date ="",title="",text="")
 {
-  
-  
+
+
   res=list()
   res$r1 = paste("<b><font size='+1'>",date,"</font></b>", " - ", "<b><font size='+1'>",title,"</font></b><br/>")
   res$r2 = paste("<p><font color='grey'>",text,"</font></p><hr/>")
-  
+
   return(HTML(unlist(res)))
 }
-
-
-#InfoBoxCSS <- "
-#.info-box:hover,
-#.info-box:hover .info-box-icon {
-#background-color: #aaa !important;
-#}
-#.info-box:active,
-#.info-box:active .info-box-icon {
-#background-color: #ccc !important;
-#}
-#"
-
-
-
-

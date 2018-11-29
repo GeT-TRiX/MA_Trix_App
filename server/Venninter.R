@@ -72,7 +72,7 @@ vennfinal <- reactive({
     paste(collapse = "")
 
 
-  if(!input$Allcont){
+  if(!input$Allcont && !input$dispvenn == "genes"){
     resfinal <- csvf()[[3]] %>%
     filter(ProbeName %in% venninter()[[reordchoice]]) %>%
       #filter(ProbeName %in% input$jvennlist) %>%
@@ -80,12 +80,28 @@ vennfinal <- reactive({
       mutate_if(is.numeric, funs(format(., digits = 3)))
 
     }
-  else{
+  else if (input$Allcont && !input$dispvenn == "genes"){
     resfinal <- csvf()[[3]] %>%
     filter(ProbeName %in% venninter()[[reordchoice]]) %>%
     #filter(ProbeName %in% input$jvennlist) %>%
-    select(ProbeName, GeneName, paste0("logFC_", choix_cont())) %>%
+    select(GeneName, paste0("logFC_", choix_cont())) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
+  }
+  else if (!input$Allcont && input$dispvenn == "genes"){
+    resfinal <- csvf()[[3]] %>%
+    #filter(ProbeName %in% venninter()[[reordchoice]]) %>%
+      filter(GeneName %in% input$jvennlist) %>%
+      select( GeneName, paste0("logFC_",  input$selcontjv)) %>%
+      mutate_if(is.numeric, funs(format(., digits = 3)))
+
+      print(resfinal)
+  }
+  else{
+    resfinal <- csvf()[[3]] %>%
+    filter(ProbeName %in% venninter()[[reordchoice]]) %>%
+      #filter(ProbeName %in% input$jvennlist) %>%
+      select(ProbeName, GeneName, paste0("logFC_", choix_cont())) %>%
+      mutate_if(is.numeric, funs(format(., digits = 3)))
   }
 
   if(input$Notanno){
@@ -106,10 +122,10 @@ vennfinal <- reactive({
     }
 
     if(input$Notanno){
-      resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,function(x) list(mean=round(mean(x), 3))),"GeneName"] %>% filter(., !grepl( "^chr[A-z0-9]{1,}:",GeneName)) %>% as.data.frame()
+      resfinal <- resfinal %>% as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% filter(., !grepl( "^chr[A-z0-9]{1,}:",GeneName)) %>% as.data.frame()
     }
     else
-      resfinal <- resfinal[,-1] %>% as.data.table() %>% .[,lapply(.SD,function(x) list(mean=round(mean(x), 3))),"GeneName"] %>% as.data.frame()
+      resfinal <- resfinal %>% as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% as.data.frame()
 
     reslist[[2]] <- resfinal
   }
@@ -212,13 +228,11 @@ plottopgenes <- eventReactive(input$topdegenes, {
   else
     mycont <- paste0("logFC_", input$selcontjv)
 
-  print(mycont)
-
+  
   if(input$dispvenn == "probes")
     myplot <- topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
   else
     myplot <- topngenes(vennfinal()[[2]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
-
 
   return(myplot)
 })
@@ -237,7 +251,6 @@ plottopgenes <- eventReactive(input$topdegenes, {
 
 plottopgenesmean <- eventReactive(input$topdegenes, {
   req(vennfinal(), vennchoice(), venntopgenes())
-  #myselcont <- ifelse(input$Allcont, choix_cont(), input$selcontjv)
   mycont = paste0("logFC_", vennchoice())
     myplot <- topngenes(vennfinal()[[1]][input$vennresintergen_rows_all, , drop = FALSE], mycont, venntopgenes(), input$dispvenn, mean = T)
 

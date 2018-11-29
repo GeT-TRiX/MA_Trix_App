@@ -16,18 +16,18 @@ output$saveclusterchoose <- downloadHandler(filename <- function() {
            '')
 },
 content <- function(file) {
-  
-  
+
+
   if (input$formvennclus == "pdf")
-    
+
     pdf(file,
         width = 12,
         height = 12,
         pointsize = 12)
-  
-  
+
+
   else if (input$formvennclus == "png")
-    
+
     png(
       file,
       width = 1200,
@@ -41,8 +41,8 @@ content <- function(file) {
         width = 12,
         height = 12,
         pointsize = 12)
-  
- 
+
+
   acyclgo()
   dev.off()
 })
@@ -53,14 +53,14 @@ content <- function(file) {
 output$clusterPlot <- renderPlot({
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(input$GOvenn ,'You need to click on the run Go button!'))
+      need(input$GOvenn ,'You need to click on the run Analysis button!'))
   req(Venncluster())
 
   plot2D(Venncluster(), input$clusterNumber)
 })
 
 #output$acyclicgo <- renderPlot({
-  
+
 #davidGODag<-DAVIDGODag(members(Venncluster())[[input$clusterNumber]],  pvalueCutoff=0.1)
 #plotGOTermGraph(g=goDag(davidGODag),r=davidGODag, max.nchar=50, node.shape="ellipse")
 
@@ -72,12 +72,12 @@ davidtag<- reactive({req(Venncluster())
 acyclgo <- reactive({
   req(davidtag())
   plotGOTermGraph(g=goDag(davidtag()),r=davidtag(), max.nchar=40, node.shape="ellipse")
-  
+
 })
 
 
 output$debug <- renderPrint({
-  
+
   req(Venncluster())
   summary(Venncluster())
 })
@@ -85,7 +85,7 @@ output$debug <- renderPrint({
 
 #' Venncluster is an event reactive function which aim is to interogate David web services database to collect relevant information about the list of genes for a specific intersection
 #'
-#' @param GOvenn clickable event button 
+#' @param GOvenn clickable event button
 #' @param vennfinal a list of two data frames
 #' @param Species list of annotated elements
 #' @param Speciesvenn character input
@@ -95,9 +95,9 @@ output$debug <- renderPrint({
 #'
 
 Venncluster <- eventReactive(input$GOvenn, {
-    
+
     req(vennfinal())
-    
+
     withProgress(message = 'Performing GO enrichment:',
                  value = 0, {
                    n <- NROW(50)
@@ -105,23 +105,23 @@ Venncluster <- eventReactive(input$GOvenn, {
                      incProgress(1 / n, detail = "Please wait...")
                    }
                    library(RDAVIDWebService)
-                   
+
                    timeoutdav <- function(y)
                      if (any(grepl("Read timed out", y)))
                        invokeRestart("muffleWarning")
-                   
+
                    tryCatch({
                      mygodavid = probnamtoentrezvenn(vennfinal()[[1]]$GeneName , Species()[[1]]) %>%
                      davidqueryvenn(input$Speciesvenn) %>% withCallingHandlers(error = timeoutdav)
                    }, warning = function(e) {
-                     
+
                      shinyjs::alert("David's server is busy")
                      warning("David's server is busy")
                      return(NULL)
-                     
+
                    })
                  })
-    
-    
+
+
     return(mygodavid)
   })
