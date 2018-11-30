@@ -53,7 +53,7 @@ output$clusterPlot <- renderPlot({
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
     need(choix_cont(), 'Set your thresholds and then select your comparison to display the Venn diagram!')%next%
-    need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!')) %next%
+    need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!') %next%
     need(input$GOvenn ,'You need to click on the run Analysis button!')) 
     req(Venncluster())
     plot2D(Venncluster(), input$clusterNumber)
