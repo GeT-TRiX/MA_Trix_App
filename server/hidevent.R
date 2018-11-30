@@ -10,6 +10,7 @@
 ######## Hide buttons         #
 ###############################
 
+addTooltip(session, id = "dist", title = "correlation:\n dist = 1-corr", placement = "left", trigger="hover")
 
 shinyjs::onclick("toggleAdvanced",
                  shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event

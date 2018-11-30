@@ -32,6 +32,32 @@ idleTimer();"
 
 
 
+makeselectInputbutton <- function(selectInput, buttonId, buttonLabel, size = "default", style = "default"){
+  size <- switch(size, `extra-small` = "btn-xs", small = "btn-sm", 
+                 large = "btn-lg", "default")
+  style <- paste0("btn-", style)
+  
+  tags$script(HTML(paste0("
+          $(document).ready(function() {
+            var inputElements = document.getElementsByTagName('input');
+            for(var i = 0; i < inputElements.length; i++){
+              var input = inputElements[i];
+
+              if(input.getAttribute('value') == '", checkboxValue, "'){
+
+                var button = document.createElement('button');
+                button.setAttribute('id', '", buttonId, "');
+                button.setAttribute('type', 'button');
+                button.setAttribute('class', '", paste("btn action-button", style , size), "');
+                button.appendChild(document.createTextNode('", buttonLabel, "'));
+
+                input.parentElement.parentElement.appendChild(button);
+             };
+            }
+          });
+        ")))
+}
+
 shinyjscode <- "
 shinyjs.init = function() {
   $(window).resize(shinyjs.calcHeight);
@@ -571,6 +597,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     tags$script(src="libraries/prettify.js") ,
                     tags$script(src="libraries/jvenn.min.js")  ,
                     tags$script(src="libraries/canvas2svg.js")  ,
+                    tags$script(src="tooltip.js"),
                     fluidRow(column(6,br(),br(),
                     tags$script(src="jvenn.js"),
                     tags$div(id="jvenn-container", style = "background-color: white;  width: 600px;")
@@ -835,7 +862,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                                       choices = c("png", "eps", "emf")))
 
                         )),
-
+                    includeCSS("./css/style.css"),
                         conditionalPanel(condition = '!output.heatmbool',  verbatimTextOutput("warningsheat")
                         ),
 
@@ -946,7 +973,6 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     verbatimTextOutput("printselected"),
                     div(class= "highvenn" , style="font-size:24px; text-align: center;",
                         htmlOutput("titlegotop")),
-                    tags$script(src="libraries/jquery-ui.min.js"),
                     tags$script(src="libraries/highcharts.js"),
                     tags$script(src="libraries/highcharts-more.js"),
 
@@ -1063,6 +1089,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                              ),
                              br(),
+                             #includeHTML("HTML/tooltip.html"),
                              shinyjs::hidden(div(
                                id = "advanced",
                                  fluidRow(
@@ -1070,8 +1097,14 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                           numericInput('clusters', 'Cluster count', 3,
                                                        min = 1, max = 15)),
                                    column(6,
+                                          #addTooltip(session, id, title, placement = "bottom", trigger = "hover", options = NULL),
+                                          #div(id = "mytext",
+                                          #    p("Choose your matrix distance",includeHTML("HTML/tooltip.html")),
                                           selectInput(
-                                            "dist","Choose your matrix distance",choices = c("correlation", "euclidian","manhattan", "cosine"))
+                                            "dist","Choose your matrix distance",choices = c("correlation", "euclidian","manhattan", "cosine")),
+                                          div(id = "tooltipelem",
+                                          bsTooltip(id = "dist", title = "correlation:\n dist = 1-corr", placement = "left", trigger="hover"))
+                                          
                                    )),
                                  fluidRow(
                                    column(6,

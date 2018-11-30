@@ -7,7 +7,7 @@
 
 
 observe({
-  req(Venncluster(),acyclgo())
+  req(Venncluster())
   updateSliderInput(session, "clusterNumber", max = nrow(summary(Venncluster())))
 })
 
@@ -42,9 +42,11 @@ content <- function(file) {
         height = 12,
         pointsize = 12)
 
-  if(typeof(acyclgo()) !="S4") return(NULL)  else acyclgo() 
+  #if(typeof(acyclgo()) !="S4") return(NULL)  
 
-  dev.off()
+    acyclgo() 
+    dev.off()
+  
 })
 
 
@@ -76,11 +78,16 @@ acyclgo <- reactive({
     plotGOTermGraph(g=goDag(davidtag()),r=davidtag(), max.nchar=40, node.shape="ellipse")
   }, warning = function(warning_condition) {
     cat("web url is wrong, can't get\n")
-    return(NULL)
+    return(F)
   })
+  
   return(result)
 })
 
+observe({
+  req(acyclgo())
+  if(typeof(acyclgo()) !="S4") shinyjs::disable("saveclusterchoose") else shinyjs::enable("saveclusterchoose")
+})
 
 output$debug <- renderPrint({
 

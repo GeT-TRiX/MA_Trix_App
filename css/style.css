@@ -41,6 +41,10 @@ h2 {
    font-size: 20px;
 }
 
+#warningsheat {
+  background-color: #ecf0f5;
+  border: 1px solid #ecf0f5;
+}
 
 p {
   /*
@@ -52,7 +56,6 @@ p {
   position: static;
 
 }
-
 
 
 .skin-blue .main-header .logo {
@@ -248,4 +251,9 @@ div.outer  {
     left: 0px;
     right: 0px;
     bottom: 0px;
+}
+
+a.my-tool-tip, a.my-tool-tip:hover, a.my-tool-tip:visited {
+
+    color: black;
 }

@@ -149,7 +149,7 @@ observe({
   }
   
   
-  output$warningsheat <- renderPrint({#renderPlot({
+  output$warningsheat <- renderPrint({
     validate(need(
       csvf(),
       'You need to import data to visualize to plot the Heatmap' ) %next% 
