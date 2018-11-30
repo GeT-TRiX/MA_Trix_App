@@ -712,7 +712,8 @@ MATRiX app is working with specific data produced by the limma package, resultin
                           plotOutput("clusterPlot", width = "100%", height = "700px"),
                           br(),br(),br(),
                           #plotOutput("acyclicgo", width = "100%", height = "1200px"),
-                          verbatimTextOutput("debug")
+                          #verbatimTextOutput("debug")
+                         dataTableOutput("debug")
                  )
 
                 )

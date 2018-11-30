@@ -57,7 +57,7 @@ output$distPlot <- renderPlot({
       isolate({pdf(NULL) 
         heatmapfinal(isplot = F)
         })
-      shinyjs::alert("your choice color are not fit to be together!!")
+      shinyjs::alert("The colors defined for the heatmap are not fit to be together!!")
       return(NULL)
       
     }

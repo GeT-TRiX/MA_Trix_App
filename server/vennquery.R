@@ -41,59 +41,59 @@ content <- function(file) {
         width = 12,
         height = 12,
         pointsize = 12)
-
-  #if(typeof(acyclgo()) !="S4") return(NULL)  
-
-    acyclgo() 
+    
+    
+    acyclgo()
     dev.off()
   
 })
 
 
-
-
 output$clusterPlot <- renderPlot({
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(input$GOvenn ,'You need to click on the run Analysis button!'))
-  req(Venncluster())
-
-  plot2D(Venncluster(), input$clusterNumber)
+    need(choix_cont(), 'Set your thresholds and then select your comparison to display the Venn diagram!')%next%
+    need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!')) %next%
+    need(input$GOvenn ,'You need to click on the run Analysis button!')) 
+    req(Venncluster())
+    plot2D(Venncluster(), input$clusterNumber)
 })
 
-#output$acyclicgo <- renderPlot({
 
-#davidGODag<-DAVIDGODag(members(Venncluster())[[input$clusterNumber]],  pvalueCutoff=0.1)
-#plotGOTermGraph(g=goDag(davidGODag),r=davidGODag, max.nchar=50, node.shape="ellipse")
-
-#})
 
 davidtag<- reactive({req(Venncluster())
-  davidGODag<-DAVIDGODag(members(Venncluster())[[input$clusterNumber]],  pvalueCutoff=0.05) })
+  davidGODag<-DAVIDGODag(members(Venncluster())[[input$clusterNumber]],  pvalueCutoff=0.1) })
 
 
-acyclgo <- reactive({
+
+acyclgo <- function() {
   req(davidtag())
-  result = tryCatch({
-    plotGOTermGraph(g=goDag(davidtag()),r=davidtag(), max.nchar=40, node.shape="ellipse")
-  }, warning = function(warning_condition) {
-    cat("web url is wrong, can't get\n")
-    return(F)
-  })
-  
-  return(result)
-})
+  result = plotGOTermGraph(g=goDag(davidtag()),r=davidtag(), max.nchar=40, node.shape="ellipse")
+  # result = tryCatch({
+  #   plotGOTermGraph(g=goDag(davidtag()),r=davidtag(), max.nchar=40, node.shape="ellipse")
+  # }, warning = function(warning_condition) {
+  #   cat("web url is wrong, can't get\n")
+  #   return(F)
+  # })
+  #return(result)
+}
+
 
 observe({
   req(acyclgo())
-  if(typeof(acyclgo()) !="S4") shinyjs::disable("saveclusterchoose") else shinyjs::enable("saveclusterchoose")
+
+  if(class(acyclgo()) == "graphNEL")
+    shinyjs::disable("saveclusterchoose")
+  else
+    shinyjs::enable("saveclusterchoose")
 })
 
-output$debug <- renderPrint({
 
-  req(Venncluster())
-  summary(Venncluster())
-})
+
+# output$debug <- renderPrint({
+#   req(Venncluster())
+#   summary(Venncluster()) %>% as.data.frame()
+# })
 
 
 #' Venncluster is an event reactive function which aim is to interogate David web services database to collect relevant information about the list of genes for a specific intersection
@@ -134,7 +134,6 @@ Venncluster <- eventReactive(input$GOvenn, {
 
                    })
                  })
-
 
     return(mygodavid)
   })
