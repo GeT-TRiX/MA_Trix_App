@@ -62,9 +62,10 @@ hmbis <- reactive({
 observeEvent(input$heatm, {
   
   if (is.null(my_intermediate())) {
+    pdf(NULL) 
     heatmapfinal(isplot = F)
     shinyjs::alert("your choice color are not fit to be together!!")
-    
+    return(NULL)
   }
   else
     output$distPlot <- renderPlot({

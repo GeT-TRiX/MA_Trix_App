@@ -120,8 +120,6 @@ observe({
         col_choice1(), my_intermediate(), col_choice3()
       ))(n = 75))
     
-    pdf(NULL)
-    
     plotHeatmaps(
       
       isolate(hmbis()[[1]]),
