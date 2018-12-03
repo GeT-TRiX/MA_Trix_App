@@ -188,7 +188,7 @@ davidquery <- function(entrezids, species, mycat) {
     setCurrentSpecies(object = david, species = specieLocation)
     #setCurrentBackgroundPosition(object = david, position = backgroundLocation)
     #getSpecieNames(david)
-    setAnnotationCategories(david, mycat) #c("GOTERM_MF_ALL", "GOTERM_CC_ALL", "GOTERM_BP_ALL")) # "KEGG_PATHWAY"
+    setAnnotationCategories(david, mycat) #c("GOTERM_MF_ALL", "GOTERM_CC_ALL", "GOTERM_BP_ALL"))  "KEGG_PATHWAY"
     mydav = as.data.frame(cbind(getFunctionalAnnotationChart(object=david, threshold=1, count=0L)))  %>%
       filter(Count>1) %>% arrange(desc(Count))  %>% dplyr::select( Category:Count, List.Total:Pop.Total,X.,PValue,Genes,Fold.Enrichment, Bonferroni, Benjamini)
     colnames(mydav)[[7]] = "percent"
@@ -219,13 +219,10 @@ davidqueryvenn <- function(entrezids, species){
   )
   
   selectedSpecie = (species)
-  
   #setAnnotationCategories(david, c("GOTERM_BP_ALL"))
   #backgroundLocation = grep(selectedSpecie,RDAVIDWebService::getBackgroundListNames(david))
   specieLocation = grep(selectedSpecie, RDAVIDWebService::getSpecieNames(david))
   setCurrentSpecies(object = david, species = specieLocation)
-  
-  # get the cluster report for the upload
   getClusterReport(david, type = "Term")
   
 }
