@@ -75,13 +75,13 @@ acyclgo <- function() {
   #   cat("web url is wrong, can't get\n")
   #   return(F)
   # })
-  #return(result)
+  return(result)
 }
 
 
 observe({
   req(acyclgo())
-
+  pdf(NULL)
   if(class(acyclgo()) == "graphNEL")
     shinyjs::disable("saveclusterchoose")
   else
