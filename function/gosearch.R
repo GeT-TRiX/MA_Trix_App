@@ -219,6 +219,8 @@ davidqueryvenn <- function(entrezids, species){
   )
   
   selectedSpecie = (species)
+  
+  #setAnnotationCategories(david, c("GOTERM_BP_ALL"))
   #backgroundLocation = grep(selectedSpecie,RDAVIDWebService::getBackgroundListNames(david))
   specieLocation = grep(selectedSpecie, RDAVIDWebService::getSpecieNames(david))
   setCurrentSpecies(object = david, species = specieLocation)

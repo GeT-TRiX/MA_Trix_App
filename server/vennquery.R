@@ -62,7 +62,7 @@ output$clusterPlot <- renderPlot({
 
 
 davidtag<- reactive({req(Venncluster())
-  davidGODag<-DAVIDGODag(members(Venncluster())[[input$clusterNumber]],  pvalueCutoff=0.1) })
+  davidGODag<-DAVIDGODag(members(Venncluster())[[input$clusterNumber]],  pvalueCutoff=0.1, input$catvenn ) })
 
 
 

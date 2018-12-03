@@ -74,7 +74,15 @@ dbHeader$children[[2]]$children <-  tags$a(tags$img(src='matrix.png',height='40'
                                            tags$h3("MATRiX",style="font-family:Purisa; margin:15px 25px 5px 0;color:white; "))
 
 
-sidebar <- dashboardSidebar( # analyse par microréseau de l'impact transcriptomique des xénobiotiques
+sidebar <- dashboardSidebar( 
+# tags$style(HTML("
+#       .main-sidebar{
+#         width: 180px;
+#       }
+#       .content-wrapper, .main-footer, .right-side{
+#       margin-left: 180px;
+#       }
+#     ")), # analyse par microréseau de l'impact transcriptomique des xénobiotiques
   useShinyjs(),
   inlineCSS(appCSS),
   tags$style(type="text/css", Errorcss),
@@ -819,18 +827,18 @@ MATRiX app is working with specific data produced by the limma package, resultin
                       strong("Functional Annotation Clustering",style = "font-family: 'times'; font-size:20px; font-style: strong; "),
 
                       br(),br(),
-                      fluidRow(column(6, br(),sliderInput("clusterNumber",label = "Cluster",
+                      fluidRow(column(6, sliderInput("clusterNumber",label = "Cluster",
                                                           value = 1, min = 1,max = 5
                       )),
-                      column(6,br(),
+                      column(6,
                       selectInput("Speciesvenn", "Choose your Species:", selected = "Mus musculus",
                                   c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
                                     "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa",
                                     "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" )))),
                       fluidRow(
-                        column(5),
+                        column(6,selectInput("catvenn", "Choose your category", selected ="BP", c("BP","MF","CC"))),
 
-                      column(4,br(),
+                      column(6,br(),
                       actionButton("GOvenn", "Run Analysis",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")))
 
                        ))))),
