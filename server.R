@@ -76,15 +76,22 @@ shinyServer(function(input, output,session) {
     return(toupper(mycol))
     }
   })
-
-  #findfamily <- debounce(input$findfamily, 2000)
-
+  
+  
+  family_input <- reactive({
+    input$findfamily
+  })
+  
+  
+  family_d <- shiny::debounce(family_input, 900)
+  
+  
   familytopdisp <- reactive({
-    if(is.null(input$findfamily))
+    if(is.null(family_d))
       return(NULL)
     else{
-      if(!input$findfamily == ""){
-        genfam = grep(pattern = toupper(input$findfamily), toupper(csvf()[[3]]$GeneName)) %>% slice(csvf()[[3]],.)%>% select(GeneName)  %>% unlist() %>% as.character()
+      if(!family_d() == ""){
+        genfam = grep(pattern = toupper(family_d()), toupper(csvf()[[3]]$GeneName)) %>% slice(csvf()[[3]],.)%>% select(GeneName)  %>% unlist() %>% as.character() 
       }
       else
         genfam =""
@@ -210,11 +217,17 @@ shinyServer(function(input, output,session) {
     session$sendCustomMessage(type="updatejcol", col2js)
 
   })
+  
+  
+  
+  jvennc_input <- reactive({
+    input$fill
+  })
 
-  jvenncol <- debounce(input$fill, 1000)
+  jvenncol <- shiny::debounce(jvennc_input, 500)
 
   mycol <- reactive({
-    if(!input$fill == ""){
+    if(!jvenncol() == ""){
 
       mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(jvenncol(), ",")))
     }

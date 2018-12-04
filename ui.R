@@ -263,10 +263,10 @@ MATRiX app is working with specific data produced by the limma package, resultin
                      box(
                        title = "What's new in MATRiX", width = NULL, status = "primary",
                        div(style = 'overflow-y: scroll; height: 500px',
-                           addNews("Nov 30th 2018", "MATRiX", "add tootlip for distance, its now possible to export acyclic graph in pdf and eps, correct bugs for classification enrichment with 0 nodes by inactivating donwload button"),
-                           addNews("Nov 29th 2018", "Venn Diagram/HTML", "Correct bugsn now venn diagram table is based on genes and not probes."),
+                           addNews("Nov 30th 2018", "MATRiX", "Add tootlip for distance, its now possible to export acyclic graph in pdf and eps, correct bugs for classification enrichment with 0 nodes by inactivating donwload button"),
+                           addNews("Nov 29th 2018", "Venn Diagram/HTML", "Correct bugs now venn diagram table is based on genes and not probes."),
                            addNews("Npv 5th 2018", "Venn Diagram", "Remove non annotated genes."),
-                           addNews("Oct 19th 2018", "Volcano plot", "Search group genes based on regular expression."),
+                           addNews("Oct 19th 2018", "Volcano plot", "Search group of genes based on regular expression."),
                            addNews("Oct 15th 2018", "Venn Diagram", "Change the library to Jvenn."),
                            addNews("Aug 15th 2018", "Presentation/Video", "Added a video to present MATRiX and add modules to import files."),
                            addNews("Aug 10th 2018", "Upload/Volcano", "You can explore your different comparisons with a volcano plot."),
