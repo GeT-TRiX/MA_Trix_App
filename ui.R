@@ -329,7 +329,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
 
                                                 tags$img(src = "pdata.png"),
                                                 tags$img(src = "wotkingset.png"),
-                                                 tags$img(src = "restable.png")
+                                                 tags$img(src = "Restable.png")
 
                                                  ),
 
