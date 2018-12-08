@@ -411,14 +411,14 @@ MATRiX app is working with specific data produced by the limma package, resultin
                   p(" Highlight your selected gene(s) in the volcano plot with a comma-separated list of input ")
                   ),
 
-              textInput(inputId = "fillvolc",label = NULL,value = "",
+              textInput(inputId = "fillvolc",label = NULL,value = NULL,
                         placeholder = "FOXP2,OT,AVPR1a",width = "100%"
               ),
               div(id = "mytextvolcgrep",
                   p(" Highlight a family of gene in the volcano plot")
               ),
 
-              textInput(inputId = "findfamily",label = NULL,
+              textInput(inputId = "findfamily",label = NULL, value = NULL,
                         placeholder = "Cyp",width = "100%"),
               numericInput(
                 'topvolc',

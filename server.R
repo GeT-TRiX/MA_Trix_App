@@ -98,7 +98,29 @@ shinyServer(function(input, output,session) {
     return(toupper(genfam))
     }
   })
-
+  
+  
+  observe({
+    
+    if(input$findfamily != ""){
+      shinyjs::disable("topvolc")
+      shinyjs::disable("fillvolc")
+    }
+    else if(input$fillvolc != ""){
+      shinyjs::disable("topvolc")
+      shinyjs::disable("findfamily")
+    }
+    else if(!is.na(input$topvolc)){
+      shinyjs::disable("findfamily")
+      shinyjs::disable("fillvolc")
+    }
+    else{
+      shinyjs::enable("topvolc")
+      shinyjs::enable("findfamily")
+      shinyjs::enable("fillvolc")
+    }
+    
+  })
 
 
   volcano <- reactive({
