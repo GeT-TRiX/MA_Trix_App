@@ -609,7 +609,8 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     tags$script(src="tooltip.js"),
                     fluidRow(column(6,br(),br(),
                     tags$script(src="jvenn.js"),
-                    tags$div(id="jvenn-container", style = "background-color: white;  width: 600px;")
+                    tags$div(id="jvenn-container", style = "background-color: white; width: 100%; height:100%")
+                    #tags$div(id="jvenn-container", style = "background-color: white;  width: 600px;")
 
                     ),
                     column(6,
