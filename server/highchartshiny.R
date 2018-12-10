@@ -24,9 +24,11 @@ filteredata<- reactive({
   # clusterExport(cl,c("paraltest"),envir=environment())
   # clusterEvalQ(cl, library(dplyr))
   reumdiff = lapply(1:length(myresdavitab()),function(x)return(sapply(length(myresdavitab()[[x]]$Count), function(y){
-    return(as.numeric(as.character(myresdavitab()[[x]]$Count))/as.numeric(as.character(myresdavitab()[[x]]$List.Total))*100)})) %>%
+    return(as.numeric(as.character(myresdavitab()[[x]]$Count))/as.numeric(as.character(myresdavitab()[[x]]$Pop.Hits))*100)})) %>%
       mutate(myresdavitab()[[x]],percent = .)) %>% rbind.fill()
   return(reumdiff)
+  
+  
   # d = parLapply(cl, 1:length(paraltest),function(x)return(sapply(length(paraltest[[x]]$Count), function(y){
   #   return(as.numeric(as.character(paraltest$Count))/as.numeric(as.character(paraltest[[x]]$List.Total))*100)})) %>%
   #     mutate(paraltest[[x]],percent = .))

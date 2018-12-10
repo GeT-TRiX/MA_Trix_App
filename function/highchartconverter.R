@@ -18,6 +18,7 @@ DftoHighjson <- function(data, param) {
   tempData$Topgenes <-  data$Top
   tempData$percent <- data$percent
 
+  
   unifiedData <- reshape(tempData, varying=paste0("y",1), 
                       direction="long", idvar="Top",sep="",timevar="x")
   
