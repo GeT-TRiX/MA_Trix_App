@@ -134,6 +134,6 @@ Venncluster <- eventReactive(input$GOvenn, {
 
                    })
                  })
-
+    pdf(NULL)
     return(mygodavid)
   })

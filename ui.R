@@ -169,9 +169,9 @@ body <- dashboardBody(
                                          tags$h3("MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics."),
                                          p("This project initiated by Yannick Lippi aims to facilitate access to biologist in order to publish graphs such as heatmap, PCA or Venn diagram related to specifics data produced by TRiX's facility.", tags$br(),"
 
-MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).",tags$br(),"
+MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray data and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).",tags$br(),"
 
-MATRiX app is working with specific data produced by the limma package, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/sampleData.zip)."),
+MATRiX app is working with specific data produced by the limma package, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN. This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/sampleData.zip)."),
 
                                          p("Hereafter is the global workflow passing by the statistical analysis to the visualization:"),tags$br(),
                                          div(id="workflow",
@@ -263,9 +263,9 @@ MATRiX app is working with specific data produced by the limma package, resultin
                      box(
                        title = "What's new in MATRiX", width = NULL, status = "primary",
                        div(style = 'overflow-y: scroll; height: 500px',
-                           addNews("Nov 30th 2018", "MATRiX", "Add tootlip for distance, its now possible to export acyclic graph in pdf and eps, correct bugs for classification enrichment with 0 nodes by inactivating donwload button"),
+                           addNews("Nov 30th 2018", "MATRiX", "Add tootlip for distance, its now possible to export acyclic graphs in pdf and eps, correct bugs for classification enrichment with 0 nodes by inactivating donwload button"),
                            addNews("Nov 29th 2018", "Venn Diagram/HTML", "Correct bugs now venn diagram table is based on genes and not probes."),
-                           addNews("Npv 5th 2018", "Venn Diagram", "Remove non annotated genes."),
+                           addNews("Nov 5th 2018", "Venn Diagram", "Remove non annotated genes."),
                            addNews("Oct 19th 2018", "Volcano plot", "Search group of genes based on regular expression."),
                            addNews("Oct 15th 2018", "Venn Diagram", "Change the library to Jvenn."),
                            addNews("Aug 15th 2018", "Presentation/Video", "Added a video to present MATRiX and add modules to import files."),

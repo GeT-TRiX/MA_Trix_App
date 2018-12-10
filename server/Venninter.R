@@ -84,7 +84,7 @@ vennfinal <- reactive({
     resfinal <- csvf()[[3]] %>%
     filter(ProbeName %in% venninter()[[reordchoice]]) %>%
     #filter(ProbeName %in% input$jvennlist) %>%
-    select(GeneName, paste0("logFC_", choix_cont())) %>%
+    select(ProbeName, GeneName, paste0("logFC_", choix_cont())) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
   }
   else if (!input$Allcont && input$dispvenn == "genes")
