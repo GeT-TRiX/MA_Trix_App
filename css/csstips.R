@@ -41,52 +41,6 @@ background-color: #fff;
 }
 "
 
-Errorcss <-
-".shiny-output-error { visibility: visible;  color: orange; font-size: larger;}
-
-.shiny-output-error:before {
-color: #3c8dbc;
-visibility: visible;
-#content: 'An error occurred. Please contact us at franck.soubes@inra.fr'; }
-content: 'ok'; }
-}
-"
-
-
-appCSS <- "
-#loading-content {
-position: absolute;
-background: #182b42;
-opacity: 0.9;
-z-index: 100;
-left: 0;
-right: 0;
-top: 30px;
-height: 100%;
-text-align: center;
-color: #FFFFFF;
-}
-#loading-content-bar {
-position: absolute;
-background: #182b42;
-opacity: 0.9;
-z-index: 100;
-left: 0;
-right: 0;
-height: 100%;
-text-align: center;
-color: #FFFFFF;
-}
-"
-
-gaugeCSS <- "
-.html-widget.gauge svg {
-    height: 100%;
-margin-top: -10px;
-margin-bottom: -40px;
-}
-"
-
 
 #' addNews is a function that render a pretty table for news
 #'
@@ -101,10 +55,7 @@ margin-bottom: -40px;
 #'
 #' @examples
 #'
-addNews <- function(date ="",title="",text="")
-{
-
-
+addNews <- function(date ="",title="",text=""){
   res=list()
   res$r1 = paste("<b><font size='+1'>",date,"</font></b>", " - ", "<b><font size='+1'>",title,"</font></b><br/>")
   res$r2 = paste("<p><font color='grey'>",text,"</font></p><hr/>")

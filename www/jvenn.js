@@ -118,10 +118,6 @@ $(document).ready(function () {
       //$("div#jvenn-container .test").addClass('draggable');
       //$("div#jvenn-container .test").draggable();
 
-			// $('button').click(function(){
-    	// $(this).css("background", "red").siblings().css("background", "green");
-  		// });
-			//
 			$('.btn-group button').on('click', function(){
     	$(this).siblings().removeClass('active')
     	$(this).addClass('active');
@@ -184,7 +180,6 @@ $(document).ready(function () {
 
 			$('[id^="ff"]').click(function() {
 				fontFamily = $(this).html();
-				//Shiny.onInputChange("updamod",fontFamily);
 				updateJvenn();
 			});
 

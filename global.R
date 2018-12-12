@@ -33,7 +33,7 @@ suppressPackageStartupMessages(library(x,character.only=TRUE))})
 
 library(shinyFiles)
 source("function/delayinput.R")
-source("css/owncss.R")
+source("css/csstips.R")
 source("function/formating.R")
 source("function/PCA.R")
 source("function/heatmtruncated.R")

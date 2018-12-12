@@ -257,7 +257,7 @@ observe({
     lengthofmyclust = sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
       return(length(which(hmobj$hm$cluster ==x)))) %>%  
       cbind(.,sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
-        return(length(which(mydfhmgen$cluster ==x))))) %>% as.data.frame()%>%
+        return(length(which(mydfhmgen$cluster ==x))))) %>% as.data.frame() %>%
       setNames(.,c("total number of probes","total number of genes")) 
     rownames(lengthofmyclust) <- sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)
       return(paste("cluster", x)))

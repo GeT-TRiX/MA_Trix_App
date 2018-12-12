@@ -84,8 +84,7 @@ sidebar <- dashboardSidebar(
 #       }
 #     ")), # analyse par microréseau de l'impact transcriptomique des xénobiotiques
   useShinyjs(),
-  inlineCSS(appCSS),
-  tags$style(type="text/css", Errorcss),
+  #inlineCSS(appCSS),
   tags$style(type="text/css", inactivity),
   shinyjs::extendShinyjs(text = shinyjscode),
 
@@ -134,7 +133,6 @@ body <- dashboardBody(
   #tags$head(includeScript("google-analytics.js")),
 
   tags$style(type="text/css", inactivity),
-  tags$style(type="text/css", Errorcss),
 
 
   useShinyjs(),
@@ -148,7 +146,7 @@ body <- dashboardBody(
     .tabbable > .nav > li > a[data-value='cutpan'] {background-color: blue;  color:white}
   ")),
 
-  inlineCSS(appCSS),
+  #inlineCSS(appCSS),
   includeCSS("./css/style.css"),
   div(
     id = "loading-content",
@@ -597,7 +595,8 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                         downloadButton('downloadvennset', "Download the filtered data",
                                                 style ="color: #fff; background-color: #337ab7; border-color: #2e6da4;"))
 
-                        )),
+                        )
+                        ),
 
                     conditionalPanel(condition = '!output.bool',
                                      uiOutput(outputId = "image")

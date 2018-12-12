@@ -147,6 +147,8 @@ position: static;
     z-index: 800;
 }
 
+.shiny-output-error { visibility: visible;  color: orange; font-size: larger;}
+
 
 .irs-bar { height: 8px; top: 25px; border-top: 1px solid #337ab7; border-bottom: 1px solid #337ab7; background: #337ab7; } .irs-bar-edge { height: 8px; top: 25px; width: 14px; border: 1px solid #337ab7; border-right: 0; background: #337ab7; border-radius: 16px 0 0 16px; -moz-border-radius: 16px 0 0 16px; }
 
@@ -210,6 +212,31 @@ div.outer  {
 }
 }
 
+#loading-content {
+position: absolute;
+background: #182b42;
+opacity: 0.9;
+z-index: 100;
+left: 0;
+right: 0;
+top: 30px;
+height: 100%;
+text-align: center;
+color: #FFFFFF;
+}
+#loading-content-bar {
+position: absolute;
+background: #182b42;
+opacity: 0.9;
+z-index: 100;
+left: 0;
+right: 0;
+height: 100%;
+text-align: center;
+color: #FFFFFF;
+}
+
+
 .dt-button.buttons-columnVisibility {
     background: #FF0000 !important;
     color: white !important;
@@ -258,10 +285,6 @@ a.my-tool-tip, a.my-tool-tip:hover, a.my-tool-tip:visited {
     color: black;
 }
 
-@media screen and (max-width: 768px)
-.row-offcanvas-left .sidebar-offcanvas {
-left: -240px;
-}
 
 
 

@@ -171,7 +171,7 @@ lapply(1:NROW(myentz), function(x)
   
 davidquery <- function(entrezids, species, mycat) {
   test = lapply(1:NROW(entrezids), function(x) {
-    david <- DAVIDWebService$new(email = "franck.soubes@inra.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
+    david <- DAVIDWebService$new(email = "get-trix@genotoul.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
     RDAVIDWebService::setTimeOut(david, 90000)
     result <-
       addList(
@@ -208,7 +208,7 @@ davidquery <- function(entrezids, species, mycat) {
 
 davidqueryvenn <- function(entrezids, species){
   
-  david <- DAVIDWebService$new(email = "franck.soubes@inra.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
+  david <- DAVIDWebService$new(email = "get-trix@genotoul.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
   RDAVIDWebService::setTimeOut(david, 90000)
   addList(
     david,

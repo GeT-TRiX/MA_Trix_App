@@ -4,6 +4,7 @@
 ### Where: GET-TRiX's facility
 ### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
 ### Licence: GPL-3.0
+### TODO comment
 
 
 
@@ -16,16 +17,17 @@ axisParameters <- list(
 )
 
 filteredata<- reactive({
-  
-  #d <- NULL
+
   req(myresdavitab())
   # paraltest <- myresdavitab()
   # cl <- makeCluster(getOption("cl.cores", 4))
   # clusterExport(cl,c("paraltest"),envir=environment())
   # clusterEvalQ(cl, library(dplyr))
+  
+  
   reumdiff = lapply(1:length(myresdavitab()),function(x)return(sapply(length(myresdavitab()[[x]]$Count), function(y){
     return(as.numeric(as.character(myresdavitab()[[x]]$Count))/as.numeric(as.character(myresdavitab()[[x]]$Pop.Hits))*100)})) %>%
-      mutate(myresdavitab()[[x]],percent = .)) %>% rbind.fill()
+      mutate(myresdavitab()[[x]],percent = .)) %>% bind_rows()#rbind.fill()
   return(reumdiff)
   
   
@@ -44,7 +46,6 @@ plotDataenrichment <- reactive({
   return(DftoHighjson(filtered,param))
   
 })
-
 
 
 observe({
