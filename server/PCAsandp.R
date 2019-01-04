@@ -13,27 +13,25 @@
 
 observe({
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
-
-
-  output$individuselpca <- renderUI(
+  
+  output$grpselpca <- renderUI(
     checkboxGroupInput(
-      inputId = "indivpca" ,
+      inputId = "groupca" ,
       label = NULL,
       #label =  "Choose your group to visualize",
       choices =  levels(csvf()[[2]]$Grp),
       #selected = levels(csvf()[[2]]$Grp),
       inline   = groupinline
-
     )
   )
-
 })
+
 # Select all groups
-observeEvent(input$allIndividuspca, {
+observeEvent(input$allgrpca, {
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(
     session,
-    "indivpca",
+    "groupca",
     label = "Choose your group to visualize",
     choices =  levels(csvf()[[2]]$Grp),
     selected = levels(csvf()[[2]]$Grp),
@@ -42,17 +40,17 @@ observeEvent(input$allIndividuspca, {
 })
 
 # Unselect all groups
-observeEvent(input$noIndividuspca, {
+observeEvent(input$nogrpca, {
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(
     session,
-    "indivpca",
+    "groupca",
     label = "Choose your group to visualize",
     choices =  levels(csvf()[[2]]$Grp),
     inline = groupinline
   )
 })
-
+  
 
 
 #' choix_grpca is a reactive function in the aim of selecting different groups
@@ -65,9 +63,10 @@ observeEvent(input$noIndividuspca, {
 
 choix_grpca <- reactive({
   req(csvf())
-  req(input$indivpca)
-  return(input$indivpca)
+  req(input$groupca)
+  return(input$groupca)
 })
+
 
 
 
@@ -81,7 +80,7 @@ choix_grpca <- reactive({
 
 
 list_ind <- reactive({
-  return(list(input$indivpca))
+  return(list(input$groupca))
 })
 
 
@@ -177,7 +176,7 @@ content <- function(file) {
 output$eigpca <- renderPlot({
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(length(input$indivpca) >0 ,'You need to select groups!') %next%
+      need(length(input$groupca) >0 ,'You need to select groups!') %next%
       need(length(unique(
         new_grouppca()$Grp
       )) > 1, 'You need to select more than one group!')
@@ -224,10 +223,27 @@ output$PCA <- renderPlot({
 },  height = plotHeight)
 
 
+output$PCAvarender <- renderPlot({
+  validate(
+    need(csvf(), 'You need to import data to visualize this plot!') %next%
+      need(length(unique(
+        new_grouppca()$Grp
+      )) > 0, 'You need to select groups!') %next%
+      need(length(unique(
+        new_grouppca()$Grp
+      )) > 1, 'You need to select more than one group!')
+  )
+
+  plot(PCAvarplot())
+
+},  height = plotHeight)
+
+
+
 output$savepca <- downloadHandler(filename <- function() {
-  paste0(basename(file_path_sans_ext(projectname())), '_pca.', input$formpca, sep =
-           '')
+  paste0(basename(file_path_sans_ext(projectname())), '_pca.', input$formpca, sep = '')
 },
+
 content <- function(file) {
   if (input$formpca == "pdf")
 

@@ -6,24 +6,49 @@
 ### Licence: GPL-3.0
 
 
-observeEvent(input$tabset25,{
+
+plotHeight <- reactive({
+  ifelse(is.null(input$plotHeight), 0, (input$plotHeight/1.25)) ## responsive plot
+})
+
+
+#########################################
+######## Loading screen                 #
+#########################################
+
+hide(id = "loading-content", anim = TRUE, animType = "fade",time=2)
+hide(id = "loading-content-bar", anim = TRUE, animType = "fade",time=2)
+
+observe({
+  collapsestate <- input$sidebarCollapsed
+  session$sendCustomMessage(type="iscollapse", collapsestate)
+})
+
+
+#########################################
+######## Redirection Panel              #
+#########################################
+
+observeEvent(input$heatmapanel, {
 
 isolate(
-  if (grepl("widgetheat", input$tabset25)) {
+  if (grepl("widgetheat", input$heatmapanel)) {
 
-    updateTabsetPanel(session, "tabset1",
+    updateTabsetPanel(session, "heatmapmainp",
                       selected = "hmmainpan")
   }
-  else if (grepl("test3", isolate(input$tabset25))) {
+  else if (grepl("cutheatmainp", isolate(input$heatmapanel))) {
 
-    updateTabsetPanel(session, "tabset1",
+    updateTabsetPanel(session, "heatmapmainp",
                       selected = "cuthmmainpan")
     
   }
 )
 })
 
-
+#########################################
+######## FC step 0.1 if FC <2           #
+#########################################
 
 observe({
   
@@ -71,6 +96,10 @@ observe({
   
 })
 
+#################################################
+######## Download data and reset button heatmap #
+#################################################
+
 output$downloadData <- downloadHandler(filename <- function() {
   paste("sampleData", ".zip", sep = '')
 },
@@ -85,7 +114,7 @@ observeEvent(input$resetAll, {
 
 
 #########################################
-######## citation packages              #
+######## Citation packages              #
 #########################################
 
 #' mypacklist is a reactive function which aim is to display the different packages used in the current session
@@ -119,3 +148,34 @@ observeEvent(input$session, {
   req(mypacklist())
   output$sessinfo <- renderDataTable(mypacklist())
 })
+
+
+
+#########################################
+######## Grep project name              #
+#########################################
+
+file_name <- reactive({
+  req(csvf())
+  inFile <- csvf()[[4]] 
+  if (class(inFile)== "character")
+    return(tools::file_path_sans_ext(inFile))
+  else
+    return (tools::file_path_sans_ext(inFile$name))
+})
+
+projectname <- reactive({
+  req(file_name())
+  splitbyunder <- strsplit(file_name(), "_")
+  MAindex = grepl("^MA", splitbyunder[[2]])
+  isindex = which(MAindex == T)
+  outputname = list(splitbyunder[[2]][isindex], MAindex)
+  if(length(outputname[[1]]) == 0){
+    return(Sys.Date())
+  }
+  else
+    return(outputname)
+  
+})
+
+

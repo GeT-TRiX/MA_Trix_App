@@ -25,7 +25,7 @@ observe({
 outputOptions(output, "heatmbool", suspendWhenHidden = F)
 
 observe({
-  req(csvf(),length(choix_test()) >0,input$reactheat == T| global$clicked)
+  req(csvf(),length(selected_test()) >0,input$reactheat == T| global$clicked)
   
   observe({boolhm <<-T}) # modify and lock the bool value to false
   
@@ -153,7 +153,7 @@ observe({
     validate(need(
       csvf(),
       'You need to import data to visualize to plot the Heatmap' ) %next% 
-      need(length(choix_test()) >0, 'You need to select a contrast(s)') %next% 
+      need(length(selected_test()) >0, 'You need to select a contrast(s)') %next% 
       need(input$heatm , 'You need to click on the heatmap button down below the heatmap settings')
     )
   })
@@ -162,9 +162,9 @@ observe({
   heatid <- input$side
   if (grepl("Heatmap", heatid)) {
     if (input$reactheat == T)
-      source(file.path("server", "plotreact.R"), local = TRUE)$value #
+      source(file.path("server", "Plotreact.R"), local = TRUE)$value #
     else
-      source(file.path("server", "plotreact2.R"), local = TRUE)$value #
+      source(file.path("server", "Plotreact2.R"), local = TRUE)$value #
     
   }
   
@@ -237,7 +237,7 @@ observe({
     else
       met = "P.value_"
     
-    mycont = paste0(met, choix_test())
+    mycont = paste0(met, selected_test())
     ordered = csvf()[[3]] %>% filter(ProbeName %in% hmobj$hm$ProbeName)  %>%
       select(ProbeName,  mycont) %>%
       full_join(hmobj$hm[,-1], ., by = "ProbeName") %>%

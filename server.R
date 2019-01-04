@@ -4,8 +4,7 @@
 ### Where: GET-TRiX's facility
 ### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
 ### Licence: GPL-3.0
-
-library(shinyFiles)
+#library(shinyFiles)
 
 shinyjscode <- "
 shinyjs.init = function() {
@@ -19,22 +18,6 @@ shinyjs.calcHeight = function() {
 shinyServer(function(input, output,session) {
 
 
-
-  hide(id = "loading-content", anim = TRUE, animType = "fade",time=2)
-  hide(id = "loading-content-bar", anim = TRUE, animType = "fade",time=2)
-
-  observe({
-    collapsestate <- input$sidebarCollapsed
-    session$sendCustomMessage(type="iscollapse", collapsestate)
-  })
-
-
-
-  plotHeight <- reactive({
-    ifelse(is.null(input$plotHeight), 0, (input$plotHeight/1.25))
-  })
-
-
   #######################################################
   ##                                                   ##
   ##                    LOAD FILES                     ##
@@ -42,296 +25,91 @@ shinyServer(function(input, output,session) {
   #######################################################
 
   #source(file.path("server", "csvFile.R"), local = TRUE)$value #
-
-  csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE)
-
+  csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE) # TODO Module for importing data
 
   ##########################################
   ######## Widget update and info         ##
   ##########################################
 
-  source(file.path("server", "matrixwidg.R"), local = TRUE)$value #
+  source(file.path("server", "Utilities.R"), local = TRUE)$value # Utilities method (packages citations, fc step, zipdownload and panel redirection and project name)
 
   ##########################################
   ######## HOME page                      ##
   ##########################################
 
-  source(file.path("server", "datasummary.R"), local = TRUE)$value #
-  source(file.path("server", "renderertable.R"), local = TRUE)$value #
-  source(file.path("server", "checkboxgrp.R"), local = TRUE)$value #
+  source(file.path("server", "Datasummary.R"), local = TRUE)$value # Reactive function that return the indexes for the signficant genes
+  source(file.path("server", "Rendertable.R"), local = TRUE)$value # TODO All the output csv except for the heatmap page that are in heatmapshiny source
+  source(file.path("server", "Checkboxgrphm.R"), local = TRUE)$value # Heatmap function for select specific groups
+  source(file.path("server", "Grepcol.R"), local = TRUE)$value # create list of dataframes containing (logfc, pval and adjpval)
 
   ##########################################
   ######## Volcano page                   ##
   ##########################################
 
-
-  genetodisplay <- reactive({
-    if(is.null(input$fillvolc))
-      return(NULL)
-    else{
-    if(!input$fillvolc == "")
-          mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(input$fillvolc, ",")))
-        else
-          mycol = ""
-    return(toupper(mycol))
-    }
-  })
-  
-  
-  family_input <- reactive({
-    input$findfamily
-  })
-  
-  
-  family_d <- shiny::debounce(family_input, 900)
-  
-  
-  familytopdisp <- reactive({
-    if(is.null(family_d))
-      return(NULL)
-    else{
-      if(!family_d() == ""){
-        genfam = grep(pattern = toupper(family_d()), toupper(csvf()[[3]]$GeneName)) %>% slice(csvf()[[3]],.)%>% select(GeneName)  %>% unlist() %>% as.character() 
-      }
-      else
-        genfam =""
-    return(toupper(genfam))
-    }
-  })
-  
-  
-  observe({
-    
-    if(input$findfamily != ""){
-      shinyjs::disable("topvolc")
-      shinyjs::disable("fillvolc")
-    }
-    else if(input$fillvolc != ""){
-      shinyjs::disable("topvolc")
-      shinyjs::disable("findfamily")
-    }
-    else if(!is.na(input$topvolc)){
-      shinyjs::disable("findfamily")
-      shinyjs::disable("fillvolc")
-    }
-    else{
-      shinyjs::enable("topvolc")
-      shinyjs::enable("findfamily")
-      shinyjs::enable("fillvolc")
-    }
-    
-  })
-
-
-  volcano <- reactive({
-    req(csvf())
-    EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) ,
-                    y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp),
-                    topgenes = input$topvolc,DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),
-                    pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = input$volcpt,transcriptLabSize = input$volclab,
-                    title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", findfamily =  ifelse(familytopdisp() == "" , NA,familytopdisp()),
-                    displaylab = ifelse(genetodisplay() =="", NA, genetodisplay()),legendLabSize = 10,
-                    cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
-                                                                         "P value & Log (base 2) fold-change"))
-  })
-
-
-
-  output$volcanoplot <- renderPlot({
-
-  validate(need(csvf(), 'You need to import data to visualize this plot!'))
-
-    req(volcano())
-    volcano()
-
-  },  height = plotHeight)
-
-  output$compvolc <- renderUI({
-    req(adjusted())
-    selectInput("volcacomp", "Choose a comparison", choices = colnames(adjusted()[[1]][,-1,drop = FALSE]))
-  })
-
-
-  output$savevolcano <- downloadHandler(filename <- function() {
-    paste0(basename(file_path_sans_ext(projectname())), '_volcano.', input$formvolc, sep ='')
-  },
-  content <- function(file) {
-    if (input$formvolc == "pdf")
-
-      pdf(file,
-          width = 12,
-          height = 12,
-          pointsize = 12)
-
-
-    else if (input$formvolc == "png")
-
-      png(
-        file,
-        width = 2500,
-        height = 2500,
-        units = "px",
-        pointsize = 12,
-        res = 100
-      )
-    else
-      ggsave(file,device=cairo_ps, fallback_resolution = 600)
-
-
-    plot(volcano())
-    dev.off()
-  })
-
+  source(file.path("server", "Volcanoshiny.R"), local = TRUE)$value # Volcano plot
 
   ################################
   ######## PCA page             ##
   ################################
 
-  source(file.path("server", "PCAshiny.R"), local = TRUE)$value #
-  source(file.path("server", "PCAsandp.R"), local = TRUE)$value #
-  source(file.path("server", "colforpca.R"), local = TRUE)$value #
+  source(file.path("server", "PCAshiny.R"), local = TRUE)$value # PCA plot function
+  source(file.path("server", "PCAsandp.R"), local = TRUE)$value # all parameters for pca plot and more
+  source(file.path("server", "Colforpca.R"), local = TRUE)$value # Color for pca plot
 
   ################################
   ######## Venn page            ##
   ################################
 
-  source(file.path("server", "Venn.R"), local = TRUE)$value #
-  #source(file.path("server", "Vennrender.R"), local = TRUE)$value #
-  source(file.path("server", "grepcol.R"), local = TRUE)$value # adjusted
-  source(file.path("server", "Venninter.R"), local = TRUE)$value # adjusted
-  source(file.path("server", "trackervenn.R"), local = TRUE)$value #
-
+  source(file.path("server", "Venn.R"), local = TRUE)$value # Generate the vennlist and select the contrasts
+  #source(file.path("server", "Vennrender.R"), local = TRUE)$value # TODO add static Venn
+  source(file.path("server", "Venninter.R"), local = TRUE)$value # Selected intersection Venn mean and barplot from the data table with the export. TODO remove not valuable info
+  source(file.path("server", "Trackervenn.R"), local = TRUE)$value # Tracker for Venn
 
   ################################
   ######## Jvenn                ##
   ################################
 
-
-  observe({
-
-    req(vennlist(),user_cont())
-
-    wrongcol <- function(y)
-      if (any(grepl("col2rgb", y)))
-        invokeRestart("muffleWarning")
-
-    if(input$dispvenn == "genes")
-      if(input$Notanno){
-        vennlist <- lapply(vennlist()[[2]], grep, pattern="^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}|[0-9]{7,}", value=TRUE, invert=TRUE)
-        Rtojs <- toJvenn(vennlist,user_cont())
-      }
-      else
-        Rtojs <- toJvenn(vennlist()[[2]],user_cont())
-    else
-        Rtojs <- toJvenn(vennlist()[[1]],user_cont())
-
-    Mymode <-  input$updamod # Mode
-    Myfont <-  input$myfont # Font size
-    Mystat <-  input$mystat # Stat
-    Myswitch <-  input$dispswitch # Stat
-
-    col2js =  tryCatch({
-      col2rgb(mycol()) %>%  lapply(.,function(x)return(x)) %>% withCallingHandlers(error = wrongcol)
-    }, error = function(e) {shinyjs::alert("Wrong color")})
-
-
-    session$sendCustomMessage(type="updatejvenn", Rtojs)
-    session$sendCustomMessage(type="updatejcol", col2js)
-
-  })
-  
-  
-  
-  jvennc_input <- reactive({
-    input$fill
-  })
-
-  jvenncol <- shiny::debounce(jvennc_input, 500)
-
-  mycol <- reactive({
-    if(!jvenncol() == ""){
-
-      mycol = gsub("^\\s+|\\s+$", "", unlist(strsplit(jvenncol(), ",")))
-    }
-    else
-      mycol = ""
-  })
-
-
-
+  source(file.path("server", "Jvenn.R"), local = TRUE)$value # Jvenn reactive expressions
 
   ################################
   ######## Venn GO              ##
   ################################
 
-  source(file.path("server", "vennquery.R"), local = TRUE)$value # adjusted
-
-  ##########################################
-  ######## Grep project name              ##
-  ##########################################
-
-
-  file_name <- reactive({
-    req(csvf())
-    inFile <- csvf()[[4]]
-    if (class(inFile)== "character")
-      return(tools::file_path_sans_ext(inFile))
-    else
-      return (tools::file_path_sans_ext(inFile$name))
-  })
-
-  projectname <- reactive({
-    req(file_name())
-    projed <- strsplit(file_name(), "_")
-    proj = grepl("^MA", projed[[2]])
-    index = which(proj == T)
-    myproj = list(projed[[2]][index], proj)
-    if(length(myproj[[1]]) == 0){
-      return(Sys.Date())
-    }
-    else
-      return(myproj)
-
-  })
-
-
+  source(file.path("server", "Vennquery.R"), local = TRUE)$value # Venn query DAVID
 
   ################################
   ######## Heatmap page         ##
   ################################
 
-  source(file.path("server", "checkboxcontrast.R"), local = TRUE)$value #
-  source(file.path("server", "changeheatmbut.R"), local = TRUE)$value #
-  source(file.path("server", "hidevent.R"), local = TRUE)$value #
-  source(file.path("server", "heatmapshiny.R"), local = TRUE)$value #
-  source(file.path("server", "tracker.R"), local = TRUE)$value #
-  source(file.path("server", "computemean.R"), local = TRUE)$value #
-  source(file.path("server", "grepcol.R"), local = TRUE)$value #
-  source(file.path("server", "indexselected.R"), local = TRUE)$value #
-  source(file.path("server", "selgroupandcont.R"), local = TRUE)$value #
-  source(file.path("server", "backgroundcolor.R"), local = TRUE)$value #
-  source(file.path("server", "groupcolor.R"), local = TRUE)$value #
+  source(file.path("server", "Checkboxcontrast.R"), local = TRUE)$value #Select the comparison for the heatmap
+  source(file.path("server", "Changeheatmbut.R"), local = TRUE)$value # Change the heatmap button color
+  source(file.path("server", "Hidevent.R"), local = TRUE)$value # Hide parameters such as number of clusters ... and tooltip for dist
+  source(file.path("server", "Heatmapshiny.R"), local = TRUE)$value #
+  source(file.path("server", "Trackerhm.R"), local = TRUE)$value # Tracker for heatmap parameters
+  source(file.path("server", "Computemean.R"), local = TRUE)$value # Mean for heatmap selected groups
+  source(file.path("server", "Grepcol.R"), local = TRUE)$value #
+  source(file.path("server", "Indexselected.R"), local = TRUE)$value #
+  source(file.path("server", "Selgroupandcont.R"), local = TRUE)$value #
+  source(file.path("server", "Backgroundcolor.R"), local = TRUE)$value # Background color for the heatmap
+  source(file.path("server", "Colorforhm.R"), local = TRUE)$value # Color for each different group in the hm
 
   ##########################################
   ######## GO enrichissment               ##
   ##########################################
 
-
-  source(file.path("server", "shinygo.R"), local = TRUE)$value #
-  source(file.path("server", "highchartshiny.R"), local = TRUE)$value #
+  source(file.path("server", "Shinygohm.R"), local = TRUE)$value #
+  source(file.path("server", "Highchartshiny.R"), local = TRUE)$value #
 
   ################################
   ######## cutheatmap page      ##
   ################################
 
-  source(file.path("server", "cutheatmap.R"), local = TRUE)$value #
+  source(file.path("server", "Cutheatmap.R"), local = TRUE)$value #
 
   ##########################################
   ######## Contact chat                   ##
   ##########################################
 
-  source(file.path("server", "shinychat.R"), local = TRUE)$value #
-
-
+  source(file.path("server", "Shinychat.R"), local = TRUE)$value #
 
 })

@@ -20,17 +20,17 @@ output$maxGen <- renderPrint({ # number of signficant genes in the heatmap produ
 })
 
 
-output$indivcol <-  renderText({ # Groups selected
-  my_final <<- paste(choix_grp(),as.character(),  sep=",") 
-  my_final[length(choix_grp())] <<- gsub(",","",my_final[length(choix_grp())])
-  print(my_final)
+output$col <-  renderText({ # Groups selected
+  my_final <<- paste(input$grouphm,as.character(),  sep=",") 
+  my_final[length(input$grouphm)] <<- gsub(",","",my_final[length(input$grouphm)])
+  my_final
 })
 
 
 output$testtt <- renderText({ #Contrast selected
-  my_final <<- paste(choix_test(),as.character(),  sep=",") 
-  my_final[length(choix_test())] <<- gsub(",","",my_final[length(choix_test())])
-  print(my_final)
+  my_final <<- paste(selected_test(),as.character(),  sep=",") 
+  my_final[length(selected_test())] <<- gsub(",","",my_final[length(selected_test())])
+  my_final
 })
 
 
@@ -57,7 +57,7 @@ output$myMAT <- renderText({ #Method for the matrix distance, default = correlat
 
 output$myPAL <- renderText({ #Colors selected for the different groups, default see palette in the global environment
   if(is.null(mypal()))
-    palette[1:length(choix_grp())]
+    palette[1:length(input$grouphm)]
   else
     paste(mypal(),as.character(),  sep=",")
 })

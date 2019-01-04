@@ -77,6 +77,20 @@ PCAplot <- function(PCAres, myax = c(1,2), elips = T , rep = T , mylevel = group
 }
 
 
+# res.pca <- function(workingset, restab ,scale = F, variable = F) {
+#   
+#   myt = transpose(workingset)
+#   row.names(myt) = colnames(workingset)
+#   
+#   if(variable)
+#     colnames(myt) =  make.names(restab$GeneName, unique=TRUE)
+#   
+#   PCAres = PCA(myt,
+#                scale.unit = F,
+#                graph = F)
+#   
+#   return(PCAres)
+# }
 
 
 

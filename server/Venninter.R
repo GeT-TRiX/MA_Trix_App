@@ -14,7 +14,6 @@
 #' @export
 #'
 
-
 vennchoice <- reactive({
   if (is.null (input$intscol))
     return(NULL)
@@ -35,7 +34,6 @@ vennchoice <- reactive({
 venninter <- reactive({
   req(vennlist(), user_cont())
   myelist <- setvglobalvenn(vennlist()[[1]], user_cont())
-
   return(myelist)
 })
 
@@ -75,7 +73,6 @@ vennfinal <- reactive({
   if(!input$Allcont && !input$dispvenn == "genes"){
     resfinal <- csvf()[[3]] %>%
     filter(ProbeName %in% venninter()[[reordchoice]]) %>%
-      #filter(ProbeName %in% input$jvennlist) %>%
       select(ProbeName, GeneName, paste0("logFC_",  input$selcontjv)) %>%
       mutate_if(is.numeric, funs(format(., digits = 3)))
 
@@ -83,7 +80,6 @@ vennfinal <- reactive({
   else if (input$Allcont && !input$dispvenn == "genes"){
     resfinal <- csvf()[[3]] %>%
     filter(ProbeName %in% venninter()[[reordchoice]]) %>%
-    #filter(ProbeName %in% input$jvennlist) %>%
     select(ProbeName, GeneName, paste0("logFC_", choix_cont())) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
   }
@@ -94,8 +90,7 @@ vennfinal <- reactive({
       filter(ProbeName %in% unlist(vennlist()[[1]])) %>%
       select( GeneName, paste0("logFC_",  input$selcontjv)) %>%
       mutate_if(is.numeric, funs(format(., digits = 3)))
-      #print(filter(resfinal, GeneName == "Afg3l1"))
-  
+
   else
     resfinal <- csvf()[[3]] %>%
       filter(GeneName %in% input$jvennlist) %>%

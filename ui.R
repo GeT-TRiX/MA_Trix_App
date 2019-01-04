@@ -481,7 +481,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
 
                         )),
 
-                    plotOutput(outputId = "PCA", height = 700)
+                    plotOutput(outputId = "PCA", height = 700) #,plotOutput(outputId = "PCAvarender", height = 700)
                   )
 
                 )
@@ -492,14 +492,14 @@ MATRiX app is working with specific data produced by the limma package, resultin
                        box(id="boxpasspca",title = strong("PCA settings",style="font-size:25px;"), width = NULL, background = "light-blue",
                            inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
                            strong("Choose your group to visualize"),
-                          uiOutput("individuselpca"),
+                          uiOutput("grpselpca"),
                   actionButton(
-                    inputId = "allIndividuspca",label = "Select all",
+                    inputId = "allgrpca",label = "Select all",
                     icon = icon("check-square-o"),
                     style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
                   ),
                   actionButton(
-                    inputId = "noIndividuspca",label = "Clear selection",icon = icon("square-o"),
+                    inputId = "nogrpca",label = "Clear selection",icon = icon("square-o"),
                     style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
                   ),
 
@@ -856,7 +856,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
               width = 8,
               div(
                 tabsetPanel(
-                  id = "tabset1",
+                  id = "heatmapmainp",
                   tabPanel(
                      strong("Visualize the Heatmap"),value = "hmmainpan",
                     div(style="display:inline-block",
@@ -1016,7 +1016,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                       tabBox(
 
                          title = "",
-                         id = "tabset25",
+                         id = "heatmapanel",
                          width = NULL,
 
                            tabPanel("Heatmap",id= "heatmpan", ##ADD8E6
@@ -1028,16 +1028,16 @@ MATRiX app is working with specific data produced by the limma package, resultin
                            actionLink("resetAll",  label = ("reset all"), style="color:orange;float:right;font-size: 18px;"),
                            br(),
                            #wellPanel(
-                             uiOutput("individusel"),
+                             uiOutput("grpselhm"),
                              actionButton(
-                               inputId = "allIndividus",
+                               inputId = "allgrphm",
                                label = "Select all",
                                icon = icon("check-square-o"),
                                style =
                                  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                              ),
                              actionButton(
-                               inputId = "noIndividus",
+                               inputId = "nogrphm",
                                label = "Clear selection",
                                icon = icon("square-o"),
                                style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
@@ -1045,14 +1045,14 @@ MATRiX app is working with specific data produced by the limma package, resultin
                            div(
                              id = "form",
                                # Creates a panel with a slightly inset border and grey background
-                               uiOutput("testout"),
+                               uiOutput("comphm"),
                                actionButton(
                                  # Action button that automatically react when triggered
-                                 inputId = "allTests",label = "Select all",icon = icon("check-square-o"),
+                                 inputId = "allcomphm",label = "Select all",icon = icon("check-square-o"),
                                  style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                ),
                                actionButton(
-                                 inputId = "noTests",label = "Clear selection",icon = icon("square-o"),
+                                 inputId = "nocomphm",label = "Clear selection",icon = icon("square-o"),
                                  style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                ),
                              br(),br(),
@@ -1242,7 +1242,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
 
                 tabPanel(
                   "Heatmap clustering",
-                  value="test3",
+                  value="cutheatmainp",
                   strong("Cut heatmap settings", style="font-size:25px;") ,
                   br(),
                   uiOutput("cutcluster"),

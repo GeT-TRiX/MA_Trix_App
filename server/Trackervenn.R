@@ -24,8 +24,10 @@ output$continter <- renderText({ #Contrast selected
 })
 
 output$totalgenes <- renderText({
-  req(vennlist())
+  
+  req(vennlist()[[1]])
   sum(sapply(vennlist()[[1]],length))
+  
 })
 
 

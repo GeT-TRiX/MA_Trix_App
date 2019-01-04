@@ -15,10 +15,9 @@
 observe({
   
 groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
-
-output$testout <- renderUI(
+output$comphm <- renderUI(
   checkboxGroupInput(
-    inputId = "test" ,
+    inputId = "selcomphm" ,
     label =  "Choose your comparison",
     choices =  colnames(adjusted()[[1]][,-1,drop = FALSE]),
     #,selected = colnames(adjusted()[, -1])
@@ -28,14 +27,13 @@ output$testout <- renderUI(
 })
 
 
-
 #Select all the contrasts
 
-observeEvent(input$allTests, {
+observeEvent(input$allcomphm, {
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(
     session,
-    "test",
+    "selcomphm",
     label = "Choose your comparison",
     choices = colnames(adjusted()[[1]][,-1,drop = FALSE]),
     selected = colnames(adjusted()[[1]][,-1,drop = FALSE]),
@@ -44,10 +42,10 @@ observeEvent(input$allTests, {
 })
 
 #Unselect all the contrasts
-observeEvent(input$noTests, {
+observeEvent(input$nocomphm, {
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(session,
-                           "test",
+                           "selcomphm",
                            label = "Choose your comparison",
                            choices = colnames(adjusted()[[1]][, -1,drop = FALSE]),
                            inline= groupinline
@@ -55,16 +53,16 @@ observeEvent(input$noTests, {
 })
 
 
-#' choix_test is an eventreactive function in the aim of selecting different comparison after a clickable event
+#' selected_test is an eventreactive function in the aim of selecting different comparison after a clickable event
 #'
-#' @param test input id corresponding to the checkboxgroup for the different comparisons
+#' @param selcomphm input id corresponding to the checkboxgroup for the different comparisons
 #'
 #' @return  a reactive value of type character for the different comparisons selected
 #'
 #' @export
 
-choix_test <- reactive({
-  return(input$test)
+selected_test <- reactive({
+  return(input$selcomphm)
 })
 
 

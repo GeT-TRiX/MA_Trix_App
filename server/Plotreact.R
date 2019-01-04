@@ -49,7 +49,7 @@ output$distPlot <- renderPlot({
     validate(need(
       csvf(),
       'You need to import data to visualize to plot the Heatmap' ) %next%
-        need(length(choix_test()) >0, 'You need to select a contrast(s) with reactivity triggered you dont need to click on the update heatmap button')
+        need(length(selected_test()) >0, 'You need to select a contrast(s) with reactivity triggered you dont need to click on the update heatmap button')
     )
     
     if(is.null(my_intermediate())){

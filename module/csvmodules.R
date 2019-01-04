@@ -20,7 +20,7 @@ csvFileInput <- function(id, label = "CSV file") {
 # Module server function
 csvFile <- function(input, output, session, stringsAsFactors) {
 
-  root = c(data = "//home/fsoubes/server/MA_Trix_App/data")
+  root = c(data = "//home/fsoubes/MA_Trix_App/data")
   #root = c(data = "//home/fsoubes/server/dev_MATRiX/data")
   ##root = c(data = "//home/franck/MA_Trix_App/MA_Trix_App/data")
   shinyFileChoose(input, 'files', roots = root, session = session,filetype=c("csv"))

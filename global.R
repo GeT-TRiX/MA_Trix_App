@@ -31,7 +31,7 @@ if(length(new.packages)) install.packages(new.packages)
 lapply(list.of.packages,function(x){
 suppressPackageStartupMessages(library(x,character.only=TRUE))})
 
-library(shinyFiles)
+#library(shinyFiles)
 source("function/delayinput.R")
 source("css/csstips.R")
 source("function/formating.R")

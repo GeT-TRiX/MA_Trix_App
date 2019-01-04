@@ -22,5 +22,3 @@ shinyjs::onclick("toggleAdvancedcolors",
 shinyjs::onclick("toggleAdvancedJvenn",
                  shinyjs::toggle(id = "advancedjvenn", anim = TRUE))
 
-# shinyjs::onclick("toggleAdvancedgo",
-#                  shinyjs::toggle(id = "advancedgo", anim = TRUE))

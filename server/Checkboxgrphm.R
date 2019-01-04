@@ -6,18 +6,19 @@
 ### Licence: GPL-3.0
 
 
-#################################
-######## Select the groups      #
-#################################
+#############################################################################
+######## align group name in the pannel if there is more than 6 groups      #
+#############################################################################
 
 
 # Render in the UI.R the levels for the pData Group
+
 observe({
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   
-  output$individusel <- renderUI(
+  output$grpselhm <- renderUI(
     checkboxGroupInput(
-      inputId = "indiv" ,
+      inputId = "grouphm" ,
       label =  "Choose your group to visualize",
       # choices =  colnames(csvf()[[1]][,-1]),
       # selected = colnames(csvf()[[1]][,-1])
@@ -30,15 +31,14 @@ observe({
 })
 
 # Select all groups
-
   
-observeEvent(input$allIndividus, {
+observeEvent(input$allgrphm, {
     
     groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
     
     updateCheckboxGroupInput(
       session,
-      "indiv",
+      "grouphm",
       label = "Choose your group to visualize",
       #choices = colnames(csvf()[[1]][,-1]),
       #selected = colnames(csvf()[[1]][,-1])
@@ -50,10 +50,10 @@ observeEvent(input$allIndividus, {
 
 
   # Unselect all groups
-  observeEvent(input$noIndividus, {
+  observeEvent(input$nogrphm, {
     groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
     updateCheckboxGroupInput(session,
-                             "indiv",
+                             "grouphm",
                              label = "Choose your group to visualize",
                              #choices = colnames(csvf()[[1]][,-1]))
                              choices =  levels(csvf()[[2]]$Grp),
@@ -61,19 +61,12 @@ observeEvent(input$allIndividus, {
     
   })
 
-#' choix_test is a reactive function in the aim of selecting different groups
-#' 
-#' @param indiv input id corresponding to the checkboxgroup for the different groups
-#'
-#' @return  a reactive value of type character for the different groups selected
-#'
-#' @export
-
-choix_grp <- reactive({
-  req(input$indiv, csvf())
-  return(input$indiv)
-})
-
+  
+  
+#################################
+######## Select the groups      #
+#################################  
+  
 
 
 #' list_ind is a reactive function in the aim of having selected groups in a list
@@ -86,7 +79,7 @@ choix_grp <- reactive({
 
 
 list_ind <- reactive({
-  return(list(input$indiv))
+  return(list(input$grouphm))
 })
 
 
@@ -94,7 +87,7 @@ list_ind <- reactive({
 #' new_group is an eventreactive function that select specific groups in the data frame
 #' 
 #' @param csvf a Data frame corresponding to the pData table
-#' @param choix_grp a reactive value of type character for the different groups selected
+#' @param grouphm an input value of type character for the different groups selected
 #'
 #' @return new_group an eventreactive factor with the corresponding groups selected
 #'
@@ -103,7 +96,7 @@ list_ind <- reactive({
 
 new_group <- reactive({
   req(csvf())
-  csvf()[[2]][csvf()[[2]]$Grp %in% choix_grp(), ]
+  csvf()[[2]][csvf()[[2]]$Grp %in% input$grouphm, ]
 })
 
 

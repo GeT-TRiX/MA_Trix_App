@@ -65,20 +65,6 @@ observe({
 
 
 
-# observe({ TODOOOO
-#   req(input$mainhmtabset)
-#   if (grepl("hmmainpan",  input$mainhmtabset)) {
-#     updateTabsetPanel(session, "tabset25",
-#                       selected = "hmpan")
-#   }
-#   else if (grepl("cuthmmainpan",  input$mainhmtabset)) {
-#     #|dfhmclu|maingo
-#     updateTabsetPanel(session, "tabset25",
-#                       selected = "cutpan")
-#   }
-# })
-
-
 #' clustergrep is a reactive function which aim is to return a list of genes for the selected cluster without the non-annotated genes
 #'
 #' @param hm data frame of the significant genes associated with the corresponding cluster index
@@ -155,7 +141,7 @@ davidwebservice <-
     # return(mygodavid[[x]]))
 
     
-    updateTabsetPanel(session, "tabset1",
+    updateTabsetPanel(session, "heatmapmainp",
                       selected = "maingo")
     
     return(mygodavid)
