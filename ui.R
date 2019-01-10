@@ -11,26 +11,6 @@
 ###############################
 
 
-inactivity <- "function idleTimer() {
-  var t = setTimeout(logout, 5000);
-  window.onmousemove = resetTimer; // catches mouse movements
-  window.onmousedown = resetTimer; // catches mouse movements
-  window.onclick = resetTimer;     // catches mouse clicks
-  window.onscroll = resetTimer;    // catches scrolling
-  window.onkeypress = resetTimer;  //catches keyboard actions
-
-  function logout() {
-    window.close();  //close the window
-  }
-
-  function resetTimer() {
-    clearTimeout(t);
-    t = setTimeout(logout, 5000);  // time is in milliseconds (1000 is 1 second)
-  }
-}
-idleTimer();"
-
-
 
 makeselectInputbutton <- function(selectInput, buttonId, buttonLabel, size = "default", style = "default"){
   size <- switch(size, `extra-small` = "btn-xs", small = "btn-sm", 
@@ -75,23 +55,13 @@ dbHeader$children[[2]]$children <-  tags$a(tags$img(src='matrix.png',height='40'
 
 
 sidebar <- dashboardSidebar( 
-# tags$style(HTML("
-#       .main-sidebar{
-#         width: 180px;
-#       }
-#       .content-wrapper, .main-footer, .right-side{
-#       margin-left: 180px;
-#       }
-#     ")), # analyse par microréseau de l'impact transcriptomique des xénobiotiques
+
   useShinyjs(),
-  #inlineCSS(appCSS),
   tags$style(type="text/css", inactivity),
   shinyjs::extendShinyjs(text = shinyjscode),
 
-#tags$head(includeHTML("www/google-analytics.html")),
 tags$head(
-     #tags$script(src = inactivity),
-     tags$script(src = "custom.js")),
+  tags$script(src = "custom.js")),
   div(id = "loading-content-bar",p()),
 
   div(
@@ -118,7 +88,7 @@ tags$head(
         style = "position:absolute;bottom:0;margin:0 0 15px 10px;"
       ) , href="https://www6.toulouse.inra.fr/toxalim", target="_blank")
 
-      )
+    )
   )
 )
 
@@ -130,23 +100,18 @@ tags$head(
   ###############################
 
 body <- dashboardBody(
+  
   #tags$head(includeScript("google-analytics.js")),
-
   tags$style(type="text/css", inactivity),
-
-
   useShinyjs(),
   extendShinyjs(text = 'shinyjs.hideSidebar = function(params) { $("body").addClass("sidebar-collapse");
               $(window).trigger("resize"); }'),
   extendShinyjs(text='shinyjs.showSidebar = function(params) { $("body").removeClass("sidebar-collapse");
               $(window).trigger("resize"); }'),
-
   tags$style(HTML("
     .tabbable > .nav > li > a[data-value='hmpan'] {background-color: red;   color:white}
     .tabbable > .nav > li > a[data-value='cutpan'] {background-color: blue;  color:white}
   ")),
-
-  #inlineCSS(appCSS),
   includeCSS("./css/style.css"),
   div(
     id = "loading-content",
@@ -173,9 +138,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
 
                                          p("Hereafter is the global workflow passing by the statistical analysis to the visualization:"),tags$br(),
                                          div(id="workflow",
-                                         tags$p(
-                                           tags$img(src = "whatmaen.png",style="width: 100%; height: 100%"))
-                                         )
+                                         tags$p(tags$img(src = "whatmaen.png",style="width: 100%; height: 100%")))
                                          ),
                                 tabPanel("Authors", h3("The main contributors to MATRiX:"),
                                          p(a("Yannick Lippi",href="mailto:yannick.lippi@inra.fr"), "(Initiator, beta-testing, feature suggestions)"),
@@ -225,7 +188,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                                                actionButton("send", "Send")
                                                            )
                                                          )
-                                                       )))
+                                                    )))
 
                                 )),
                                 tabPanel("Video",
@@ -301,19 +264,17 @@ MATRiX app is working with specific data produced by the limma package, resultin
             fluidRow(
               tags$head(
                 tags$style(type="text/css", ".myslidermain .irs-grid-text {bottom: 5px;color: #333;}
-      .myslidermain .irs-min{color: #333;font-size: 10px;line-height: 1.333;text-shadow: none;top: 0;padding: 1px 3px;
-      background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px}
-      .myslidermain .irs-max{color: #333;font-size: 10px;line-height: 1.333;text-shadow: none;top: 0;padding: 1px 3px;
-      background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px}")
+                                .myslidermain .irs-min{color: #333;font-size: 10px;line-height: 1.333;text-shadow: none;top: 0;padding: 1px 3px;
+                                background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px}
+                                .myslidermain .irs-max{color: #333;font-size: 10px;line-height: 1.333;text-shadow: none;top: 0;padding: 1px 3px;
+                                background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px}")
               ),
-              #div(style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;",
               column(width=9,
                 div( style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;" , id = "upload",
                      tabBox(title="Upload your data", width=NULL,id = "upload",
 
                             tabPanel("Import your data", style = "background-color: #ffffff;",
                             conditionalPanel(condition = 'output.boolmark', #Hide or Show event depending on the loading data success or failure
-                                             #includeMarkdown("markdown/help.md")
                                              tags$h1("How to import ?"),
                                              tags$ul(
                                                tags$li("First click on the browse button to load the data"),
@@ -324,11 +285,9 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                              ),
 
                                                tags$p(
-
                                                 tags$img(src = "pdata.png"),
                                                 tags$img(src = "wotkingset.png"),
-                                                 tags$img(src = "Restable.png")
-
+                                                tags$img(src = "Restable.png")
                                                  ),
 
                                              tags$h1("Tips"),
@@ -397,6 +356,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                 #   ),
                 #   multiple = T # Attribute to load multiple data at once
                 # ),
+                
                 br(),
 
               conditionalPanel(condition = '!output.boolmark',
@@ -447,15 +407,11 @@ MATRiX app is working with specific data produced by the limma package, resultin
     tabItem(tabName = "PCA",
             tags$style(type='text/css', ".well { max-width: 20em; }"),
             tags$style(type='text/css', ".well { max-height: 50em; }"),
-            fluidRow(column(
-              width = 9,
+            fluidRow(column(width = 9,
               div(style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;",
-                #style = "width:100% ; max-width: 1200px; height: 1050px",
-                #tabBox(title="PCA, width=NULL,id = "homepage",
+
                 tabsetPanel(
-                  #title = "Principal component analysis",
-                  #id = "tabset1",
-                  #width = NULL,
+
                   tabPanel(
                     strong("Scree plot"),
                     downloadButton("savescre", "Save your Scree plot" , style =
@@ -515,7 +471,6 @@ MATRiX app is working with specific data produced by the limma package, resultin
                         "Dim 5" = 5
                       ),
                       selected = firstdim
-                      #width = '80%'
                     )
                   ),
                   column(6,
@@ -574,34 +529,23 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     value= "vennset",
                     strong("Visualize the Venn diagram"),
 
-                    div(style="display:inline-block",
-                        fluidRow(column(3, style= "width:14.2%;",
 
-                                        downloadButton('downloadvenn', "Download the data",
-                                                       style =
-                                                         "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                 column(3, style="width:14.2%;",
-                                        downloadButton("downloadsetven", "Download venn set" , style =
-                                                         "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                 column(3, style="width:11.8%;",
-                                        downloadButton("savevenn", "Save your plot" , style =
-                                                         "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-
-                                     column(3,style="width:10%;", selectInput(
-                                       "formven",label = NULL,
-                                       choices = c("png", "eps", "pdf"))),
-                                 column(3 ,style="width:5%;"),
-                                 column(3,
-                                        downloadButton('downloadvennset', "Download the filtered data",
-                                                style ="color: #fff; background-color: #337ab7; border-color: #2e6da4;"))
-
-                        )
-                        ),
+              div(style="display:block; width:100%; position:relative;",
+ 
+                        downloadButton('downloadvenn', "Download the data",
+                                       style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                
+                        downloadButton("downloadsetven", "Download venn set" , style =
+                                         "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+               
+                        downloadButton('downloadvennset', "Download the filtered data",
+                                       style ="color: #fff; background-color: #337ab7; border-color: #2e6da4;position:absolute;left:50%;margin-left: 15px;")
+                 
+        ),
 
                     conditionalPanel(condition = '!output.bool',
                                      uiOutput(outputId = "image")
                                      , uiOutput("sorry")),
-                    #tags$script(src="libraries/bootstrap.min.js") ,
                     tags$script(src="libraries/prettify.js") ,
                     tags$script(src="libraries/jvenn.min.js")  ,
                     tags$script(src="libraries/canvas2svg.js")  ,
@@ -609,7 +553,6 @@ MATRiX app is working with specific data produced by the limma package, resultin
                     fluidRow(column(6,br(),br(),
                     tags$script(src="jvenn.js"),
                     tags$div(id="jvenn-container", style = "background-color: white; width: 100%; height:100%")
-                    #tags$div(id="jvenn-container", style = "background-color: white;  width: 600px;")
 
                     ),
                     column(6,
@@ -652,19 +595,13 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                                  right: -22px;left: 0px;color: #3c8dbc;position: absolute;"))
                                )),
                    plotOutput(outputId ="barplotvenn", height = "500px", width ="100%"),
-                    #plotOutput(outputId ="barplotvenn", height = "auto"),
                    br(),
-                   ##includeHTML("HTML/colorandname.html"),
-
                    h1("Here's a tracker for your different selections:"),
                    tags$head(
                      tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
                    ),
-                   # tags$head(
-                   #   tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap-responsive.css") # add style.css in order to add better police
-                   # ),
-                   tags$head(tags$style("
-                                        #container * {
+
+                   tags$head(tags$style("#container * {
                                         display: inline;
                                         }")),
 
@@ -720,8 +657,6 @@ MATRiX app is working with specific data produced by the limma package, resultin
 
                           plotOutput("clusterPlot", width = "100%", height = "700px"),
                           br(),br(),br(),
-                          #plotOutput("acyclicgo", width = "100%", height = "1200px"),
-                          #verbatimTextOutput("debug")
                          dataTableOutput("debug")
                  )
 
@@ -770,7 +705,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                               min = 0.01,max = 0.05,
                                               value = 0.05,step = 0.01
                                             )),
-                                     #br(),
+
                                      column(6,
                                             sliderInput("fcvenn","FC treshold",min = 1, max = 10,
                                               value = 1,step = 1
@@ -991,7 +926,6 @@ MATRiX app is working with specific data produced by the limma package, resultin
 
 
                     tags$div(id="highChart")  ,
-                    #tags$div(id="highChart",style="width: 100%;, height: 600px;")  ,
                     checkboxInput("addlabelhigh", "add label", FALSE),
                     tags$script(src="bubble.js")
 
@@ -1027,7 +961,6 @@ MATRiX app is working with specific data produced by the limma package, resultin
 
                            actionLink("resetAll",  label = ("reset all"), style="color:orange;float:right;font-size: 18px;"),
                            br(),
-                           #wellPanel(
                              uiOutput("grpselhm"),
                              actionButton(
                                inputId = "allgrphm",
@@ -1203,14 +1136,9 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                            "Add reactivity",
                                            FALSE))
                            ),
-                          #shinyjs::disabled(actionButton("stop", "Stop")),
 
                            helpText("Note: It is highly advised to check this box if you're working with a set of genes close to 1000.",style="color:White; font-size:15px;"),
-
-
-                           #conditionalPanel(condition = 'output.heatmbool',
                           conditionalPanel(condition = 'output.heatmbool',
-                          #conditionalPanel(condition = 'input.button >0',
 
                                             div(id = 'center', strong("Functional enrichment analysis",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                             br(),
