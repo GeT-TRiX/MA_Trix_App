@@ -109,7 +109,7 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
 
 
 
-#' Vennfinal is a function which aim is to return an object containing a venn diagram 
+#' Vennfinal is a function which aim is to return an object containing a venn diagram (old function with Venndiagram had been change with Jvenn)
 #' 
 #' @param myl a list of genes for the different contrasts
 #' @param adj dataframe subset of the alltoptable
@@ -126,25 +126,24 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
 
 Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = "probes", pval, mycol= ""){ 
   
-  #if(is.null(myl))
-    #return(NULL)
+
   
   palette("default")
   if(meandup == "genes"){
     myl = lapply(seq(length(myl)), function(x){pval %>% select(GeneName, ProbeName) %>% filter( ProbeName %in% myl[[x]]) %>% 
         distinct( GeneName)}) %>%as.matrix()
     
-    myl = lapply(1:length(myl),FUN = function(i) as.character(myl[[i]]$GeneName))  #D14Ertd668e doublons pour LWT_MCD.LWT_CTRL (si genesymbol -1 perte d'info) avec une probe nom partagée avec LKO_MCD.LKO_CTRL  et une probe partagée
+    myl = lapply(1:length(myl),FUN = function(i) as.character(myl[[i]]$GeneName)) 
   }
   metuse = ifelse(statimet == "FDR","DEG BH ", "DEG RAW ")
   
   indexnull = which( sapply(myl ,length) == 0)
-  if(length(indexnull)>0) test = colnames(adj[,-c(indexnull)]) else  test = colnames(adj)
+  if(length(indexnull)>0) comp = colnames(adj[,-c(indexnull)]) else  comp = colnames(adj)
   myl <- myl[sapply(myl, length) > 0]
   final = length(myl)-1
   if(mycol =="") mycolven= 2:(2+final) else mycolven = mycol
   totgenes =  sum(sapply(myl,length))
-  totprobes=  totalvenn(myl, test)
+  totprobes=  totalvenn(myl, comp)
   mynumb = paste("total ", meandup,  ":", totgenes ,"and total ", meandup,  "crossings :",totprobes, collapse = "")
 
   futile.logger::flog.threshold(futile.logger::ERROR, name = "VennDiagramLogger")
@@ -155,10 +154,10 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = 
      if (length(myl[[2]])> length(myl[[1]]))
        mynames = rev(colnames(adj))
      else
-       mynames = test
+       mynames = comp
   }
   else
-    mynames = test
+    mynames = comp
 
   if(length(indexnull)>0){
     if(length(myl)==5){
@@ -194,24 +193,6 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = 
 
 
 
-#' Vennsev is a function that is used for more than 5 intersections
-#'
-#' @param myl a list of genes for the different contrasts
-#' @param adj dataframe subset of the alltoptable
-#'
-#' @return plot device
-#' @export
-#' 
-
-Vennsev <- function(myl, adj){
-  
-  myl <- myl[sapply(myl, length) > 0]
-  final = length(myl)-1
-  tot = sum(sapply(myl,length))
-  mynumb = paste("total genes", tot , collapse = ":")
-  g = venn(myven, ilabels= F, zcolor ="style", sname = colnames(adj), cexil = 0.5, size = 5, cexsn = 0.5)
-  return(g)
-}
 
 #' myventocsv is a function that create a csv file of the signficant genes for the different contrasts for a cutoff of 5%
 #'
@@ -304,7 +285,7 @@ rowtoprob <- function(myven,pval,adj) {
     names(myven),
     FUN = function(x) 
       return( pval %>%filter( rownames(.)%in% myven[[x]]) %>%
-                select(ProbeName) %>%unlist() %>%
+                select(colnames(pval[1])) %>%unlist() %>%
                 as.character())
   )
   
@@ -326,9 +307,9 @@ toJvenn <- function(myven, adj){
   name   <- rep(names(myven), sapply(myven, FUN=function(x)return(length(x))))
   names(myven) <- NULL
   data <- sapply(myven, FUN=function(x)return(x)) %>% unlist()
-  df  <- data.frame(name,data)
+  restab  <- data.frame(name,data)
   
-  return(df %>% group_by(name) %>% 
+  return(restab %>% group_by(name) %>% 
            summarise(data = list(as.character(data))) %>% 
            jsonlite::toJSON())
   

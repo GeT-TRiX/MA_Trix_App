@@ -9,7 +9,7 @@
 output$venngenes <- renderPrint({ # number of signficant genes in the heatmap produced
   req(input$selcontjv)
   if(input$dispvenn == "probes")
-    cat(length(vennfinal()[[1]]$ProbeName))
+    cat(length(vennfinal()[[1]][[1]]))
   else
     cat(length(vennfinal()[[1]]$GeneName))
 })

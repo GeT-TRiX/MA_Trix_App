@@ -51,11 +51,11 @@ output$davidgo <- DT::renderDataTable(DT::datatable(rounddavidtable()[[as.numeri
 myrenderedtop <- reactive({
   req(csvf())
   csvf()[[3]] %>% 
-    select_if(.,grepl("^Probe|^Gene|^logFC|^P.value|^adj.P", colnames(.))) %>%
+    select_if(.,grepl("^Probe|^Tran|^Gene|^logFC|^P.value|^adj.P", colnames(.))) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
 })
 
-output$new_group <- DT::renderDataTable(DT::datatable(myrenderedtop() , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons',filter =c("none")))
+output$subsetgroup_hm <- DT::renderDataTable(DT::datatable(myrenderedtop() , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons',filter =c("none")))
 
 
 observe({

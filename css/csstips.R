@@ -55,6 +55,7 @@ background-color: #fff;
 #'
 #' @examples
 #'
+
 addNews <- function(date ="",title="",text=""){
   res=list()
   res$r1 = paste("<b><font size='+1'>",date,"</font></b>", " - ", "<b><font size='+1'>",title,"</font></b><br/>")

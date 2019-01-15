@@ -33,12 +33,10 @@
 #'
 #' @export
 
-#maPalette <- function (low = "green", high = "red", mid = NULL, k = 50)
 
 
-cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,labrow = F,
+cutHeatmaps = function(hmp, height, exprData, groups, cexcol = 1, cexrow = 1, labrow = F, genename = NULL ,
                        fileType = "png",scales = "row",meanGrp = F,mypal = NULL,
-                       #col.hm= maPalette(low="green",high="red",mid="black",k=75),
                        type = "None",las = 2,distfun = "cor",palette.col = NULL,num = 4,...)
 {
 
@@ -62,40 +60,8 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
   }else  palette(mypal)
 
   cl=palette(mypal);
-
-
-
-  # if (!is.null(palette.col)) {
-  #   cl = palette(palette.col)
-
-    #		}else cl=palette(c("black", "blue", "cyan", "magenta",   "darkgray", "darkgoldenrod", "violet",  "orange", "lightgreen","lightblue", "darkorchid", "darkred","darkslateblue", "darkslategray", "maroon", "burlywood1" , "darkolivegreen"));
-  # } else
-  #   cl =  palette(
-  #     c(
-  #       "#000000",
-  #       "#0072c2",
-  #       "#D55E00",
-  #       "#999999",
-  #       "#56B4E9",
-  #       "#E69F00",
-  #       "#CC79A7",
-  #       "lightblue",
-  #       "#F0E442",
-  #       "lightgreen",
-  #       "deepskyblue4",
-  #       "darkred",
-  #       "#009E73",
-  #       "maroon3",
-  #       "darkslategray",
-  #       "burlywood1",
-  #       "darkkhaki",
-  #       "#CC0000"
-  #     )
-  #   )
-
-
   colid = colnames(exprData)
-
+  rownames(exprData) = rownames(genename)
   exprData = exprData[labels(hmp$rowDendrogram), ]
   wdt = 900
   wdte = 12
@@ -103,7 +69,6 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
   groups0 = groups
   if (meanGrp) {
     cat("\n -> calculating groups means \n")
-    #prefix=paste(prefix,"meanGrp",sep="_")
     exprData = t(apply(
       exprData,
       1,
@@ -126,51 +91,40 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
   }
 
   ###=======================
-  ## decoupage de la heatmap
+  ## cut the heatmap
   ###=======================
-  # decouper le dendro en 2 parties (upper et lower) a la hauteur desiree
-  print(height)
-  cut02 = cut(hmp$rowDendrogram, h = height)
-  #upper est une version tronquee de l'arbre de depart
-  #lower est une liste contenant les X sous-dendrogrammes generes par la coupure
+  
+  # Cut the dendogram in 2 part with the desired height
 
+  cut02 = cut(hmp$rowDendrogram, h = height)
   cat("\n -> size of", length(cut02$lower), "sub-dendrograms\n")
   print(sapply(cut02$lower, function(x)
     length(labels(x))))
-  #Pour voir quels sont les effectifs de chaque sous-groupe de genes
+  #To check the sub group population of genes
 
   cat(" ->export result tables for each subgroup \n")
-
-
-
   gpcol=num2cols(as.numeric(groups))
-#	if(!is.null(palette.col)){
-#		gpcol=num2cols(as.numeric(groups),palette.col)
-#	}else gpcol=num2cols(as.numeric(groups))
 
 
-    # idx sondes de chaque cluster
+
+    # Row names of each clsuter
     HCgroupsLab=lapply(cut02$lower,function(x)labels(x))
 
-    # expression de chaque cluster
+    # Expression of each cluster
     HCgroupsLabExrs=lapply(HCgroupsLab,function(x)exprData0[x,])
 
-    ## centrage reduction
+    ## scaling
 #		HCgroupsLabExrsCenterScale <- ifelse(scales=="row",lapply(HCgroupsLabExrs,function(y){t(scale(t(y),center=T,scale=T))}),HCgroupsLabExrs)
+    
     if(scales=="row"){
       HCgroupsLabExrsCenterScale <- lapply(HCgroupsLabExrs,function(y){t(scale(t(y),center=T,scale=T))})
     }else HCgroupsLabExrsCenterScale <- HCgroupsLabExrs
 
 
-    ## exr moyen par groupe et pour chaque cluster
+    # mean expression for each group and each cluster
     grps=groups0
-    #print(grps)
-    #print(HCgroupsLabExrsCenterScale)
-
     HCgroupsLabExrsCenterScaleMean = lapply(HCgroupsLabExrsCenterScale, function(y) {
-    t(apply(
-      y,
-      1,
+    t(apply( y,1,
       FUN = function(x) {
         tapply(x, grps, mean)
       }
@@ -189,13 +143,9 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
     library(Hmisc)
     library(reshape2)
     library(plotly)
-    #library(heatmaply)
-
     myplots <- list()
 
     for (i in 1:length(HCgroupsLabExrsCenterScaleMean)) {
-      #print(length(HCgroupsLabExrsCenterScaleMean))
-
       local({
         i <- i
 
@@ -212,7 +162,6 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
         test <- footnote
         dataCentSm = melt(dataCentS)
         colnames(dataCentSm) = c("Probe", "Group", "Expression")
-        #footnote <- paste("Average expression Z-score over replicates; ",nProbes," probes",sep="")
         ggbplot = ggplot(dataCentSm, aes(x = Group, y = Expression)) +
           theme_bw() + theme(
             panel.grid.major = element_blank(),
@@ -220,8 +169,6 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
             panel.border = element_blank()
           ) +
           theme(axis.line = element_line(colour = "#888888")) +
-          #geom_violin(aes(fill=Group)) +
-         #scale_fill_manual(values = cl[(1:length(levels(groups))) + 1]) +
           scale_fill_manual(values = cl[(1:length(levels(groups)))]) +
           geom_jitter(
             position = position_jitter(0.16) ,
@@ -230,7 +177,7 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
             shape = 16,
             size = 3
           ) +
-          #geom_boxplot(width = 0.1, fill = NA) +
+
 
           labs(title = paste("Cluster", i),
                subtitle = paste(caption = footnote)) +
@@ -267,7 +214,6 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
 
   if (plot.stripchart) {
     cat(" ->Plotting Expression as stripchart for each subgroup \n")
-    #print(head(HCgroupsLabExrsCenterScale))
 
     numProbes = lapply(HCgroupsLabExrsCenterScale, nrow)
     myplotsstrip <- list()
@@ -292,7 +238,6 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
         dataStackeddt$Grp = dataStackeddt$factor.trace
         nindiv = table(dataStackeddt$Grp) / numProbes[[i]]
 
-        #	 		print(head(dataStackeddt))
         if (all(nindiv == nindiv[1])) {
           nindiv = as.character(nindiv[1])
 
@@ -308,20 +253,15 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
                 sep = "")
 
         if (!probes.boxplot) {
-          #	 print(footnote)
+          
           ##=============
           ## plot stripchart
           ##
-
-
           #### jitter classique
-          #		d=data.frame(Grp=rep(c('before','after'), 2000), Expression=rexp(4000, 1))
-          #				ggstrip= ggplot(d, aes(x=Grp, y = Expression)) +
-          #				geom_jitter()
+
 
 
           ggstrip = ggplot(dataStackeddt, aes(x = Grp, y = Expression)) +
-            #				geom_jitter()
             theme_bw() + theme(
               panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(),
@@ -329,10 +269,6 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
             ) +
             theme(axis.line = element_line(colour = "#888888")) +
             geom_violin() +
-            #					geom_violin(aes(fill=Grp)) +
-            ##					geom_dotplot(binaxis='y', stackdir='center', dotsize=0.5) +
-            #					geom_sina() +  #  package ggforce
-            #					geom_boxplot(width = 0.1) +
             geom_jitter(
               position = position_jitter(0.16) ,
               colour = "#888888",
@@ -340,8 +276,7 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
               shape = 16,
               size = 3
             ) +
-            #					geom_sina(aes(color=Grp)) +
-            #					geom_jitter(width=0.5, position=position_jitter(0.05), size=3, colour="#888888") +
+
             stat_summary(
               fun.data = mean_cl_normal,
               geom = "errorbar",
@@ -355,12 +290,11 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
               color = "red",
               size = 2
             )  +
-            #					labs(title=paste("Cluster",i), y="Expression Z-score")+#, x=factors.names[1], colour=factors.names[2]) +
             labs(
               title = paste("Cluster", i),
               y = "Expression Z-score",
               caption = footnote
-            ) + #, x=factors.names[1], colour=factors.names[2]) +
+            ) + 
             theme(
               plot.title = element_text(size = 20, hjust = 0.5),
               plot.caption = element_text(size = 10, hjust = 0.5),
@@ -393,9 +327,7 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
             ) +
             theme(axis.line = element_line(colour = "#888888")) +
             geom_boxplot(outlier.shape = 1, notch = F) +
-            #geom_jitter(position=position_dodge(0.6), width=0.8) +
             theme(legend.position = "none") +
-            #					geom_jitter(width=0.5, position=position_dodge(0.05), size=3, colour="#888888") +
             stat_summary(
               fun.data = mean_cl_normal,
               geom = "errorbar",
@@ -409,12 +341,11 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
               color = "red",
               size = 2
             )  +
-            #					labs(title=paste("Cluster",i), y="Expression Z-score")+#, x=factors.names[1], colour=factors.names[2]) +
             labs(
               title = paste("Cluster", i),
               y = "Expression Z-score",
               caption = footnote
-            ) + #, x=factors.names[1], colour=factors.names[2]) +
+            ) + 
             theme(
               plot.title = element_text(size = 24, hjust = 0.5),
               axis.title.x = element_text(size = 10),
@@ -442,8 +373,6 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
   ## plot de la heatmap
   ###=======================
 
-      if (labrow == T)
-          rowIds = DEGres$ResTable[labels(cut02$lower[[num]]), "GeneName"]
 
       # View(as.matrix(exprData[labels(cut02$lower[[num]]),]))
         # useRasterTF = T
@@ -454,7 +383,6 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
         #   scale = scale, Colv = hmp$colDendrogram
         #   )%>%
         #   layout(margin = list(l = 130, b = 100))
-
 
 
         if(hmp.plot){
@@ -473,10 +401,10 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
           #    }else if(labrow==T) rowIds=DEGres$ResTable$GeneName[labels(cut02$lower[[i]])]
           #if(length(labrow)>1){ rowIds=labrow[labels(cut02$lower[[i]])]
             # if(labrow==T) rowIds=DEGres$ResTable[labels(cut02$lower[[1]]),"GeneName"]
+            
             useRasterTF=T;
             hm02gp=heatmap(exprData[labels(cut02$lower[[1]]),], Rowv=str(cut02$lower[[1]]),
             Colv=hmp$colDendrogram,
-            #col= col.hm,
             distfun=distfunTRIX,
             hclustfun=hclustfun,
             labRow =rowIds,
@@ -488,7 +416,6 @@ cutHeatmaps = function(hmp,height,exprData,DEGres,groups,cexcol = 1,cexrow = 1,l
             na.rm=T,
             margins=c(8,8),
             useRaster=useRasterTF)
-    #return(hm02gp)
   }
   }
     return(hm02gp)

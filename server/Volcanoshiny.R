@@ -107,8 +107,8 @@ output$volcanoplot <- renderPlot({
 },  height = plotHeight)
 
 output$compvolc <- renderUI({
-  req(adjusted())
-  selectInput("volcacomp", "Choose a comparison", choices = colnames(adjusted()[[1]][,-1,drop = FALSE]))
+  req(subsetstat())
+  selectInput("volcacomp", "Choose a comparison", choices = colnames(subsetstat()[[1]]))
 })
 
 

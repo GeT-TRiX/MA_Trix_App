@@ -153,16 +153,13 @@ observe({
 
 observe({
 
-   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
-
-output$contout <- renderUI(
-  ##validate
+groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
+output$contout <- renderUI( ##validate
 
   checkboxGroupInput(
     inputId = "cont" ,
     label =  "Choose your comparison",
-    choices = colnames(adjusted()[[1]][,-1,drop = FALSE][myindex()]),
-    #selected = colnames(adjusted()[[1]][,-1][myindex()])
+    choices = colnames(subsetstat()[[1]][myindex()]),
     inline = groupinline
   )
 )
@@ -178,9 +175,8 @@ observeEvent(input$allCont, {
     "cont",
     label = "Choose your comparison",
 
-    choices = colnames(adjusted()[[1]][,-1,drop = FALSE][myindex()]),
-    #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())]),
-    selected = colnames(adjusted()[[1]][,-1,drop = FALSE][myindex()]),
+    choices = colnames(subsetstat()[[1]][myindex()]),
+    selected = colnames(subsetstat()[[1]][myindex()]),
     inline = groupinline
   )
 })
@@ -190,11 +186,12 @@ observeEvent(input$noCont, {
   updateCheckboxGroupInput(session,
                            "cont",
                            label = "Choose your comparison",
-                           #choices = colnames(adjusted()[[1]][,-1][,-c(indnull())]),
-                           choices = colnames(adjusted()[[1]][,-1,drop = FALSE][myindex()]),
+                           choices = colnames(subsetstat()[[1]][myindex()]),
                            inline=groupinline
   )
 })
+
+
 
 #' indnull is a reactive function that return a vector for the contrasts with 0 genes significant at a treshold set to 5%
 #'
@@ -227,7 +224,7 @@ choix_cont <- reactive({
 
 #' user_cont is a reactive function that  return the contrast selected by the user
 #'
-#' @param adjusted data frame corresponding to the pvalue or adjusted pvalue
+#' @param subsetstat data frame corresponding to the pvalue or subsetstat pvalue
 #' @param choix_cont a set of contrasts selected by the user
 #'
 #' @return user_cont a reactive data frame with the contrast selected
@@ -236,13 +233,12 @@ choix_cont <- reactive({
 #'
 
 user_cont <- reactive({
-  req(adjusted())
-
+  req(subsetstat())
   if (input$methodforvenn == "FDR")
-    mysel = (subset(adjusted()[[1]],
+    mysel = (subset(subsetstat()[[1]],
                   select = choix_cont()))
   else
-    mysel = (subset(adjusted()[[3]],
+    mysel = (subset(subsetstat()[[3]],
                     select = choix_cont()))
   return(mysel)
 })
@@ -250,7 +246,7 @@ user_cont <- reactive({
 
 #' user_cont is a reactive function that  return the contrast selected by the user
 #'
-#' @param adjusted data frame corresponding to the logfc value
+#' @param subsetstat data frame corresponding to the logfc value
 #' @param choix_cont a set of contrasts selected by the user
 #'
 #' @return user_cont a reactive data frame with the contrast selected
@@ -260,7 +256,7 @@ user_cont <- reactive({
 
 user_fc <- reactive({
 
-  mysel = (subset(adjusted()[[2]],
+  mysel = (subset(subsetstat()[[2]],
                   select = choix_cont()))
   return(mysel)
 })
@@ -320,12 +316,9 @@ output$downloadsetven <- downloadHandler(
 )
 
 
-
-################# TO DO commented
-
 #' myindex is a reactive function returning the column indices for which there's more than one significant genes
 #'
-#' @param adjusted data frame corresponding to the adjusted.pval
+#' @param subsetstat data frame corresponding to the subsetstat.pval
 #'
 #' @return myindex a numeric vector
 #'
@@ -335,12 +328,15 @@ output$downloadsetven <- downloadHandler(
 
 myindex<- reactive({
 
-  myl = lapply(seq(ncol(adjusted()[[1]])),function(x)
-    #return(which(adjusted()[[1]][[x]] < input$pvalvenn & adjusted()[[3]][[x]]  > log2( input$fcvenn))))
-    return(which(adjusted()[[1]][[x]] < 0.05)))
+  myl = lapply(seq(ncol(subsetstat()[[1]])),function(x)
+    return(which(subsetstat()[[1]][[x]] < 0.05)))
 
   indexnull = which( sapply(myl ,length) == 0)
-  final = colnames(adjusted()[[1]][,-c(indexnull),drop = FALSE])
+  if(length(indexnull)>0)
+    final = colnames(subsetstat()[[1]][,-c(indexnull),drop = FALSE])
+  else
+    final = colnames(subsetstat()[[1]])
+  
   return(final)
 
 })

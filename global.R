@@ -7,6 +7,7 @@
 
 
 # increase loading files
+
 options(shiny.maxRequestSize=128000000)
 options(digits=3)
 
@@ -31,14 +32,10 @@ if(length(new.packages)) install.packages(new.packages)
 lapply(list.of.packages,function(x){
 suppressPackageStartupMessages(library(x,character.only=TRUE))})
 
-#library(shinyFiles)
-source("function/delayinput.R")
 source("css/csstips.R")
-source("function/formating.R")
 source("function/PCA.R")
 source("function/heatmtruncated.R")
-source("function/formating.R")
-source("function/PCA.R")
+source("function/formatingtables.R")
 source("function/decideTestTrix.R")
 source("function/vennplot.R")
 source("function/create_forked_task.R")
@@ -47,7 +44,6 @@ source("function/gosearch.R")
 source("function/highchartconverter.R")
 source("function/EnhancedVolcano.R")
 source("./module/csvmodules.R")
-
 
 
 

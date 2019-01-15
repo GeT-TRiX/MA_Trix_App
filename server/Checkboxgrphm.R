@@ -20,8 +20,6 @@ observe({
     checkboxGroupInput(
       inputId = "grouphm" ,
       label =  "Choose your group to visualize",
-      # choices =  colnames(csvf()[[1]][,-1]),
-      # selected = colnames(csvf()[[1]][,-1])
       choices =  levels(csvf()[[2]]$Grp),
       selected = levels(csvf()[[2]]$Grp),
       inline = groupinline
@@ -40,8 +38,6 @@ observeEvent(input$allgrphm, {
       session,
       "grouphm",
       label = "Choose your group to visualize",
-      #choices = colnames(csvf()[[1]][,-1]),
-      #selected = colnames(csvf()[[1]][,-1])
       choices =  levels(csvf()[[2]]$Grp),
       selected = levels(csvf()[[2]]$Grp),
       inline = groupinline
@@ -50,12 +46,12 @@ observeEvent(input$allgrphm, {
 
 
   # Unselect all groups
+
   observeEvent(input$nogrphm, {
     groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
     updateCheckboxGroupInput(session,
                              "grouphm",
                              label = "Choose your group to visualize",
-                             #choices = colnames(csvf()[[1]][,-1]))
                              choices =  levels(csvf()[[2]]$Grp),
                              inline = groupinline )
     
@@ -84,34 +80,33 @@ list_ind <- reactive({
 
 
 
-#' new_group is an eventreactive function that select specific groups in the data frame
+#' subsetgroup_hm is an eventreactive function that select specific groups in the data frame
 #' 
 #' @param csvf a Data frame corresponding to the pData table
 #' @param grouphm an input value of type character for the different groups selected
 #'
-#' @return new_group an eventreactive factor with the corresponding groups selected
+#' @return subsetgroup_hm an eventreactive factor with the corresponding groups selected
 #'
 #' @export
 
 
-new_group <- reactive({
+subsetgroup_hm <- reactive({
   req(csvf())
   csvf()[[2]][csvf()[[2]]$Grp %in% input$grouphm, ]
 })
 
 
-#' new_data is a reactive function that aim is to select specific individuals in the data frame
+#' subsetwset is a reactive function that aim is to select specific individuals in the data frame
 #'
 #' @param csvf Data frame corresponding to the Workingset
-#' @param new_group a reactive factor with the corresponding groups selected
+#' @param subsetgroup_hm a reactive factor with the corresponding groups selected
 #'
-#' @return new_data a reactive data frame with specific columns depending on the user's choices
+#' @return subsetwset a reactive data frame with specific columns depending on the user's choices
 #'
 #' @export
 
 
-new_data <- reactive({
+subsetwset <- reactive({
   req(csvf())
-  #subset(csvf()[[1]],select = choix_individus())
-  select(csvf()[[1]], as.character(factor(new_group()$X)))
+  select(csvf()[[1]], as.character(factor(subsetgroup_hm()$X)))
 })

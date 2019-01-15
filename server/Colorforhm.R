@@ -12,15 +12,15 @@
 
 #' mycolgrp is a reactive function which aim is to display the number of groups selected
 #'
-#' @param new_group a subset data frame of the pData
+#' @param subsetgroup_hm a subset data frame of the pData
 #'
 #' @return mycolgrp a reactive data frame
 #'
 #' @export
 
 mycolgrp <- reactive  ({
-  req(new_group())
-  mygrpcol <- new_group()$Grp %>%
+  req(subsetgroup_hm())
+  mygrpcol <- subsetgroup_hm()$Grp %>%
     sort() %>%
     unique() %>%
     droplevels()

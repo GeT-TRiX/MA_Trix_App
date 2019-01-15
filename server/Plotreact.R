@@ -7,9 +7,9 @@ shinyjs::disable("heatm")
 
 #' hmbis is an event reactive function that pre-computed hierarchical clustering on microarray data 
 #'
-#' @param new_data a data frame with all the individuals selected
-#' @param formated  a data frame with the indexes corresponding to the sigificant genes
-#' @param new_group  a data frame with the corresponding groups 
+#' @param subsetwset a data frame with all the individuals selected
+#' @param subsetDEG  a data frame with the indexes corresponding to the sigificant genes
+#' @param subsetgroup_hm  a data frame with the corresponding groups 
 #' @param workingPath the current user's repository 
 #' @param k a numeric value which aim is to defined the treshold value to cut the dendogram input$clusters
 #' @param Rowdistfun a function used to compute the distance for the rows
@@ -26,9 +26,9 @@ shinyjs::disable("heatm")
 hmbis <- reactive( {
 
       truncatedhat(
-        data.matrix(new_data()),
-        formated()[[1]], 
-        droplevels(new_group()$Grp),
+        data.matrix(subsetwset()),
+        subsetDEG()[[1]], 
+        droplevels(subsetgroup_hm()$Grp),
         workingPath = wd_path,
         k = input$clusters,
         mypal = unlist(colors()),
@@ -43,6 +43,9 @@ hmbis <- reactive( {
     
   
 })
+
+
+
 
 output$distPlot <- renderPlot({
     

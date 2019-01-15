@@ -138,10 +138,6 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   
   if( any(rownames(exprData) != rownames(exprData)[order(as.numeric(rownames(exprData)))])) stop("Error: 'exprData' must have rownames in numerical ascending order!");
   if(length(RowSideColor)==1) RowSideColor=gray.colors(k, start = 0.2, end = 0.9)
-  #if(!Rowdistfun %in% c("correlation","euclidian")) stop("Rowdistfun must be one of 'cor' or 'euclidian'!")
-  #if(!Coldistfun %in% c("correlation","euclidian")) stop("Coldistfun must be one of 'cor' or 'euclidian'!")
-  
-  
   if(is.null(mypal))
     mypal = brewer.pal(8,"Dark2") %>%
       list(brewer.pal(10,"Paired")) %>%
@@ -154,9 +150,10 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
     palette(mypal)
   
   cl=palette(mypal);
-  
-  
+  rownames(exprData) = rownames(genename)
   exprData=exprData[geneSet,]
+  
+  
   
   ##-----------------------##
   ## Row dendrogram
@@ -260,12 +257,7 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
 
     plot(hc,hang=-1,labels=FALSE,sub=paste("hclust method: ward2\n", subdist),xlab="",main="")
     hcgp=rect.hclust(hc,k=k,border="red")
-
-    #hts=rev( tail( hc$height,15))
-    # bp=barplot(hts,names.arg=1:length(hts))
-    # text(x=bp,y=hts,label= formatC(hts,1,format="f"),pos=3,cex=0.8) 
-    # dev.off()
-    myheight = rev( tail( hc$height,15))
+    myheight <- rev( tail( hc$height,15))
     
     cat("    Done \n")
   }
@@ -298,7 +290,6 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   rowIds = genename$GeneName[geneSet]
   
   
-  #print(myheight[[k]])  
   objforheat = list(exprData,distfunTRIX,ColvOrd,rowv,gpcol,gpcolr,rowIds,myheight[[k]])
   
   
@@ -371,11 +362,6 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   
   
   
-  # mypal =c ("#0072c2", "#D55E00", "#999999", "#56B4E9", "#E69F00", "#CC79A7","lightblue", "#F0E442",
-  #          "lightgreen", "deepskyblue4", "darkred", "#009E73", "maroon3","darkslategray",
-  #          "burlywood1","darkkhaki", "#CC0000" )
-  
-  
   if(is.null(mypal))
     mypal = brewer.pal(8,"Dark2") %>%
       list(brewer.pal(10,"Paired")) %>%
@@ -386,8 +372,7 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   }else  palette(mypal)
   
   cl=palette(mypal);
-  
-  
+
   ##-----------------------##
   ## plot Heatmap
   ##-----------------------##
@@ -397,7 +382,6 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   
   par(mar=c(5,5,1,1.10))
   
-  #pdf(NULL)
   hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=rastering,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), 
@@ -408,11 +392,11 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
     dev.off()
   
   cat("    Done \n")
-  myfinalobj = list(heatmtoclust(hmp02,exprData,genename,height= height),hmp02)
 
-  #return(heatmtoclust(hmp02,exprData,genename,height= height))
+  restoshiny = list(heatmtoclust(hmp02,exprData,genename,height= height),hmp02)
 
-  return(myfinalobj)
+
+  return(restoshiny)
 }
 
 

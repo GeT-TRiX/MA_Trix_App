@@ -25,28 +25,14 @@ p <- eventReactive(input$updateheatm,{
   isolate(hmobj$obj)
 })
 
-#' rownametoX is a reactive function that change the rownames values
-#'
-#' @param csvf a data frame
-#'
-#' @return rownametoX a reactive data frame
-#'
-#' @export
-#'
 
-rownamtoX <- reactive({
-  mycsv = csvf()[[3]]
-  row.names(mycsv) = mycsv$X
-
-  return(rownamtoX)
-})
 
 #' cutfinal is a reactive function that return heatmap or ggplot2 object
 #'
 #' @param hmobj$obj heatmap object
 #' @param cut a numeric input corresponding to the height where the dendogram is cut
-#' @param new_data a data frame with specific columns depending on the user's choices
-#' @param rownamtoX a data frame
+#' @param subsetwset a data frame with specific columns depending on the user's choices
+#' @param genename a data frame
 #' @param groups a data frame of the choosen groups
 #' @param cutcluster a numeric input corresponding to the selected cluster to display
 #' @param cutinfo a character input to select the plot to display heatmap, boxplot or stripchart
@@ -63,15 +49,14 @@ cutfinal <- reactive({
     cutHeatmaps(
       hmobj$obj,
       height =  hmsize$cut,
-      exprData = data.matrix(new_data()),
-      groups = droplevels(new_group()$Grp),
-      DEGres =  rownamtoX()[, -1],
+      genename = csvf()[[3]],
+      exprData = data.matrix(subsetwset()),
+      groups = droplevels(subsetgroup_hm()$Grp),
       num = input$cutcluster,
       type = input$cutinfo,
       mypal = unlist(colors())
     )
 })
-
 
 
 # render to the ui the number of clusted for a define height in function of the current heatmap object
@@ -131,7 +116,6 @@ output$savecut <- downloadHandler(
       )
     else
       cairo_ps(filename=file, width=10, height=10,pointsize = 12)
-
 
     plot(cutfinal())
     dev.off()

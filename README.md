@@ -51,7 +51,7 @@ if(!require('shiny')){
 # Install dependencies, download last version of MATRiX from github and run matrix in one command :
 runGitHub('fsoubes/MA_Trix_App')
 ```
-You can also run the app as following : 
+If RDAVIDWebService and Shiny are install on your machine can also run the app as following : 
 ```
 git clone https://github.com/fsoubes/MA_Trix_App
 chmod +x ./cmd.sh

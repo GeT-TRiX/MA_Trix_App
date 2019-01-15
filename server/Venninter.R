@@ -43,7 +43,7 @@ venninter <- reactive({
 #'
 #'
 #' @param vennchoice reactive character vector
-#' @param adjusted dataframe subset of the alltoptable
+#' @param subsetstat dataframe subset of the alltoptable
 #' @param dispvenn character input between probes and genes
 #' @param venninter multiple lists of probenames
 #'
@@ -65,38 +65,40 @@ vennfinal <- reactive({
 
   reslist = list()
   reordchoice <- input$selcontjv %>%
-    factor(levels = names(adjusted()[[1]][,-1,drop = FALSE])) %>%
+    factor(levels = names(subsetstat()[[1]])) %>%
     sort() %>%
     paste(collapse = "")
-
-
+  
+  resfinal <- csvf()[[3]] %>%
+    filter(GeneName %in% input$jvennlist)
+  
   if(!input$Allcont && !input$dispvenn == "genes"){
     resfinal <- csvf()[[3]] %>%
-    filter(ProbeName %in% venninter()[[reordchoice]]) %>%
-      select(ProbeName, GeneName, paste0("logFC_",  input$selcontjv)) %>%
+    filter( .[[1]]  %in% venninter()[[reordchoice]]) %>%
+      select(dataid(), GeneName, paste0("logFC_",  input$selcontjv)) %>%
       mutate_if(is.numeric, funs(format(., digits = 3)))
 
     }
   else if (input$Allcont && !input$dispvenn == "genes"){
     resfinal <- csvf()[[3]] %>%
-    filter(ProbeName %in% venninter()[[reordchoice]]) %>%
-    select(ProbeName, GeneName, paste0("logFC_", choix_cont())) %>%
+    filter(.[[1]] %in% venninter()[[reordchoice]]) %>%
+    select(dataid(), GeneName, paste0("logFC_", choix_cont())) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
   }
   else if (!input$Allcont && input$dispvenn == "genes")
 
     resfinal <- csvf()[[3]] %>%
       filter(GeneName %in% input$jvennlist) %>%
-      filter(ProbeName %in% unlist(vennlist()[[1]])) %>%
+    filter(.[[1]]  %in% unlist(vennlist()[[1]])) %>%
       select( GeneName, paste0("logFC_",  input$selcontjv)) %>%
       mutate_if(is.numeric, funs(format(., digits = 3)))
-
   else
     resfinal <- csvf()[[3]] %>%
       filter(GeneName %in% input$jvennlist) %>%
-      filter(ProbeName %in% unlist(vennlist()[[1]])) %>%
+      filter(.[[1]]  %in% unlist(vennlist()[[1]])) %>%
       select( GeneName, paste0("logFC_", choix_cont())) %>%
       mutate_if(is.numeric, funs(format(., digits = 3)))
+  
   
   if(input$Notanno){
     resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}|[0-9]{7,}",GeneName)) %>% as.data.frame()

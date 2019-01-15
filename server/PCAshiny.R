@@ -49,7 +49,7 @@ PCAplot <- function() {
   p <- fviz_mca_ind(
     PCAres(),
     label = labeled(),
-    habillage = droplevels(new_grouppca()$Grp),
+    habillage = droplevels(subsetgroup_pca()$Grp),
     addEllipses = input$ellipse ,
     ellipse.level = 0.8,
     repel = input$jitter,

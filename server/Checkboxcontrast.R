@@ -19,8 +19,8 @@ output$comphm <- renderUI(
   checkboxGroupInput(
     inputId = "selcomphm" ,
     label =  "Choose your comparison",
-    choices =  colnames(adjusted()[[1]][,-1,drop = FALSE]),
-    #,selected = colnames(adjusted()[, -1])
+    choices =  colnames(subsetstat()[[1]]),
+    #,selected = colnames(subsetstat()[, -1])
     inline = groupinline
   )
 )
@@ -35,8 +35,8 @@ observeEvent(input$allcomphm, {
     session,
     "selcomphm",
     label = "Choose your comparison",
-    choices = colnames(adjusted()[[1]][,-1,drop = FALSE]),
-    selected = colnames(adjusted()[[1]][,-1,drop = FALSE]),
+    choices = colnames(subsetstat()[[1]]),
+    selected = colnames(subsetstat()[[1]]),
     inline = groupinline
   )
 })
@@ -47,7 +47,7 @@ observeEvent(input$nocomphm, {
   updateCheckboxGroupInput(session,
                            "selcomphm",
                            label = "Choose your comparison",
-                           choices = colnames(adjusted()[[1]][, -1,drop = FALSE]),
+                           choices = colnames(subsetstat()[[1]]),
                            inline= groupinline
                            )
 })

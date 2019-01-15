@@ -7,7 +7,6 @@
 ### TODO comment
 
 
-
 #########################################
 ######## From Shiny to highcharts       #
 #########################################
@@ -16,20 +15,18 @@ axisParameters <- list(
   topcatdav = list( min = 0, max = 12, legend = 'Source: <a href="https://www.highcharts.com/"  target="_blank">Plot produce with highcharts</a> and <a href="https://shiny.rstudio.com/" target= "_blank">Shiny</a>', title= "top genes")
 )
 
-filteredata<- reactive({
+addpercentpop <- reactive({
 
   req(myresdavitab())
+  
   # paraltest <- myresdavitab()
   # cl <- makeCluster(getOption("cl.cores", 4))
   # clusterExport(cl,c("paraltest"),envir=environment())
   # clusterEvalQ(cl, library(dplyr))
   
-  
   reumdiff = lapply(1:length(myresdavitab()),function(x)return(sapply(length(myresdavitab()[[x]]$Count), function(y){
     return(as.numeric(as.character(myresdavitab()[[x]]$Count))/as.numeric(as.character(myresdavitab()[[x]]$Pop.Hits))*100)})) %>%
-      mutate(myresdavitab()[[x]],percent = .)) %>% bind_rows()#rbind.fill()
-  return(reumdiff)
-  
+      mutate(myresdavitab()[[x]],percent = .)) %>% bind_rows()
   
   # d = parLapply(cl, 1:length(paraltest),function(x)return(sapply(length(paraltest[[x]]$Count), function(y){
   #   return(as.numeric(as.character(paraltest$Count))/as.numeric(as.character(paraltest[[x]]$List.Total))*100)})) %>%
@@ -39,19 +36,21 @@ filteredata<- reactive({
   # d
 })
 
-plotDataenrichment <- reactive({
-  req(filteredata())
-  param <- list(search= "Fold.Enrichment", n_points=length(filteredata()$Fold.Enrichment), x_start=min(as.numeric(filteredata()$Fold.Enrichment)))
-  filtered <- filteredata()
+dfenrichtojson <- reactive({
+  
+  req(addpercentpop())
+  param <- list(search= "Fold.Enrichment", n_points=length(addpercentpop()$Fold.Enrichment), x_start=min(as.numeric(addpercentpop()$Fold.Enrichment)))
+  filtered <- addpercentpop()
   return(DftoHighjson(filtered,param))
   
 })
 
 
 observe({
-  req(plotDataenrichment())
-  newData <- c(axisParameters$topcatdav, list(series=plotDataenrichment()))
+  
+  req(dfenrichtojson())
+  newData <- c(axisParameters$topcatdav, list(series=dfenrichtojson()))
   islab = input$addlabelhigh 
-  session$sendCustomMessage(type="updateVariable", newData)
-  session$sendCustomMessage("handler1", islab)
+  session$sendCustomMessage(type="updateVariable", newData) # send to javascript data
+  session$sendCustomMessage("handler1", islab) #send to javascript labels
 })

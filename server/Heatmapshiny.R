@@ -69,6 +69,7 @@ colname <- reactive({
 })
 
 
+
 heatmapobj <- NULL # declare outside the observeEvent
 formatidus <- NULL
 hmbis <- reactiveValues()
@@ -81,9 +82,9 @@ observe({
   
   #' heatmapfinal is an isolate function that only react to a user's click on the heatmap button 
   #' 
-  #' @param hmbis[[1]] a data frame with all the individuals selected
-  #' @param formated  a data frame with the indexes corresponding to the sigificant genes
-  #' @param new_group  a data frame with the corresponding groups 
+  #' @param hmbis a data frame with all the individuals selected
+  #' @param subsetDEG  a data frame with the indexes corresponding to the sigificant genes
+  #' @param subsetgroup_hm  a data frame with the corresponding groups 
   #' @param workingPath the current user's repository 
   #' @param my_palette a vector of colors 
   #' @param k a numeric value which aim is to defined the treshold value to cut the dendogram input$clusters
@@ -124,7 +125,7 @@ observe({
       
       isolate(hmbis()[[1]]),
       geneSet =  isolate(hmbis()[[7]]),
-      droplevels(new_group()$Grp),
+      droplevels(subsetgroup_hm()$Grp),
       workingPath = wd_path,
       my_palette = (colorRampPalette(
         c(col_choice1(), my_intermediate(), col_choice3())
@@ -202,10 +203,10 @@ observe({
           width = 7,
           height = 9)
     
-    if (!is.null(formated()[[1]]))
+    if (!is.null(subsetDEG()[[1]]))
       withProgress(message = 'Saving heatmap:',
                    value = 0, {
-                     n <- NROW(formated()[[1]])
+                     n <- NROW(subsetDEG()[[1]])
                      for (i in 1:n) {
                        incProgress(1 / n, detail = "Please wait...")
                      }
@@ -228,20 +229,24 @@ observe({
     }
   )
   
+
+  
+  
   ordered <- reactive({
     
     req(hmobj$hm)
-    
-    if (input$method2 == "FDR")
+  
+    if (input$decidemethod == "FDR")
       met = "adj.P.Val_"
     else
       met = "P.value_"
     
     mycont = paste0(met, selected_test())
-    ordered = csvf()[[3]] %>% filter(ProbeName %in% hmobj$hm$ProbeName)  %>%
-      select(ProbeName,  mycont) %>%
-      full_join(hmobj$hm[,-1], ., by = "ProbeName") %>%
-      select(ProbeName, GeneName, mycont, cluster) %>%
+
+    ordered = csvf()[[3]] %>% filter(  csvf()[[3]][[1]]  %in% hmobj$hm[[2]] )  %>%
+      select(dataid(),  mycont) %>%
+      full_join(hmobj$hm[,-1], ., by = dataid() ) %>%
+      select(dataid(), GeneName, mycont, cluster) %>%
       mutate_if(is.numeric, funs(format(., digits = 3)))
 
     rightor = sort(as.integer(rownames(ordered)), decreasing = T)
@@ -251,16 +256,16 @@ observe({
   })
  
   grouplength <- reactive({
-    req(ordered())
     
+    req(ordered())
     mydfhmgen = (subset( hmobj$hm, !duplicated(subset( hmobj$hm, select=GeneName)))) 
     lengthofmyclust = sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
-      return(length(which(hmobj$hm$cluster ==x)))) %>%  
-      cbind(.,sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
-        return(length(which(mydfhmgen$cluster ==x))))) %>% as.data.frame() %>%
-      setNames(.,c("total number of probes","total number of genes")) 
+    return(length(which(hmobj$hm$cluster ==x)))) %>%  
+    cbind(.,sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
+    return(length(which(mydfhmgen$cluster ==x))))) %>% as.data.frame() %>%
+    setNames(.,c("total number of probes","total number of genes")) 
     rownames(lengthofmyclust) <- sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)
-      return(paste("cluster", x)))
+    return(paste("cluster", x)))
     
     lengthofmyclust <- rbind(lengthofmyclust,c(sum(unlist(lengthofmyclust$`total number of probes`)),sum(unlist(lengthofmyclust$`total number of genes`))))
     rownames(lengthofmyclust)[length(rownames(lengthofmyclust))]<- "total"
@@ -274,7 +279,6 @@ observe({
   
   output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))
 
-  
   
 })
 

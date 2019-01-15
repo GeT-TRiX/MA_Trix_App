@@ -6,10 +6,6 @@
 ### Licence: GPL-3.0
 
 
-#obsC <- observe(quote({ print(hmobj$hm) }), quoted = TRUE)
-
-#gores <- reactiveValues()
-
 url <- reactiveValues()
 gores <- reactiveValues()
 
@@ -26,14 +22,6 @@ observe({
   })
 })
 
-# observe({
-#   req(clustergrep())
-#   print(length(clustergrep()))
-#
-#   if (length(clustergrep()) > 400)
-#     shinyjs::disable("DAVID")
-#
-# })
 
 observe({
   
@@ -76,6 +64,7 @@ observe({
 #' 
 
 clustergrep <- reactive({
+  
   req(hmobj$hm, input$cutgo)
   
   genlist <- hmobj$hm[!duplicated(hmobj$hm$GeneName),] %>%
@@ -107,10 +96,8 @@ clustergrep <- reactive({
 #' 
 
 
-davidwebservice <-
-  eventReactive(input$GO, {
-    #Warning: Error in .jcall: org.apache.axis2.AxisFault: Read timed out
-    
+davidwebservice <- eventReactive(input$GO, {
+
     req(hmobj$hm)
     
     withProgress(message = 'Performing GO enrichment:',
@@ -136,10 +123,6 @@ davidwebservice <-
                    })
                  })
     
-   # final = lapply(1:NROW(mygodavid), function(x)
-    #  return(format(mygodavid[[x]], digits = 3)))
-    # return(mygodavid[[x]]))
-
     
     updateTabsetPanel(session, "heatmapmainp",
                       selected = "maingo")
@@ -174,53 +157,52 @@ observe({
 })
 
 
-output$clustgo <- renderPrint({
-  validate(
-    need(csvf(), 'You need to import data to visualize the data!') %next%
-      need(
-        input$cutgo,
-        'You need to click on the heatmap button! then on the run GO button'
-      )
-  )
-  gores$obj <- isolate(testad())
-  
-  req(input$cutgo, input$slidergo)
-  x <- input$cutgo
-  if (!is.null(testad()[[as.integer(x)]])) {
-    for (go in input$slidergo[[1]]:input$slidergo[[2]]) {
-      if (Ontology(testad()[[as.integer(x)]][[1]][[go]]) == input$onto) {
-        cat(paste("GOID:", (GOID(
-          gores$obj[[as.integer(x)]][[1]][[go]]
-        ))))
-        cat("\n")
-        cat(paste("Term:", (Term(
-          gores$obj[[as.integer(x)]][[1]][[go]]
-        ))))
-        cat("\n")
-        cat(paste("Ontology:", (Ontology(
-          gores$obj[[as.integer(x)]][[1]][[go]]
-        ))))
-        cat("\n")
-        cat(paste("Definition:", (Definition(
-          gores$obj[[as.integer(x)]][[1]][[go]]
-        ))))
-        cat("\n")
-        cat(paste("Synonym:", (Synonym(
-          gores$obj[[as.integer(x)]][[1]][[go]]
-        ))))
-        cat("\n")
-        
-        cat("--------------------------------------\n")
-      }
-    }
-  }
-  else
-    print("Sorry, no enriched genes for this cluster")
-  
-})
+# output$clustgo <- renderPrint({ 
+#   validate(
+#     need(csvf(), 'You need to import data to visualize the data!') %next%
+#       need(input$cutgo,
+#         'You need to click on the heatmap button! then on the run GO button'
+#       )
+#   )
+#   gores$obj <- isolate(testad())
+#   
+#   req(input$cutgo, input$slidergo)
+#   x <- input$cutgo
+#   if (!is.null(testad()[[as.integer(x)]])) {
+#     for (go in input$slidergo[[1]]:input$slidergo[[2]]) {
+#       if (Ontology(testad()[[as.integer(x)]][[1]][[go]]) == input$onto) {
+#         cat(paste("GOID:", (GOID(
+#           gores$obj[[as.integer(x)]][[1]][[go]]
+#         ))))
+#         cat("\n")
+#         cat(paste("Term:", (Term(
+#           gores$obj[[as.integer(x)]][[1]][[go]]
+#         ))))
+#         cat("\n")
+#         cat(paste("Ontology:", (Ontology(
+#           gores$obj[[as.integer(x)]][[1]][[go]]
+#         ))))
+#         cat("\n")
+#         cat(paste("Definition:", (Definition(
+#           gores$obj[[as.integer(x)]][[1]][[go]]
+#         ))))
+#         cat("\n")
+#         cat(paste("Synonym:", (Synonym(
+#           gores$obj[[as.integer(x)]][[1]][[go]]
+#         ))))
+#         cat("\n")
+#         
+#         cat("--------------------------------------\n")
+#       }
+#     }
+#   }
+#   else
+#     print("Sorry, no enriched genes for this cluster")
+#   
+# })
 
 
-#' mytransf is a reactive function which aim is to convert entrez ID to GENE  the selected rows in the output data table
+#' myentreztosymb is a reactive function which aim is to convert entrez ID to GENE  the selected rows in the output data table
 #'
 #' @param davidwebservice data frame 
 #' @param cutgo a numeric input 
@@ -232,7 +214,8 @@ output$clustgo <- renderPrint({
 #'
 
 
-mytransf <- reactive({
+myentreztosymb <- reactive({
+  
   req( davidwebservice())
   
     
@@ -260,21 +243,19 @@ output$printmessage <- renderPrint({
   cat("You can select the rows in the table above in order to display the gene names")
   cat("\n")
   cat("\n")
-  
+
 })
 
 
 output$printselected <- renderPrint({
-  
-  req(mytransf())  
-  # cat("You can select the rows in the table above in order to display the gene names")
-  # cat("\n")
-  # cat("\n")
-    for(i in 1:length(mytransf())){
-      cat(paste("GOID and Term: " , unique(mytransf()[[i]]$Term)))
+
+  req(myentreztosymb())
+
+    for(i in 1:length(myentreztosymb())){
+      cat(paste("GOID and Term: " , unique(myentreztosymb()[[i]]$Term)))
       cat("\n")
       cat("Genes: ")
-      cat(paste( mytransf()[[i]]$Genes, collapse = " ,"))
+      cat(paste( myentreztosymb()[[i]]$Genes, collapse = " ,"))
       cat("\n")
       cat("\n")
     }

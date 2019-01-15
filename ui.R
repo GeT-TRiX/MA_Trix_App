@@ -224,6 +224,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                      box(
                        title = "What's new in MATRiX", width = NULL, status = "primary",
                        div(style = 'overflow-y: scroll; height: 500px',
+                           addNews("Jan 11th 2019", "Data", "MATRiX is now compatible with Microarray, ChIP-seq and RNA-seq data"),
                            addNews("Nov 30th 2018", "MATRiX", "Add tootlip for distance, its now possible to export acyclic graphs in pdf and eps, correct bugs for classification enrichment with 0 nodes by inactivating donwload button"),
                            addNews("Nov 29th 2018", "Venn Diagram/HTML", "Correct bugs now venn diagram table is based on genes and not probes."),
                            addNews("Nov 5th 2018", "Venn Diagram", "Remove non annotated genes."),
@@ -285,9 +286,9 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                              ),
 
                                                tags$p(
-                                                tags$img(src = "pdata.png"),
-                                                tags$img(src = "wotkingset.png"),
-                                                tags$img(src = "Restable.png")
+                                                tags$img(src = "pData.png"),
+                                                tags$img(src = "restable.png"),
+                                                tags$img(src = "workingset.png")
                                                  ),
 
                                              tags$h1("Tips"),
@@ -325,7 +326,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                      tabPanel("Volcano plot",value="volcano", style = "background-color: #ffffff;",
                               conditionalPanel(condition = '!output.boolmark',
                              div(style="display:inline-block;",
-                              fluidRow(column(3, style="width:33.5%;",
+                              fluidRow(column(3, style="width:34.0%;",
                               downloadButton("savevolcano", "Save your Volcano plot" , style =
                                                "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
                               column( 3, style="width:20%;",
@@ -344,9 +345,16 @@ MATRiX app is working with specific data produced by the limma package, resultin
 
                 downloadLink("downloadData", label = "download sample data", style="color:red; float:right;"),
                 br(),br(),
+
+                
                 csvFileInput("datafile", "User data (.csv format)"),
+                fluidRow(column(6,
                 p("Import local example",style="color:white; font-weight: 700; font-size: 14px;"),
-                dirModuleUI("datafile"),
+                
+                dirModuleUI("datafile")),
+                column(6, 
+                       csvIdentifier("datafile", "Unique identifier")
+                )),
 
                 #csvFileInput("file", "Choose your csv files"),
                 # fileInput(
@@ -394,7 +402,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
             conditionalPanel(condition = '!output.boolmark',
             column(12,
                     h3("Show the actual data frame with the columns selected"),
-                    dataTableOutput("new_group")
+                    dataTableOutput("subsetgroup_hm")
             ),ns = NS("datafile"))
 
 
@@ -795,7 +803,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                   tabPanel(
                      strong("Visualize the Heatmap"),value = "hmmainpan",
                     div(style="display:inline-block",
-                        fluidRow( column(1 ,
+                        fluidRow( column(1 ,style="width:9%;",
                                          downloadButton(
                                            "savehm",
                                            "Save your plot" ,
@@ -998,7 +1006,7 @@ MATRiX app is working with specific data produced by the limma package, resultin
                                               )),column(6,
                                                         br(),
                                                         selectInput(
-                                                          "method2",
+                                                          "decidemethod",
                                                           "Choose your statistical method",
                                                           choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")
                                                         ))),

@@ -179,3 +179,6 @@ projectname <- reactive({
 })
 
 
+dataid <- reactive({
+  return(colnames(csvf()[[3]][1]))
+})

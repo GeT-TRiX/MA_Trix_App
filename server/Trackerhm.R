@@ -6,11 +6,11 @@
 ### Licence: GPL-3.0
 
 output$myNUM <- renderPrint({ # number of signficant genes in the heatmap produced
-  req(formated())
-  if(is.null(formated()[[1]]))
+  req(subsetDEG())
+  if(is.null(subsetDEG()[[1]]))
     return("X")
   else
-    cat(length(formated()[[1]]))
+    cat(length(subsetDEG()[[1]]))
 })
 
 
@@ -44,7 +44,7 @@ output$myFC <- renderText({ #Fold change value selected, default =1
 })
 
 output$myMET <- renderText({ #Method for choosing the signficant genes, default = FDR (BH method)
-  input$method2
+  input$decidemethod
 })
 
 output$myCLUST <- renderText({ #number of clusted selected, default = 3

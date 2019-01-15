@@ -103,7 +103,7 @@ colorspca <- reactive({
 #' mycolgrppca is a reactive function which aim is to display the total number of groups
 #'
 #' @param csvf a dataframe
-#' @param new_grouppca a reactive factor with the corresponding groups selected
+#' @param subsetgroup_pca a reactive factor with the corresponding groups selected
 #'
 #' @return mycolgrppca a reactive reorder dataframe
 #'
@@ -111,7 +111,7 @@ colorspca <- reactive({
 
 mycolgrppca <- reactive  ({
   req(csvf())
-  mygrpcol <- new_grouppca()$Grp %>%
+  mygrpcol <- subsetgroup_pca()$Grp %>%
     sort() %>%
     unique() %>%
     droplevels()
