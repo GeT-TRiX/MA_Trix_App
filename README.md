@@ -33,6 +33,7 @@ sudo apt-get install default-jdk
 sudo R CMD javareconf #to associate it with R
 sudo apt-get install r-cran-rjava
 sudo apt-get install libgdal1-dev libproj-dev
+sudo apt-get install libv8-3.14-dev
 ```
 ```
 ## Install RDAVIDWebService into R
