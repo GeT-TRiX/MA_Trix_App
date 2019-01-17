@@ -38,6 +38,7 @@ sudo apt-get install libgdal1-dev libproj-dev
 ## Install RDAVIDWebService into R
 source("https://bioconductor.org/biocLite.R")
 biocLite("RDAVIDWebService")
+install.packages("rJava")
 
 ## Load RDAVIDWebService 
 library(RDAVIDWebService)
