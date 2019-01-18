@@ -299,6 +299,57 @@ rowtoprob <- function(myven,pval,adj) {
   return(list(probesel, genesel))
 }
 
+filterjvenn <- function(jvennlist, selcontjv, restab, idcol,  usersel, venngeneslist = NULL){
+
+  ifelse (usersel == "genes",resfinal <- restab %>%
+    filter(GeneName %in% jvennlist) %>%
+    filter(.[[1]]  %in% venngeneslist) %>%
+    select( GeneName, paste0("logFC_",  selcontjv)) %>%
+    mutate_if(is.numeric, funs(format(., digits = 3))), resfinal <- restab %>%
+    filter(.[[1]] %in% jvennlist) %>%
+    select(idcol, GeneName, paste0("logFC_",  selcontjv)) %>%
+    mutate_if(is.numeric, funs(format(., digits = 3))))
+  
+  return(resfinal)
+}
+
+
+getDegVennlfc <- function(selcontjv, filtgenes, restab, idcol, allcol, nonannot, usersel){
+  
+  reslist = list()
+  
+  resfinal <- restab %>%
+    filter( .[[1]]  %in% filtgenes) %>%
+    select(  GeneName, paste0("logFC_",  selcontjv)) %>%
+    mutate_if(is.numeric, funs(format(., digits = 3)))
+  
+  if(nonannot){
+    resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}|[0-9]{7,}",GeneName)) %>% as.data.frame()
+  }
+  
+  reslist[[1]] <- resfinal
+  
+  if(!allcol)
+    mycont = paste0("logFC_",selcontjv)
+  else
+    mycont = paste0("logFC_",selcontjv) ## allcont
+  
+  if(usersel == "genes"){
+    
+    options(datatable.optimize=1)
+    
+    for (i in mycont) {
+      resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
+    }
+    
+    reslist[[2]] <- resfinal %>% as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% as.data.frame()  
+  }
+  
+  
+  return(reslist)
+  
+}
+
 
 toJvenn <- function(myven, adj){
   

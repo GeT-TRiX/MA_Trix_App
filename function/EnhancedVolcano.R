@@ -86,6 +86,7 @@ EnhancedVolcano <- function(
     }
     else{
       toptable$abs <- unlist(abs(toptable[x]))
+      toptable$X <- rownames(toptable)
       myval <- toptable %>%   dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,X,abs)  %>% top_n(.,topgenes)
       myvalueind <- myval$X
       selectLab <- as.character(myval$GeneName)

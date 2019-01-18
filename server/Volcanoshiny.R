@@ -29,7 +29,8 @@ family_input <- reactive({
 })
 
 
-family_d <- shiny::debounce(family_input, 900) # Delay input
+family_d <- shiny::debounce(family_input, 750) # Delay input debounche also pour search genes
+
 
 
 #######################################################

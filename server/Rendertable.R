@@ -19,18 +19,16 @@ output$data_summary <- renderDataTable(data_summary()) # Summary of the signific
 observe({
   
   req(input$dispvenn)
-  if(input$dispvenn == "probes")
-    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('5', '10', '15')), options = list(scrollX = TRUE,  pageLength = 15, scrollY=530)), server = F)
-  else
-    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('5', '10', '15')), options = list(scrollX = TRUE ,pageLength = 15, scrollY=530)), server = F)
+  
+  if(input$dispvenn == "probes" )#&& is.null(input$filteredcompjv) || input$filteredcompjv == "")
+    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('5', '10', '15')), options = list(scrollX = TRUE,  pageLength = 15, scrollY=530,  stateSave = T)), server = F)
+  else if (input$dispvenn == "genes" )#&& is.null(input$filteredcompjv) || input$filteredcompjv == "" )
+    output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('5', '10', '15')), options = list(scrollX = TRUE ,pageLength = 15, scrollY=530,  stateSave = T)), server = F)
+ # else
+#    output$vennresinter <- DT::renderDataTable(DT::datatable(topngenesDT(), list(lengthMenu =  c('5', '10', '15')), options = list(scrollX = TRUE ,pageLength = 15, scrollY=530,  stateSave = T)), server = F)
+    
 })
     
-observe({
-  if(input$dispvenn == "genes")
-    output$vennresintergen <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('15', '30', '50','100')),options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis'), pageLength = 15), extensions = 'Buttons'), server = F)
-})
-
-
 rounddavidtable <- reactive({
   req(davidwebservice)
   return(lapply(1:NROW(davidwebservice()), function(x)

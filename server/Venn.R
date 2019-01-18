@@ -55,6 +55,9 @@ vennlist <- reactive({
   #stopCluster(cl)
   mycont = Vennlist(user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
   probven = rowtoprob(mycont,csvf()[[3]], user_cont())
+  
+  
+  
   return(probven)
 })
 
@@ -333,10 +336,10 @@ myindex<- reactive({
 
   indexnull = which( sapply(myl ,length) == 0)
   if(length(indexnull)>0)
-    final = colnames(subsetstat()[[1]][,-c(indexnull),drop = FALSE])
+    selcol = colnames(subsetstat()[[1]][,-c(indexnull),drop = FALSE])
   else
-    final = colnames(subsetstat()[[1]])
+    selcol = colnames(subsetstat()[[1]])
   
-  return(final)
+  return(selcol)
 
 })

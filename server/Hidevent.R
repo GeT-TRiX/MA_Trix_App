@@ -22,3 +22,6 @@ shinyjs::onclick("toggleAdvancedcolors",
 shinyjs::onclick("toggleAdvancedJvenn",
                  shinyjs::toggle(id = "advancedjvenn", anim = TRUE))
 
+shinyjs::onclick("togglefiltertabvenn",
+                 shinyjs::toggle(id = "advancedfilter", anim = TRUE))
+
