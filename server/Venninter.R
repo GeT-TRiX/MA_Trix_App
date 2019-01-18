@@ -311,19 +311,13 @@ topngenesDT <- reactive ({
   
   req(input$filteredcompjv, vennfinal())
 
-  test <- vennfinal()[[1]]$ProbeName
-  print(test)
-  print(colnames( csvf()[[3]] ))
-  print(paste0(ifelse(input$methodforvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv))
-  test2 <- vennfinal()[[2]]$GeneName
-  topngenesDT <- csvf()[[3]] %>% select(  GeneName)
-  #topngenesDT <- csvf()[[3]] %>% select( ProbeName, GeneName, paste0(ifelse(input$methodforvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv))#  %>% filter ( ProbeName  %in% test)
-  print(topngenesDT)
+  topngenesDT <- csvf()[[3]] %>% select( ProbeName, GeneName, paste0(ifelse(input$methodforvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% filter ( ProbeName  %in% vennfinal()[[1]]$ProbeName)
   #{if (input$dispvenn == "genes") filter ( ., GeneName  %in% test2) else filter(., ProbeName  %in% test)}
-   # topngenesDT$rank <- topngenesDT %>% select( paste0(ifelse(input$methodforvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% rank(.) 
-   # topngenesDT<- topngenesDT %>% arrange( desc(rank) ) %>% top_n(-input$topgenes, rank)  #distinct(GeneName, .keep_all = TRUE)  %>% 
-   # topngenesDT <-vennfinal()[[2]] %>% filter (GeneName %in% topngenesDT$GeneName)
- # return(topngenesDT)
+  topngenesDT$rank <- topngenesDT %>% select( paste0(ifelse(input$methodforvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% rank(.) 
+  topngenesDT<- topngenesDT %>% arrange( desc(rank) ) %>% top_n(-input$topgenes, rank)  #distinct(GeneName, .keep_all = TRUE)  %>% 
+  #topngenesDT <-vennfinal()[[2]] %>% filter (GeneName %in% topngenesDT$GeneName)
+  topngenesDT <-vennfinal()[[1]] %>% filter (ProbeName %in% topngenesDT$ProbeName)
+ return(topngenesDT)
   
 })
 
@@ -341,12 +335,13 @@ observe({
   print(topngenesDT())
 })
 
-observe({
-  req(vennfinal())
-  print('kokoa')
-  print(vennfinal()[[1]])
-  #print(input$filteredcompjv)
-})
+# observe({
+#   req(input$filteredcompjv, vennfinal())
+#   
+#   topngenesDT <- csvf()[[3]] %>% select( ProbeName, GeneName, paste0(ifelse(input$methodforvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% filter ( ProbeName  %in% vennfinal()[[1]]$ProbeName)
+#   
+#   
+# })
 
 
 
