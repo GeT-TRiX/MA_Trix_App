@@ -26,18 +26,20 @@ and also a [video Presentation](https://www.youtube.com/watch?v=lfI0zRYzeJs)
 ## Installation
 
 MATRiX is available for R>3.5.0. The installation, download and execution can all be performed with a small R script :
-First you'll need to install RJava in the aim of using RDAVIDWebService.
-You can download it with the following commands:
+First you'll need to install RJava in the aim to using RDAVIDWebService.
+You can install it using the following commands:
 ```
 sudo apt-get install default-jdk
-sudo R CMD javareconf to associate it with R
+sudo R CMD javareconf #to associate it with R
 sudo apt-get install r-cran-rjava
 sudo apt-get install libgdal1-dev libproj-dev
+sudo apt-get install libv8-3.14-dev
 ```
 ```
-## Download RDAVIDWebService
+## Install RDAVIDWebService into R
 source("https://bioconductor.org/biocLite.R")
 biocLite("RDAVIDWebService")
+install.packages("rJava")
 
 ## Load RDAVIDWebService 
 library(RDAVIDWebService)
@@ -49,11 +51,11 @@ if(!require('shiny')){
 }
 
 # Install dependencies, download last version of MATRiX from github and run matrix in one command :
-runGitHub('fsoubes/MA_Trix_App')
+runGitHub('GeT-TRiX/MA_Trix_App')
 ```
-If RDAVIDWebService and Shiny are install on your machine can also run the app as following : 
+If RDAVIDWebService and Shiny are installed on your machine can also run the app as following : 
 ```
-git clone https://github.com/fsoubes/MA_Trix_App
+git clone https://github.com/GeT-TRiX/MA_Trix_App
 chmod +x ./cmd.sh
 ./cmd.sh
 ```
