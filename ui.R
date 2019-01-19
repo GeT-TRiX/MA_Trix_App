@@ -546,15 +546,15 @@ body <- dashboardBody(
                           downloadButton("downloadsetven", "Download venn set" , style =
                                            "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
                           
-                          downloadButton('downloadvennset', "Download the filtered data",
-                                         style ="color: #fff; background-color: #337ab7; border-color: #2e6da4;position:absolute;left:50%;margin-left: 15px;"),
+                          #downloadButton('downloadvennset', "Download the filtered data",
+                           #              style ="color: #fff; background-color: #337ab7; border-color: #2e6da4;position:absolute;left:50%;margin-left: 15px;"),
                  
                           shiny::actionButton( 
                             "togglefiltertabvenn",
                             "Advanced Filter Options",
                             href = "#",
                             icon = icon("filter"),
-                            style = "color: #fff; background-color: #337ab7; border-color: #2e6da4; position:relative;position:absolute;left:70%; margin:0 auto;"
+                            style = "color: #fff; background-color: #337ab7; border-color: #2e6da4; position:relative;position:absolute;left:50%;margin-left: 15px;"
                           ),
                           br(),
                           
