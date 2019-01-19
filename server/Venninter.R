@@ -96,20 +96,10 @@ vennfinal <- reactive({
 })
 
 
-output$topgenesvenn <- renderUI({
-
-  req( input$selcontjv)
-  tags$div(
-    class = "topgeness",numericInput('topgenes',
-               'Top genes', value = 50,
-               min = 1,
-               max = length(vennfinal()[[1]]$ProbeName))
-    )
-})
 
 
 output$venntitle <- renderText({
-  req(input$topgenes)
+  req(input$selcontjv)
   if(input$dispvenn == "probes")
     mytitlevenn <<- print(paste("Barplot showing the top ", input$topgenes ," genes"))
   else
@@ -118,7 +108,7 @@ output$venntitle <- renderText({
 
 
 output$venngenesbef <- renderText({
-  req(input$topgenes)
+  req(input$selcontjv)
   if(input$dispvenn == "genes")
   mytitlevenn <<- print(paste("Barplot showing the computationnal logFC mean of the top " ,input$topgenes , " genes after the rendering table"))
 
@@ -126,7 +116,7 @@ output$venngenesbef <- renderText({
 
 
 output$dfvenn <- renderText({
-  req(input$topgenes)
+  req(input$selcontjv)
   if(input$dispvenn == "probes")
     mytitlevenn <<- print(paste("Table showing the ProbeNames and GeneNames associated with their respective logFC for the intersection(s) selected"))
   else
@@ -136,7 +126,7 @@ output$dfvenn <- renderText({
 })
 
 output$dfvennbef <- renderText({
-  req(input$topgenes)
+  req(input$selcontjv)
   if(input$dispvenn == "genes")
     mytitlevenn <<- print(paste("Table showing the GeneNames associated with their respective logFC for the intersection(s) selected"))
 
@@ -145,18 +135,38 @@ output$dfvennbef <- renderText({
 
 #' venntopgenes is a reactive function which aim is to return the user's input top n genes
 #'
-#' @param topgenes numeric input
+#' @param filtertopjvenn numeric input
 #'
 #' @return numeric input
 #' @export
 #'
 
 venntopgenes <- reactive({
-    if (is.null (input$topgenes))
-      return(NULL)
-    else
-      return(input$topgenes)
-  })
+  if (is.null (input$filtertopjvenn))
+    return(NULL)
+  else
+    return(input$filtertopjvenn)
+})
+
+
+# output$topgenesvenn <- renderUI({
+#   
+#   req( input$selcontjv)
+#   tags$div(
+#     class = "topgeness",numericInput('topgenes',
+#                                      'Top genes', value = 50,
+#                                      min = 1,
+#                                      max = length(vennfinal()[[1]]$ProbeName))
+#   )
+# })
+
+
+# venntopgenes <- reactive({
+#     if (is.null (input$topgenes))
+#       return(NULL)
+#     else
+#       return(input$topgenes)
+#   })
 
 output$downloadvennset = downloadHandler('venns-filtered.csv',
   content = function(file) {
@@ -190,10 +200,14 @@ plottopgenes <- eventReactive(input$topdegenes, {
     mycont <- paste0("logFC_", input$selcontjv)
 
   
-  if(input$dispvenn == "probes")
+  if(input$dispvenn == "probes" &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ) )
     myplot <- topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
-  else
+  else if(input$dispvenn == "genes" &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
     myplot <- topngenes(vennfinal()[[2]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
+  else
+    myplot <- topngenes(topngenesDT()[input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
+  
+    
 
   return(myplot)
 })
@@ -290,35 +304,21 @@ filteredcolvenn <- reactive ({
 })
 
 
-# topngenesDT <- reactive ({
-#   
-# req(filteredcolvenn(), vennfinal())
-# 
-# test <- vennfinal()[[1]]$ProbeName
-# test2 <- vennfinal()[[2]]$GeneName
-# topngenesDT <- csvf()[[3]] %>% select( ProbeName, GeneName, paste0(ifelse(input$methodforvenn == "FDR", "adj.P.Val_" , "P.value_"), filteredcolvenn())) %>% 
-#   filter ( GeneName  %in% test2) 
-# topngenesDT$rank <- topngenesDT %>% select( paste0(ifelse(input$methodforvenn == "FDR", "adj.P.Val_" , "P.value_"), filteredcolvenn())) %>% rank(.) 
-# topngenesDT<- topngenesDT %>% arrange( desc(rank) )%>% top_n(-input$topgenes, rank)
-# return(topngenesDT)
-# 
-# return(topngenesDT)
-#   
-# })
-
-
 topngenesDT <- reactive ({
   
   req(input$filteredcompjv, vennfinal())
 
-  topngenesDT <- csvf()[[3]] %>% select( ProbeName, GeneName, paste0(ifelse(input$methodforvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% filter ( ProbeName  %in% vennfinal()[[1]]$ProbeName)
-  #{if (input$dispvenn == "genes") filter ( ., GeneName  %in% test2) else filter(., ProbeName  %in% test)}
-  topngenesDT$rank <- topngenesDT %>% select( paste0(ifelse(input$methodforvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% rank(.) 
-  topngenesDT<- topngenesDT %>% arrange( desc(rank) ) %>% top_n(-input$topgenes, rank)  #distinct(GeneName, .keep_all = TRUE)  %>% 
-  #topngenesDT <-vennfinal()[[2]] %>% filter (GeneName %in% topngenesDT$GeneName)
-  topngenesDT <-vennfinal()[[1]] %>% filter (ProbeName %in% topngenesDT$ProbeName)
- return(topngenesDT)
+  topngenesDT <- csvf()[[3]] %>% select( ProbeName, GeneName, paste0(ifelse(input$filtermethjvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% # filter ( ProbeName  %in% vennfinal()[[1]]$ProbeName)
+  {if (input$dispvenn == "genes") filter ( ., GeneName  %in% vennfinal()[[2]]$GeneName) else filter(., ProbeName  %in% vennfinal()[[1]]$ProbeName)}
+  topngenesDT$rank <- topngenesDT %>% select( paste0(ifelse(input$filtermethjvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% rank(.) 
+  topngenesDT <- topngenesDT %>% arrange( desc(rank) ) %>% top_n(-input$filtertopjvenn, rank) # distinct(GeneName, .keep_all = TRUE)   comment remove les doublons pour les GeneName 
+  if (input$dispvenn == "genes")
+    topngenesDT <-vennfinal()[[2]] %>% filter (GeneName %in% topngenesDT$GeneName)
+  else
+    topngenesDT <-vennfinal()[[1]] %>% filter (ProbeName %in% topngenesDT$ProbeName)
   
+    
+ return(topngenesDT)
 })
 
 
@@ -327,7 +327,7 @@ output$filtercompjvenn <- renderUI({
   req( input$selcontjv)
   tags$div(
     class = "jvennfiltparam",selectInput('filteredcompjv',
-                                     'Select your comparison', choices = c("", input$selcontjv), selected = ""))
+                                     'filter comp', choices = c("", input$selcontjv), selected = ""))
 })
 
 observe({
@@ -335,13 +335,7 @@ observe({
   print(topngenesDT())
 })
 
-# observe({
-#   req(input$filteredcompjv, vennfinal())
-#   
-#   topngenesDT <- csvf()[[3]] %>% select( ProbeName, GeneName, paste0(ifelse(input$methodforvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% filter ( ProbeName  %in% vennfinal()[[1]]$ProbeName)
-#   
-#   
-# })
+
 
 
 

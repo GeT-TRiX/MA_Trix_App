@@ -538,7 +538,7 @@ body <- dashboardBody(
                       strong("Visualize the Venn diagram"),
                       
                       
-                      div(style="display:block; width:100%; position:relative;",
+                      div(style="display:block; width:100%; ",
                           
                           downloadButton('downloadvenn', "Download the data",
                                          style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
@@ -547,7 +547,25 @@ body <- dashboardBody(
                                            "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
                           
                           downloadButton('downloadvennset', "Download the filtered data",
-                                         style ="color: #fff; background-color: #337ab7; border-color: #2e6da4;position:absolute;left:50%;margin-left: 15px;")
+                                         style ="color: #fff; background-color: #337ab7; border-color: #2e6da4;position:absolute;left:50%;margin-left: 15px;"),
+                 
+                          shiny::actionButton( 
+                            "togglefiltertabvenn",
+                            "Advanced Filter Options",
+                            href = "#",
+                            icon = icon("filter"),
+                            style = "color: #fff; background-color: #337ab7; border-color: #2e6da4; position:relative;position:absolute;left:70%; margin:0 auto;"
+                          ),
+                          br(),
+                          
+                          shinyjs::hidden(div( style ="position:absolute;left:50%;margin-left: 15px;",
+                            id = "advancedfilter",
+                            fluidRow( column(3,
+                            numericInput("filtertopjvenn", "Top n genes", value = 50, min=5 , max = 150)),
+                            column(3,
+                            selectInput("filtermethjvenn", "Based on", choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None"))),
+                            column(3,
+                            uiOutput("filtercompjvenn")))))
                           
                       ),
                       
@@ -565,12 +583,16 @@ body <- dashboardBody(
                       ),
                       column(6,
                              div(class= "dfvenn" , style="font-size:24px; margin-top: 17px;",
+                                 
+                                 conditionalPanel(condition = "input.togglefiltertabvenn%2==1", br(),br()),
+                                 
                                  htmlOutput("dfvenn")),
+                             
                              conditionalPanel(condition = "input.dispvenn == 'genes'",
                                               helpText(
                                                 "You can directly filter the table by fold change and save the output table"
                                               )),
-                             
+                              
                              DT::dataTableOutput("vennresinter"),br(),br(),br(),
                              conditionalPanel(condition = "input.selcontjv",
                                               div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; "))
@@ -595,12 +617,12 @@ body <- dashboardBody(
                                                     "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
                             column(3 ,br(),style= "width:11%;  padding: 0%;",
                                    selectInput( "formvenbar",label = NULL,
-                                                choices = c("png", "eps", "pdf"))),
-                            
-                            column(3,style= "width:9%; padding: 0%;",
-                                   
-                                   uiOutput("topgenesvenn", style= "padding: 0px;font-weight: 400;top: 0px;
-                                            right: -22px;left: 0px;color: #3c8dbc;position: absolute;"))
+                                                choices = c("png", "eps", "pdf")))
+                            # ,
+                            # column(3,style= "width:9%; padding: 0%;",
+                            #        
+                            #        uiOutput("topgenesvenn", style= "padding: 0px;font-weight: 400;top: 0px;
+                            #                 right: -22px;left: 0px;color: #3c8dbc;position: absolute;"))
                                    )),
                       plotOutput(outputId ="barplotvenn", height = "500px", width ="100%"),
                       br(),
@@ -766,20 +788,20 @@ body <- dashboardBody(
                      )),
                      
                      br(), 
-                     shiny::actionButton(
-                       "togglefiltertabvenn",
-                       "Advanced Filter Options",
-                       href = "#",
-                       style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                     ),
-                     br(),
-                     
-                     shinyjs::hidden(div(
-                       id = "advancedfilter",
-                       br(),
-                       numericInput("filtertopjvenn", "Top n genes", value = 50),    
-                      selectInput("filtermethjvenn", "Based on", choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")),
-                     uiOutput("filtercompjvenn"))),
+                     # shiny::actionButton(
+                     #   "togglefiltertabvenn",
+                     #   "Advanced Filter Options",
+                     #   href = "#",
+                     #   style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+                     # ),
+                     # br(),
+                     # 
+                     # shinyjs::hidden(div(
+                     #   id = "advancedfilter",
+                     #   br(),br(), br(),
+                     #   numericInput("filtertopjvenn", "Top n genes", value = 50),    
+                     #  selectInput("filtermethjvenn", "Based on", choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")),
+                     # uiOutput("filtercompjvenn"))),
                      br(),
                      
                      

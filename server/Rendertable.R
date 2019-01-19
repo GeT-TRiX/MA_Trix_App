@@ -18,14 +18,14 @@ output$data_summary <- renderDataTable(data_summary()) # Summary of the signific
 
 observe({
   
-  req(input$dispvenn)
+  req(input$dispvenn, vennfinal())
   
-  if(input$dispvenn == "probes" )#&& is.null(input$filteredcompjv) || input$filteredcompjv == "")
+  if(input$dispvenn == "probes" &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
     output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('5', '10', '15')), options = list(scrollX = TRUE,  pageLength = 15, scrollY=530,  stateSave = T)), server = F)
-  else if (input$dispvenn == "genes" )#&& is.null(input$filteredcompjv) || input$filteredcompjv == "" )
+  else if (input$dispvenn == "genes"  &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
     output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('5', '10', '15')), options = list(scrollX = TRUE ,pageLength = 15, scrollY=530,  stateSave = T)), server = F)
- # else
-#    output$vennresinter <- DT::renderDataTable(DT::datatable(topngenesDT(), list(lengthMenu =  c('5', '10', '15')), options = list(scrollX = TRUE ,pageLength = 15, scrollY=530,  stateSave = T)), server = F)
+  else
+    output$vennresinter <- DT::renderDataTable(DT::datatable(topngenesDT(), list(lengthMenu =  c('5', '10', '15')), options = list(scrollX = TRUE ,pageLength = 15, scrollY=530,  stateSave = T)), server = F)
     
 })
     
