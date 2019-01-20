@@ -147,6 +147,8 @@ position: static;
     z-index: 800;
 }
 
+
+
 .shiny-output-error { visibility: visible;  color: orange; font-size: larger;}
 
 
@@ -286,6 +288,24 @@ a.my-tool-tip, a.my-tool-tip:hover, a.my-tool-tip:visited {
 }
 
 
+.navbar-toggler:focus, .navbar-toggler:active {
+    outline: none;
+    box-shadow: none;
+  }
 
+
+.box.box-solid.box-primary > .box-header {
+  color: #fff;
+background: #337ab7;
+    background-color: rgb(60, 141, 188);
+background-color: #337ab7;
+}
+
+#stripbox .box{
+  left:-2.4%;
+}
+
+
+#stripbox .box-header {text-align: center;}
 
 

@@ -112,6 +112,7 @@ body <- dashboardBody(
                   .tabbable > .nav > li > a[data-value='hmpan'] {background-color: red;   color:white}
                   .tabbable > .nav > li > a[data-value='cutpan'] {background-color: blue;  color:white}
                   ")),
+    
   includeCSS("./css/style.css"),
   div(
     id = "loading-content",
@@ -318,13 +319,20 @@ body <- dashboardBody(
                                                              
                                                              column(12,
                                                                     h3("This table shows the samples with the corresponding groups"),
-                                                                    dataTableOutput("new_test")
+                                                                    dataTableOutput("designtab")
+                                                             ), 
+                                                             column(12,
+                                                                    h3("Show the actual data frame with the columns selected"),
+                                                                    dataTableOutput("subsetgroup_hm")
                                                              )
                                                              ,ns = NS("datafile")
                                                              
                                             )),
-                                   tabPanel("Volcano plot",value="volcano", style = "background-color: #ffffff;",
+                                   
+                                   tabPanel("Volcano plot", style = "background-color: #ffffff;",
+                                            
                                             conditionalPanel(condition = '!output.boolmark',
+                                                             
                                                              div(style="display:inline-block;",
                                                                  fluidRow(column(3, style="width:34.0%;",
                                                                                  downloadButton("savevolcano", "Save your Volcano plot" , style =
@@ -332,9 +340,49 @@ body <- dashboardBody(
                                                                           column( 3, style="width:20%;",
                                                                                   selectInput(
                                                                                     "formvolc",label = NULL,
+                                                                                    choices = c("png", "eps", "pdf"))))), 
+                                              
+                                            plotOutput(outputId = "volcanoplot", height = 900)     
+                                            ,ns = NS("datafile"))
+                                   ), 
+                                   tabPanel("Stripchart genes", value = "stripgenes", #style ="background-color: #ffffff;",
+                                            conditionalPanel(condition = '!output.boolmark',
+                                                          
+                                                             
+                                                             
+                                                             column(width=12,
+                                                                 div(id = "stripbox", 
+                                                                    box(title="Filter the workingset",width = 9, status = "primary", solidHeader = TRUE,collapsible = TRUE,collapsed = TRUE,icon = icon("arrow-down"), 
+                                                                        column(width=4,  radioButtons("decidemethodstrip",label = "Choose your statistical method",choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None"),inline = TRUE)),
+                                                                        div( class= "myslidermain", column(3, sliderInput('fcstrip', "Choose your FC cutoff",min = 1, max=10, step = 1,value=1)),
+                                                                        column(3,sliderInput('pvalstrip', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05))),
+                                                                        
+                                                                        column(width=4,  textInput("stripgenesearch", "Search your gene", placeholder = "cyp2b10" ),
+                                                                               bsTooltip("stripgenesearch", "Enter your gene in order to display the group mean expression.","bottom",trigger = "hover", options = list(container = "body"))
+                                                                        ),
+                                                                        column(width=3,  actionButton("plotstrip",label = "Generate plot",
+                                                                                                      icon = icon("arrow-down")),
+                                                                               bsTooltip("plotstrip", "Click here to generate the strip graph", options = list(container = "body")),
+                                                                               tags$style(type='text/css', "#plotstrip { width:100%; margin-top: 25px;}")
+                                                                        
+                                                                        
+                                                                        )
+                                                                    ))),
+                                                             
+                                                             column(12,
+                                                                    h3("This table shows the normalized values"),
+                                                                    dataTableOutput("orderedwk")
+                                                             ),
+                                                             div(style="display:inline-block;",
+                                                                 fluidRow(column(3, style="width:27%;",
+                                                                                 downloadButton("savevstripgenes", "Save your plot" , style =
+                                                                                                  "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                                                                          column( 3, style="width:20%;",
+                                                                                  selectInput(
+                                                                                    "formstrip",label = NULL,
                                                                                     choices = c("png", "eps", "pdf")))))
-                                            ),
-                                            plotOutput(outputId = "volcanoplot", height = 900)
+                                                             ,ns = NS("datafile"))           
+                                   
                                    )
                             ))),
                 div(id="pass",style = "word-wrap: break-word;",
@@ -356,21 +404,16 @@ body <- dashboardBody(
                                                csvIdentifier("datafile", "Unique identifier")
                                         )),
                                
-                               #csvFileInput("file", "Choose your csv files"),
-                               # fileInput(
-                               #   "file",
-                               #   "Choose your csv files",
-                               #   accept = c("text/csv","text/comma-separated-values,text/plain",".csv"
-                               #   ),
-                               #   multiple = T # Attribute to load multiple data at once
-                               # ),
-                               
+        
                                br(),
                                
                                conditionalPanel(condition = '!output.boolmark',
                                                 selectInput(
-                                                  "method","Choose your statistical method",choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None")),
-                                                strong("VOLCANO plot",style="font-size:18px;"),
+                                                  "method","Choose your statistical method",choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None")),  ns = NS("datafile"))),
+                               
+                           conditionalPanel(condition = '!output.boolmark',
+                               box(id="boxpass2",title = strong("VOLCANO plot", style="font-size:25px;"), width = NULL, background = "light-blue",         
+                                                #strong("VOLCANO plot",style="font-size:18px;"),
                                                 br(),br(),
                                                 uiOutput("compvolc"),
                                                 div(id = "mytextvolc",
@@ -393,17 +436,17 @@ body <- dashboardBody(
                                                 fluidRow(column(6, sliderInput('volcfc', "Choose your FC cutoff",min = 1, max=10, step = 1,value=1)),
                                                          column(6,sliderInput('volcpval', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05))),
                                                 fluidRow(column(6, sliderInput('volclab', "Choose your lab size",min = 1, max=6, step = 0.5,value=3.0)),
-                                                         column(6,sliderInput('volcpt', "Choose your point size", min=0.5, max=3, step=0.1,value=1))),
+                                                         column(6,sliderInput('volcpt', "Choose your point size", min=0.5, max=3, step=0.1,value=1)))#,
                                                 
-                                                ns = NS("datafile")
-                               ))
+                                                # ns = NS("datafile")
+                               ), ns = NS("datafile"))
                     )
-                ),
-                conditionalPanel(condition = '!output.boolmark',
-                                 column(12,
-                                        h3("Show the actual data frame with the columns selected"),
-                                        dataTableOutput("subsetgroup_hm")
-                                 ),ns = NS("datafile"))
+                )#,
+                # conditionalPanel(condition = '!output.boolmark',
+                #                  column(12,
+                #                         h3("Show the actual data frame with the columns selected"),
+                #                         dataTableOutput("subsetgroup_hm")
+                #                  ),ns = NS("datafile"))
                 
                 
                   )),
@@ -537,37 +580,48 @@ body <- dashboardBody(
                       value= "vennset",
                       strong("Visualize the Venn diagram"),
                       
-                      
-                      div(style="display:block; width:100%; ",
-                          
+                     column(6,offset = 0, style='padding:0px;',
+                           div(style="display:inline-block",
+                      fluidRow(
+                      column(3, style="width:43%",
                           downloadButton('downloadvenn', "Download the data",
-                                         style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-                          
+                                         style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                         column(3,
                           downloadButton("downloadsetven", "Download venn set" , style =
-                                           "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                                           "color: #fff; background-color: #337ab7; border-color: #2e6da4"))))),
                           
-                          #downloadButton('downloadvennset', "Download the filtered data",
-                           #              style ="color: #fff; background-color: #337ab7; border-color: #2e6da4;position:absolute;left:50%;margin-left: 15px;"),
-                 
-                          shiny::actionButton( 
-                            "togglefiltertabvenn",
-                            "Advanced Filter Options",
-                            href = "#",
-                            icon = icon("filter"),
-                            style = "color: #fff; background-color: #337ab7; border-color: #2e6da4; position:relative;position:absolute;left:50%;margin-left: 15px;"
-                          ),
-                          br(),
                           
-                          shinyjs::hidden(div( style ="position:absolute;left:50%;margin-left: 15px;",
-                            id = "advancedfilter",
-                            fluidRow( column(3,
-                            numericInput("filtertopjvenn", "Top n genes", value = 50, min=5 , max = 150)),
-                            column(3,
-                            selectInput("filtermethjvenn", "Based on", choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None"))),
-                            column(3,
-                            uiOutput("filtercompjvenn")))))
                           
-                      ),
+                          column(width=6, offset = 0, style='padding:0px;',
+                                div(id = "vennbox", 
+                                    box(title="Filter the datatable",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,collapsed = TRUE,icon = icon("arrow-down"), 
+                                        column(3,
+                                               numericInput("filtertopjvenn", "Top n genes", value = 50, min=5 , max = 150)),
+                                        column(5,
+                                               selectInput("filtermethjvenn", "Based on", choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None"))),
+                                        column(5,
+                                               uiOutput("filtercompjvenn"))
+                  ))),
+# 
+#                           shiny::actionButton( 
+#                             "togglefiltertabvenn",
+#                             "Advanced Filter Options",
+#                             href = "#",
+#                             icon = icon("filter"),
+#                             style = "color: #fff; background-color: #337ab7; border-color: #2e6da4; position:relative;position:absolute;left:50%;margin-left: 15px;"
+#                           ),
+#                           br(),
+#                           
+#                           shinyjs::hidden(div( style ="position:absolute;left:50%;margin-left: 15px;",
+#                             id = "advancedfilter",
+#                             fluidRow( column(3,
+#                             numericInput("filtertopjvenn", "Top n genes", value = 50, min=5 , max = 150)),
+#                             column(3,
+#                             selectInput("filtermethjvenn", "Based on", choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None"))),
+#                             column(5,
+#                             uiOutput("filtercompjvenn")))))
+#                           
+                 #    ),
                       
                       conditionalPanel(condition = '!output.bool',
                                        uiOutput(outputId = "image")
@@ -576,7 +630,7 @@ body <- dashboardBody(
                       tags$script(src="libraries/jvenn.min.js")  ,
                       tags$script(src="libraries/canvas2svg.js")  ,
                       tags$script(src="tooltip.js"),
-                      fluidRow(column(6,br(),br(),
+                      fluidRow(column(6,
                                       tags$script(src="jvenn.js"),
                                       tags$div(id="jvenn-container", style = "background-color: white; width: 100%; height:100%")
                                       
@@ -584,7 +638,7 @@ body <- dashboardBody(
                       column(6,
                              div(class= "dfvenn" , style="font-size:24px; margin-top: 17px;",
                                  
-                                 conditionalPanel(condition = "input.togglefiltertabvenn%2==1", br(),br()),
+                                 #conditionalPanel(condition = "input.togglefiltertabvenn%2==1", br(),br()),
                                  
                                  htmlOutput("dfvenn")),
                              

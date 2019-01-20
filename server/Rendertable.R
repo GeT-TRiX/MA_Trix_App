@@ -10,7 +10,7 @@
 ######## Plot the data frame wiht input ##
 ##########################################
 
-output$new_test <- renderDataTable(csvf()[[2]]) # Data frame corresponding to the pData
+output$designtab <- renderDataTable(csvf()[[2]]) # Data frame corresponding to the pData
 
 
 output$data_summary <- renderDataTable(data_summary()) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)

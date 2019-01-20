@@ -26,7 +26,8 @@ shinyServer(function(input, output,session) {
 
   #source(file.path("server", "csvFile.R"), local = TRUE)$value #
   csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE) # TODO Module for importing data
-
+  source(file.path("server", "Groupstripshiny.R"), local = TRUE)$value # Utilities method (packages citations, fc step, zipdownload and panel redirection and project name)
+  
   
   ##########################################
   ######## Widget update and info         ##
