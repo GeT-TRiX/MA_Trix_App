@@ -572,7 +572,7 @@ body <- dashboardBody(
               fluidRow(column(
                 width = 9,
                 div(
-                  style = "width:100% ; max-width: 1500px; height: 1780px; max-height: 2800px;",
+                  style = "width:100% ; max-width: 1500px; height: 1950px; max-height: 2800px;",
                   tabsetPanel(
                     id = "Vennd",
                     

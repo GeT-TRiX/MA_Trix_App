@@ -28,11 +28,12 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
 {
   ## select probes with cutoff_meth<= DEGcutoff and FoldChange > FC and nbr of selected probes < maxDE (if nb FC selected >maxDE)
   
-  
+
   if (length(contrast) == 1)
     contrast = c(contrast, contrast)
+
   
-  if (is.na(maxDE))
+  if (is.na(maxDE) || is.null(maxDE))
     maxDE = nrow(adj)
 
   
@@ -46,6 +47,7 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
   
   ## select on pvalue
   DEp = pList <= DEGcutoff
+  
   
   ## select on FC
   DEFC = 2 ** abs(logfc[, contrast]) >= FC

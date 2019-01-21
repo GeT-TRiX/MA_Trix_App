@@ -11,12 +11,20 @@ myreorderwk <- reactive({ ## add GeneName
   req(csvf())
   wkingsetclean <- csvf()[[1]]
   samplesgroup <- factor(csvf()[[2]]$Grp)
-  samplesnum <- parse_number(csvf()[[2]]$X)
-  colnames(wkingsetclean)[-1] <- paste0(samplesgroup, samplesnum ) 
+  #samplesnum <- parse_number(as.character(csvf()[[2]]$X))
+  colnames(wkingsetclean)[-1] <- paste(samplesgroup, as.character(csvf()[[2]]$X) , sep = ".") 
   wkingsetclean$GeneName <- csvf()[[3]]$GeneName
   return(wkingsetclean)
   
 })
+
+
+# myreorderwk <- reactive({ ## add GeneName
+#   
+#   TODO return a sorted table with the colnames = Groups & Samples
+#   
+# })
+
 
 
 filenamestrip <- reactive({
@@ -30,9 +38,16 @@ filenamestrip <- reactive({
   
 })
 
+# filenamestrip <- reactive({
+#
+#   TODO return past vector of the project name
+#
+# })
+
+
 #final filter based on slice() select rownames
 
-output$orderedwk <- DT::renderDataTable(DT::datatable(myreorderwk() %>% select(ProbeName,GeneName, sort(names(.[-1]))) %>% mutate_if(is.numeric, funs(format(., digits = 3))), 
+output$orderedwk <- DT::renderDataTable(DT::datatable(myreorderwk() %>% select(ProbeName,GeneName, sort(names(.[-1]))) %>% slice(., getDegenes()[[1]]) %>% mutate_if(is.numeric, funs(format(., digits = 3))), 
 options = list(scrollX = TRUE,  
                   pageLength = 150, 
                   scrollY=550,  
@@ -51,9 +66,17 @@ options = list(scrollX = TRUE,
 rownames= FALSE ))
 
 
+# output$orderedwk <- DT::renderDataTable(DT::datatable(
+#
+#   TODO render the filtered table 
+#
+# ))
+
+
+
 getDegenes <- reactive({
   
-  req(subsetstat(), csvf())
+  req(subsetstat(), csvf(), input$pvalstrip)
   
   indexDEG = decTestTRiX(
     subsetstat()[[1]],
@@ -61,12 +84,25 @@ getDegenes <- reactive({
     subsetstat()[[3]],
     DEGcutoff = input$pvalstrip,
     FC = input$fcstrip,
-    cutoff_meth = input$decidemethodstrip,
-    maxDE = NULL)
-  
+    cutoff_meth = input$decidemethodstrip, maxDE=NULL )
+
   return(indexDEG)
   
 })
+
+observe({
+  req(getDegenes(), csvf())
+  print(input$decidemethodstrip)
+  print(getDegenes()[[1]])
+})
+
+
+# getDegenes <- reactive({
+#   
+#   TODO return a list of index with the decTestTRiX function
+#   
+# })
+
 
 
 callstripgenes <- reactive({
@@ -77,10 +113,25 @@ callstripgenes <- reactive({
   
 })
 
+# callstripgenes <- reactive({
+# 
+#   TODO call the function to compute the plot
+#   
+# })
+
+
+
 output$renderstripgenes <- renderPlot({
   
   return(NULL)
 })
+
+
+# output$renderstripgenes <- renderPlot({
+#   
+#   TODO render plot strip gene
+#
+# })
 
 
 output$savestriplot <- downloadHandler(filename <- function() {
@@ -122,5 +173,9 @@ content <- function(file) {
 
 
 
-
+# output$savestriplot <- downloadHandler(filename <- function() {
+#   
+#   TODO add donwload button 
+#   
+# })
 
