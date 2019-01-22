@@ -273,7 +273,7 @@ body <- dashboardBody(
                   ),
                 column(width=9,
                        div( style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;" , id = "upload",
-                            tabBox(title="Upload your data", width=NULL,id = "upload",
+                            tabBox(title="Upload/Visualize your data", width=NULL,id = "upload",
                                    
                                    tabPanel("Import your data", style = "background-color: #ffffff;",
                                             conditionalPanel(condition = 'output.boolmark', #Hide or Show event depending on the loading data success or failure
@@ -348,25 +348,24 @@ body <- dashboardBody(
                                    tabPanel("Stripchart genes", value = "stripgenes", #style ="background-color: #ffffff;",
                                             conditionalPanel(condition = '!output.boolmark',
                                                           
-                                                             
-                                                             
                                                              column(width=12,
                                                                  div(id = "stripbox", 
-                                                                    box(title="Filter the workingset",width = 9, status = "primary", solidHeader = TRUE,collapsible = TRUE,collapsed = TRUE,icon = icon("arrow-down"), 
+                                                                    box(title="Filter the table",width = 10, status = "primary", solidHeader = TRUE,collapsible = TRUE,collapsed = TRUE,icon = icon("arrow-down"), 
                                                                         column(width=4,  radioButtons("decidemethodstrip",label = "Choose your statistical method",choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None"),inline = TRUE)),
                                                                         div( class= "myslidermain", column(3, sliderInput('fcstrip', "Choose your FC cutoff",min = 1, max=10, step = 1,value=1)),
                                                                         column(3,sliderInput('pvalstrip', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05))),
                                                                         
-                                                                        column(width=4,  textInput("stripgenesearch", "Search your gene", placeholder = "cyp2b10" ),
-                                                                               bsTooltip("stripgenesearch", "Enter your gene in order to display the group mean expression.","bottom",trigger = "hover", options = list(container = "body"))
-                                                                        ),
-                                                                        column(width=3,  actionButton("plotstrip",label = "Generate plot",
-                                                                                                      icon = icon("arrow-down")),
-                                                                               bsTooltip("plotstrip", "Click here to generate the strip graph", options = list(container = "body")),
-                                                                               tags$style(type='text/css', "#plotstrip { width:100%; margin-top: 25px;}")
-                                                                        
-                                                                        
+                                                                        column(width=12,  textOutput("selected_stripgene") 
+                                                                               #textInput("stripgenesearch", "Search your gene", placeholder = "cyp2b10" ),
+                                                                               #bsTooltip("stripgenesearch", "Enter your gene in order to display the group mean expression.","bottom",trigger = "hover", options = list(container = "body"))
                                                                         )
+                                                                        # column(width=3,  actionButton("plotstrip",label = "Generate plot",
+                                                                        #                               icon = icon("arrow-down")),
+                                                                        #        bsTooltip("plotstrip", "Click here to generate the strip graph", options = list(container = "body")),
+                                                                        #        tags$style(type='text/css', "#plotstrip { width:100%; margin-top: 25px;}")
+                                                                        # 
+                                                                        # 
+                                                                        # )
                                                                     ))),
                                                              
                                                              column(12,
@@ -375,13 +374,20 @@ body <- dashboardBody(
                                                              ),
                                                              div(style="display:inline-block;",
                                                                  fluidRow(column(3, style="width:27%;",
-                                                                                 downloadButton("savevstripgenes", "Save your plot" , style =
+                                                                                 downloadButton("savestriplot", "Save your plot" , style =
                                                                                                   "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
                                                                           column( 3, style="width:20%;",
                                                                                   selectInput(
                                                                                     "formstrip",label = NULL,
                                                                                     choices = c("png", "eps", "pdf")))))
-                                                             ,ns = NS("datafile"))           
+                                                             ,ns = NS("datafile"), 
+                                                             
+                                                             
+                                                             plotOutput(outputId ="renderstripgenes", height = "500px", width ="100%")
+                                                             
+                                                             
+                                                             
+                                                             )           
                                    
                                    )
                             ))),

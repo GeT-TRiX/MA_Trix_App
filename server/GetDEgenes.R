@@ -91,7 +91,7 @@ subsetcomp <- reactive({
 
 subsetDEG <- reactive({
   
-  req(subsetcomp(), csvf())
+  req(subsetcomp())
   
   indexDEG = decTestTRiX(
     subsetcomp()[[1]],

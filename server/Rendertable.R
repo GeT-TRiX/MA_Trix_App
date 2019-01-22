@@ -16,6 +16,7 @@ output$designtab <- renderDataTable(csvf()[[2]]) # Data frame corresponding to t
 output$data_summary <- renderDataTable(data_summary()) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)
 
 
+ 
 observe({
   
   req(input$dispvenn, vennfinal())

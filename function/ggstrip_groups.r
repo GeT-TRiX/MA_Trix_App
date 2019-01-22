@@ -11,7 +11,7 @@
 ###############################
 
 
-ggstrip_groups <- function(  grps , wSet, probesID, SubIndivID=1:ncol(wSet), SubGrpsID, dietNamesCol ) {
+ggstrip_groups <- function(  grps , wSet, probesID) {
   
     
     nindiv=table(grps)
@@ -20,9 +20,12 @@ ggstrip_groups <- function(  grps , wSet, probesID, SubIndivID=1:ncol(wSet), Sub
       nindiv=as.character(nindiv[1]);
     } else nindiv=paste(nindiv,collapse=", ")
     
-    datai=cbind.data.frame(Group=grps, expression=as.numeric(wSet[1,-1]), row.names = NULL) # -(1:2)
-    geneName=wSet[1,"X"] #GeneName
-
+    print(length(grps))
+    print(length(colnames(wSet)))
+    datai=cbind.data.frame(Group=grps, expression=as.numeric(wSet[probesID,-(1:2)]), row.names = NULL) 
+    print(datai)
+    geneName=wSet[probesID,"GeneName"] 
+    print(geneName)
     footnote <- paste("Error bar: mean +/- SEM; n=",nindiv,sep="")
     ggstrip= ggplot(datai, aes(x=Group, y = expression)) + 
       theme_classic() +				

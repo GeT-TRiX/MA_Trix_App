@@ -103,7 +103,7 @@ output$volcanoplot <- renderPlot({
   validate(need(csvf(), 'You need to import data to visualize this plot!'))
   
   req(volcano())
-  volcano()
+  volcano()[[1]]
   
 },  height = plotHeight)
 
@@ -139,6 +139,6 @@ content <- function(file) {
     ggsave(file,device=cairo_ps, fallback_resolution = 600)
   
   
-  plot(volcano())
+  plot(volcano()[[1]])
   dev.off()
 })

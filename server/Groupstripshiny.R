@@ -11,8 +11,8 @@ myreorderwk <- reactive({ ## add GeneName
   req(csvf())
   wkingsetclean <- csvf()[[1]]
   samplesgroup <- factor(csvf()[[2]]$Grp)
-  #samplesnum <- parse_number(as.character(csvf()[[2]]$X))
-  colnames(wkingsetclean)[-1] <- paste(samplesgroup, as.character(csvf()[[2]]$X) , sep = ".") 
+  samplesnum <- parse_number(as.character(csvf()[[2]]$X))
+  colnames(wkingsetclean)[-1] <- paste(samplesgroup, samplesnum , sep = ".") 
   wkingsetclean$GeneName <- csvf()[[3]]$GeneName
   return(wkingsetclean)
   
@@ -47,8 +47,25 @@ filenamestrip <- reactive({
 
 #final filter based on slice() select rownames
 
-output$orderedwk <- DT::renderDataTable(DT::datatable(myreorderwk() %>% select(ProbeName,GeneName, sort(names(.[-1]))) %>% slice(., getDegenes()[[1]]) %>% mutate_if(is.numeric, funs(format(., digits = 3))), 
-options = list(scrollX = TRUE,  
+
+
+filterwkingset <- reactive({   
+  
+  req(myreorderwk())
+  myreorderwk() %>% select(ProbeName,GeneName, sort(names(.[-1]))) %>% slice(., getDegenes()[[1]]) %>% mutate_if(is.numeric, funs(format(., digits = 3)))
+  
+})
+
+
+# filterwkingset <- reactive ({
+#   
+#   TODO return a round filtered table (ProbeName,, GeneName with group reorder for the significant  genes)
+# 
+# })
+
+
+output$orderedwk <- DT::renderDataTable(DT::datatable(filterwkingset(), 
+options = list(scrollX = TRUE, 
                   pageLength = 150, 
                   scrollY=550,  
                   stateSave = T,  
@@ -61,6 +78,7 @@ options = list(scrollX = TRUE,
                       title = "My Title",
                       header = FALSE)
                 )),
+selection = 'single', 
  extensions=c("Buttons",'Scroller'),
  filter =c("none"),
 rownames= FALSE ))
@@ -85,15 +103,8 @@ getDegenes <- reactive({
     DEGcutoff = input$pvalstrip,
     FC = input$fcstrip,
     cutoff_meth = input$decidemethodstrip, maxDE=NULL )
-
   return(indexDEG)
   
-})
-
-observe({
-  req(getDegenes(), csvf())
-  print(input$decidemethodstrip)
-  print(getDegenes()[[1]])
 })
 
 
@@ -105,11 +116,15 @@ observe({
 
 
 
+
 callstripgenes <- reactive({
-  req(getDegenes())
-  # ggstrip_groups call 
   
-  return(NULL)
+  validate(
+    need(input$orderedwk_row_last_clicked, 'Search your gene and select the corresponding row'))
+  
+  req(getDegenes(), filterwkingset(), req(input$orderedwk_row_last_clicked))
+  grps <- gsub("[.][0-9]*","",colnames(filterwkingset()[-(1:2)]), perl=T)
+  ggp=ggstrip_groups(grps=grps , wSet= filterwkingset() , probesID= input$orderedwk_row_last_clicked)
   
 })
 
@@ -122,8 +137,8 @@ callstripgenes <- reactive({
 
 
 output$renderstripgenes <- renderPlot({
-  
-  return(NULL)
+  req(callstripgenes())
+  plotOutput(callstripgenes())
 })
 
 
@@ -137,6 +152,8 @@ output$renderstripgenes <- renderPlot({
 output$savestriplot <- downloadHandler(filename <- function() {
   paste0(
     basename(tools::file_path_sans_ext(projectname())), # add  gene name
+    '_',
+    selectedstripgene(), 
     '_strip_chart.',
     input$formstrip,
     sep = ''
@@ -171,6 +188,17 @@ content <- function(file) {
 })
 
 
+selectedstripgene <- reactive({
+  req(input$orderedwk_row_last_clicked)
+  
+  return(filterwkingset()[input$orderedwk_row_last_clicked,"GeneName"] )
+  
+})
+
+
+output$selected_stripgene <- renderText({ 
+  paste("You have selected", selectedstripgene(), "gene.")
+})
 
 
 # output$savestriplot <- downloadHandler(filename <- function() {

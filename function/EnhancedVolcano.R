@@ -85,9 +85,13 @@ EnhancedVolcano <- function(
       selectLab <- ""
     }
     else{
-      toptable$abs <- unlist(abs(toptable[x]))
+      #toptable$abs <- unlist(abs(toptable[x]))
+      toptable$abs <- unlist((toptable[x])) #positive
+     # toptable$abs <- ifelse(regsens == "both",  unlist(abs(toptable[x])) , unlist((toptable[x])))
+       
+      print(colnames(toptable))
       toptable$X <- rownames(toptable)
-      myval <- toptable %>%   dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,X,abs)  %>% top_n(.,topgenes)
+      myval <- toptable %>%   dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,X,abs)  %>% top_n(.,-topgenes)
       myvalueind <- myval$X
       selectLab <- as.character(myval$GeneName)
       
@@ -130,7 +134,7 @@ EnhancedVolcano <- function(
     tot = subset(toptable,
            toptable[,y]<pLabellingCutoff &
              abs(toptable[,x])>FCcutoff)[,"lab"]
-   
+    
     plot <- ggplot2::ggplot(toptable,
             ggplot2::aes(x=xvals, y=-log10(yvals))) +
 
@@ -195,12 +199,15 @@ EnhancedVolcano <- function(
             linetype=cutoffLineType,
             colour=cutoffLineCol,
             size=cutoffLineWidth)
-
+    
+    data = subset(toptable,
+           toptable[,y]<pLabellingCutoff &
+             abs(toptable[,x])>FCcutoff)
+    
+    
     if (DrawConnectors == TRUE) {
         plot <- plot + ggrepel::geom_text_repel(max.iter = 100,
-            data=subset(toptable,
-                toptable[,y]<pLabellingCutoff &
-                    abs(toptable[,x])>FCcutoff),
+            data=data,
             ggplot2::aes(label=subset(toptable,
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff)[,"lab"]),
@@ -209,9 +216,7 @@ EnhancedVolcano <- function(
                 segment.size = widthConnectors,
                 vjust = 1.0)
     } else if (DrawConnectors == FALSE && !is.null(selectLab)) {
-        plot <- plot + ggplot2::geom_text(data=subset(toptable,
-                toptable[,y]<pLabellingCutoff &
-                    abs(toptable[,x])>FCcutoff),
+        plot <- plot + ggplot2::geom_text(data=data,
             ggplot2::aes(label=subset(toptable,
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff)[,"lab"]),
@@ -219,9 +224,7 @@ EnhancedVolcano <- function(
 		check_overlap = T,
                 vjust = 1.0)
     } else if (DrawConnectors == FALSE && is.null(selectLab)) {
-        plot <- plot + ggplot2::geom_text(data=subset(toptable,
-                toptable[,y]<pLabellingCutoff &
-                    abs(toptable[,x])>FCcutoff),
+        plot <- plot + ggplot2::geom_text(data=data,
             ggplot2::aes(label=subset(toptable,
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff)[,"lab"]),
@@ -229,6 +232,7 @@ EnhancedVolcano <- function(
                 check_overlap = F,
                 vjust = 1.0)
     }
-
-    return(plot)
+    
+    mylist = list(plot, data)
+    return(mylist)
 }
