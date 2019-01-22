@@ -28,18 +28,7 @@ shinyServer(function(input, output,session) {
   csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE) #  Module for importing data
   
   
-  toto <- reactive({
-    
-    
-    
-  })
-  
-  observe({
-    req(csvf())
-   print(csvf()) 
-    
-  })
-  
+
   ##########################################
   ######## Widget update and info         ##
   ##########################################
