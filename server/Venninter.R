@@ -53,7 +53,6 @@ venninter <- reactive({
 
 vennfinal <- reactive({
 
-
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
       need(choix_cont(), 'Set your thresholds and then select your comparison to display the Venn diagram!')%next%
@@ -73,26 +72,16 @@ vennfinal <- reactive({
   if(input$Notanno){
     resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}|[0-9]{7,}",GeneName)) %>% as.data.frame()
   }
-
-  reslist[[1]] <- resfinal
-
-  if(!input$Allcont)
-    mycont = paste0("logFC_",input$selcontjv)
-  else
-    mycont = paste0("logFC_",choix_cont())
-
-  if(input$dispvenn == "genes"){
-
-    options(datatable.optimize=1)
-    for (i in mycont) {
-      resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
-    }
-
-    reslist[[2]] <- resfinal %>% as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% as.data.frame()
-    }
-
-  return(reslist)
   
+  reslist[[1]] <- resfinal
+  if(!input$Allcont)
+    mycont =input$selcontjv
+  else
+    mycont =choix_cont()
+  if(input$dispvenn == "genes")
+    reslist[[2]] <- meanrankgenes(resfinal, stat ="logFC_", multcomp = mycont , jvenn=  T)
+  
+  return(reslist)
 })
 
 
@@ -149,24 +138,6 @@ venntopgenes <- reactive({
 })
 
 
-# output$topgenesvenn <- renderUI({
-#   
-#   req( input$selcontjv)
-#   tags$div(
-#     class = "topgeness",numericInput('topgenes',
-#                                      'Top genes', value = 50,
-#                                      min = 1,
-#                                      max = length(vennfinal()[[1]]$ProbeName))
-#   )
-# })
-
-
-# venntopgenes <- reactive({
-#     if (is.null (input$topgenes))
-#       return(NULL)
-#     else
-#       return(input$topgenes)
-#   })
 
 output$downloadvennset = downloadHandler('venns-filtered.csv',
   content = function(file) {
@@ -198,7 +169,6 @@ plottopgenes <- eventReactive(input$topdegenes, {
     mycont <- paste0("logFC_", choix_cont())
   else
     mycont <- paste0("logFC_", input$selcontjv)
-
   
   if(input$dispvenn == "probes" &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ) )
     myplot <- topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
@@ -308,7 +278,7 @@ topngenesDT <- reactive ({
   
   req(input$filteredcompjv, vennfinal())
 
-  topngenesDT <- csvf()[[3]] %>% select( ProbeName, GeneName, paste0(ifelse(input$filtermethjvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% # filter ( ProbeName  %in% vennfinal()[[1]]$ProbeName)
+  topngenesDT <- csvf()[[3]] %>% select( ProbeName, GeneName, paste0(ifelse(input$filtermethjvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% 
   {if (input$dispvenn == "genes") filter ( ., GeneName  %in% vennfinal()[[2]]$GeneName) else filter(., ProbeName  %in% vennfinal()[[1]]$ProbeName)}
   topngenesDT$rank <- topngenesDT %>% select( paste0(ifelse(input$filtermethjvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% rank(.) 
   topngenesDT <- topngenesDT %>% arrange( desc(rank) ) %>% top_n(-input$filtertopjvenn, rank) # distinct(GeneName, .keep_all = TRUE)   comment remove les doublons pour les GeneName 
@@ -330,10 +300,6 @@ output$filtercompjvenn <- renderUI({
                                      'filter comp', choices = c("", input$selcontjv), selected = ""))
 })
 
-observe({
-  req(topngenesDT())
-  print(topngenesDT())
-})
 
 
 

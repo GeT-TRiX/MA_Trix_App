@@ -27,8 +27,6 @@ shinyServer(function(input, output,session) {
   #source(file.path("server", "csvFile.R"), local = TRUE)$value #
   csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE) #  Module for importing data
   
-  
-
   ##########################################
   ######## Widget update and info         ##
   ##########################################
@@ -40,7 +38,7 @@ shinyServer(function(input, output,session) {
   ##########################################
 
   source(file.path("server", "Datasummary.R"), local = TRUE)$value # Reactive function that return the indexes for the signficant genes
-  source(file.path("server", "Rendertable.R"), local = TRUE)$value # TODO All the output csv except for the heatmap page that are in heatmapshiny source
+  source(file.path("server", "Rendertable.R"), local = TRUE)$value #  All the output csv except for the heatmap page that are in heatmapshiny source
   source(file.path("server", "Checkboxgrphm.R"), local = TRUE)$value # Heatmap function for select specific groups
 
   ##########################################

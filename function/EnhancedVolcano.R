@@ -12,6 +12,7 @@ EnhancedVolcano <- function(
     displaylab = NULL,
     findfamily = NULL,
     topgenes = NULL,
+    regulationvolc = NULL,
     xlim = c(min(toptable[,x], na.rm=TRUE),
         max(toptable[,x], na.rm=TRUE)),
     ylim = c(0, max(-log10(toptable[,y]), na.rm=TRUE) + 5),
@@ -73,8 +74,8 @@ EnhancedVolcano <- function(
         (abs(toptable[,x])>FCcutoff)] <- "FC_P"
     toptable$Sig <- factor(toptable$Sig,
         levels=c("NS","FC","P","FC_P"))
-  
     
+  
     
     if(is.na(topgenes) && !is.na(displaylab) ){
       selectLab <- as.character(displaylab)
@@ -85,13 +86,18 @@ EnhancedVolcano <- function(
       selectLab <- ""
     }
     else{
-      #toptable$abs <- unlist(abs(toptable[x]))
-      toptable$abs <- unlist((toptable[x])) #positive
-     # toptable$abs <- ifelse(regsens == "both",  unlist(abs(toptable[x])) , unlist((toptable[x])))
-       
-      print(colnames(toptable))
+      if(regulationvolc == "both")
+        toptable$abs <-  unlist(abs(toptable[x]))
+      else if(regulationvolc == "up"){
+        toptable$abs <- unlist((toptable[x]))
+      }
+      else{
+        toptable$abs <- unlist((toptable[x]))
+      }
+        
       toptable$X <- rownames(toptable)
-      myval <- toptable %>%   dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,X,abs)  %>% top_n(.,-topgenes)
+      myval <- toptable %>%   dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,X,abs)  %>%  
+      {if (regulationvolc == "down") top_n(.,-topgenes) else top_n(.,topgenes)}
       myvalueind <- myval$X
       selectLab <- as.character(myval$GeneName)
       
@@ -108,12 +114,11 @@ EnhancedVolcano <- function(
       else return(v)
     })
     
+    
+    
     toptable$xvals <- toptable[,x]
     toptable$yvals <- toptable[,y]
-    
-    
-    
-    
+  
     
    if (!is.null(selectLab)) {
     if(!is.na(topgenes) && is.na(displaylab)&& is.na(findfamily)){
@@ -129,12 +134,11 @@ EnhancedVolcano <- function(
         toptable$lab <- names.new
       }
     }
+    
+    subdata = subset(toptable,
+                     toptable[,y]<pLabellingCutoff &
+                       abs(toptable[,x])>FCcutoff) 
 
-    
-    tot = subset(toptable,
-           toptable[,y]<pLabellingCutoff &
-             abs(toptable[,x])>FCcutoff)[,"lab"]
-    
     plot <- ggplot2::ggplot(toptable,
             ggplot2::aes(x=xvals, y=-log10(yvals))) +
 
@@ -199,15 +203,12 @@ EnhancedVolcano <- function(
             linetype=cutoffLineType,
             colour=cutoffLineCol,
             size=cutoffLineWidth)
-    
-    data = subset(toptable,
-           toptable[,y]<pLabellingCutoff &
-             abs(toptable[,x])>FCcutoff)
+   
     
     
     if (DrawConnectors == TRUE) {
         plot <- plot + ggrepel::geom_text_repel(max.iter = 100,
-            data=data,
+            data=subdata ,
             ggplot2::aes(label=subset(toptable,
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff)[,"lab"]),
@@ -216,7 +217,7 @@ EnhancedVolcano <- function(
                 segment.size = widthConnectors,
                 vjust = 1.0)
     } else if (DrawConnectors == FALSE && !is.null(selectLab)) {
-        plot <- plot + ggplot2::geom_text(data=data,
+        plot <- plot + ggplot2::geom_text(data=subdata,
             ggplot2::aes(label=subset(toptable,
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff)[,"lab"]),
@@ -224,7 +225,7 @@ EnhancedVolcano <- function(
 		check_overlap = T,
                 vjust = 1.0)
     } else if (DrawConnectors == FALSE && is.null(selectLab)) {
-        plot <- plot + ggplot2::geom_text(data=data,
+        plot <- plot + ggplot2::geom_text(data=subdata,
             ggplot2::aes(label=subset(toptable,
                 toptable[,y]<pLabellingCutoff &
                     abs(toptable[,x])>FCcutoff)[,"lab"]),
@@ -233,6 +234,7 @@ EnhancedVolcano <- function(
                 vjust = 1.0)
     }
     
-    mylist = list(plot, data)
+    if(!is.na(topgenes)) subdata <- filter(subdata, lab != "")
+    mylist = list(plot, subdata)
     return(mylist)
 }

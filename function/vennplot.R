@@ -400,26 +400,21 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F ) 
     
     }
     
-  
-  
-  
+
   mycont = gsub("-"," vs logFC_" ,mycont)
   colnames(dfinter)= lapply(colnames(dfinter),function(x){
     
     if(grepl("-",x))
-      x = gsub("-"," vs logFC_" ,x)
-    
+      x = gsub("-"," vs logFC_" , x)
     return(x)})
   
   
-  
   reshp <-melt(dfinter[1:inputtop, ],
-    id.vars = "GeneName",measure.vars = c (mycont),
-    variable.name = "Comparisons",value.name = "logFC") %>% na.omit()
+  id.vars = "GeneName",measure.vars = c (mycont),
+  variable.name = "Comparisons",value.name = "logFC") %>% na.omit()
   reshp <- droplevels(reshp)
   reshp$GeneName <-factor(reshp$GeneName, levels = unique(as.character(reshp$GeneName)))
-  
-  
+
   p <- ggplot(reshp, aes(
     x = GeneName,
     y = as.numeric(as.character(formatC(as.double(logFC), digits = 1, format = "f"))),
@@ -450,7 +445,6 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F ) 
       axis.text.y = element_text(size = 8, colour = "#808080"),
       legend.position="top"
     ) 
-    
   
   print(p)
   return( p)

@@ -225,6 +225,27 @@ chartofa = function(datach){
 }
 
 
+meanrankgenes  <- function(dtsign, stat , rankcomp=NULL, multcomp, regulationvolc=NULL, jvenn = F){
+  
+  selcomp <-  paste0(stat, multcomp )
+  options(datatable.optimize=1)
+  
+  for (i in selcomp) {
+    dtsign[[i]] = as.numeric(as.character(dtsign[[i]]))
+  }
+  
+  summarizetable <- dtsign %>% select(GeneName, paste0(stat, multcomp))  %>% 
+    as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% as.data.frame() 
+  
+  if(!jvenn){
+  summarizetable$rank <- summarizetable %>% select(paste0(stat , rankcomp) ) %>% rank(.) 
+  summarizetable <- if(regulationvolc == "down") summarizetable %>% arrange( desc(-rank) ) else summarizetable %>% arrange( desc(rank) )  
+  }
+  
+  return(summarizetable)
+}
+
+
 #' This function returns a data frame of the significant genes associated with the corresponding cluster index
 #'
 #' @param hmp01_All a heatmap object
@@ -271,6 +292,8 @@ heatmtoclust = function( hmp01_All, exprData, pval ,height= 5){
   return(heatmclust)
   
 }
+
+
 
 
 

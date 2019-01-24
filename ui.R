@@ -342,8 +342,21 @@ body <- dashboardBody(
                                                                                     "formvolc",label = NULL,
                                                                                     choices = c("png", "eps", "pdf"))))), 
                                               
-                                            plotOutput(outputId = "volcanoplot", height = 900)     
+                                            plotOutput(outputId = "volcanoplot", height = 900) , 
+                                            div(style="display:inline-block", id ="dontwanttoshow",
+                                                fluidRow(
+                                                
+                                                  column(5, style = "width:30%",
+                                                         
+                                                         downloadButton("savevolcplot", "Save your barplot" , style =
+                                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                                                  column(3 ,
+                                                         selectInput( "formvolcbar",label = NULL,
+                                                                      choices = c("png", "eps", "pdf"))))),
+                                            
+                                            plotOutput(outputId ="barplotvolc", height = 500)
                                             ,ns = NS("datafile"))
+                                            
                                    ), 
                                    tabPanel("Stripchart genes", value = "stripgenes", #style ="background-color: #ffffff;",
                                             conditionalPanel(condition = '!output.boolmark',
@@ -397,7 +410,7 @@ body <- dashboardBody(
                                inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
                                
                                
-                               downloadLink("downloadData", label = "download sample data", style="color:red; float:right;"),
+                               downloadLink("downloadData", label = "download sample data", style="color:orange; float:right;"),
                                br(),br(),
                                
                                
@@ -419,9 +432,24 @@ body <- dashboardBody(
                                
                            conditionalPanel(condition = '!output.boolmark',
                                box(id="boxpass2",title = strong("VOLCANO plot", style="font-size:25px;"), width = NULL, background = "light-blue",         
-                                                #strong("VOLCANO plot",style="font-size:18px;"),
-                                                br(),br(),
-                                                uiOutput("compvolc"),
+        
+                                   fluidRow(column(6,
+                                                uiOutput("compvolc")), 
+                                            column(6,
+                                                   selectInput("regulationvolc", #  Create a select list that can be used to choose a single or multiple items from a list of values.
+                                                               "Choose your regulation",
+                                                               choices = c("both","up", "down"))
+                                                   
+                                                   )),
+                                         
+                                   fluidRow(column(6, sliderInput('volcfc', "Choose your FC cutoff",min = 1, max=10, step = 1,value=1)),
+                                            column(6,sliderInput('volcpval', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05))),
+                                   fluidRow(column(6, sliderInput('volclab', "Choose your lab size",min = 1, max=6, step = 0.5,value=3.0)),
+                                            column(6,sliderInput('volcpt', "Choose your point size", min=0.5, max=3, step=0.1,value=1))),
+                                   
+                                                   
+                                                   
+                                                   
                                                 div(id = "mytextvolc",
                                                     p(" Highlight your selected gene(s) in the volcano plot with a comma-separated list of input ")
                                                 ),
@@ -429,21 +457,18 @@ body <- dashboardBody(
                                                 textInput(inputId = "fillvolc",label = NULL,value = NULL,
                                                           placeholder = "FOXP2,OT,AVPR1a",width = "100%"
                                                 ),
-                                                div(id = "mytextvolcgrep",
-                                                    p(" Highlight a family of gene in the volcano plot")
-                                                ),
+                                   fluidRow(column(6,
                                                 
-                                                textInput(inputId = "findfamily",label = NULL, value = NULL,
-                                                          placeholder = "Cyp",width = "100%"),
+                                                textInput(inputId = "findfamily",label = "Highlight a gene family", value = NULL,
+                                                          placeholder = "Cyp",width = "100%")),
+                                            column(6,
                                                 numericInput(
                                                   'topvolc',
-                                                  'Maximal number of genes by comparison(s)',
-                                                  NULL,min = 0,max = 5000),
-                                                fluidRow(column(6, sliderInput('volcfc', "Choose your FC cutoff",min = 1, max=10, step = 1,value=1)),
-                                                         column(6,sliderInput('volcpval', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05))),
-                                                fluidRow(column(6, sliderInput('volclab', "Choose your lab size",min = 1, max=6, step = 0.5,value=3.0)),
-                                                         column(6,sliderInput('volcpt', "Choose your point size", min=0.5, max=3, step=0.1,value=1)))#,
-                                                
+                                                  'Max number of genes',
+                                                  NULL,min = 0,max = 5000))), 
+                                   
+                                   uiOutput("addcompvolc")
+                                        
                                                 # ns = NS("datafile")
                                ), ns = NS("datafile"))
                     )
@@ -697,7 +722,7 @@ body <- dashboardBody(
 
                       tags$head(tags$style("#mytext p{font-weight: 500;font-size: 17px;line-height: 1.5;color: white;
                                            position: static;}
-                                           #mytext a{color: red;}"
+                                           #mytext a{color: orange;}"
                       )),
                       
                       div(
