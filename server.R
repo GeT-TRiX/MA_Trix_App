@@ -59,16 +59,10 @@ shinyServer(function(input, output,session) {
   ######## Venn page            ##
   ################################
 
-  source(file.path("server", "Venn.R"), local = TRUE)$value # Generate the vennlist and select the contrasts
+  source(file.path("server", "Venn.R"), local = TRUE)$value # Generate the vennlist and select the contrasts and send them to Jvenn
   #source(file.path("server", "Vennrender.R"), local = TRUE)$value # TODO add static Venn
   source(file.path("server", "Venninter.R"), local = TRUE)$value # Selected intersection Venn mean and barplot from the data table with the export. TODO remove not valuable info
   source(file.path("server", "Trackervenn.R"), local = TRUE)$value # Tracker for Venn
-
-  ################################
-  ######## Jvenn                ##
-  ################################
-
-  source(file.path("server", "Jvenn.R"), local = TRUE)$value # Jvenn reactive expression
 
   ################################
   ######## Venn GO              ##
