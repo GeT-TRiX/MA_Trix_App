@@ -20,7 +20,6 @@ output$comphm <- renderUI(
     inputId = "selcomphm" ,
     label =  "Choose your comparison",
     choices =  colnames(subsetstat()[[1]]),
-    #,selected = colnames(subsetstat()[, -1])
     inline = groupinline
   )
 )

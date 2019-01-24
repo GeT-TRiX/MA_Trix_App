@@ -11,20 +11,6 @@
 #########################################
 
 
-#' p is a reactive function that return a heatmap gplots object
-#'
-#' @param updateheatm  clickable input button
-#' @param hmobj$obj a reactive value object
-#'
-#' @return p an heatmap object isolate
-#'
-#' @export
-#'
-
-p <- eventReactive(input$updateheatm,{
-  isolate(hmobj$obj)
-})
-
 
 
 #' cutfinal is a reactive function that return heatmap or ggplot2 object

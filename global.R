@@ -11,6 +11,11 @@
 options(shiny.maxRequestSize=128000000)
 options(digits=3)
 
+userId <- Sys.getenv("SHINYPROXY_USERNAME")
+listofteam <- list("E01", "E05")
+
+
+
 cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"),
                      Stripchart=c(`Without boxplot`="LB", `With boxplot` = "WB"))
 

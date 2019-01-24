@@ -63,12 +63,4 @@ PCAplot <- function() {
 }
 
 
-# observe({
-#   req(PCAres())
-#   print(PCAres()$var)
-# })
-
-
-
-
 

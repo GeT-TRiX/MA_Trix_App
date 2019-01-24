@@ -18,9 +18,7 @@ observe({
     checkboxGroupInput(
       inputId = "groupca" ,
       label = NULL,
-      #label =  "Choose your group to visualize",
       choices =  levels(csvf()[[2]]$Grp),
-      #selected = levels(csvf()[[2]]$Grp),
       inline   = groupinline
     )
   )

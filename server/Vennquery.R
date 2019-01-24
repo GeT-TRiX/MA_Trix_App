@@ -69,12 +69,6 @@ davidtag<- reactive({req(Venncluster())
 acyclgo <- function() {
   req(davidtag())
   result = plotGOTermGraph(g=goDag(davidtag()),r=davidtag(), max.nchar=40, node.shape="ellipse")
-  # result = tryCatch({
-  #   plotGOTermGraph(g=goDag(davidtag()),r=davidtag(), max.nchar=40, node.shape="ellipse")
-  # }, warning = function(warning_condition) {
-  #   cat("web url is wrong, can't get\n")
-  #   return(F)
-  # })
   return(result)
 }
 

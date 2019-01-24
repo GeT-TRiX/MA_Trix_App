@@ -24,9 +24,8 @@ shinyServer(function(input, output,session) {
   ##                                                   ##
   #######################################################
 
-  #source(file.path("server", "csvFile.R"), local = TRUE)$value #
   csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE) #  Module for importing data
-  
+
   ##########################################
   ######## Widget update and info         ##
   ##########################################
@@ -60,7 +59,6 @@ shinyServer(function(input, output,session) {
   ################################
 
   source(file.path("server", "Venn.R"), local = TRUE)$value # Generate the vennlist and select the contrasts and send them to Jvenn
-  #source(file.path("server", "Vennrender.R"), local = TRUE)$value # TODO add static Venn
   source(file.path("server", "Venninter.R"), local = TRUE)$value # Selected intersection Venn mean and barplot from the data table with the export. TODO remove not valuable info
   source(file.path("server", "Trackervenn.R"), local = TRUE)$value # Tracker for Venn
 
@@ -79,7 +77,6 @@ shinyServer(function(input, output,session) {
   source(file.path("server", "Hidevent.R"), local = TRUE)$value # Hide parameters such as number of clusters ... and tooltip for dist
   source(file.path("server", "Heatmapshiny.R"), local = TRUE)$value # Generate the heatmap
   source(file.path("server", "Trackerhm.R"), local = TRUE)$value # Tracker for heatmap parameters
-  source(file.path("server", "Computemean.R"), local = TRUE)$value # Mean for heatmap selected groups
   source(file.path("server", "GetDEgenes.R"), local = TRUE)$value # Subset dataframe restable (stat, comp and deg to list of dataframes)
   source(file.path("server", "Backgroundcolor.R"), local = TRUE)$value # Background color for the heatmap
   source(file.path("server", "Colorforhm.R"), local = TRUE)$value # Color for each different group in the hm
@@ -103,7 +100,7 @@ shinyServer(function(input, output,session) {
 
   source(file.path("server", "Shinychat.R"), local = TRUE)$value # Chat for the app associated with the file Chat.rds
   source(file.path("server", "Groupstripshiny.R"), local = TRUE)$value # Utilities method (packages citations, fc step, zipdownload and panel redirection and project name)
-  
-  
-  
+
+
+
 })

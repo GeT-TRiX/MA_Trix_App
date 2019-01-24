@@ -23,13 +23,13 @@
 global <- reactiveValues(clicked = FALSE)
 
 observe({
-  if(length(input$heatm)){ # giving a length once it's clicked
+  if(length(input$heatm)){
     if(input$heatm) global$clicked <- TRUE
   }
 })
 
 
-output$button <-  renderUI({ # if button is clicked changed his style.css
+output$button <-  renderUI({ 
   if(!is.null(input$heatm) & global$clicked){
     shiny::actionButton("heatm", "Update Heatmap", icon = icon("repeat"), style = "color: #fff; background-color: #b77033; border-color: #b77033")
   }

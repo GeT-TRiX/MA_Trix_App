@@ -19,13 +19,6 @@ myreorderwk <- reactive({ ## add GeneName
 })
 
 
-# myreorderwk <- reactive({ ## add GeneName
-#   
-#   TODO return a sorted table with the colnames = Groups & Samples
-#   
-# })
-
-
 
 filenamestrip <- reactive({
   req(csvf(),projectname())
@@ -38,15 +31,6 @@ filenamestrip <- reactive({
   
 })
 
-# filenamestrip <- reactive({
-#
-#   TODO return past vector of the project name
-#
-# })
-
-
-#final filter based on slice() select rownames
-
 
 
 filterwkingset <- reactive({   
@@ -57,11 +41,6 @@ filterwkingset <- reactive({
 })
 
 
-# filterwkingset <- reactive ({
-#   
-#   TODO return a round filtered table (ProbeName,, GeneName with group reorder for the significant  genes)
-# 
-# })
 
 
 output$orderedwk <- DT::renderDataTable(DT::datatable(filterwkingset(), 
@@ -84,11 +63,6 @@ selection = 'single',
 rownames= FALSE ))
 
 
-# output$orderedwk <- DT::renderDataTable(DT::datatable(
-#
-#   TODO render the filtered table 
-#
-# ))
 
 
 
@@ -108,13 +82,6 @@ getDegenes <- reactive({
 })
 
 
-# getDegenes <- reactive({
-#   
-#   TODO return a list of index with the decTestTRiX function
-#   
-# })
-
-
 
 
 callstripgenes <- reactive({
@@ -128,25 +95,11 @@ callstripgenes <- reactive({
   
 })
 
-# callstripgenes <- reactive({
-# 
-#   TODO call the function to compute the plot
-#   
-# })
-
-
 
 output$renderstripgenes <- renderPlot({
   req(callstripgenes())
   plotOutput(callstripgenes())
 })
-
-
-# output$renderstripgenes <- renderPlot({
-#   
-#   TODO render plot strip gene
-#
-# })
 
 
 output$savestriplot <- downloadHandler(filename <- function() {
@@ -201,9 +154,4 @@ output$selected_stripgene <- renderText({
 })
 
 
-# output$savestriplot <- downloadHandler(filename <- function() {
-#   
-#   TODO add donwload button 
-#   
-# })
 
