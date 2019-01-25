@@ -225,6 +225,10 @@ body <- dashboardBody(
                        box(
                          title = "What's new in MATRiX", width = NULL, status = "primary",
                          div(style = 'overflow-y: scroll; height: 500px',
+                             addNews("Jan 25th 2019", "Bug", "Correct david$getSpecieNames (Specieshm and Speciesvenn)"),
+                             addNews("Jan 25th 2019", "Data", "Users can now register as a team and load their data directly from the server (only for 2019 projects and logs are provided in report)"),
+                             addNews("Jan 25th 2019", "MATRiX", "MATRiX is now running with Shinyproxy (Spring + Docker)"),
+                             addNews("Jan 21th 2019", "Increased exploration", "Add features to filter the top n based on the FDR/RAW and logFC, Generate strip chart for specific genes and barplot for Volcano plot"),
                              addNews("Jan 11th 2019", "Data", "MATRiX is now compatible with Microarray, ChIP-seq and RNA-seq data"),
                              addNews("Nov 30th 2018", "MATRiX", "Add tootlip for distance, its now possible to export acyclic graphs in pdf and eps, correct bugs for classification enrichment with 0 nodes by inactivating donwload button"),
                              addNews("Nov 29th 2018", "Venn Diagram/HTML", "Correct bugs now venn diagram table is based on genes and not probes."),

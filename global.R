@@ -12,8 +12,7 @@ options(shiny.maxRequestSize=128000000)
 options(digits=3)
 
 userId <- Sys.getenv("SHINYPROXY_USERNAME")
-listofteam <- list("E01", "E05")
-
+root <- ifelse(userId != "", paste("/root/MA_Trix_App/data/", userId, sep = ""), "/home/fsoubes/dockerize_MATRiX/MA_Trix_App/data/gettrix")
 
 
 cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"),

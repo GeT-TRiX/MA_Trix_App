@@ -113,7 +113,7 @@ davidwebservice <- eventReactive(input$GO, {
                        invokeRestart("muffleWarning")
                    
                    tryCatch({
-                     mygodavid = probnamtoentrez(hmobj$hm, Species()[[1]]) %>%
+                     mygodavid = probnamtoentrez(hmobj$hm, Specieshm()[[1]]) %>%
                        davidquery(input$Species, input$catinfo) %>% withCallingHandlers(error = timeoutdav)
                    }, warning = function(e) {
                      warning("David's server is busy")
@@ -157,49 +157,7 @@ observe({
 })
 
 
-# output$clustgo <- renderPrint({ 
-#   validate(
-#     need(csvf(), 'You need to import data to visualize the data!') %next%
-#       need(input$cutgo,
-#         'You need to click on the heatmap button! then on the run GO button'
-#       )
-#   )
-#   gores$obj <- isolate(testad())
-#   
-#   req(input$cutgo, input$slidergo)
-#   x <- input$cutgo
-#   if (!is.null(testad()[[as.integer(x)]])) {
-#     for (go in input$slidergo[[1]]:input$slidergo[[2]]) {
-#       if (Ontology(testad()[[as.integer(x)]][[1]][[go]]) == input$onto) {
-#         cat(paste("GOID:", (GOID(
-#           gores$obj[[as.integer(x)]][[1]][[go]]
-#         ))))
-#         cat("\n")
-#         cat(paste("Term:", (Term(
-#           gores$obj[[as.integer(x)]][[1]][[go]]
-#         ))))
-#         cat("\n")
-#         cat(paste("Ontology:", (Ontology(
-#           gores$obj[[as.integer(x)]][[1]][[go]]
-#         ))))
-#         cat("\n")
-#         cat(paste("Definition:", (Definition(
-#           gores$obj[[as.integer(x)]][[1]][[go]]
-#         ))))
-#         cat("\n")
-#         cat(paste("Synonym:", (Synonym(
-#           gores$obj[[as.integer(x)]][[1]][[go]]
-#         ))))
-#         cat("\n")
-#         
-#         cat("--------------------------------------\n")
-#       }
-#     }
-#   }
-#   else
-#     print("Sorry, no enriched genes for this cluster")
-#   
-# })
+
 
 
 #' myentreztosymb is a reactive function which aim is to convert entrez ID to GENE  the selected rows in the output data table
@@ -224,7 +182,7 @@ myentreztosymb <- reactive({
   if(length(myselectedrows["Genes"][[1]])>0){
     
     myentreztosymb = lapply(1:NROW(myselectedrows),function(x){
-      myselectedrows$Genes[[x]] %>% strsplit( ", ") %>% unlist() %>% mget(x= .,envir = Species()[[2]],ifnotfound = NA) %>%  unlist() %>%
+      myselectedrows$Genes[[x]] %>% strsplit( ", ") %>% unlist() %>% mget(x= .,envir = Specieshm()[[2]],ifnotfound = NA) %>%  unlist() %>%
         unique() %>% cbind(myselectedrows$Term[[x]]) %>% as.data.frame() %>% setNames(., c("Genes", "Term"))
     
     })
@@ -324,43 +282,44 @@ output$savegohmdavxlsx = downloadHandler(filename <- function() { paste0(basenam
 #'
 
 
-Species <- reactive({
-  if (input$Species == "Homo sapiens" || input$Speciesvenn == "Homo sapiens") {
+Specieshm <- reactive({
+  if (input$Species == "Homo sapiens" ) {
     # human
     library("org.Hs.eg.db")
     return(list(org.Hs.egALIAS2EG, org.Hs.egSYMBOL))
   }
-  else if (input$Species == "Mus musculus" || input$Speciesvenn == "Mus musculus" ) {
+  else if (input$Species == "Mus musculus"  ) {
     # Mouse
     library("org.Mm.eg.db")
     return( list(org.Mm.egALIAS2EG, org.Mm.egSYMBOL))
   }
-  else if (input$Species == "Danio rerio" || input$Speciesvenn == "Danio rerio") {
+  else if (input$Species == "Danio rerio" ) {
     #Zebra fish
     library("org.Dr.eg.db")
     return(list(org.Dr.egALIAS2EG, org.Dr.egSYMBOL))
   }
-  else if (input$Species == "Gallus gallus" || input$Speciesvenn == "Gallus gallus") {
+  else if (input$Species == "Gallus gallus" ) {
     # chicken
     library("org.Gg.eg.db")
     return(list(org.Gg.egALIAS2EG, org.Gg.egSYMBOL))
   }
-  else if (input$Species == "equCab2" || input$Speciesvenn == "equCab2") {
+  else if (input$Species == "equCab2" ) {
     # horse
     library("org.Gg.eg.db")
     return(list(org.Gg.eg.dbALIAS2EG))
   }
-  else if (input$Species == "Caenorhabditis elegans" || input$Speciesvenn == "Caenorhabditis elegans") {
+  else if (input$Species == "Caenorhabditis elegans" ) {
     # cC elegans
     library("org.Ce.eg.db")
+    
     return(list(org.Ce.egALIAS2EG, org.Ce.egSYMBOL))
   }
-  else if (input$Species == "Rattus norvegicus" || input$Speciesvenn == "Rattus norvegicus") {
+  else if (input$Species == "Rattus norvegicus" ) {
     # Rat
     library("org.Rn.eg.db")
     return(list(org.Rn.egALIAS2EG, org.Rn.egSYMBOL ))
   }
-  else if (input$Species == "Sus scrofa" || input$Speciesvenn == "Sus scrofa") {
+  else if (input$Species == "Sus scrofa") {
     # Pig
     library("org.Ss.eg.db")
     return(list(org.Ss.egALIAS2EG, org.Ss.egSYMBOL))

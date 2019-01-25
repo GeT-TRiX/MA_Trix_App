@@ -31,10 +31,10 @@ DftoHighjson <- function(data, param) {
   unifiedData$z <-  as.numeric(as.character(unifiedData$percent))
   
   
-  unifiedData$GO  = sapply(unifiedData$Term, FUN= function(x) if(grepl("^mmu", x)) return(strsplit(as.character(x), ":")%>% unlist() %>% .[1]) 
+  unifiedData$GO  = sapply(unifiedData$Term, FUN= function(x) if(grepl("^mmu|^rno|^hsa|^ssc|^ptr|^gga|^cel|^ecb", x)) return(strsplit(as.character(x), ":")%>% unlist() %>% .[1]) 
                         else return(strsplit(as.character(x), "~")%>% unlist() %>% .[1])) 
   
-  unifiedData$Term  = sapply(unifiedData$Term, FUN= function(x) if(grepl("^mmu", x)) return(strsplit(as.character(x), ":")%>% unlist() %>% .[2]) 
+  unifiedData$Term  = sapply(unifiedData$Term, FUN= function(x) if(grepl("^mmu|^rno|^hsa|^ssc|^ptr|^gga|^cel|^ecb", x)) return(strsplit(as.character(x), ":")%>% unlist() %>% .[2]) 
                         else return(strsplit(as.character(x), "~")%>% unlist() %>% .[2])) 
   
   unifiedData$Pvalue =  format(tempData$pvalue, digits = 3)

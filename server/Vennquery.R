@@ -118,7 +118,7 @@ Venncluster <- eventReactive(input$GOvenn, {
                        invokeRestart("muffleWarning")
 
                    tryCatch({
-                     mygodavid = probnamtoentrezvenn(vennfinal()[[1]]$GeneName , Species()[[1]]) %>%
+                     mygodavid = probnamtoentrezvenn(vennfinal()[[1]]$GeneName , Speciesvenn()[[1]]) %>%
                      davidqueryvenn(input$Speciesvenn) %>% withCallingHandlers(error = timeoutdav)
                    }, warning = function(e) {
 
@@ -131,3 +131,59 @@ Venncluster <- eventReactive(input$GOvenn, {
     pdf(NULL)
     return(mygodavid)
   })
+
+
+#' Species is a reactive function which aim is to return annotated packages for a specific genome
+#'
+#' @param Species character input
+#' @param Speciesvenn character input
+#'
+#' @return
+#' @export
+#'
+
+
+Speciesvenn <- reactive({
+  if ( input$Speciesvenn == "Homo sapiens") {
+    # human
+    library("org.Hs.eg.db")
+    return(list(org.Hs.egALIAS2EG, org.Hs.egSYMBOL))
+  }
+  else if ( input$Speciesvenn == "Mus musculus" ) {
+    # Mouse
+    library("org.Mm.eg.db")
+    return( list(org.Mm.egALIAS2EG, org.Mm.egSYMBOL))
+  }
+  else if (input$Speciesvenn == "Danio rerio") {
+    #Zebra fish
+    library("org.Dr.eg.db")
+    return(list(org.Dr.egALIAS2EG, org.Dr.egSYMBOL))
+  }
+  else if (input$Speciesvenn == "Gallus gallus") {
+    # chicken
+    library("org.Gg.eg.db")
+    return(list(org.Gg.egALIAS2EG, org.Gg.egSYMBOL))
+  }
+  else if ( input$Speciesvenn == "equCab2") {
+    # horse
+    library("org.Gg.eg.db")
+    return(list(org.Gg.eg.dbALIAS2EG))
+  }
+  else if (input$Speciesvenn == "Caenorhabditis elegans") {
+    # cC elegans
+    library("org.Ce.eg.db")
+    
+    return(list(org.Ce.egALIAS2EG, org.Ce.egSYMBOL))
+  }
+  else if ( input$Speciesvenn == "Rattus norvegicus") {
+    # Rat
+    library("org.Rn.eg.db")
+    return(list(org.Rn.egALIAS2EG, org.Rn.egSYMBOL ))
+  }
+  else if (input$Speciesvenn == "Sus scrofa") {
+    # Pig
+    library("org.Ss.eg.db")
+    return(list(org.Ss.egALIAS2EG, org.Ss.egSYMBOL))
+  }
+  
+})

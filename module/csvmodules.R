@@ -86,9 +86,8 @@ dirModuleUI = function(id) {
 
 # Module server function
 csvFile <- function(input, output, session, stringsAsFactors) {
-
-  #root = c(data = "//home/fsoubes/MA_Trix_App/data")
-  root = c(data = "//home/franck1337/MA_Trix_App/data")
+  
+  root = c(data = root)
   shinyFileChoose(input, 'files', roots = root, session = session,filetype=c("csv"))
   shinyDirChoose(input, "directory", roots = root, session = session)
   shinyFileSave(input, "fileSave", roots = root, session = session)

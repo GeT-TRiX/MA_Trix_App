@@ -168,22 +168,23 @@ lapply(1:NROW(myentz), function(x)
 #'
   
 davidquery <- function(entrezids, species, mycat) {
+  
   test = lapply(1:NROW(entrezids), function(x) {
     david <- DAVIDWebService$new(email = "get-trix@genotoul.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
     RDAVIDWebService::setTimeOut(david, 90000)
-    result <-
-      addList(
+    result <- addList(
         david,
         entrezids[[x]],
         idType = "ENTREZ_GENE_ID",
         listName = "testList",
         listType = "Gene"
-      )
-    
+    )
+   
     selectedSpecie = (species)
     specieLocation = grep(selectedSpecie, RDAVIDWebService::getSpecieNames(david))
+    print(RDAVIDWebService::getSpecieNames(david))
     setCurrentSpecies(object = david, species = specieLocation)
-    setAnnotationCategories(david, mycat) #c("GOTERM_MF_ALL", "GOTERM_CC_ALL", "GOTERM_BP_ALL"))  "KEGG_PATHWAY"
+    setAnnotationCategories(david, mycat)
     mydav = as.data.frame(cbind(getFunctionalAnnotationChart(object=david, threshold=1, count=0L)))  %>%
       filter(Count>1) %>% arrange(desc(Count))  %>% dplyr::select( Category:Count, List.Total:Pop.Total,X.,PValue,Genes,Fold.Enrichment, Bonferroni, Benjamini)
     colnames(mydav)[[7]] = "percent"
