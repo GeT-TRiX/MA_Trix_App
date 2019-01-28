@@ -152,7 +152,7 @@ content <- function(file) {
 
 vocfilt <- reactive({
   req(csvf(), input$topvolc,  volcanocomp())
-  volcobj$top <- meanrankgenes(isolate(volcobj$dt), "logFC_" , input$volcacomp,  volcanocomp(), input$regulationvolc  )
+  volcobj$top <- meanrankgenes(volcobj$dt, "logFC_" , input$volcacomp,  volcanocomp(), input$regulationvolc  )
   return(volcobj$top)
 })
 
