@@ -200,8 +200,8 @@ observe({
       )
     else
       eps(file,
-          width = 7,
-          height = 9)
+          width = 5,
+          height = 7)
     
     if (!is.null(subsetDEG()[[1]]))
       withProgress(message = 'Saving heatmap:',
@@ -210,7 +210,7 @@ observe({
                      for (i in 1:n) {
                        incProgress(1 / n, detail = "Please wait...")
                      }
-                     heatmapfinal(isplot = F,israstering =myras)
+                     heatmapfinal(isplot = F, israstering =myras)
                    })
     dev.off()
     

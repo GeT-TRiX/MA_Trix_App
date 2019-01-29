@@ -124,7 +124,6 @@ $(document).ready(function () {
 			})
 
 
-
 			$('[id^="clear"]').click(function() {
 				let index = $(this).attr("id").split("_")[1];
 				$("#area" + index).val("");
@@ -143,39 +142,34 @@ $(document).ready(function () {
 			$("#venn-type").change(function() {
 				updateJvenn();
 			});
+			
 				$("#ds_yes").click(function() {
 				displayStat = true;
 				Shiny.onInputChange("mystat",displayStat);
-				updateJvenn();
 			});
 			$("#ds_no").click(function() {
 				displayStat = false;
 				Shiny.onInputChange("mystat",displayStat);
-				updateJvenn();
 			});
 
 			$("#dsw_yes").click(function() {
 				displaySwitch = true;
 				Shiny.onInputChange("dispswitch",displaySwitch);
-				updateJvenn();
 			});
 			$("#dsw_no").click(function() {
 				displaySwitch = false;
 				Shiny.onInputChange("dispswitch",displaySwitch);
-				updateJvenn();
 			});
 
 			$("#dm_classic").click(function() {
 				displayMode = "classic";
         Shiny.onInputChange("updamod",displayMode);
-				updateJvenn();
 			});
 
 
 			$("#dm_edwards").click(function() {
 				displayMode = "edwards";
 				Shiny.onInputChange("updamod",displayMode);
-				updateJvenn();
 			});
 
 			$('[id^="ff"]').click(function() {
@@ -186,7 +180,6 @@ $(document).ready(function () {
 			$('[id^="fs"]').click(function() {
 				fontSize = $(this).html();
 				Shiny.onInputChange("myfont",fontSize);
-				updateJvenn();
 			});
 
 

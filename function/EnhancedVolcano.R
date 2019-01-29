@@ -139,6 +139,10 @@ EnhancedVolcano <- function(
                      toptable[,y]<pLabellingCutoff &
                        abs(toptable[,x])>FCcutoff) 
 
+    
+    
+    
+    
     plot <- ggplot2::ggplot(toptable,
             ggplot2::aes(x=xvals, y=-log10(yvals))) +
 

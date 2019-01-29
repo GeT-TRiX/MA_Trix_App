@@ -93,9 +93,7 @@ var defaultOptions = {
     },
 
     tooltip: {
-        //valueDecimals: 2,
-        //yDecimals: 0,
-        //xDecimals: 1,
+
         useHTML: true,
         headerFormat: '<table>',
         pointFormat: '<tr><th colspan="2"><h3>{point.term}</h3></th></tr>' +
