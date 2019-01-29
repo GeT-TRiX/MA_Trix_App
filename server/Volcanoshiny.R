@@ -29,7 +29,14 @@ family_input <- reactive({
 })
 
 
-family_d <- shiny::debounce(family_input, 750) # Delay input debounche also pour search genes
+family_d <- shiny::debounce(family_input, 1200) # Delay input debounche also pour search genes
+
+top_volc <- reactive({
+  input$topvolc
+})
+
+
+top_volcd <- shiny::debounce(top_volc, 1000) # Delay input debounche also pour search genes
 
 
 
@@ -88,7 +95,7 @@ volcano <- reactive({
   req(csvf(),input$volcacomp )
   EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) ,
                   y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp),
-                  topgenes = input$topvolc,DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),
+                  topgenes = top_volcd(),DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),
                   pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = input$volcpt,transcriptLabSize = input$volclab,
                   title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", findfamily =  ifelse(familytopdisp() == "" , NA,familytopdisp()),regulationvolc = input$regulationvolc, 
                   displaylab = ifelse(genetodisplay() =="", NA, genetodisplay()),legendLabSize = 10,
@@ -151,7 +158,7 @@ content <- function(file) {
 
 
 vocfilt <- reactive({
-  req(csvf(), input$topvolc,  volcanocomp())
+  req(csvf(), top_volcd(),  volcanocomp())
   volcobj$top <- meanrankgenes(volcobj$dt, "logFC_" , input$volcacomp,  volcanocomp(), input$regulationvolc  )
   return(volcobj$top)
 })
@@ -165,7 +172,7 @@ volcplototp <- reactive({
   req(vocfilt())
   
   selcomp <-  paste0("logFC_",  volcanocomp())
-  myplot <- topngenes(vocfilt(), selcomp , input$topvolc  ,meandup = "genes")
+  myplot <- topngenes(vocfilt(), selcomp ,top_volcd()  ,meandup = "genes")
   return(myplot)
 })
 
@@ -175,7 +182,7 @@ volcplototp <- reactive({
 observe({
 
 output$barplotvolc <- renderPlot({
-  validate(need(input$topvolc, 'Add an input in the max number of genes widget!'))
+  validate(need(top_volcd(), 'Add an input in the max number of genes widget!'))
     req(volcplototp())
     plotOutput(volcplototp())
   })
