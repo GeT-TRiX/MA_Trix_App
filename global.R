@@ -96,6 +96,20 @@ palette = brewer.pal(8,"Dark2") %>%
   unlist()
 
 
+# downloadButton <- function(outputId, label = "Download", class = NULL, ...) {
+#   aTag <-
+#     tags$a(
+#       id = outputId,
+#       class = paste('btn btn-default shiny-download-link', class),
+#       href = '',
+#       target = '_blank',
+#       download = NA,
+#       icon("download"),
+#       label,
+#       ...
+#     )
+# }
+
 
 textInputRow<-function (inputId, label, value = "") {
   div(style="display:inline-block",

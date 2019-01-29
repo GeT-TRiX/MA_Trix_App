@@ -13,24 +13,24 @@
 
 
 makeselectInputbutton <- function(selectInput, buttonId, buttonLabel, size = "default", style = "default"){
-  size <- switch(size, `extra-small` = "btn-xs", small = "btn-sm", 
+  size <- switch(size, `extra-small` = "btn-xs", small = "btn-sm",
                  large = "btn-lg", "default")
   style <- paste0("btn-", style)
-  
+
   tags$script(HTML(paste0("
                           $(document).ready(function() {
                           var inputElements = document.getElementsByTagName('input');
                           for(var i = 0; i < inputElements.length; i++){
                           var input = inputElements[i];
-                          
+
                           if(input.getAttribute('value') == '", checkboxValue, "'){
-                          
+
                           var button = document.createElement('button');
                           button.setAttribute('id', '", buttonId, "');
                           button.setAttribute('type', 'button');
                           button.setAttribute('class', '", paste("btn action-button", style , size), "');
                           button.appendChild(document.createTextNode('", buttonLabel, "'));
-                          
+
                           input.parentElement.parentElement.appendChild(button);
                           };
                           }
@@ -54,16 +54,16 @@ dbHeader$children[[2]]$children <-  tags$a(tags$img(src='matrix.png',height='40'
                                            tags$h3("MATRiX",style="font-family:Purisa; margin:15px 25px 5px 0;color:white; "))
 
 
-sidebar <- dashboardSidebar( 
-  
+sidebar <- dashboardSidebar(
+
   useShinyjs(),
   tags$style(type="text/css", inactivity),
   shinyjs::extendShinyjs(text = shinyjscode),
-  
+
   tags$head(
     tags$script(src = "custom.js")),
   div(id = "loading-content-bar",p()),
-  
+
   div(
     id = "matrixapp",
     sidebarMenu(id = "side",
@@ -74,7 +74,7 @@ sidebar <- dashboardSidebar(
                 menuItem("Heatmap", tabName = "Heatmap", icon = icon("line-chart")),
                 menuItemOutput("dymMenu"),
                 collapsed = TRUE,
-                
+
                 tags$a(img(
                   src = "GeT_logo-RVB.png",
                   height = 50,
@@ -87,7 +87,7 @@ sidebar <- dashboardSidebar(
                   width = 168,
                   style = "position:absolute;bottom:0;margin:0 0 15px 10px;"
                 ) , href="https://www6.toulouse.inra.fr/toxalim", target="_blank")
-                
+
     )
   )
 )
@@ -100,7 +100,7 @@ sidebar <- dashboardSidebar(
 ###############################
 
 body <- dashboardBody(
-  
+
   #tags$head(includeScript("google-analytics.js")),
   tags$style(type="text/css", inactivity),
   useShinyjs(),
@@ -112,7 +112,7 @@ body <- dashboardBody(
                   .tabbable > .nav > li > a[data-value='hmpan'] {background-color: red;   color:white}
                   .tabbable > .nav > li > a[data-value='cutpan'] {background-color: blue;  color:white}
                   ")),
-    
+
   includeCSS("./css/style.css"),
   div(
     id = "loading-content",
@@ -126,17 +126,17 @@ body <- dashboardBody(
               fluidRow(
                 column(width=9,
                        div(style="width:100% ;max-width: 1500px; height: 1500px max-height: 2200px;",id = "homepage",
-                           
+
                            tabBox(title="Welcome to MATRiX", width=NULL,id = "homepage",
-                                  
+
                                   tabPanel("About", style = "background-color: #ffffff;",
                                            tags$h3("MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics."),
                                            p("This project initiated by Yannick Lippi aims to facilitate access to biologist in order to publish graphs such as heatmap, PCA or Venn diagram related to specifics data produced by TRiX's facility.", tags$br(),"
-                                             
+
                                              MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray data and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).",tags$br(),"
-                                             
+
                                              MATRiX app is working with specific data produced by the limma package, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN. This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/sampleData.zip)."),
-                                           
+
                                            p("Hereafter is the global workflow passing by the statistical analysis to the visualization:"),tags$br(),
                                            div(id="workflow",
                                                tags$p(tags$img(src = "whatmaen.png",style="width: 100%; height: 100%")))
@@ -149,11 +149,11 @@ body <- dashboardBody(
                                            p("Thanks to the Toxalim's team BioToMyc & TIM and especially to the following people for their helps reporting errors, proposing new features and beta testing of MATRiX:"),
                                            p("Laura Costes,", "Anne Fougerat,","Claire Naylies,", "Philippe Pinton,","Arnaud Polizzi," ,"Marion Regnier," , "Sandrine Ellero-Simatos,","Sarra Smati."),
                                            p("Special Thanks to Didier Laborie for installing the virtual machine with Ubuntu and for answering my questions")
-                                           
+
                                   ),
                                   tabPanel("Packages",
                                            tags$h3("If you are using MATRiX in your work, you can cite some of the packages by clicking on the link down below."),
-                                           
+
                                            actionLink("session",
                                                       "Print version information about R, the OS and attached or loaded packages."),
                                            br(), br(), br(),
@@ -165,9 +165,9 @@ body <- dashboardBody(
                                                "#entry {width: 100%;position: relative;left: 4%;}
                                                #users ul li {font-family: 'Inconsolata', cursive;font-weight: 500;line-height: 1.5;color: white;position: static;font-size: 18px;}
                                                #users a{color: red;} #users p{color:white;}")),
-                                           
+
                                            includeCSS("www/shinychat.css"),
-                                           
+
                                            # And custom JavaScript -- just to send a message when a user hits "enter"
                                            # and automatically scroll the chat window for us. Totally optional.
                                            includeScript("www/sendOnEnter.js"),
@@ -179,7 +179,7 @@ body <- dashboardBody(
                                                            class = "row-fluid",
                                                            # Create a spot for a dynamic UI containing the chat contents.
                                                            uiOutput("chat"),
-                                                           
+
                                                            # Create the bottom bar to allow users to chat.
                                                            fluidRow(
                                                              div(class="span8",
@@ -190,7 +190,7 @@ body <- dashboardBody(
                                                              )
                                                            )
                                                          )))
-                                             
+
                                            )),
                                   tabPanel("Video",
                                            div( id="video",
@@ -198,12 +198,12 @@ body <- dashboardBody(
                                                   column(8, align="center", offset = 2,
                                                          tags$iframe(src = "https://www.youtube.com/embed/lfI0zRYzeJs?vq=hd1080", width="960", height="540", align= "middle", frameborder="0",allowfullscreen ="1" )
                                                   ))))
-                                  
+
                                            ))),
                 column(width=3,
                        div(id="pass",style = "word-wrap: break-word;",
                            box(id="boxpass",title = strong("Session information", style="font-size:25px;"), width = NULL, background = "light-blue",
-                               
+
                                # The right sidebar
                                # Let the user define his/her own ID
                                textInput("user", "Your User ID:", value=""),
@@ -221,7 +221,7 @@ body <- dashboardBody(
                                             "here"))
                                ))
                        ),
-                       
+
                        box(
                          title = "What's new in MATRiX", width = NULL, status = "primary",
                          div(style = 'overflow-y: scroll; height: 500px',
@@ -259,11 +259,11 @@ body <- dashboardBody(
                              addNews("May 29th 2018","beta-test","The service will be made available once the beta test phase is officially completed.")
                              )
                              )
-                       
+
                 )
                            )
                 ),
-      
+
       tabItem(tabName = "Upload",
               bsAlert("alert"),
               tags$style(type='text/css', ".well { max-width: 2em; }"),
@@ -278,7 +278,7 @@ body <- dashboardBody(
                 column(width=9,
                        div( style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;" , id = "upload",
                             tabBox(title="Upload/Visualize your data", width=NULL,id = "upload",
-                                   
+
                                    tabPanel("Import your data", style = "background-color: #ffffff;",
                                             conditionalPanel(condition = 'output.boolmark', #Hide or Show event depending on the loading data success or failure
                                                              tags$h1("How to import ?"),
@@ -289,13 +289,13 @@ body <- dashboardBody(
                                                                tags$li("The final step consist to select all the data at once and then confirm the selection by clicking on the open button."),
                                                                tags$li("A green message will then appear to confirm the data loading with a summary table.")
                                                              ),
-                                                             
+
                                                              tags$p(
                                                                tags$img(src = "pData.png"),
                                                                tags$img(src = "restable.png"),
                                                                tags$img(src = "workingset.png")
                                                              ),
-                                                             
+
                                                              tags$h1("Tips"),
                                                              tags$ul(
                                                                tags$li("You can select a region by handling the left click button if the files are stacked together, if it's not the case you can select the different files by maintening the Ctrl button and clicked on the files.")
@@ -307,9 +307,9 @@ body <- dashboardBody(
                                                              ,ns = NS("datafile")
                                             ),
                                             conditionalPanel(condition = '!output.boolmark',
-                                                             
+
                                                              textOutput("myFileName"),
-                                                             
+
                                                              column(12, h3(
                                                                "This table summarizes the number of significant genes depending on the p-value treshold choosen with the slider bar"
                                                              ),
@@ -320,23 +320,23 @@ body <- dashboardBody(
                                                                   ),
                                                                   dataTableOutput("data_summary") # render a renderTable or renderDataTable within an application page
                                                              )),
-                                                             
+
                                                              column(12,
                                                                     h3("This table shows the samples with the corresponding groups"),
                                                                     dataTableOutput("designtab")
-                                                             ), 
+                                                             ),
                                                              column(12,
                                                                     h3("Show the actual data frame with the columns selected"),
                                                                     dataTableOutput("subsetgroup_hm")
                                                              )
                                                              ,ns = NS("datafile")
-                                                             
+
                                             )),
-                                   
+
                                    tabPanel("Volcano plot", style = "background-color: #ffffff;",
-                                            
+
                                             conditionalPanel(condition = '!output.boolmark',
-                                                             
+
                                                              div(style="display:inline-block;",
                                                                  fluidRow(column(3, style="width:34.0%;",
                                                                                  downloadButton("savevolcano", "Save your Volcano plot" , style =
@@ -344,35 +344,35 @@ body <- dashboardBody(
                                                                           column( 3, style="width:20%;",
                                                                                   selectInput(
                                                                                     "formvolc",label = NULL,
-                                                                                    choices = c("png", "eps", "pdf"))))), 
-                                              
-                                            plotOutput(outputId = "volcanoplot", height = 900) , 
+                                                                                    choices = c("png", "eps", "pdf"))))),
+
+                                            plotOutput(outputId = "volcanoplot", height = 900) ,
                                             div(style="display:inline-block", id ="dontwanttoshow",
                                                 fluidRow(
-                                                
+
                                                   column(5, style = "width:30%",
-                                                         
+
                                                          downloadButton("savevolcplot", "Save your barplot" , style =
                                                                           "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
                                                   column(3 ,
                                                          selectInput( "formvolcbar",label = NULL,
                                                                       choices = c("png", "eps", "pdf"))))),
-                                            
+
                                             plotOutput(outputId ="barplotvolc", height = 500)
                                             ,ns = NS("datafile"))
-                                            
-                                   ), 
+
+                                   ),
                                    tabPanel("Stripchart genes", value = "stripgenes", #style ="background-color: #ffffff;",
                                             conditionalPanel(condition = '!output.boolmark',
-                                                          
+
                                                              column(width=12,
-                                                                 div(id = "stripbox", 
-                                                                    box(title="Filter the table",width = 10, status = "primary", solidHeader = TRUE,collapsible = TRUE,collapsed = TRUE,icon = icon("arrow-down"), 
+                                                                 div(id = "stripbox",
+                                                                    box(title="Filter the table",width = 10, status = "primary", solidHeader = TRUE,collapsible = TRUE,collapsed = TRUE,icon = icon("arrow-down"),
                                                                         column(width=4,  radioButtons("decidemethodstrip",label = "Choose your statistical method",choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None"),inline = TRUE)),
                                                                         div( class= "myslidermain", column(3, sliderInput('fcstrip', "Choose your FC cutoff",min = 1, max=10, step = 1,value=1)),
                                                                         column(3,sliderInput('pvalstrip', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05))),
-                                                                        
-                                                                        column(width=12,  textOutput("selected_stripgene") 
+
+                                                                        column(width=12,  textOutput("selected_stripgene")
                                                                                #textInput("stripgenesearch", "Search your gene", placeholder = "cyp2b10" ),
                                                                                #bsTooltip("stripgenesearch", "Enter your gene in order to display the group mean expression.","bottom",trigger = "hover", options = list(container = "body"))
                                                                         )
@@ -380,11 +380,11 @@ body <- dashboardBody(
                                                                         #                               icon = icon("arrow-down")),
                                                                         #        bsTooltip("plotstrip", "Click here to generate the strip graph", options = list(container = "body")),
                                                                         #        tags$style(type='text/css', "#plotstrip { width:100%; margin-top: 25px;}")
-                                                                        # 
-                                                                        # 
+                                                                        #
+                                                                        #
                                                                         # )
                                                                     ))),
-                                                             
+
                                                              column(12,
                                                                     h3("This table shows the normalized values"),
                                                                     dataTableOutput("orderedwk")
@@ -397,82 +397,82 @@ body <- dashboardBody(
                                                                                   selectInput(
                                                                                     "formstrip",label = NULL,
                                                                                     choices = c("png", "eps", "pdf")))))
-                                                             ,ns = NS("datafile"), 
-                                                             
-                                                             
+                                                             ,ns = NS("datafile"),
+
+
                                                              plotOutput(outputId ="renderstripgenes", height = "500px", width ="100%")
-                                                             
-                                                             
-                                                             
-                                                             )           
-                                   
+
+
+
+                                                             )
+
                                    )
                             ))),
                 div(id="pass",style = "word-wrap: break-word;",
                     column(width = 3,
                            box(id="boxpass",title = strong("Upload data", style="font-size:25px;"), width = NULL, background = "light-blue",
                                inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
-                               
-                               
+
+
                                downloadLink("downloadData", label = "download sample data", style="color:orange; float:right;"),
                                br(),br(),
-                               
-                               
+
+
                                csvFileInput("datafile", "User data (.csv format)"),
                                fluidRow(column(6,
                                                p("Import local example",style="color:white; font-weight: 700; font-size: 14px;"),
-                                               
+
                                                dirModuleUI("datafile")),
-                                        column(6, 
+                                        column(6,
                                                csvIdentifier("datafile", "Unique identifier")
                                         )),
-                               
-        
+
+
                                br(),
-                               
+
                                conditionalPanel(condition = '!output.boolmark',
                                                 selectInput(
                                                   "method","Choose your statistical method",choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None")),  ns = NS("datafile"))),
-                               
+
                            conditionalPanel(condition = '!output.boolmark',
-                               box(id="boxpass2",title = strong("VOLCANO plot", style="font-size:25px;"), width = NULL, background = "light-blue",         
-        
+                               box(id="boxpass2",title = strong("VOLCANO plot", style="font-size:25px;"), width = NULL, background = "light-blue",
+
                                    fluidRow(column(6,
-                                                uiOutput("compvolc")), 
+                                                uiOutput("compvolc")),
                                             column(6,
                                                    selectInput("regulationvolc", #  Create a select list that can be used to choose a single or multiple items from a list of values.
                                                                "Choose your regulation",
                                                                choices = c("both","up", "down"))
-                                                   
+
                                                    )),
-                                         
+
                                    fluidRow(column(6, sliderInput('volcfc', "Choose your FC cutoff",min = 1, max=10, step = 1,value=1)),
                                             column(6,sliderInput('volcpval', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05))),
                                    fluidRow(column(6, sliderInput('volclab', "Choose your lab size",min = 1, max=6, step = 0.5,value=3.0)),
                                             column(6,sliderInput('volcpt', "Choose your point size", min=0.5, max=3, step=0.1,value=1))),
-                                   
-                                                   
-                                                   
-                                                   
+
+
+
+
                                                 div(id = "mytextvolc",
                                                     p(" Highlight your selected gene(s) in the volcano plot with a comma-separated list of input ")
                                                 ),
-                                                
+
                                                 textInput(inputId = "fillvolc",label = NULL,value = NULL,
                                                           placeholder = "FOXP2,OT,AVPR1a",width = "100%"
                                                 ),
                                    fluidRow(column(6,
-                                                
+
                                                 textInput(inputId = "findfamily",label = "Highlight a gene family", value = NULL,
                                                           placeholder = "Cyp",width = "100%")),
                                             column(6,
                                                 numericInput(
                                                   'topvolc',
                                                   'Max number of genes',
-                                                  NULL,min = 0,max = 5000))), 
-                                   
+                                                  NULL,min = 0,max = 5000))),
+
                                    uiOutput("addcompvolc")
-                                        
+
                                                 # ns = NS("datafile")
                                ), ns = NS("datafile"))
                     )
@@ -482,35 +482,35 @@ body <- dashboardBody(
                 #                         h3("Show the actual data frame with the columns selected"),
                 #                         dataTableOutput("subsetgroup_hm")
                 #                  ),ns = NS("datafile"))
-                
-                
+
+
                   )),
-      
+
       ###############################
       ######## PCA page             #
       ###############################
-      
+
       tabItem(tabName = "PCA",
               tags$style(type='text/css', ".well { max-width: 20em; }"),
               tags$style(type='text/css', ".well { max-height: 50em; }"),
               fluidRow(column(width = 9,
                               div(style = "width:100% ; max-width: 1500px; height: 1500px max-height: 2200px;",
-                                  
+
                                   tabsetPanel(
-                                    
+
                                     tabPanel(
                                       strong("Scree plot"),
                                       downloadButton("savescre", "Save your Scree plot" , style =
                                                        "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-                                      
+
                                       br(),br(),
                                       plotOutput(outputId = "eigpca", height = 700)
                                     ),
                                     tabPanel(
                                       strong("PCA plot"),
                                       tags$style(type = "text/css",".shiny-output-error:before { visibility: hidden; }"),
-                                      
-                                      
+
+
                                       div(style="display:inline-block;",
                                           fluidRow( column(1 ,
                                                            downloadButton("savepca", "Save your PCA" , style =
@@ -520,12 +520,12 @@ body <- dashboardBody(
                                                             selectInput(
                                                               "formpca",label = NULL,
                                                               choices = c("png", "eps", "pdf")))
-                                                    
+
                                           )),
-                                      
+
                                       plotOutput(outputId = "PCA", height = 700) #,plotOutput(outputId = "PCAvarender", height = 700)
                                     )
-                                    
+
                                   )
                               )
               ),
@@ -544,8 +544,8 @@ body <- dashboardBody(
                                inputId = "nogrpca",label = "Clear selection",icon = icon("square-o"),
                                style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
                              ),
-                             
-                             
+
+
                              fluidRow(column(6,
                                              selectInput("dim1",
                                                          label = h6(gettext("x axis")),
@@ -580,28 +580,28 @@ body <- dashboardBody(
                                column(4,
                                       checkboxInput("ellipse", "Add ellipses", FALSE))#,
                              ),
-                             
+
                              fluidRow(column(3),
                                       column(8,checkboxInput("jitter", "Avoid overlap between points", FALSE))),
                              verbatimTextOutput("valued"),
-                             
+
                              sliderInput(
                                "labelsiize","Label size",min = 2,max = 6,value = 4,step = 1
                              ),
-                             
+
                              sliderInput("pointsiize","Point size",min = 2,max = 6,value = 2,step = 1
                              ),
-                             
+
                              uiOutput('myPanelpca'),
                              br()
                          ))))),
       ###############################
       ######## Venn Page            #
       ###############################
-      
-      
+
+
       tabItem(tabName = "Venn",
-              
+
               tags$style(type='text/css', ".well { max-width: 25em; }"),
               tags$style(type='text/css', ".well { max-height: 70em; }"),
               fluidRow(column(
@@ -610,11 +610,11 @@ body <- dashboardBody(
                   style = "width:100% ; max-width: 1500px; height: 1950px; max-height: 2800px;",
                   tabsetPanel(
                     id = "Vennd",
-                    
+
                     tabPanel(
                       value= "vennset",
                       strong("Visualize the Venn diagram"),
-                      
+
                      column(6,offset = 0, style='padding:0px;',
                            div(style="display:inline-block",
                       fluidRow(
@@ -624,12 +624,12 @@ body <- dashboardBody(
                          column(3,
                           downloadButton("downloadsetven", "Download venn set" , style =
                                            "color: #fff; background-color: #337ab7; border-color: #2e6da4"))))),
-                          
-                          
-                          
+
+
+
                           column(width=6, offset = 0, style='padding:0px;',
-                                div(id = "vennbox", 
-                                    box(title="Filter the datatable",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,collapsed = TRUE,icon = icon("arrow-down"), 
+                                div(id = "vennbox",
+                                    box(title="Filter the datatable",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,collapsed = TRUE,icon = icon("arrow-down"),
                                         column(3,
                                                numericInput("filtertopjvenn", "Top n genes", value = 50, min=5 , max = 150)),
                                         column(5,
@@ -637,8 +637,8 @@ body <- dashboardBody(
                                         column(5,
                                                uiOutput("filtercompjvenn"))
                   ))),
-# 
-#                           shiny::actionButton( 
+#
+#                           shiny::actionButton(
 #                             "togglefiltertabvenn",
 #                             "Advanced Filter Options",
 #                             href = "#",
@@ -646,7 +646,7 @@ body <- dashboardBody(
 #                             style = "color: #fff; background-color: #337ab7; border-color: #2e6da4; position:relative;position:absolute;left:50%;margin-left: 15px;"
 #                           ),
 #                           br(),
-#                           
+#
 #                           shinyjs::hidden(div( style ="position:absolute;left:50%;margin-left: 15px;",
 #                             id = "advancedfilter",
 #                             fluidRow( column(3,
@@ -655,9 +655,9 @@ body <- dashboardBody(
 #                             selectInput("filtermethjvenn", "Based on", choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None"))),
 #                             column(5,
 #                             uiOutput("filtercompjvenn")))))
-#                           
+#
                  #    ),
-                      
+
                       conditionalPanel(condition = '!output.bool',
                                        uiOutput(outputId = "image")
                                        , uiOutput("sorry")),
@@ -668,24 +668,24 @@ body <- dashboardBody(
                       fluidRow(column(6,
                                       tags$script(src="jvenn.js"),
                                       tags$div(id="jvenn-container", style = "background-color: white; width: 100%; height:100%")
-                                      
+
                       ),
                       column(6,
                              div(class= "dfvenn" , style="font-size:24px; margin-top: 17px;",
-                                 
+
                                  #conditionalPanel(condition = "input.togglefiltertabvenn%2==1", br(),br()),
-                                 
+
                                  htmlOutput("dfvenn")),
-                             
+
                              conditionalPanel(condition = "input.dispvenn == 'genes'",
                                               helpText(
                                                 "You can directly filter the table by fold change and save the output table"
                                               )),
-                              
+
                              DT::dataTableOutput("vennresinter"),br(),br(),br(),
                              conditionalPanel(condition = "input.selcontjv",
                                               div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; "))
-                             
+
                       )),
                       div(style="display:inline-block", id ="dontwanttoshow",
                           fluidRow(
@@ -701,7 +701,7 @@ body <- dashboardBody(
                                        "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                    )),
                             column(3, style= "width:26.0%;",br(),
-                                   
+
                                    downloadButton("savebarplot", "Save your barplot" , style =
                                                     "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
                             column(3 ,br(),style= "width:11%;  padding: 0%;",
@@ -709,7 +709,7 @@ body <- dashboardBody(
                                                 choices = c("png", "eps", "pdf")))
                             # ,
                             # column(3,style= "width:9%; padding: 0%;",
-                            #        
+                            #
                             #        uiOutput("topgenesvenn", style= "padding: 0px;font-weight: 400;top: 0px;
                             #                 right: -22px;left: 0px;color: #3c8dbc;position: absolute;"))
                                    )),
@@ -719,7 +719,7 @@ body <- dashboardBody(
                       tags$head(
                         tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
                       ),
-                      
+
                       tags$head(tags$style("#container * {
                                            display: inline;
                                            }")),
@@ -728,7 +728,7 @@ body <- dashboardBody(
                                            position: static;}
                                            #mytext a{color: orange;}"
                       )),
-                      
+
                       div(
                         id = "container",
                         p("You have chosen the following comparisons"),
@@ -739,7 +739,7 @@ body <- dashboardBody(
                         htmlOutput("myPVALvenn"),
                         p("and"),
                         htmlOutput("myFCvenn")
-                        
+
                       ),
                       div(
                         id = "container",
@@ -752,14 +752,14 @@ body <- dashboardBody(
                         htmlOutput("topgenesdf"),
                         p("rows the of the previous table")
                       )
-                      
+
                       ),
-                    
-                    
+
+
                     tabPanel(strong("Venn GO enrichment"),
                              value = "venngopanel",
                              useShinyjs(),
-                             
+
                              fluidRow( column(6 ,
                                               downloadButton(
                                                 "saveclusterchoose",
@@ -770,15 +770,15 @@ body <- dashboardBody(
                                                       selectInput(
                                                         "formvennclus",label = NULL,
                                                         choices = c("png", "eps", "pdf")))
-                                              
+
                              )),
-                             
-                             
+
+
                              plotOutput("clusterPlot", width = "100%", height = "700px"),
                              br(),br(),br(),
                              dataTableOutput("debug")
                     )
-                    
+
               )
       )
               ),
@@ -794,7 +794,7 @@ body <- dashboardBody(
                        style =
                          "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                      ),
-                     
+
                      actionButton(inputId = "noCont",label = "Clear selection",
                                   icon = icon("square-o"),
                                   style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
@@ -814,23 +814,23 @@ body <- dashboardBody(
                            "or",
                            tags$a(href = "https://en.wikipedia.org/wiki/Web_colors#Hex_triplet",target="_blank",
                                   "hex colors."))),
-                     
+
                      textInput(inputId = "fill",label = NULL,value = c( "green,blue,red,purple,orange,brown"),
                                placeholder = "grey70, white, steelblue4",width = "100%"
                      ),
-                     
+
                      fluidRow( column(6,
                                       sliderInput("pvalvenn","P-value treshold",
                                                   min = 0.01,max = 0.05,
                                                   value = 0.05,step = 0.01
                                       )),
-                               
+
                                column(6,
                                       sliderInput("fcvenn","FC treshold",min = 1, max = 10,
                                                   value = 1,step = 1
                                       ))),
                      br(),
-                     
+
                      fluidRow(
                        column(12,
                               selectInput("dispvenn", #  Create a select list that can be used to choose a single or multiple items from a list of values.
@@ -840,7 +840,7 @@ body <- dashboardBody(
                               checkboxInput("Notanno","Remove the genes that are not annotated",FALSE)),
                        column(6,
                               checkboxInput("Allcont","Show the logFC for all comparisons",FALSE))),
-                     
+
                      br(),
                      shiny::actionButton(
                        "toggleAdvancedJvenn",
@@ -849,11 +849,11 @@ body <- dashboardBody(
                        style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                      ),
                      br(),
-                     
+
                      shinyjs::hidden(div(
                        id = "advancedjvenn",
                        br(),
-                       
+
                        fluidRow(
                          column(6,
                                 p("Select your Type of Venn",style="color:white; font-weight: 700; font-size: 14px;"),
@@ -872,11 +872,11 @@ body <- dashboardBody(
                          column(6,
                                 p("Display switch",style="color:white; font-weight: 700; font-size: 14px;"),
                                 includeHTML("HTML/dispswitch.html")))
-                       
-                       
+
+
                      )),
-                     
-                     br(), 
+
+                     br(),
                      # shiny::actionButton(
                      #   "togglefiltertabvenn",
                      #   "Advanced Filter Options",
@@ -884,18 +884,18 @@ body <- dashboardBody(
                      #   style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                      # ),
                      # br(),
-                     # 
+                     #
                      # shinyjs::hidden(div(
                      #   id = "advancedfilter",
                      #   br(),br(), br(),
-                     #   numericInput("filtertopjvenn", "Top n genes", value = 50),    
+                     #   numericInput("filtertopjvenn", "Top n genes", value = 50),
                      #  selectInput("filtermethjvenn", "Based on", choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")),
                      # uiOutput("filtercompjvenn"))),
                      br(),
-                     
-                     
+
+
                      strong("Functional Annotation Clustering",style = "font-family: 'times'; font-size:20px; font-style: strong; "),
-                     
+
                      br(),br(),
                      fluidRow(column(6, sliderInput("clusterNumber",label = "Cluster",
                                                     value = 1, min = 1,max = 5
@@ -907,21 +907,21 @@ body <- dashboardBody(
                                           "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" )))),
                      fluidRow(
                        column(6,selectInput("catvenn", "Choose your category", selected ="BP", c("BP","MF","CC"))),
-                       
+
                        column(6,br(),
                               actionButton("GOvenn", "Run Analysis",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")))
-                     
+
                  ))))),
-      
+
       ###############################
       ######## Heatmap Page         #
       ###############################
-      
-      
+
+
       tabItem(tabName = "Heatmap",
               tags$style(type='text/css', ".well { max-width: 25em; }"),
-              
-              
+
+
               fluidRow(column(
                 width = 8,
                 div(
@@ -935,17 +935,20 @@ body <- dashboardBody(
                                              "savehm",
                                              "Save your plot" ,
                                              style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                           )),
+                                           ),
+                                           div(id = "tooltiphm",
+                                               bsTooltip(id = "savehm", title = "For download larger files, you must use Chrome!", placement = "down", trigger="hover"))
+                                         ),
                                     column(2),
                                     column( 3,
                                             selectInput("formhm", label = NULL,
                                                         choices = c("png", "eps", "emf")))
-                                    
+
                           )),
                       includeCSS("./css/style.css"),
                       conditionalPanel(condition = '!output.heatmbool',  verbatimTextOutput("warningsheat")
                       ),
-                      
+
                       conditionalPanel(
                         condition = "input.col1 =='blue' && input.col3 =='red' && input.submit == 0 ",
                         wellPanel(style = "position: absolute; width: 30%; left: 35%; top: 40%;
@@ -953,21 +956,21 @@ body <- dashboardBody(
                                   selectInput("text", "Choose your intermediate color:", choices = c("yellow", "white")),
                                   actionButton("submit", "Submit"))
                       ),
-                      
+
                       #plotOutput("warningsheat")
                       conditionalPanel(condition = 'output.heatmbool',
                                        plotOutput("distPlot", width = "100%" , height = 1300)
-                                       
+
                       ),
-                      
+
                       h1("Here's a tracker for your different selections:"),
                       tags$head(
                         tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
                       ),
-                      
+
                       tags$head(tags$style("
                                            #container * {display: inline;}")),
-                      
+
                       div(
                         id = "container",p("There are"),htmlOutput("myNUM"),
                         p("significant genes"),
@@ -983,14 +986,14 @@ body <- dashboardBody(
                         p('and'),
                         textOutput("myFC")
                       ),
-                      
+
                       conditionalPanel(condition = "input.maxgen != null",
                                        div(
                                          id = "container",
                                          p("You have chosen to regulate your comparison to "),
                                          textOutput("maxGen"),
                                          p(" genes maximum"))),
-                      
+
                       div(
                         id = "container",
                         p('The'),
@@ -1032,8 +1035,8 @@ body <- dashboardBody(
                         )
                         ,
                         dataTableOutput("clustering"),
-                        
-                        
+
+
                         h3("This table summarizes the number of significant probes and genes by cluster"),
                         helpText(
                           "For the number of genes by cluster the duplicated genes are removed"
@@ -1043,57 +1046,58 @@ body <- dashboardBody(
                     tabPanel(
                       strong("(GO) enrichment-based cluster analysis"),value="maingo",
                       downloadButton("savegohmdavxlsx", "Save your enrichment as xlsx" , style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-                      
+                      div(id = "tooltipelem",
+                          bsTooltip(id = "savegohmdavxlsx", title = "For download larger files, you must use Chrome!", placement = "down", trigger="hover")), 
                       conditionalPanel(condition = "input.GO",
                                        div(class= "highvenn" , style="font-size:24px; text-align: center;",
                                            htmlOutput("titlegomain")),
                                        DT::dataTableOutput("davidgo"),
-                                       
+
                                        verbatimTextOutput("printmessage"),
                                        verbatimTextOutput("printselected"),
                                        div(class= "highvenn" , style="font-size:24px; text-align: center;",
                                            htmlOutput("titlegotop")),
                                        tags$script(src="libraries/highcharts.js"),
                                        tags$script(src="libraries/highcharts-more.js"),
-                                       
+
                                        tags$script(src="https://code.highcharts.com/modules/exporting.js"),
                                        tags$script(src="https://code.highcharts.com/modules/export-data.js"),
-                                       
-                                       
+
+
                                        tags$div(id="highChart")  ,
                                        checkboxInput("addlabelhigh", "add label", FALSE),
                                        tags$script(src="bubble.js")
-                                       
+
                       )),
                     tabPanel(
                       strong("Cut heatmap"),#icon("table"),
                       bsAlert("alert"),value = "cuthmmainpan",
                       plotlyOutput(outputId = "cutheatmap", height = 600),
-                      
-                      
+
+
                       br(),br(),br(),br(),br(),br(),br(),br(),br(),
                       br(),br(),br(),br(),br(),br(),br(),br(),br(),
                       br(),br()
-                      
+
                     )
                   )
                   )
                 ),
                 column(width=4,
-                       
+
                        div(id="mypanheat", style="color: white;",
                            tabBox(
-                             
+
                              title = "",
                              id = "heatmapanel",
                              width = NULL,
-                             
+
                              tabPanel("Heatmap",id= "heatmpan", ##ADD8E6
                                       style="background-color: #3c8dbc;",
                                       value="widgetheat",
                                       strong("Heatmap settings", style="font-size:25px;") ,
                                       br(),
-                                      
+
                                       actionLink("resetAll",  label = ("reset all"), style="color:orange;float:right;font-size: 18px;"),
                                       br(),
                                       uiOutput("grpselhm"),
@@ -1137,7 +1141,7 @@ body <- dashboardBody(
                                                                      "Choose your statistical method",
                                                                      choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")
                                                                    ))),
-                                        
+
                                         br(),
                                         fluidRow( column(6,
                                                          sliderInput(
@@ -1182,7 +1186,7 @@ body <- dashboardBody(
                                                      "dist","Choose your matrix distance",choices = c("correlation", "euclidian","manhattan", "cosine")),
                                                    div(id = "tooltipelem",
                                                        bsTooltip(id = "dist", title = "correlation:\n dist = 1-corr", placement = "left", trigger="hover"))
-                                                   
+
                                             )),
                                           fluidRow(
                                             column(6,
@@ -1192,15 +1196,15 @@ body <- dashboardBody(
                                             column(6,
                                                    selectInput(
                                                      "algomet","Choose your hierarchical clustering method",choices = c("ward.D2", "single","complete","average")))
-                                            
+
                                           )))
                                         ,br(),
                                         shiny::actionButton("toggleAdvancedcolors","Advanced graphical Settings",
                                                             href = "#",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                         ),
-                                        
+
                                         br(),
-                                        
+
                                         shinyjs::hidden(div(
                                           id = "advancedcol",
                                           fluidRow(
@@ -1233,21 +1237,21 @@ body <- dashboardBody(
                                                    min = 0.2,max = 1.5,step = 0.1
                                                  )
                                           )
-                                          
+
                                           ),
-                                          
+
                                           fluidRow(column(6,
                                                           radioButtons("rowname",
                                                                        "show/hide rowname",
                                                                        c("hide", "show"))
-                                                          
+
                                           ),
                                           column(6,
                                                  radioButtons("colname",
                                                               "show/hide colnames",
                                                               c("show", "hide"))
                                           )),
-                                          
+
                                           uiOutput('myPanel'),
                                           br()
                                         ))), #end of the div "form"
@@ -1256,14 +1260,14 @@ body <- dashboardBody(
                                         # Hide some widgets between the tags
                                         id = "advancedgo",
                                         wellPanel(
-                                          
+
                                         )
                                       )),
-                                      
+
                                       br(),
                                       div(id = 'center', strong("Print Heatmap",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                       br(),
-                                      
+
                                       fluidRow(column(6, uiOutput("button")
                                       ),
                                       column(6,
@@ -1271,10 +1275,10 @@ body <- dashboardBody(
                                                            "Add reactivity",
                                                            FALSE))
                                       ),
-                                      
+
                                       helpText("Note: It is highly advised to check this box if you're working with a set of genes close to 1000.",style="color:White; font-size:15px;"),
                                       conditionalPanel(condition = 'output.heatmbool',
-                                                       
+
                                                        div(id = 'center', strong("Functional enrichment analysis",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                                        br(),
                                                        fluidRow(column( 4,
@@ -1298,11 +1302,11 @@ body <- dashboardBody(
                                                                 uiOutput("DAVID"))
                                                        ),br(),
                                                        helpText("Run Gene enrichment analysis, results are obtained by querying DWS (DAVID Web Services)", style="font-size:15px; color:white;")
-                                                       
+
                                       ),br(),br()
-                                      
+
                              ),
-                             
+
                              tabPanel(
                                "Heatmap clustering",
                                value="cutheatmainp",
@@ -1313,19 +1317,19 @@ body <- dashboardBody(
                                               choices = cutheatmlist),
                                # cutheatmlist is a variable defined in the global environment
                                br(),
-                               
+
                                selectInput("formcut","Choose your file format",choices = c("pdf", "png", "eps")
                                ), br(),
                                verbatimTextOutput("event"),
-                               
+
                                br(),
                                downloadButton("savecut", "Save your plot" , style =
                                                 "color: #fff; background-color: #337ab7; border-color: #2e6da4")
-                               
+
                              ))
                        )
                 )
-                
+
               ))
       )
   )
