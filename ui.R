@@ -935,9 +935,7 @@ body <- dashboardBody(
                                              "savehm",
                                              "Save your plot" ,
                                              style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                           ),
-                                           div(id = "tooltiphm",
-                                               bsTooltip(id = "savehm", title = "For download larger files, you must use Chrome!", placement = "down", trigger="hover"))
+                                           )
                                          ),
                                     column(2),
                                     column( 3,
@@ -1046,8 +1044,7 @@ body <- dashboardBody(
                     tabPanel(
                       strong("(GO) enrichment-based cluster analysis"),value="maingo",
                       downloadButton("savegohmdavxlsx", "Save your enrichment as xlsx" , style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-                      div(id = "tooltipelem",
-                          bsTooltip(id = "savegohmdavxlsx", title = "For download larger files, you must use Chrome!", placement = "down", trigger="hover")), 
+                    
                       conditionalPanel(condition = "input.GO",
                                        div(class= "highvenn" , style="font-size:24px; text-align: center;",
                                            htmlOutput("titlegomain")),

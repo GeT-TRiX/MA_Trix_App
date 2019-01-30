@@ -169,6 +169,8 @@ observe({
     
   }
   
+  #outputOptions(output, 'savehm', suspendWhenHidden=FALSE)
+  
   
   output$savehm <- downloadHandler(filename <- function() {
     paste0(basename(file_path_sans_ext(projectname())),
