@@ -8,7 +8,7 @@ sessionVars <- reactiveValues(username = "")
 # assign a username to unininitialized sessions.
 init <- FALSE
 
-# When a session is ended, remove the user and note that they left the room. 
+# When a session is ended, remove the user and note that they left the room.
 session$onSessionEnded(function() {
   isolate({
     vars$users <- vars$users[vars$users != sessionVars$username]
@@ -23,10 +23,11 @@ session$onSessionEnded(function() {
 observe({
   # We want a reactive dependency on this variable, so we'll just list it here.
   input$user
-  
+
   if (!init){
     # Seed initial username
-    sessionVars$username <- paste0("User", round(runif(1, 10000, 99999)))
+    sessionVars$username <- ifelse(userId == "", paste0("User", round(runif(1, 10000, 99999))) , userId )
+
     isolate({
       vars$chat <<- c(vars$chat, paste0(linePrefix(),
                                         tags$span(class="user-enter",
@@ -34,6 +35,7 @@ observe({
                                                   "entered the room.")))
     })
     init <<- TRUE
+
   } else{
     # A previous username was already given
     isolate({
@@ -41,18 +43,18 @@ observe({
         # No change. Just return.
         return()
       }
-      
-      # Updating username      
+
+      # Updating username
       # First, remove the old one
       vars$users <- vars$users[vars$users != sessionVars$username]
-      
+
       # Note the change in the chat log
       vars$chat <<- c(vars$chat, paste0(linePrefix(),
                                         tags$span(class="user-change",
                                                   paste0("\"", sessionVars$username, "\""),
                                                   " -> ",
                                                   paste0("\"", input$user, "\""))))
-      
+
       # Now update with the new one
       sessionVars$username <- input$user
     })
@@ -63,8 +65,8 @@ observe({
 
 # Keep the username updated with whatever sanitized/assigned username we have
 observe({
-  updateTextInput(session, "user", 
-                  value=sessionVars$username)    
+  updateTextInput(session, "user",
+                  value=sessionVars$username)
 })
 
 # Keep the list of connected users updated
@@ -91,7 +93,7 @@ observe({
                         ": ",
                         tagList(input$entry)
                       ))
-    
+
   })
   # Clear out the text entry field.
   updateTextInput(session, "entry", value="")
@@ -104,8 +106,12 @@ output$chat <- renderUI({
     vars$chat <- vars$chat[(length(vars$chat)-500):(length(vars$chat))]
   }
   # Save the chat object so we can restore it later if needed.
-  saveRDS(vars$chat, "chat.Rds")
-  
+  if(userId == "")
+    saveRDS(vars$chat, "./chat/chat.Rds")
+  else
+    saveRDS(vars$chat, "/root/MA_Trix_App/chat/chat.Rds")
+
+
   # Pass the chat log through as HTML
   HTML(vars$chat)
 })

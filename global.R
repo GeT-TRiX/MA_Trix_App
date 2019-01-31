@@ -13,7 +13,7 @@ options(digits=3)
 
 userId <- Sys.getenv("SHINYPROXY_USERNAME")
 root <- ifelse(userId != "", paste("/root/MA_Trix_App/data/", userId, sep = ""), "/home/fsoubes/dockerize_MATRiX/MA_Trix_App/data/gettrix")
-
+print(root)
 
 cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatmap"),
                      Stripchart=c(`Without boxplot`="LB", `With boxplot` = "WB"))
@@ -24,7 +24,7 @@ categoerygen = c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_
 # Loading packages
 
 #sudo apt-get install libv8-dev
-list.of.packages <- c("AnnotationDbi","shiny","shinythemes","shinyjs","ggplot2","shinyBS","plyr","shinyFiles","xlsx", 
+list.of.packages <- c("AnnotationDbi","shiny","shinythemes","shinyjs","ggplot2","shinyBS","plyr","shinyFiles","xlsx",
                       "BH","data.table","DT","readr","colourpicker","shinydashboard","heatmaply",
                       "tools","devEMF","R.devices","FactoMineR","factoextra","gplots","V8",
                       "RColorBrewer","foreach","doParallel","gridExtra","plotly","dplyr","reticulate","Hmisc")
@@ -60,11 +60,16 @@ source("./module/csvmodules.R")
 vars <- reactiveValues(chat=NULL, users=NULL)
 
 # Restore the chat log from the last session.
-if (file.exists("chat.Rds")){
+
+if (file.exists("chat.Rds") && userId == ""){
   vars$chat <- readRDS("chat.Rds")
+} else if(file.exists("./chat/chat.Rds") && userId != ""){
+    vars$chat <- readRDS("./chat/chat.Rds")
 } else {
   vars$chat <- "Welcome to MATRiX Chat!"
 }
+
+
 
 #' Get the prefix for the line to be added to the chat window. Usually a newline
 #' character unless it's the first line.
@@ -95,20 +100,6 @@ palette = brewer.pal(8,"Dark2") %>%
   list(brewer.pal(10,"Paired")) %>%
   unlist()
 
-
-# downloadButton <- function(outputId, label = "Download", class = NULL, ...) {
-#   aTag <-
-#     tags$a(
-#       id = outputId,
-#       class = paste('btn btn-default shiny-download-link', class),
-#       href = '',
-#       target = '_blank',
-#       download = NA,
-#       icon("download"),
-#       label,
-#       ...
-#     )
-# }
 
 
 textInputRow<-function (inputId, label, value = "") {
