@@ -2,7 +2,7 @@
 ### Bioinformatics Master Degree - University of Bordeaux, France
 ### Link: https://github.com/fsoubes/MA_Trix_App
 ### Where: GET-TRiX's facility
-### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
+### Application: MATRiX is a shiny application for Metadata Analysis on Transcriptomic impact of Xenobiotics
 ### Licence: GPL-3.0
 
 
@@ -10,33 +10,6 @@
 ######## dashboardsidebar     #
 ###############################
 
-
-
-makeselectInputbutton <- function(selectInput, buttonId, buttonLabel, size = "default", style = "default"){
-  size <- switch(size, `extra-small` = "btn-xs", small = "btn-sm",
-                 large = "btn-lg", "default")
-  style <- paste0("btn-", style)
-
-  tags$script(HTML(paste0("
-                          $(document).ready(function() {
-                          var inputElements = document.getElementsByTagName('input');
-                          for(var i = 0; i < inputElements.length; i++){
-                          var input = inputElements[i];
-
-                          if(input.getAttribute('value') == '", checkboxValue, "'){
-
-                          var button = document.createElement('button');
-                          button.setAttribute('id', '", buttonId, "');
-                          button.setAttribute('type', 'button');
-                          button.setAttribute('class', '", paste("btn action-button", style , size), "');
-                          button.appendChild(document.createTextNode('", buttonLabel, "'));
-
-                          input.parentElement.parentElement.appendChild(button);
-                          };
-                          }
-                          });
-                          ")))
-}
 
 shinyjscode <- "
 shinyjs.init = function() {
@@ -130,18 +103,18 @@ body <- dashboardBody(
                            tabBox(title="Welcome to MATRiX", width=NULL,id = "homepage",
 
                                   tabPanel("About", style = "background-color: #ffffff;",
-                                           tags$h3("MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics."),
+                                           tags$h3("MATRiX is a shiny application that stands for Mining Analysis on TranscriptomicX data."),
                                            p("This project initiated by Yannick Lippi aims to facilitate access to biologist in order to publish graphs such as heatmap, PCA or Venn diagram related to specifics data produced by TRiX's facility.", tags$br(),"
 
-                                             MATRiX is an application dedicated to DNA chip analysis, this application incorporates quality control with Principal components analysis to summarizes microarray data and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).",tags$br(),"
+                                             MATRiX is an application dedicated to transcriptomic analysis (DNA chip, RNA-seq, ChIP-Seq), this application incorporates quality control with Principal components analysis to summarizes Transcriptomic data and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).",tags$br(),"
 
-                                             MATRiX app is working with specific data produced by the limma package, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN. This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/sampleData.zip)."),
+                                             MATRiX app is working with data produced by the limma, DESeq2 and edgeR  packages, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN. This application works with specific data produced by transcriptomic facilities, you can refer to the download example file (sampleData.zip) and the MATRiX's menu (upload data)."),
 
-                                           p("Hereafter is the global workflow passing by the statistical analysis to the visualization:"),tags$br(),
+                                           p("Below is represented the global workflow passing by the statistical analysis to the visualization:"),tags$br(),
                                            div(id="workflow",
                                                tags$p(tags$img(src = "whatmaen.png",style="width: 100%; height: 100%")))
                                            ),
-                                  tabPanel("Authors", h3("The main contributors to MATRiX:"),
+                                  tabPanel("Authors", h3("The main providers to MATRiX:"),
                                            p(a("Yannick Lippi",href="mailto:yannick.lippi@inra.fr"), "(Initiator, beta-testing, feature suggestions)"),
                                            p(a("Franck Soubès", href="mailto:franck.soubes@inra.fr"), "(Coding, Unit testing, documentation, packaging, feature suggestions)",tags$a(href = "https://github.com/fsoubes",target="_blank",
                                                                                                                                                                                      "See github")),
@@ -221,7 +194,6 @@ body <- dashboardBody(
                                             "here"))
                                ))
                        ),
-
                        box(
                          title = "What's new in MATRiX", width = NULL, status = "primary",
                          div(style = 'overflow-y: scroll; height: 500px',
@@ -257,11 +229,11 @@ body <- dashboardBody(
                                      have been added to compare the results of 2 or more contrasts."),
                              addNews("Jun 5th 2018","PCA/Heatmap","Display color groups side by side in the gui."),
                              addNews("May 29th 2018","beta-test","The service will be made available once the beta test phase is officially completed.")
-                             )
-                             )
+                            )
+                          )
 
-                )
-                           )
+                        )
+                      )
                 ),
 
       tabItem(tabName = "Upload",
@@ -289,7 +261,6 @@ body <- dashboardBody(
                                                                tags$li("The final step consist to select all the data at once and then confirm the selection by clicking on the open button."),
                                                                tags$li("A green message will then appear to confirm the data loading with a summary table.")
                                                              ),
-
                                                              tags$p(
                                                                tags$img(src = "pData.png"),
                                                                tags$img(src = "restable.png"),
@@ -298,7 +269,9 @@ body <- dashboardBody(
 
                                                              tags$h1("Tips"),
                                                              tags$ul(
+                                                               tags$li("Unique IDs and GeneName columns must appear in the statistical data and unique IDs columns for Workingset in order to import the data (RNA-seq, DNA-chips, ChIP-Seq)."),
                                                                tags$li("You can select a region by handling the left click button if the files are stacked together, if it's not the case you can select the different files by maintening the Ctrl button and clicked on the files.")
+
                                                              ),
                                                              tags$h1("Warning"),
                                                              tags$ul(
@@ -1044,7 +1017,7 @@ body <- dashboardBody(
                     tabPanel(
                       strong("(GO) enrichment-based cluster analysis"),value="maingo",
                       downloadButton("savegohmdavxlsx", "Save your enrichment as xlsx" , style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
-                    
+
                       conditionalPanel(condition = "input.GO",
                                        div(class= "highvenn" , style="font-size:24px; text-align: center;",
                                            htmlOutput("titlegomain")),

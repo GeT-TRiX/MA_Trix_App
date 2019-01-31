@@ -16,20 +16,20 @@ csvFileInput <- function(id, label = "CSV file") {
 csvIdentifier <- function(id, label = "Unique Identifier") {
   ns <- NS(id)
   selectInput(ns("identifier"), label, choices = c("ProbeName", "Transcript"))
-  
+
 }
 
 ordinput <- function(csvnord, identifier){
-  
+
   csv <- lapply(
     csvnord,
-    
+
     #' apply the fread method for each element in the csvnord list
     #'
     #' @return \csv a data frame object
     #'
     FUN = function (x)
-      
+
       fread(
         x,
         data.table = F,
@@ -39,43 +39,43 @@ ordinput <- function(csvnord, identifier){
         dec = ","
       )
   )
-  
+
   csvord = list()
   for (i in 1:length(csv)) {
     if (colnames(csv[[i]][2]) == "Grp") {
       csvord[[2]] <- csv[[i]]
-      
+
     }
     else if (any(grepl("adj.P.Val" , colnames(csv[[i]]))))
     {
       csvord[[3]] <- csv[[i]]
-      
+
     }
     else
       csvord[[1]] <- csv[[i]]
   }
-  
+
   csvord[[2]] <- chartofa(csvord[[2]]) # transform dataframe containing characters to factors
-  
-  
+
+
   if(class(csvord[[3]][[1]]) == "integer"){
     csvord[[3]] <- csvord[[3]][-1] #remove useless column
-    csvord[[3]] <- csvord[[3]] %>% 
+    csvord[[3]] <- csvord[[3]] %>%
       select(ProbeName,  everything())
   }
-  
+
   colnames(csvord[[3]])[[1]] <- identifier
   colnames(csvord[[1]])[[1]] <- identifier
   colnames(csvord[[2]])[1] <- "X"
   csvord[[1]][1] <- csvord[[3]][1]
-  
+
   return(csvord)
-  
+
 }
 
 dirModuleUI = function(id) {
   ns = NS(id)
-  
+
   fluidPage(
     fluidRow(
       shinyFilesButton(ns('files'), label='File select', title='Please select all the files', multiple=T)
@@ -86,7 +86,7 @@ dirModuleUI = function(id) {
 
 # Module server function
 csvFile <- function(input, output, session, stringsAsFactors) {
-  
+
   root = c(data = root)
   shinyFileChoose(input, 'files', roots = root, session = session,filetype=c("csv"))
   shinyDirChoose(input, "directory", roots = root, session = session)
@@ -120,10 +120,10 @@ csvFile <- function(input, output, session, stringsAsFactors) {
   #'
   #' @return \csvf a reactive value of type list containing three data frames toptable and workingset and the pData
   #'
-  
+
   csvf <- reactive({
 
-    
+
     inFile <- input$file
     if(!is.null(inFile)){
 
@@ -185,11 +185,11 @@ csvFile <- function(input, output, session, stringsAsFactors) {
       output$boolmark <- reactive({
         showmark
       })
-    
+
     simil <- isimilar(csvord[[3]], csvord[[2]], csvord[[1]])
-    
+
     if(!simil[[1]] ||!simil[[2]]){
-      
+
       createAlert(
         session,
         "alert",
@@ -198,12 +198,12 @@ csvFile <- function(input, output, session, stringsAsFactors) {
         title = "Oops Error",
         content = "Identifier error not the same column",
         append = FALSE
-        
+
       )
       return(NULL)
     }
-    
-    
+
+
     createAlert(
       session,
       "alert",
@@ -234,8 +234,8 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     csvnord[3] <-csvlocpath()[[3]]
 
     csvord <- ordinput(csvnord, input$identifier)
-    
-    
+
+
     observe({showmark <<-F
     print(showmark)
     }) # modify and lock the bool value to false
@@ -271,6 +271,3 @@ csvFile <- function(input, output, session, stringsAsFactors) {
   })
 
 }
-
-
-
