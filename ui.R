@@ -103,7 +103,7 @@ body <- dashboardBody(
                            tabBox(title="Welcome to MATRiX", width=NULL,id = "homepage",
 
                                   tabPanel("About", style = "background-color: #ffffff;",
-                                           tags$h3("MATRiX is a shiny application that stands for Mining Analysis on TranscriptomicX data."),
+                                           tags$h3("MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data."),
                                            p("This project initiated by Yannick Lippi aims to facilitate access to biologist in order to publish graphs such as heatmap, PCA or Venn diagram related to specifics data produced by TRiX's facility.", tags$br(),"
 
                                              MATRiX is an application dedicated to transcriptomic analysis (DNA chip, RNA-seq, ChIP-Seq), this application incorporates quality control with Principal components analysis to summarizes Transcriptomic data and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).",tags$br(),"
@@ -256,8 +256,11 @@ body <- dashboardBody(
                                                              tags$h1("How to import ?"),
                                                              tags$ul(
                                                                tags$li("First click on the browse button to load the data"),
-                                                               tags$li("After the pop up has appeared, you will have to select the files within the access path that is given in the report produced by GeT-TRiX. "),
-                                                               tags$li("You will then find three distinct csv files, these files are respectively named xxx_pData, xxx_WorkingSet and xxx_ResTable."),
+                                                               tags$li("After the pop up has appeared, you will have to select the data files."),
+                                                               tags$li("You need three distinct csv files, these files are respectively named xxx_pData, xxx_WorkingSet and xxx_ResTable."),
+                                                               tags$li("pData : The experimental design is a 2 column size table that associates samples according to their respective groups."),
+                                                               tags$li("WorkingSet : The expression table combine the normalised log2 expression for each samples separated in columns with the first column corresponding to the unique id."),
+                                                               tags$li("ResTable : Statistical file is the result of differential analysis that link for each unique ids the gene symbol with the fold change, p-value and FDR."),
                                                                tags$li("The final step consist to select all the data at once and then confirm the selection by clicking on the open button."),
                                                                tags$li("A green message will then appear to confirm the data loading with a summary table.")
                                                              ),
@@ -736,7 +739,7 @@ body <- dashboardBody(
                              fluidRow( column(6 ,
                                               downloadButton(
                                                 "saveclusterchoose",
-                                                "Download the graph" ,
+                                                "Export to acyclic graph" ,
                                                 style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                               ),
                                               column( 3,
@@ -849,24 +852,10 @@ body <- dashboardBody(
 
                      )),
 
-                     br(),
-                     # shiny::actionButton(
-                     #   "togglefiltertabvenn",
-                     #   "Advanced Filter Options",
-                     #   href = "#",
-                     #   style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                     # ),
-                     # br(),
-                     #
-                     # shinyjs::hidden(div(
-                     #   id = "advancedfilter",
-                     #   br(),br(), br(),
-                     #   numericInput("filtertopjvenn", "Top n genes", value = 50),
-                     #  selectInput("filtermethjvenn", "Based on", choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")),
-                     # uiOutput("filtercompjvenn"))),
-                     br(),
+                     br(), br(),
 
-
+                     conditionalPanel( "input.selcontjv" ,
+                     
                      strong("Functional Annotation Clustering",style = "font-family: 'times'; font-size:20px; font-style: strong; "),
 
                      br(),br(),
@@ -882,7 +871,7 @@ body <- dashboardBody(
                        column(6,selectInput("catvenn", "Choose your category", selected ="BP", c("BP","MF","CC"))),
 
                        column(6,br(),
-                              actionButton("GOvenn", "Run Analysis",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")))
+                              actionButton("GOvenn", "Run Analysis",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"))))
 
                  ))))),
 

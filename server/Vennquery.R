@@ -84,11 +84,6 @@ observe({
 
 
 
-# output$debug <- renderPrint({
-#   req(Venncluster())
-#   summary(Venncluster()) %>% as.data.frame()
-# })
-
 
 #' Venncluster is an event reactive function which aim is to interogate David web services database to collect relevant information about the list of genes for a specific intersection
 #'
@@ -128,7 +123,12 @@ Venncluster <- eventReactive(input$GOvenn, {
 
                    })
                  })
+    
     pdf(NULL)
+    
+    updateTabsetPanel(session, "Vennd",
+                      selected = "venngopanel")
+    
     return(mygodavid)
   })
 
