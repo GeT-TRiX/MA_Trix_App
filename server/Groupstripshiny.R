@@ -1,9 +1,9 @@
-#' ### Author: Franck Soubès
-#' ### Bioinformatics Master Degree - University of Bordeaux, France
-#' ### Link: https://github.com/fsoubes/MA_Trix_App
-#' ### Where: GET-TRiX's facility
-#' ### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
-#' ### Licence: GPL-3.0
+### Author: Franck Soubès
+### Bioinformatics Master Degree - University of Bordeaux, France
+### Link: https://github.com/GeT-TRiX/MA_Trix_App/
+### Where: GET-TRiX's facility
+### Application: MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data
+### Licence: GPL-3.0
 
 
 myreorderwk <- reactive({ ## add GeneName

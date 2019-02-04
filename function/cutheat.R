@@ -1,10 +1,9 @@
 ### Author: Franck Soubès
 ### Bioinformatics Master Degree - University of Bordeaux, France
-### Link: https://github.com/fsoubes/MA_Trix_App
+### Link: https://github.com/GeT-TRiX/MA_Trix_App/
 ### Where: GET-TRiX's facility
-### Application: MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
+### Application: MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data
 ### Licence: GPL-3.0
-
 
 
 #' cutHeatmaps if a function that takes as input an heatmap object and depending on the cut height and the cluster
@@ -374,33 +373,12 @@ cutHeatmaps = function(hmp, height, exprData, groups, cexcol = 1, cexrow = 1, la
   ###=======================
 
 
-      # View(as.matrix(exprData[labels(cut02$lower[[num]]),]))
-        # useRasterTF = T
-        # hm02gp = heatmaply(
-        # heatmaply(
-        #   as.matrix(exprData[labels(cut02$lower[[num]]),]),
-        #   height=900,col = col.hm,distfun = distfunTRIX,hclustfun = hclustfun,
-        #   scale = scale, Colv = hmp$colDendrogram
-        #   )%>%
-        #   layout(margin = list(l = 130, b = 100))
-
-
         if(hmp.plot){
            cat(" ->plot heatmap for each subgroup \n")
           for(i in 1:length(cut02$lower)){
             if(length(labels(cut02$lower[[i]]))>1){
             rowIds=NA;
 
-            # hm02gp = heatmaply(
-            #   as.matrix(exprData[labels(cut02$lower[[2]]),]),
-            #   height=900,distfun = distfunTRIX,hclustfun = hclustfun,
-            #   scale = scale, Colv = hmp$colDendrogram
-            #   )%>%
-            #   layout(margin = list(l = 130, b = 100))
-          #    if(length(labrow)>1){ rowIds=labrow[labels(cut02$lower[[i]])]
-          #    }else if(labrow==T) rowIds=DEGres$ResTable$GeneName[labels(cut02$lower[[i]])]
-          #if(length(labrow)>1){ rowIds=labrow[labels(cut02$lower[[i]])]
-            # if(labrow==T) rowIds=DEGres$ResTable[labels(cut02$lower[[1]]),"GeneName"]
             
             useRasterTF=T;
             hm02gp=heatmap(exprData[labels(cut02$lower[[1]]),], Rowv=str(cut02$lower[[1]]),

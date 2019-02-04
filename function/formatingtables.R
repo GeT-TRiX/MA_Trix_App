@@ -1,5 +1,9 @@
-##### Formating function for microarray data #### 
-##### Franck Soubès
+### Author: Franck Soubès
+### Bioinformatics Master Degree - University of Bordeaux, France
+### Link: https://github.com/GeT-TRiX/MA_Trix_App/
+### Where: GET-TRiX's facility
+### Application: MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data
+### Licence: GPL-3.0
 
 
 #' formating is a function alpha version of the higher elaborate decTestTRiX function 

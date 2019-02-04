@@ -1,6 +1,9 @@
-#require(goseq)
-#require(GO.db)
-library(dplyr)
+### Author: Franck Soubès
+### Bioinformatics Master Degree - University of Bordeaux, France
+### Link: https://github.com/GeT-TRiX/MA_Trix_App/
+### Where: GET-TRiX's facility
+### Application: MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data
+### Licence: GPL-3.0
 
 
 #' gosearch is a function that return a list of data frame containing the go ids for the different clusters

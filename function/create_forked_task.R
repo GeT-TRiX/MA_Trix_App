@@ -1,5 +1,3 @@
-library(shiny)
-
 # @ Author: Joe Cheng
 # Also uses parallel, shinyjs, tools
 # Create a long-running task, executed in a forked process. (Doesn't work on Windows)
@@ -14,6 +12,7 @@ library(shiny)
 #   the return value. If failed, throws error. Reactive, so when
 #   the state changes any reactive readers will invalidate.
 # - cancel(): Call this to prematurely terminate the task.
+
 create_forked_task <- function(expr) {
   makeReactiveBinding("state")
   state <- factor("running",
