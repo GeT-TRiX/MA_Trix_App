@@ -1,4 +1,4 @@
-# MATRiX is a shiny application for Microarray Analysis on Transcriptomic impact of Xenobiotics
+# MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data.
 
 ## Contents
 
@@ -10,12 +10,12 @@
 
 ## Introduction
 
-This project initiate by Yannick Lippi aims to facilitate access to biologists in order to publish graphs such as heatmap, PCA or Venn diagram related to specific data produced by TRiX's team.
-MATRiX is an application dedicated to  DNA chip analysis, this application incorporates quality control with Principal components analysis to summarize microarray and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).
+This project initiate by Yannick Lippi aims to facilitate access to biologists in order to publish graphs such as heatmap, PCA or Venn diagram related to transcriptomic data.
+MATRiX is an application dedicated to  DNA chip, RNA-seq and  ChIP-Seq analysis, this application incorporates quality control with Principal components analysis helping to summarize the data  and differential analysis with various methods such as Venn diagram, Heatmap clustering and GO Enrichment analysis by querying the DWS (DAVID WEB SERVICES).
 
-MATRiX app is working with specific data produced by the limma package, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995].
+MATRiX app is working with specific data produced by the limma, DESeq2, edgeR packages, resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995].
 PCA is computed with the FactoMineR package and the plot is produced with the factoextra package, for the Heatmap and Venn diagram the graphs are obtained respectively with the gplots and VennDiagram package, those packages are available on CRAN
-This application works only with specific data produced by the plateau TRiX, you can check the example file (MA_Trix_App/downloadData.zip)
+This application works only with specific data, you can check the example file (MA_Trix_App/downloadData.zip)
 
 Here's the global workflow passing by the experiment to the visualization:
 
@@ -41,7 +41,7 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("RDAVIDWebService")
 install.packages("rJava")
 
-## Load RDAVIDWebService 
+## Load RDAVIDWebService
 library(RDAVIDWebService)
 
 ## Load shiny packages
@@ -53,7 +53,7 @@ if(!require('shiny')){
 # Install dependencies, download last version of MATRiX from github and run matrix in one command :
 runGitHub('GeT-TRiX/MA_Trix_App')
 ```
-If RDAVIDWebService and Shiny are installed on your machine can also run the app as following : 
+If RDAVIDWebService and Shiny are installed on your machine can also run the app as following :
 ```
 git clone https://github.com/GeT-TRiX/MA_Trix_App
 chmod +x ./cmd.sh
