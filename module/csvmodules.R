@@ -48,7 +48,7 @@ ordinput <- function(csvnord, identifier){
     }
     else if (any(grepl("^adj.P.Val|^FDR|^padj_" , colnames(csv[[i]])))){
       csvord[[3]] <- csv[[i]]
-      if(colnames(csvord[[3]])[[2]] != "GeneName")
+      if(!any(grepl("GeneName", colnames(csvord[[3]]))))
         colnames(csvord[[3]])[[2]] <- "GeneName"
     }
     else
@@ -63,6 +63,7 @@ ordinput <- function(csvnord, identifier){
     csvord[[3]] <- csvord[[3]] %>%
       select(ProbeName,  everything())
   }
+
 
   colnames(csvord[[3]])[[1]] <- identifier
   colnames(csvord[[1]])[[1]] <- identifier
