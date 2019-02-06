@@ -7,47 +7,51 @@
 
 
 myreorderwk <- reactive({ ## add GeneName
-  
   req(csvf())
   wkingsetclean <- csvf()[[1]]
   samplesgroup <- factor(csvf()[[2]]$Grp)
   samplesnum <- parse_number(as.character(csvf()[[2]]$X))
-  colnames(wkingsetclean)[-1] <- paste(samplesgroup, samplesnum , sep = ".") 
+
+if(any(duplicated(samplesnum))){
+  samplesnum <- str_extract(csvf()[[2]]$X, "[0-9]$")
+  colnames(wkingsetclean)[-1] <- paste(samplesgroup, samplesnum , sep = ".")
+}else
+  colnames(wkingsetclean)[-1] <- paste(samplesgroup, samplesnum , sep = ".")
+
   wkingsetclean$GeneName <- csvf()[[3]]$GeneName
   return(wkingsetclean)
-  
 })
 
 
 
 filenamestrip <- reactive({
   req(csvf(),projectname())
-  
+
   return( paste0(
     basename(tools::file_path_sans_ext(projectname())), # Add cutoff
     '_strip_chart',
     sep = ''
   ))
-  
+
 })
 
 
 
-filterwkingset <- reactive({   
-  
+filterwkingset <- reactive({
+
   req(myreorderwk())
-  myreorderwk() %>% select(ProbeName,GeneName, sort(names(.[-1]))) %>% slice(., getDegenes()[[1]]) %>% mutate_if(is.numeric, funs(format(., digits = 3)))
-  
+  myreorderwk() %>% select(dataid() ,GeneName, sort(names(.[-1]))) %>% slice(., getDegenes()[[1]]) %>% mutate_if(is.numeric, funs(format(., digits = 3)))
+
 })
 
 
 
 
-output$orderedwk <- DT::renderDataTable(DT::datatable(filterwkingset(), 
-options = list(scrollX = TRUE, 
-                  pageLength = 150, 
-                  scrollY=550,  
-                  stateSave = T,  
+output$orderedwk <- DT::renderDataTable(DT::datatable(filterwkingset(),
+options = list(scrollX = TRUE,
+                  pageLength = 150,
+                  scrollY=550,
+                  stateSave = T,
                   dom = 'Bfrtip',
                 buttons = list(
                  list(extend = 'csv',
@@ -57,7 +61,7 @@ options = list(scrollX = TRUE,
                       title = "My Title",
                       header = FALSE)
                 )),
-selection = 'single', 
+selection = 'single',
  extensions=c("Buttons",'Scroller'),
  filter =c("none"),
 rownames= FALSE ))
@@ -67,9 +71,9 @@ rownames= FALSE ))
 
 
 getDegenes <- reactive({
-  
+
   req(subsetstat(), csvf(), input$pvalstrip)
-  
+
   indexDEG = decTestTRiX(
     subsetstat()[[1]],
     subsetstat()[[2]],
@@ -78,21 +82,21 @@ getDegenes <- reactive({
     FC = input$fcstrip,
     cutoff_meth = input$decidemethodstrip, maxDE=NULL )
   return(indexDEG)
-  
+
 })
 
 
 
 
 callstripgenes <- reactive({
-  
+
   validate(
     need(input$orderedwk_row_last_clicked, 'Search your gene and select the corresponding row'))
-  
+
   req(getDegenes(), filterwkingset(), req(input$orderedwk_row_last_clicked))
   grps <- gsub("[.][0-9]*","",colnames(filterwkingset()[-(1:2)]), perl=T)
   ggp=ggstrip_groups(grps=grps , wSet= filterwkingset() , probesID= input$orderedwk_row_last_clicked)
-  
+
 })
 
 
@@ -106,7 +110,7 @@ output$savestriplot <- downloadHandler(filename <- function() {
   paste0(
     basename(tools::file_path_sans_ext(projectname())), # add  gene name
     '_',
-    selectedstripgene(), 
+    selectedstripgene(),
     '_strip_chart.',
     input$formstrip,
     sep = ''
@@ -114,12 +118,12 @@ output$savestriplot <- downloadHandler(filename <- function() {
 },
 content <- function(file) {
   if (input$formstrip == "pdf")
-    
+
     pdf(file,
         width = 16,
         height = 7,
         pointsize = 12)
-  
+
   else if (input$formstrip == "png")
     png(
       file,
@@ -134,24 +138,21 @@ content <- function(file) {
         width = 16,
         height = 7,
         pointsize = 12)
-  
+
   print(callstripgenes())
-  
+
   dev.off()
 })
 
 
 selectedstripgene <- reactive({
   req(input$orderedwk_row_last_clicked)
-  
+
   return(filterwkingset()[input$orderedwk_row_last_clicked,"GeneName"] )
-  
+
 })
 
 
-output$selected_stripgene <- renderText({ 
+output$selected_stripgene <- renderText({
   paste("You have selected", selectedstripgene(), "gene.")
 })
-
-
-

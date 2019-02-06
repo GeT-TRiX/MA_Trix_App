@@ -44,7 +44,8 @@ content <- function(file) {
     
     
     acyclgo()
-    dev.off()
+    
+  dev.off()
   
 })
 
@@ -80,6 +81,7 @@ observe({
     shinyjs::disable("saveclusterchoose")
   else
     shinyjs::enable("saveclusterchoose")
+  dev.off()
 })
 
 

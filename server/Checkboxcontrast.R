@@ -10,11 +10,11 @@
 ######## Select the comparisons #
 #################################
 
-# Render in the UI.R the levels for the pData Group 
+# Render in the UI.R the levels for the pData Group
 
 observe({
   
-groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)  
+groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
 output$comphm <- renderUI(
   checkboxGroupInput(
     inputId = "selcomphm" ,
@@ -63,11 +63,3 @@ observeEvent(input$nocomphm, {
 selected_test <- reactive({
   return(input$selcomphm)
 })
-
-
-
-
-
-
-
-

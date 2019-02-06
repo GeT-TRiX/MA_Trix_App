@@ -139,7 +139,7 @@ probnamtoentrezvenn <- function(venngenes, mypack){
   entrezids <- venngenes %>%
     unlist() %>%
     as.character() %>%
-    mget(x = .,envir = mypack,ifnotfound = NA) %>%
+    mget(x = .,envir = mypack, ifnotfound = NA) %>%
     unlist() %>%
     unique() %>%
     .[!is.na(.)]

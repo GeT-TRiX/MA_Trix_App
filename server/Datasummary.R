@@ -20,6 +20,6 @@
 #' @export
 
 data_summary <- reactive({
-  req(csvf())
-  myfinalfc(csvf()[[3]], input$pval1, input$method)
+  req(csvf(), subsetstat())
+  myfinalfc(csvf()[[3]], input$pval1, input$method, prefstat$greppre)
 })

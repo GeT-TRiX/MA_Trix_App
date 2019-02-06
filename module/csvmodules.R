@@ -42,14 +42,13 @@ ordinput <- function(csvnord, identifier){
 
   csvord = list()
   for (i in 1:length(csv)) {
-    if (colnames(csv[[i]][2]) == "Grp") {
+    if (length(csv[[i]]) == 2) {
       csvord[[2]] <- csv[[i]]
-
+      colnames(csvord[[2]]) <- c("X", "Grp")
     }
-    else if (any(grepl("adj.P.Val" , colnames(csv[[i]]))))
-    {
+    else if (any(grepl("^adj.P.Val|^FDR|^padj_" , colnames(csv[[i]])))){
       csvord[[3]] <- csv[[i]]
-
+      colnames(csvord[[3]])[[2]] <- "GeneName"
     }
     else
       csvord[[1]] <- csv[[i]]
@@ -66,11 +65,9 @@ ordinput <- function(csvnord, identifier){
 
   colnames(csvord[[3]])[[1]] <- identifier
   colnames(csvord[[1]])[[1]] <- identifier
-  colnames(csvord[[2]])[1] <- "X"
   csvord[[1]][1] <- csvord[[3]][1]
 
   return(csvord)
-
 }
 
 dirModuleUI = function(id) {
@@ -260,7 +257,6 @@ csvFile <- function(input, output, session, stringsAsFactors) {
       title = "Sucess",
       content = " Your files have been loaded, you can choose your data now",
       append = FALSE
-
     )
 
     Sys.sleep(1)

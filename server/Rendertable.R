@@ -16,11 +16,11 @@ output$designtab <- renderDataTable(csvf()[[2]]) # Data frame corresponding to t
 output$data_summary <- renderDataTable(data_summary()) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)
 
 
- 
+
 observe({
-  
+
   req(input$dispvenn, vennfinal())
-  
+
   if(input$dispvenn == "probes" &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
     output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('5', '10', '15')),extensions=c("Buttons",'Scroller'),  options = list(scrollX = TRUE,  pageLength = 150, scrollY=530,  stateSave = T,  dom = 'Bfrtip',
                                                                                                                                       buttons = c( 'csv',  'pdf' )) ), server = F)
@@ -30,9 +30,9 @@ observe({
   else
     output$vennresinter <- DT::renderDataTable(DT::datatable(topngenesDT(), list(lengthMenu =  c('5', '10', '15')),extensions=c("Buttons",'Scroller'),  options = list(scrollX = TRUE ,pageLength = 150, scrollY=530,  stateSave = T,dom = 'Bfrtip',
                                                                                                                                    buttons = c( 'csv',  'pdf' ))), server = F)
-    
+
 })
-    
+
 rounddavidtable <- reactive({
   req(davidwebservice)
   return(lapply(1:NROW(davidwebservice()), function(x)
@@ -52,8 +52,8 @@ output$davidgo <- DT::renderDataTable(DT::datatable(rounddavidtable()[[as.numeri
 
 myrenderedtop <- reactive({
   req(csvf())
-  csvf()[[3]] %>% 
-    select_if(.,grepl("^Probe|^Tran|^Gene|^logFC|^P.value|^adj.P", colnames(.))) %>%
+  csvf()[[3]] %>%
+    select_if(.,grepl("^Probe|^Tran|^Gene|^logFC|^log2FoldChange|^P.value|^pvalue|^PValue|^adj.P|^padj|^FDR", colnames(.))) %>%
     mutate_if(is.numeric, funs(format(., digits = 3)))
 })
 

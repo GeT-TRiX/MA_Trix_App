@@ -59,7 +59,7 @@ vennfinal <- reactive({
       need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!'))
 
   reslist = list()
-  
+
   if(!input$Allcont && !input$dispvenn == "genes")
     resfinal <- filterjvenn(input$jvennlist, input$selcontjv, csvf()[[3]],dataid(), input$dispvenn )
   else if (input$Allcont && !input$dispvenn == "genes")
@@ -72,15 +72,15 @@ vennfinal <- reactive({
   if(input$Notanno){
     resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}|[0-9]{7,}",GeneName)) %>% as.data.frame()
   }
-  
+
   reslist[[1]] <- resfinal
   if(!input$Allcont)
     mycont =input$selcontjv
   else
     mycont =choix_cont()
   if(input$dispvenn == "genes")
-    reslist[[2]] <- meanrankgenes(resfinal, stat ="logFC_", multcomp = mycont , jvenn=  T)
-  
+    reslist[[2]] <- meanrankgenes(resfinal, stat = prefstat$greppre[[2]], multcomp = mycont , jvenn=  T)
+
   return(reslist)
 })
 
@@ -166,18 +166,18 @@ plottopgenes <- eventReactive(input$topdegenes, {
   req(vennfinal(), venntopgenes(), input$selcontjv)
 
   if(input$Allcont)
-    mycont <- paste0("logFC_", choix_cont())
+    mycont <- paste0(prefstat$greppre[[2]], choix_cont())
   else
-    mycont <- paste0("logFC_", input$selcontjv)
-  
+    mycont <- paste0(prefstat$greppre[[2]], input$selcontjv)
+
   if(input$dispvenn == "probes" &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ) )
     myplot <- topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
   else if(input$dispvenn == "genes" &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
     myplot <- topngenes(vennfinal()[[2]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
   else
     myplot <- topngenes(topngenesDT()[input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
-  
-    
+
+
 
   return(myplot)
 })
@@ -255,16 +255,16 @@ observe({
 
 
 filteredcolvenn <- reactive ({
-  
+
   req(vennfinal(), venntopgenes(), input$selcontjv)
   filteredcol = na.omit((as.numeric(gsub("([0-9]+).*$", "\\1", unlist(input$vennresinter_state$order)))))
   if(input$dispvenn == "probes")
     colnamefil = colnames(vennfinal()[[1]][filteredcol])
-  else 
+  else
     colnamefil = colnames(vennfinal()[[2]][filteredcol])
-  
+
   colnamefil = gsub(
-    pattern = "logFC_" ,
+    pattern = prefstat$greppre[[2]] ,
     replacement = "",
     x = colnamefil,
     perl = T
@@ -275,33 +275,27 @@ filteredcolvenn <- reactive ({
 
 
 topngenesDT <- reactive ({
-  
+
   req(input$filteredcompjv, vennfinal())
 
-  topngenesDT <- csvf()[[3]] %>% select( ProbeName, GeneName, paste0(ifelse(input$filtermethjvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% 
-  {if (input$dispvenn == "genes") filter ( ., GeneName  %in% vennfinal()[[2]]$GeneName) else filter(., ProbeName  %in% vennfinal()[[1]]$ProbeName)}
-  topngenesDT$rank <- topngenesDT %>% select( paste0(ifelse(input$filtermethjvenn == "FDR", "adj.P.Val_" , "P.value_"), input$filteredcompjv)) %>% rank(.) 
-  topngenesDT <- topngenesDT %>% arrange( desc(rank) ) %>% top_n(-input$filtertopjvenn, rank) 
+  topngenesDT <- csvf()[[3]] %>% select( dataid() , GeneName, paste0(ifelse(input$filtermethjvenn == "FDR", prefstat$greppre[[1]] , prefstat$greppre[[3]]), input$filteredcompjv)) %>%
+  {if (input$dispvenn == "genes") filter ( ., GeneName  %in% vennfinal()[[2]]$GeneName) else filter(., .[[1]]  %in% vennfinal()[[1]][[1]] )}
+  topngenesDT$rank <- topngenesDT %>% select( paste0(ifelse(input$filtermethjvenn == "FDR",prefstat$greppre[[1]] , prefstat$greppre[[3]]), input$filteredcompjv)) %>% rank(.)
+  topngenesDT <- topngenesDT %>% arrange( desc(rank) ) %>% top_n(-input$filtertopjvenn, rank)
   if (input$dispvenn == "genes")
-    topngenesDT <-vennfinal()[[2]] %>% filter (GeneName %in% topngenesDT$GeneName)
+    topngenesDT <- vennfinal()[[2]] %>% filter (GeneName %in% topngenesDT$GeneName)
   else
-    topngenesDT <-vennfinal()[[1]] %>% filter (ProbeName %in% topngenesDT$ProbeName)
-  
-    
+    topngenesDT <-vennfinal()[[1]] %>% filter (vennfinal()[[1]][[1]] %in% topngenesDT[[1]])
+
+
  return(topngenesDT)
 })
 
 
 output$filtercompjvenn <- renderUI({
-  
+
   req( input$selcontjv)
   tags$div(
     class = "jvennfiltparam",selectInput('filteredcompjv',
                                      'filter comp', choices = c("", input$selcontjv), selected = ""))
 })
-
-
-
-
-
-

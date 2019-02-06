@@ -6,26 +6,26 @@
 ### Licence: GPL-3.0
 
 
-#' formating is a function alpha version of the higher elaborate decTestTRiX function 
+#' formating is a function alpha version of the higher elaborate decTestTRiX function
 #'
 #' @param adj
-#' @param pval 
+#' @param pval
 #'
 #' @return
 #' @export
 #'
-#' 
+#'
 #' @export
 
 formating = function( adj, pval){
-  
-  
+
+
   passingval = adj %>%
     apply(2,FUN = function(x){return(x < pval)}) %>%
-    apply(1,sum) 
-  
+    apply(1,sum)
+
   passingval = which( passingval > 0)
-  
+
   cat("Il y a",length(passingval),"gène significatifs")
 
   return(passingval)
@@ -35,15 +35,15 @@ formating = function( adj, pval){
 
 #' transform a dataframe containing factor for different levels not optimal tho
 #'
-#' @param dataframe 
+#' @param dataframe
 #'
 #' @return
-#' 
+#'
 #' @export
 
 
 transform <- function(dataframe,toast){
-  
+
   myl = list()
   cpt = 1
   for (i in toast) {
@@ -55,7 +55,7 @@ transform <- function(dataframe,toast){
     cpt = cpt+1
     dyn_grp <- Reduce(function(x, y) merge(x, y, all=TRUE), myl, accumulate=FALSE)
   }
-  
+
   return(dyn_grp)
 }
 
@@ -70,46 +70,46 @@ transform <- function(dataframe,toast){
 #' @param pv a list
 #'
 #' @return \grp1 of class data frame
-#' 
+#'
 #' @export
 
 evaluatesign = function(adj,elem,pv){
-  
+
 
   grp1 = adj[,c(elem)] %>%
     sapply( FUN = function(x){return(x < pv)}) %>%
     data.frame() %>%
     filter(. == T) %>%
     nrow()
-  
+
   return(grp1)
 }
 
 
 #' This function returns an integer for the number of significant genes using parallelism
-#' 
-#' @param adj 
-#' @param elem 
-#' @param pv 
+#'
+#' @param adj
+#' @param elem
+#' @param pv
 #'
 #' @return \grp1 of class data.frame
-#' 
+#'
 #' @export
 
 
 
 
-evaluatesignpar = function(adj,elem,pv) { ### for benchmarking 
-  
-  
-  grp1 = foreach(i = iter(adj[elem], by = "col"), .combine = c) %dopar%  
+evaluatesignpar = function(adj,elem,pv) { ### for benchmarking
+
+
+  grp1 = foreach(i = iter(adj[elem], by = "col"), .combine = c) %dopar%
     (sign= {i < pv}) %>%
     as.data.frame() %>%
     filter(. == T) %>%
     nrow()
-  
- return(grp1) 
-  
+
+ return(grp1)
+
 }
 
 
@@ -117,8 +117,8 @@ evaluatesignpar = function(adj,elem,pv) { ### for benchmarking
 #'
 #' @param adj a data frame containing the adjusted p-value
 #'
-#' @return \dtsign a data frame 
-#' 
+#' @return \dtsign a data frame
+#'
 #' @export
 
 createdfsign = function(adj) {
@@ -133,11 +133,11 @@ createdfsign = function(adj) {
   colnames(dtsign) <- y
   rownames(dtsign) <- colnames(adj)
   pvalue = c(0.01, 0.05)
-  
+
   i <- 1
   for (pv in pvalue) {
     for (elem in colnames(adj)) {
-      
+
       if (i %% constmod == 0) {
         i <- 1
       }
@@ -148,7 +148,7 @@ createdfsign = function(adj) {
         i = i + 1
       }
       else{
-        
+
         dtsign$`pvalue(0.01)`[i] = evaluatesignpar(adj, elem, pv)
         i <- i + 1
 
@@ -160,11 +160,11 @@ createdfsign = function(adj) {
 
 
 isimilar <- function(restab, pdata, workingset){
-  
+
   sameids <- all(restab[[1]] == workingset [[1]])
   samedesign <- all(colnames(workingset[-1])== pdata[[1]])
   return(list(sameids,samedesign))
-  
+
 }
 
 #' This function returns a data frame of the element which are superior to a vector character 1.2,2,4,6 and 10 and for a defined pvalue
@@ -172,80 +172,80 @@ isimilar <- function(restab, pdata, workingset){
 #' @param alltop a data frame
 #' @param pval a numeric pvalue
 #'
-#' @return \fcpval a data frame 
-#' 
+#' @return \fcpval a data frame
+#'
 #' @export
 
-myfinalfc <- function(alltop, pval, testrix) {
+myfinalfc <- function(alltop, pval, testrix, grepre) {
+
   j = 1
   colnames(myfinalfc)
   whatest  = ifelse(testrix == "FDR", T, F)
   if (whatest)
-    adj = alltop[, grep("^adj.P.Val", names(alltop), value = TRUE), drop= F]
+    adj = alltop[, grep( grepre[[1]], names(alltop), value = TRUE), drop= F]
   else
-    adj = alltop[, grep("^P.value", names(alltop), value = TRUE),drop= F]
-  
-  logfc = alltop[, grep("^logFC", names(alltop), value = TRUE),drop= F]
+    adj = alltop[, grep(grepre[[3]], names(alltop), value = TRUE),drop= F]
+
+  logfc = alltop[, grep( grepre[[2]], names(alltop), value = TRUE),drop= F]
   myfc = c(1, 1.2, 2, 4, 6, 10)
   fcpval = data.frame(matrix(ncol = length(myfc), nrow = length(adj)))
   mycolnames = c("FC>1.0", "FC >1.2" , "FC >2", "FC >4", "FC >6", "FC >10")
-  
+
 
   for (fc in myfc) {
     fcpval[j] = cbind.data.frame(colSums(adj < pval &
                                            2 ** abs(logfc) > fc))
     j = j + 1
   }
-  
+
   names(logfc) =  gsub(
-    pattern = "^logFC_",
+    pattern =  grepre[[2]] ,
     replacement = "",
     x = names(logfc),
     perl =  TRUE
   )
-  
+
   colnames(fcpval) = mycolnames
   rownames(fcpval) = colnames(logfc)
   return(fcpval)
-  
+
 }
 
 #' This function returns a transformed data frame of character type to a data frame of factor type
 #'
 #' @param datach a data frames
 #'
-#' @return \datach a data frame 
-#' 
+#' @return \datach a data frame
+#'
 #' @export
 
 
 chartofa = function(datach){
-  
+
   datach[] <- lapply( datach, factor)
   col_names <- names(datach)
   datach[col_names] <- lapply(datach[col_names] , factor)
-  
   return(datach)
 }
 
 
 meanrankgenes  <- function(dtsign, stat , rankcomp=NULL, multcomp, regulationvolc=NULL, jvenn = F){
-  
+
   selcomp <-  paste0(stat, multcomp )
   options(datatable.optimize=1)
-  
+
   for (i in selcomp) {
     dtsign[[i]] = as.numeric(as.character(dtsign[[i]]))
   }
-  
-  summarizetable <- dtsign %>% select(GeneName, paste0(stat, multcomp))  %>% 
-    as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% as.data.frame() 
-  
+
+  summarizetable <- dtsign %>% select(GeneName, paste0(stat, multcomp))  %>%
+    as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% as.data.frame()
+
   if(!jvenn){
-  summarizetable$rank <- summarizetable %>% select(paste0(stat , rankcomp) ) %>% rank(.) 
-  summarizetable <- if(regulationvolc == "down") summarizetable %>% arrange( desc(-rank) ) else summarizetable %>% arrange( desc(rank) )  
+  summarizetable$rank <- summarizetable %>% select(paste0(stat , rankcomp) ) %>% rank(.)
+  summarizetable <- if(regulationvolc == "down") summarizetable %>% arrange( desc(-rank) ) else summarizetable %>% arrange( desc(rank) )
   }
-  
+
   return(summarizetable)
 }
 
@@ -262,27 +262,27 @@ meanrankgenes  <- function(dtsign, stat , rankcomp=NULL, multcomp, regulationvol
 #'
 
 heatmtoclust = function( hmp01_All, exprData, pval ,height= 5){
-  
+
   cut02 = cut(hmp01_All$rowDendrogram, h = height )
-  
+
   HCgroupsLab = lapply(cut02$lower, function(x)
     labels(x))
   id = colnames(pval[1])
-  
+
   final = exprData[rev(hmp01_All$rowInd), hmp01_All$colInd]
-  
+
   my_last= as.integer(lapply(seq(length(HCgroupsLab)), function(x)
   {return(tail(HCgroupsLab[[x]],1))}))
-  
+
   mygen = as.integer(row.names(final))
   pval$X = as.integer(rownames(pval))
-  
+
   heatmclust = pval %>%
     dplyr::select (X,id,GeneName) %>%
     filter( X %in% mygen) %>%
     left_join(data.frame(X=mygen), . , by="X") %>%
     arrange(-row_number())
-  
+
   i = 1
   for(row in 1:nrow(heatmclust)){
     if(heatmclust$X[row] == my_last[i] ){
@@ -292,12 +292,7 @@ heatmtoclust = function( hmp01_All, exprData, pval ,height= 5){
     else
       heatmclust$cluster[row] = i
   }
-  
+
   return(heatmclust)
-  
+
 }
-
-
-
-
-

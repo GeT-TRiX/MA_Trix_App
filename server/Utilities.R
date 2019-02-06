@@ -41,7 +41,7 @@ isolate(
 
     updateTabsetPanel(session, "heatmapmainp",
                       selected = "cuthmmainpan")
-    
+
   }
 )
 })
@@ -51,7 +51,7 @@ isolate(
 #########################################
 
 observe({
-  
+
   if (input$fcvenn <= 2)
     updateSliderInput(
       session,
@@ -72,7 +72,7 @@ observe({
       max = 10,
       step = 1
     )
-  
+
   if (input$fc <= 2)
     updateSliderInput(
       session,
@@ -93,7 +93,7 @@ observe({
       max = 10,
       step = 1
     )
-  
+
 })
 
 #################################################
@@ -119,12 +119,12 @@ observeEvent(input$resetAll, {
 
 #' mypacklist is a reactive function which aim is to display the different packages used in the current session
 #'
-#' @param sessionInfo version information about R, the OS and attached or loaded packages. 
+#' @param sessionInfo version information about R, the OS and attached or loaded packages.
 #'
 #' @return a data frame
 #'
 #' @export
-#' 
+#'
 
 
 mypacklist <- reactive({
@@ -139,7 +139,7 @@ mypacklist <- reactive({
       return(paste(mysess$otherPkgs[[x]]$Title))))) %>%
     as.data.frame() %>%
     setNames(c('Version', "Title"))
-  
+
   return(dfpack)
 })
 
@@ -157,7 +157,7 @@ observeEvent(input$session, {
 
 file_name <- reactive({
   req(csvf())
-  inFile <- csvf()[[4]] 
+  inFile <- csvf()[[4]]
   if (class(inFile)== "character")
     return(tools::file_path_sans_ext(inFile))
   else
@@ -175,7 +175,7 @@ projectname <- reactive({
   }
   else
     return(outputname)
-  
+
 })
 
 

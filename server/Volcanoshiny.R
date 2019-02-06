@@ -50,7 +50,7 @@ familytopdisp <- reactive({
     return(NULL)
   else{
     if(!family_d() == ""){
-      genfam = grep(pattern = toupper(family_d()), toupper(csvf()[[3]]$GeneName)) %>% slice(csvf()[[3]],.)%>% select(GeneName)  %>% unlist() %>% as.character() 
+      genfam = grep(pattern = toupper(family_d()), toupper(csvf()[[3]]$GeneName)) %>% slice(csvf()[[3]],.)%>% select(GeneName)  %>% unlist() %>% as.character()
     }
     else
       genfam =""
@@ -65,7 +65,7 @@ familytopdisp <- reactive({
 
 
 observe({
-  
+
   if(input$findfamily != ""){
     shinyjs::disable("topvolc")
     shinyjs::disable("fillvolc")
@@ -83,7 +83,7 @@ observe({
     shinyjs::enable("findfamily")
     shinyjs::enable("fillvolc")
   }
-  
+
 })
 
 
@@ -93,11 +93,11 @@ observe({
 
 volcano <- reactive({
   req(csvf(),input$volcacomp )
-  EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0("logFC_",input$volcacomp) ,
-                  y = paste0(ifelse(input$method == "FDR", "adj.P.Val_","P.value_"),input$volcacomp),
+  EnhancedVolcano(csvf()[[3]], lab= csvf()[[3]]$GeneName , x = paste0(prefstat$greppre[[2]],input$volcacomp) ,
+                  y = paste0(ifelse(input$method == "FDR",prefstat$greppre[[1]] ,prefstat$greppre[[3]]),input$volcacomp),
                   topgenes = top_volcd(),DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),
                   pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = input$volcpt,transcriptLabSize = input$volclab,
-                  title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", findfamily =  ifelse(familytopdisp() == "" , NA,familytopdisp()),regulationvolc = input$regulationvolc, 
+                  title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", findfamily =  ifelse(familytopdisp() == "" , NA,familytopdisp()),regulationvolc = input$regulationvolc,
                   displaylab = ifelse(genetodisplay() =="", NA, genetodisplay()),legendLabSize = 10,
                   cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
                                                                        "P value & Log (base 2) fold-change"))
@@ -108,15 +108,15 @@ volcobj <- reactiveValues()
 
 
 output$volcanoplot <- renderPlot({
-  
+
   validate(need(csvf(), 'You need to import data to visualize this plot!'))
-  
+
   req(volcano())
   volcboth$tot <- volcano()
   volcobj$plot <- volcboth$tot[[1]]
   volcobj$dt <-volcboth$tot[[2]]
   volcobj$plot
-  
+
 },  height = plotHeight)
 
 output$compvolc <- renderUI({
@@ -130,15 +130,15 @@ output$savevolcano <- downloadHandler(filename <- function() {
 },
 content <- function(file) {
   if (input$formvolc == "pdf")
-    
+
     pdf(file,
         width = 12,
         height = 12,
         pointsize = 12)
-  
-  
+
+
   else if (input$formvolc == "png")
-    
+
     png(
       file,
       width = 2500,
@@ -147,11 +147,11 @@ content <- function(file) {
       pointsize = 12,
       res = 100
     )
-  
+
   else
     ggsave(file,device=cairo_ps, fallback_resolution = 600)
-  
-  
+
+
   plot(volcano()[[1]])
   dev.off()
 })
@@ -159,7 +159,7 @@ content <- function(file) {
 
 vocfilt <- reactive({
   req(csvf(), top_volcd(),  volcanocomp())
-  volcobj$top <- meanrankgenes(volcobj$dt, "logFC_" , input$volcacomp,  volcanocomp(), input$regulationvolc  )
+  volcobj$top <- meanrankgenes(volcobj$dt, prefstat$greppre[[2]] , input$volcacomp,  volcanocomp(), input$regulationvolc  )
   return(volcobj$top)
 })
 
@@ -170,8 +170,8 @@ volcanocomp <- reactive({
 
 volcplototp <- reactive({
   req(vocfilt())
-  
-  selcomp <-  paste0("logFC_",  volcanocomp())
+
+  selcomp <-  paste0(prefstat$greppre[[2]],  volcanocomp())
   myplot <- topngenes(vocfilt(), selcomp ,top_volcd()  ,meandup = "genes")
   return(myplot)
 })
@@ -186,13 +186,13 @@ output$barplotvolc <- renderPlot({
     req(volcplototp())
     plotOutput(volcplototp())
   })
-  
+
 })
 
 
 observe({
   validate(need(csvf(), 'You need to import data to visualize this plot!'))
-  
+
   output$savevolcplot <- downloadHandler(filename <- function() {
     paste0(
       basename(tools::file_path_sans_ext(projectname())),
@@ -203,12 +203,12 @@ observe({
   },
   content <- function(file) {
     if (input$formvolcbar == "pdf")
-      
+
       pdf(file,
           width = 16,
           height = 7,
           pointsize = 12)
-    
+
     else if (input$formvolcbar == "png")
       png(
         file,
@@ -223,12 +223,12 @@ observe({
           width = 16,
           height = 7,
           pointsize = 12)
-    
+
     print(volcplototp())
-    
+
     dev.off()
   })
-  
+
 })
 
 

@@ -19,20 +19,20 @@ output$heatmbool <- reactive({
 
 observe({
   print(boolhm)
-  
+
 })
 
 outputOptions(output, "heatmbool", suspendWhenHidden = F)
 
 observe({
   req(csvf(),length(selected_test()) >0,input$reactheat == T| global$clicked)
-  
+
   observe({boolhm <<-T}) # modify and lock the bool value to false
-  
+
   output$heatmbool <- reactive({
     boolhm
   })
-  
+
 })
 
 
@@ -79,14 +79,14 @@ hmsize <- reactiveValues()
 
 
 observe({
-  
-  #' heatmapfinal is an isolate function that only react to a user's click on the heatmap button 
-  #' 
+
+  #' heatmapfinal is an isolate function that only react to a user's click on the heatmap button
+  #'
   #' @param hmbis a data frame with all the individuals selected
   #' @param subsetDEG  a data frame with the indexes corresponding to the sigificant genes
-  #' @param subsetgroup_hm  a data frame with the corresponding groups 
-  #' @param workingPath the current user's repository 
-  #' @param my_palette a vector of colors 
+  #' @param subsetgroup_hm  a data frame with the corresponding groups
+  #' @param workingPath the current user's repository
+  #' @param my_palette a vector of colors
   #' @param k a numeric value which aim is to defined the treshold value to cut the dendogram input$clusters
   #' @param Rowdistfun a character value set by the user to defined the method to calculate the dendogram matrix distance for the genes input$dist
   #' @param Coldistfun a character value set by the user to defined the method to calculate the dendogram matrix distance for the contrasts input$dist
@@ -94,25 +94,25 @@ observe({
   #' @param cexrow  a numeric value to change the size of the police legend for the rows input$rowsize
   #' @param cexcol a numeric value to change the size of the police legend for the columns input$colsize
   #' @param meanGrp a boolean value to compute or not the mean of each contrasts in the heatmap input$meangrp
-  #' @param mypal a list of values 
+  #' @param mypal a list of values
   #' @param showcol a boolean value used to hide or show the colnames input$colname
   #' @param showrow a boolean value used to hide or show the rownames input$rowname
-  #' @param genename a data frame 
+  #' @param genename a data frame
   #' @param notplot a boolean value for applying dev.off or not on the heatmap
   #' @param rowv  dendogram object
   #' @param ColOrd  positive numbers, used as cex.axis in for the row or column axis labeling
-  #' @param gpcol  matrix with colors associated to each groups 
+  #' @param gpcol  matrix with colors associated to each groups
   #' @param gpcolr  matrix with gray color depending on the clusters
   #' @param distfunTRIX function that computes whether euclidian or pearson for Hierarchical Clustering
   #' @param height a numeric object corresponding to the selected cluster to display
   #' @param rastering a graphical boolean
-  #' @param geneSet 
+  #' @param geneSet
   #'
-  #' @return  a data frame with the cluster and the corresponding genes 
-  #' 
+  #' @return  a data frame with the cluster and the corresponding genes
+  #'
   #' @export
-  #' 
-  
+  #'
+
   heatmapfinal <- function(isplot  = F, israstering = T) {
     if (is.null(my_intermediate()))
       mypal = (colorRampPalette(c("green", "black", "red"))(n = 75))
@@ -120,9 +120,9 @@ observe({
       mypal = (colorRampPalette(c(
         col_choice1(), my_intermediate(), col_choice3()
       ))(n = 75))
-    
+
     plotHeatmaps(
-      
+
       isolate(hmbis()[[1]]),
       geneSet =  isolate(hmbis()[[7]]),
       droplevels(subsetgroup_hm()$Grp),
@@ -143,35 +143,35 @@ observe({
       gpcol = hmbis()[[5]],
       gpcolr = hmbis()[[6]],
       distfunTRIX = isolate(hmbis()[[2]]),
-      height = hmbis()[[8]], 
+      height = hmbis()[[8]],
       rastering = israstering
     )
-    
+
   }
-  
-  
+
+
   output$warningsheat <- renderPrint({
     validate(need(
       csvf(),
-      'You need to import data to visualize to plot the Heatmap' ) %next% 
-      need(length(selected_test()) >0, 'You need to select a contrast(s)') %next% 
+      'You need to import data to visualize to plot the Heatmap' ) %next%
+      need(length(selected_test()) >0, 'You need to select a contrast(s)') %next%
       need(input$heatm , 'You need to click on the heatmap button down below the heatmap settings')
     )
   })
-  
-  
+
+
   heatid <- input$side
   if (grepl("Heatmap", heatid)) {
     if (input$reactheat == T)
       source(file.path("server", "Plotreact.R"), local = TRUE)$value #
     else
       source(file.path("server", "Plotreact2.R"), local = TRUE)$value #
-    
+
   }
-  
+
   #outputOptions(output, 'savehm', suspendWhenHidden=FALSE)
-  
-  
+
+
   output$savehm <- downloadHandler(filename <- function() {
     paste0(basename(file_path_sans_ext(projectname())),
            '_heatmap.',
@@ -180,9 +180,9 @@ observe({
   },
   content <- function(file) {
     myras = ifelse(input$formhm == "emf", F, T)
-    
+
     if (input$formhm == "emf")
-      
+
       emf(
         file,
         width = 9,
@@ -190,7 +190,7 @@ observe({
         pointsize = 12,
         coordDPI = 300
       )
-    
+
     else if (input$formhm == "png")
       png(
         file,
@@ -204,7 +204,7 @@ observe({
       eps(file,
           width = 5,
           height = 7)
-    
+
     if (!is.null(subsetDEG()[[1]]))
       withProgress(message = 'Saving heatmap:',
                    value = 0, {
@@ -215,10 +215,10 @@ observe({
                      heatmapfinal(isplot = F, israstering =myras)
                    })
     dev.off()
-    
+
   })
-  
-  
+
+
   output$downloadcut <- downloadHandler(
     filename = function() {
       paste(basename(file_path_sans_ext(projectname())),
@@ -230,19 +230,19 @@ observe({
       write.csv(ordered(), file, row.names = FALSE)
     }
   )
-  
 
-  
-  
+
+
+
   ordered <- reactive({
-    
+
     req(hmobj$hm)
-  
+
     if (input$decidemethod == "FDR")
-      met = "adj.P.Val_"
+      met = prefstat$greppre[[1]]
     else
-      met = "P.value_"
-    
+      met = prefstat$greppre[[3]]
+
     mycont = paste0(met, selected_test())
 
     ordered = csvf()[[3]] %>% filter(  csvf()[[3]][[1]]  %in% hmobj$hm[[2]] )  %>%
@@ -253,34 +253,33 @@ observe({
 
     rightor = sort(as.integer(rownames(ordered)), decreasing = T)
     ordered = ordered[match(rightor, rownames(ordered)), ]
-    
+
     return(ordered)
   })
- 
+
   grouplength <- reactive({
-    
+
     req(ordered())
-    mydfhmgen = (subset( hmobj$hm, !duplicated(subset( hmobj$hm, select=GeneName)))) 
+    mydfhmgen = (subset( hmobj$hm, !duplicated(subset( hmobj$hm, select=GeneName))))
     lengthofmyclust = sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
-    return(length(which(hmobj$hm$cluster ==x)))) %>%  
+    return(length(which(hmobj$hm$cluster ==x)))) %>%
     cbind(.,sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
     return(length(which(mydfhmgen$cluster ==x))))) %>% as.data.frame() %>%
-    setNames(.,c("total number of probes","total number of genes")) 
+    setNames(.,c("total number of probes","total number of genes"))
     rownames(lengthofmyclust) <- sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)
     return(paste("cluster", x)))
-    
+
     lengthofmyclust <- rbind(lengthofmyclust,c(sum(unlist(lengthofmyclust$`total number of probes`)),sum(unlist(lengthofmyclust$`total number of genes`))))
     rownames(lengthofmyclust)[length(rownames(lengthofmyclust))]<- "total"
-    
+
     return(lengthofmyclust)
-    
+
   })
-  
+
   output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength() )) #
-  
-  
+
+
   output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))
 
-  
-})
 
+})
