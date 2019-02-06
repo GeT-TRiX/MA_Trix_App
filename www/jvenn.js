@@ -48,8 +48,8 @@ $(document).ready(function () {
 
 
   function updateJvenn() {
-    Shiny.addCustomMessageHandler("updatejvenn", function(final) {
-	    let seriesTable = final;//jsonData;
+    Shiny.addCustomMessageHandler("updatejvenn", function(Rjson) {
+	    let seriesTable = Rjson; //jsonData;
       Shiny.addCustomMessageHandler("updatejcol", function(coljvenn) {
 
         let arraylen = (coljvenn.length/3)
@@ -142,7 +142,7 @@ $(document).ready(function () {
 			$("#venn-type").change(function() {
 				updateJvenn();
 			});
-			
+
 				$("#ds_yes").click(function() {
 				displayStat = true;
 				Shiny.onInputChange("mystat",displayStat);

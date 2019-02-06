@@ -59,11 +59,6 @@ subsetstat <- reactive({
 })
 
 
-observe({
-  req(prefstat$greppre)
-  print(prefstat$greppre[[1]])
-
-})
 
 # subsetcomp is a reactive function that return a list of data frame depending on the selected comparisons
 #'

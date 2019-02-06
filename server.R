@@ -29,7 +29,12 @@ shinyServer(function(input, output,session) {
   ##########################################
   ######## Widget update and info         ##
   ##########################################
-
+  
+  observe({
+    
+    
+  })
+  
   source(file.path("server", "Utilities.R"), local = TRUE)$value # Utilities method (packages citations, fc step, zipdownload and panel redirection and project name)
 
   ##########################################

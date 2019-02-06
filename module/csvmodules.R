@@ -48,7 +48,8 @@ ordinput <- function(csvnord, identifier){
     }
     else if (any(grepl("^adj.P.Val|^FDR|^padj_" , colnames(csv[[i]])))){
       csvord[[3]] <- csv[[i]]
-      colnames(csvord[[3]])[[2]] <- "GeneName"
+      if(colnames(csvord[[3]])[[2]] != "GeneName")
+        colnames(csvord[[3]])[[2]] <- "GeneName"
     }
     else
       csvord[[1]] <- csv[[i]]
