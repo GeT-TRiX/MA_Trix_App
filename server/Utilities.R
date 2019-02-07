@@ -104,7 +104,7 @@ output$downloadData <- downloadHandler(filename <- function() {
   paste("sampleData", ".zip", sep = '')
 },
 content <- function(file) {
-  file.copy("/root/data/sampleData.zip", file)
+  file.copy("data/sampleData.zip", file)
 },
 contentType = "zip")
 

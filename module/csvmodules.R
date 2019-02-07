@@ -95,6 +95,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
 
   showmark <- T # Boolean uses to hide or show the mardkwon serving to load data
 
+  isuploading <- F
 
   #' Reactive function returned to the tab1.R
   #'
@@ -123,8 +124,10 @@ csvFile <- function(input, output, session, stringsAsFactors) {
 
   csvf <- reactive({
 
-
+    isuploading = ifelse( (length(parseFilePaths(root, input$files)$datapath) !=0) || !is.null(input$file)  , T, F)
+    validate(need(isuploading == T, "You need to import the data"))
     inFile <- input$file
+
     if(!is.null(inFile)){
 
     data <- as.list(inFile$datapath)

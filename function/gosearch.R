@@ -20,17 +20,17 @@
 gosearch <- function(hm01, species, ids, clusterlist) {
   library(goseq)
   library(GO.db)
-	
+
   for (i in 1:NROW(unique(hm01$cluster))) {
     genlist <- hm01[!duplicated(hm01$GeneName),]
     genlist <-genlist %>% dplyr::select(cluster, GeneName)   %>% filter(cluster == i)
     final = as.double(matrix(1, length(genlist$cluster)))
     names(final) = (genlist$GeneName)
-    
+
     h <- function(w)
         if (any(grepl("constraints|library", w)))
           invokeRestart("muffleWarning")
-    
+
     e <- function(y)
       if(any(grepl("Rplots.pdf", y)))
         invokeRestart("muffleWarning")
@@ -41,10 +41,10 @@ gosearch <- function(hm01, species, ids, clusterlist) {
       warning("40 % of genes are misssing")
       return(NULL)
     })
-    
+
     #pwf <- nullp(final, species, ids,plot.fit=FALSE) %>% na.omit()
     cat(length(row.names(pwf)))
-    
+
     if (!is.null(pwf)) {
       finalons <- goseq(pwf, species , ids, use_genes_without_cat = F)
       clusterlist[[i]] = filter(finalons, numInCat > 1 ) %>%
@@ -59,8 +59,8 @@ gosearch <- function(hm01, species, ids, clusterlist) {
 #' wclust is a function that return a tabular file containing the top n genes for the different clusters, the go ids associated to this cluster, the id's term and the definition of the term (Old function working with go seq package)
 #'
 #' @param clusterlist list of data frames
-#' @param filename name of the output file 
-#' @param min GO ids that are not represented significally by default = 2 
+#' @param filename name of the output file
+#' @param min GO ids that are not represented significally by default = 2
 #' @param top top go ids to display
 #'
 #' @return txt file
@@ -97,12 +97,12 @@ wclust <- function(clusterlist, filename, min, top)  {
       cat("\n", file = con)
     }
   }
-  
+
   close(con)
 }
 #' probnamtoentrez is a function that convert Gene symbols to entrez IDS
 #'
-#' @param hm01 data frame 
+#' @param hm01 data frame
 #' @param mypack package specific to the genome
 #'
 #' @return lists of entrez IDS
@@ -110,7 +110,7 @@ wclust <- function(clusterlist, filename, min, top)  {
 #'
 
 probnamtoentrez <- function(hm01,  mypack) {
-  
+
   lapply(1:NROW(unique((hm01$cluster))), function(x) {
     entrezids <- hm01 %>%
       filter(cluster == x) %>%
@@ -121,7 +121,7 @@ probnamtoentrez <- function(hm01,  mypack) {
       unlist() %>%
       unique() %>%
       .[!is.na(.)]
-    
+
     return(entrezids)
   })
 }
@@ -135,7 +135,7 @@ probnamtoentrez <- function(hm01,  mypack) {
 #' @export
 #'
 probnamtoentrezvenn <- function(venngenes, mypack){
-  
+
   entrezids <- venngenes %>%
     unlist() %>%
     as.character() %>%
@@ -143,7 +143,7 @@ probnamtoentrezvenn <- function(venngenes, mypack){
     unlist() %>%
     unique() %>%
     .[!is.na(.)]
-  
+
 }
 
 #' entreztosymb is a function which aim is to convert entrez IDS to gene symbols
@@ -160,18 +160,18 @@ lapply(1:NROW(myentz), function(x)
   as.vector(unlist(mget(myentz[[x]], envir=mypack, ifnotfound=NA))))
 }
 
-#' davidquery is a function which aim is to querrying DWS and performing go term enrichment analysis 
+#' davidquery is a function which aim is to querrying DWS and performing go term enrichment analysis
 #'
 #' @param entrezids list of entrez IDS
 #' @param species character name of the species whose genes are enriched
 #' @param mycat category of the enrichment analysis: MF, CC, BP or KEGG pathway
 #'
-#' @return list of data frames for each cluster containing 
+#' @return list of data frames for each cluster containing
 #' @export
 #'
-  
+
 davidquery <- function(entrezids, species, mycat) {
-  
+
   test = lapply(1:NROW(entrezids), function(x) {
     david <- DAVIDWebService$new(email = "get-trix@genotoul.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
     RDAVIDWebService::setTimeOut(david, 90000)
@@ -182,7 +182,7 @@ davidquery <- function(entrezids, species, mycat) {
         listName = "testList",
         listType = "Gene"
     )
-   
+
     selectedSpecie = (species)
     specieLocation = grep(selectedSpecie, RDAVIDWebService::getSpecieNames(david))
     print(RDAVIDWebService::getSpecieNames(david))
@@ -206,7 +206,7 @@ davidquery <- function(entrezids, species, mycat) {
 #'
 
 davidqueryvenn <- function(entrezids, species){
-  
+
   david <- DAVIDWebService$new(email = "get-trix@genotoul.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
   RDAVIDWebService::setTimeOut(david, 90000)
   addList(
@@ -216,12 +216,12 @@ davidqueryvenn <- function(entrezids, species){
     listName = "myqueryvenn",
     listType = "Gene"
   )
-  
+
   selectedSpecie = (species)
   specieLocation = grep(selectedSpecie, RDAVIDWebService::getSpecieNames(david))
   setCurrentSpecies(object = david, species = specieLocation)
   getClusterReport(david, type = "Term")
-  
+
 }
 
 
@@ -234,14 +234,10 @@ davidqueryvenn <- function(entrezids, species){
 #'
 
 mygotabres <- function(davtab){
-  
+
   lapply(seq(unique(davtab$Category)), function(x){
-    return(davtab %>% select(Category, Term,Fold.Enrichment,Benjamini,Count,List.Total,Pop.Hits)%>%
+    return(davtab %>% select(Category, Term,Fold.Enrichment,Benjamini,Count,List.Total,Pop.Hits, PValue)%>%
              filter(Category == unique(davtab$Category)[[x]]) %>%
-             top_n(10, Fold.Enrichment) %>% arrange(desc(Fold.Enrichment))%>% tibble::rownames_to_column("Top")
+             top_n(10, Fold.Enrichment) %>% arrange(desc(Fold.Enrichment))%>% tibble::rownames_to_column("Top") # PValue 
     )})
 }
-  
-
-
-

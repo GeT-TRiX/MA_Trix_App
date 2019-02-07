@@ -8,33 +8,31 @@ Licence: GPL-3.0
 */
 
 
-
 $(document).ready(function () {
 
 var xTitle = "top genes enriched";
 
 var defaultOptions = {
-  
-  
+
+
     series: null,
-    
+
     chart: {
 	  zoomType: "xy",
-	  reflow: true,
-	  //width: 1100,
+	  reflow: true, //width: 1100,
 	  height: 600,
 	  renderTo: "highChart",
 	  type: 'bubble'
 
   },
 
-  dom: "highChart",  
-  id: "highChart",  
-                           
+  dom: "highChart",
+  id: "highChart",
+
   exporting: {enabled: true},
   credits: {href: null, text: null},
-  
-                     
+
+
    legend: {
         enabled: true
     },
@@ -80,7 +78,7 @@ var defaultOptions = {
             step:1,
         },
         maxPadding: 0.2,
-        
+
         plotLines: [{
             color: 'black',
             dashStyle: 'dot',
@@ -120,21 +118,21 @@ var defaultOptions = {
             }
         }
     },
-    
+
 
   };
 
-  
 
-  
+
+
   function updatechart() {
-  
+
   Shiny.addCustomMessageHandler("updateVariable", function(newData) {
-  
+
   var newOptions = defaultOptions;
   newOptions.subtitle.text = newData.min;
   newOptions.subtitle.text = newData.max;
-  newOptions.series = newData.series; //update the series data 
+  newOptions.series = newData.series; //update the series data
   newOptions.subtitle.text = newData.legend;
   newOptions.yAxis.title.text = newData.title;
 
@@ -142,17 +140,17 @@ var defaultOptions = {
   newOptions.plotOptions.series.dataLabels.enabled = message;
 
   var chartObj = new Highcharts.Chart(newOptions);
-  
+
   Shiny.addCustomMessageHandler("iscollapse", function(collapsestate) {
     var chartObj = new Highcharts.Chart(newOptions);
     chartObj.reflow();
       });
-    
+
     });
   });
-  
+
   }
-  
+
   var printUpdate = function () {
         $('#container').highcharts().reflow();
   };
@@ -163,12 +161,8 @@ var defaultOptions = {
     printUpdate();
       });
     }
-    
-  
+
+
 updatechart();
 
 });
-
-
-
-  

@@ -16,16 +16,16 @@ axisParameters <- list(
 addpercentpop <- reactive({
 
   req(myresdavitab())
-  
+
   # paraltest <- myresdavitab()
   # cl <- makeCluster(getOption("cl.cores", 4))
   # clusterExport(cl,c("paraltest"),envir=environment())
   # clusterEvalQ(cl, library(dplyr))
-  
+
   reumdiff = lapply(1:length(myresdavitab()),function(x)return(sapply(length(myresdavitab()[[x]]$Count), function(y){
     return(as.numeric(as.character(myresdavitab()[[x]]$Count))/as.numeric(as.character(myresdavitab()[[x]]$Pop.Hits))*100)})) %>%
       mutate(myresdavitab()[[x]],percent = .)) %>% bind_rows()
-  
+
   # d = parLapply(cl, 1:length(paraltest),function(x)return(sapply(length(paraltest[[x]]$Count), function(y){
   #   return(as.numeric(as.character(paraltest$Count))/as.numeric(as.character(paraltest[[x]]$List.Total))*100)})) %>%
   #     mutate(paraltest[[x]],percent = .))
@@ -35,20 +35,20 @@ addpercentpop <- reactive({
 })
 
 dfenrichtojson <- reactive({
-  
+
   req(addpercentpop())
   param <- list(search= "Fold.Enrichment", n_points=length(addpercentpop()$Fold.Enrichment), x_start=min(as.numeric(addpercentpop()$Fold.Enrichment)))
   filtered <- addpercentpop()
   return(DftoHighjson(filtered,param))
-  
+
 })
 
 
 observe({
-  
+
   req(dfenrichtojson())
   newData <- c(axisParameters$topcatdav, list(series=dfenrichtojson()))
-  islab = input$addlabelhigh 
+  islab = input$addlabelhigh
   session$sendCustomMessage(type="updateVariable", newData) # send to javascript data
   session$sendCustomMessage("handler1", islab) #send to javascript labels
 })

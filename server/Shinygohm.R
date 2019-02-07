@@ -175,7 +175,7 @@ observe({
 myentreztosymb <- reactive({
 
   req( davidwebservice())
-  
+
 
   myselectedrows = (davidwebservice()[[as.numeric(input$cutgo)]][input$davidgo_rows_selected, c("Genes", "Term"),  drop = FALSE])
 
