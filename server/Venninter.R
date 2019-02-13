@@ -233,6 +233,13 @@ observe({
         pointsize = 12,
         res = 100
       )
+    else if (input$formvenbar == "png")
+      svg(
+        file,
+        width = 16,
+        height = 7,
+        pointsize = 12
+      )
     else
       eps(file,
           width = 16,

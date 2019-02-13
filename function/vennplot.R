@@ -341,6 +341,7 @@ getDegVennlfc <- function(selcontjv, filtgenes, restab, idcol, allcol, nonannot,
     for (i in mycont) {
       resfinal[[i]] = as.numeric(as.character(resfinal[[i]]))
     }
+    print(head(reslist[[2]]))
     
     reslist[[2]] <- resfinal %>% as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% as.data.frame()  
   }

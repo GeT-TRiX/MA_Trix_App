@@ -169,9 +169,6 @@ observe({
 
   }
 
-  #outputOptions(output, 'savehm', suspendWhenHidden=FALSE)
-
-
   output$savehm <- downloadHandler(filename <- function() {
     paste0(basename(file_path_sans_ext(projectname())),
            '_heatmap.',
@@ -200,6 +197,16 @@ observe({
         pointsize = 12,
         res = 100
       )
+    
+    else if (input$formhm == "svg")
+      svg(
+        file,
+        width = 8,
+        height = 8,
+        bg = "transparent", 
+        pointsize = 12
+      )
+    
     else
       eps(file,
           width = 5,
@@ -269,14 +276,14 @@ observe({
     rownames(lengthofmyclust) <- sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)
     return(paste("cluster", x)))
 
-    lengthofmyclust <- rbind(lengthofmyclust,c(sum(unlist(lengthofmyclust$`total number of probes`)),sum(unlist(lengthofmyclust$`total number of genes`))))
+    lengthofmyclust <- rbind(lengthofmyclust,c(sum(unlist(lengthofmyclust$`total number of probes`)), sum(unlist(lengthofmyclust$`total number of genes`))))
     rownames(lengthofmyclust)[length(rownames(lengthofmyclust))]<- "total"
 
     return(lengthofmyclust)
 
   })
 
-  output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength() )) #
+  output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength() )) 
 
 
   output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))

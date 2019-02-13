@@ -320,7 +320,7 @@ body <- dashboardBody(
                                                                           column( 3, style="width:20%;",
                                                                                   selectInput(
                                                                                     "formvolc",label = NULL,
-                                                                                    choices = c("png", "eps", "pdf"))))),
+                                                                                    choices = c("png", "eps", "pdf","svg"))))),
 
                                             plotOutput(outputId = "volcanoplot", height = 900) ,
                                             div(style="display:inline-block", id ="dontwanttoshow",
@@ -400,8 +400,10 @@ body <- dashboardBody(
 
                                                dirModuleUI("datafile")),
                                         column(6,
-                                               csvIdentifier("datafile", "Unique identifier")
+                                               csvDecimal("datafile")
+                                              
                                         )),
+                               csvIdentifier("datafile", "Unique identifier"), 
 
 
                                br(),
@@ -495,7 +497,7 @@ body <- dashboardBody(
                                                     column( 3,
                                                             selectInput(
                                                               "formpca",label = NULL,
-                                                              choices = c("png", "eps", "pdf")))
+                                                              choices = c("png", "eps", "pdf", "svg")))
 
                                           )),
 
@@ -682,7 +684,7 @@ body <- dashboardBody(
                                                     "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
                             column(3 ,br(),style= "width:11%;  padding: 0%;",
                                    selectInput( "formvenbar",label = NULL,
-                                                choices = c("png", "eps", "pdf")))
+                                                choices = c("png", "eps", "pdf", "svg")))
                             # ,
                             # column(3,style= "width:9%; padding: 0%;",
                             #
@@ -902,7 +904,7 @@ body <- dashboardBody(
                                     column(2),
                                     column( 3,
                                             selectInput("formhm", label = NULL,
-                                                        choices = c("png", "eps", "emf")))
+                                                        choices = c("png", "eps", "emf", "svg")))
 
                           )),
                       includeCSS("./css/style.css"),

@@ -260,6 +260,13 @@ content <- function(file) {
       pointsize = 12,
       res = 100
     )
+  else if (input$formpca == "svg")
+    
+    svg(file,
+        width = 12,
+        height = 12,
+        pointsize = 12
+        )
   else
     eps(file,
         width = 12,

@@ -147,6 +147,15 @@ content <- function(file) {
       pointsize = 12,
       res = 100
     )
+  else if( input$formvolc == "svg")
+    svg(
+      file,
+      width = 12,
+      height = 12,
+      pointsize = 12
+      
+      
+    )
 
   else
     ggsave(file,device=cairo_ps, fallback_resolution = 600)

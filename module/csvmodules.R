@@ -19,7 +19,22 @@ csvIdentifier <- function(id, label = "Unique Identifier") {
 
 }
 
-ordinput <- function(csvnord, identifier){
+csvSeparator <- function(id, label="Separator"){
+  ns <- NS(id)
+  radioButtons(ns("csvsep"), label , 
+               choices = c(Semicolon=';', Comma=',' 
+                           ,Tab='\t', Space=''
+               ), selected = ';')
+}
+
+csvDecimal <- function(id, label="Decimal"){
+  ns <- NS(id)
+  radioButtons(ns("csvdec"), label , 
+               choices = c(Comma=',', Point='.' ), selected = ',')
+}
+
+
+ordinput <- function(csvnord, identifier, dec){
 
   csv <- lapply(
     csvnord,
@@ -35,8 +50,8 @@ ordinput <- function(csvnord, identifier){
         data.table = F,
         check.names = F,
         header = T,
-        sep = ";",
-        dec = ","
+        #sep = sep ,
+        dec = dec
       )
   )
 
@@ -178,7 +193,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
         }
       }
 
-      csvord <- ordinput(csvnord, input$identifier)
+      csvord <- ordinput(csvnord, input$identifier, input$csvdec)
 
 
       observe({showmark <<-F
@@ -236,7 +251,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
     csvnord[2] <-csvlocpath()[[2]]
     csvnord[3] <-csvlocpath()[[3]]
 
-    csvord <- ordinput(csvnord, input$identifier)
+    csvord <- ordinput(csvnord, input$identifier, input$csvdec)
 
 
     observe({showmark <<-F
