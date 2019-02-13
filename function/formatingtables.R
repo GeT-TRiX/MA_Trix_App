@@ -237,7 +237,7 @@ meanrankgenes  <- function(dtsign, stat , rankcomp=NULL, multcomp, regulationvol
   for (i in selcomp) {
     dtsign[[i]] = as.numeric(as.character(dtsign[[i]]))
   }
-  print(dtsign)
+  
   summarizetable <- dtsign %>% select(GeneName, paste0(stat, multcomp))  %>%
     as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% as.data.frame()
 

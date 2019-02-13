@@ -26,7 +26,7 @@ observe({
                                                                                                                                       buttons = c( 'csv',  'pdf' )) ), server = F)
   else if (input$dispvenn == "genes"  &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
     output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('5', '10', '15')),extensions=c("Buttons",'Scroller'), options = list(scrollX = TRUE ,pageLength = 150, scrollY=530,  stateSave = T,dom = 'Bfrtip',
-                                                                                                                                      buttons = c( 'csv',  'pdf' ))), server = F)
+                                                                                                                                      buttons = c( 'csv',  'pdf' ))) %>% formatStyle('GeneName', color = styleEqual(unique(jvenndup$duplicated$GeneName), rep('orange', length(unique(jvenndup$duplicated$GeneName))))), server = F)
   else
     output$vennresinter <- DT::renderDataTable(DT::datatable(topngenesDT(), list(lengthMenu =  c('5', '10', '15')),extensions=c("Buttons",'Scroller'),  options = list(scrollX = TRUE ,pageLength = 150, scrollY=530,  stateSave = T,dom = 'Bfrtip',
                                                                                                                                    buttons = c( 'csv',  'pdf' ))), server = F)

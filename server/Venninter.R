@@ -38,6 +38,8 @@ venninter <- reactive({
 })
 
 
+jvenndup <- reactiveValues()
+
 #' vennfinal is a reactive function which return a list of data frame corresponding to the computationnal mean of each logFC for the possible logical relations between a finite collection of different sets
 #' and a data frame with as primary key the probenames associated with the corresponding gene names and logFC
 #'
@@ -78,12 +80,16 @@ vennfinal <- reactive({
     mycont =input$selcontjv
   else
     mycont =choix_cont()
-  if(input$dispvenn == "genes")
+  if(input$dispvenn == "genes"){
     reslist[[2]] <- meanrankgenes(resfinal, stat = prefstat$greppre[[2]], multcomp = mycont , jvenn=  T)
-
+    
+  jvenndup$duplicated <- resfinal %>% 
+      group_by(GeneName) %>% 
+      filter(n()>1)
+  }
+    
   return(reslist)
 })
-
 
 
 
