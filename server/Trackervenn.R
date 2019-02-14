@@ -8,7 +8,7 @@
 
 output$venngenes <- renderPrint({ # number of signficant genes in the heatmap produced
   req(input$selcontjv)
-  if(input$dispvenn == "probes")
+  if(any(grepl("probes|transcripts", input$dispvenn)))
     cat(length(vennfinal()[[1]][[1]]))
   else
     cat(length(vennfinal()[[1]]$GeneName))
@@ -16,18 +16,18 @@ output$venngenes <- renderPrint({ # number of signficant genes in the heatmap pr
 
 
 output$contvenn <- renderText({ #Contrast selected
-  my_final <<- paste(colnames(user_cont()),as.character(),  sep=",") 
+  my_final <<- paste(colnames(user_cont()),as.character(),  sep=",")
 })
 
 output$continter <- renderText({ #Contrast selected
-  my_final <<- paste(vennchoice(),as.character(),  sep=",") 
+  my_final <<- paste(vennchoice(),as.character(),  sep=",")
 })
 
 output$totalgenes <- renderText({
-  
+
   req(vennlist())
   sum(sapply(vennlist()[[1]],length))
-  
+
 })
 
 
@@ -43,4 +43,3 @@ output$myFCvenn <- renderText({ #Fold change value selected, default =1
 output$topgenesdf <- renderText({ #Method for choosing the signficant genes, default = FDR (BH method)
   input$topgenes
 })
-

@@ -12,7 +12,6 @@
 
 boolhm <- F
 
-
 output$heatmbool <- reactive({
   boolhm
 })
@@ -160,14 +159,11 @@ observe({
   })
 
 
-  heatid <- input$side
-  if (grepl("Heatmap", heatid)) {
     if (input$reactheat == T)
       source(file.path("server", "Plotreact.R"), local = TRUE)$value #
     else
       source(file.path("server", "Plotreact2.R"), local = TRUE)$value #
 
-  }
 
   output$savehm <- downloadHandler(filename <- function() {
     paste0(basename(file_path_sans_ext(projectname())),
@@ -197,16 +193,16 @@ observe({
         pointsize = 12,
         res = 100
       )
-    
+
     else if (input$formhm == "svg")
       svg(
         file,
         width = 8,
         height = 8,
-        bg = "transparent", 
+        bg = "transparent",
         pointsize = 12
       )
-    
+
     else
       eps(file,
           width = 5,
@@ -237,8 +233,6 @@ observe({
       write.csv(ordered(), file, row.names = FALSE)
     }
   )
-
-
 
 
   ordered <- reactive({
@@ -272,18 +266,16 @@ observe({
     return(length(which(hmobj$hm$cluster ==x)))) %>%
     cbind(.,sapply(1:NROW(unique( hmobj$hm$cluster)),function(x)
     return(length(which(mydfhmgen$cluster ==x))))) %>% as.data.frame() %>%
-    setNames(.,c("total number of probes","total number of genes"))
-    rownames(lengthofmyclust) <- sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)
-    return(paste("cluster", x)))
-
-    lengthofmyclust <- rbind(lengthofmyclust,c(sum(unlist(lengthofmyclust$`total number of probes`)), sum(unlist(lengthofmyclust$`total number of genes`))))
+    setNames(.,c(ifelse(dataid() == "ProbeName", "total number of probes", "total number of transcripts"),"total number of genes")) %>%
+    `row.names<-`(., sapply(1:NROW(unique(hmobj$hm$cluster)), function(x)return(paste("cluster", x)))) %>%
+    rbind(. ,c(sum(unlist(.$`total number of probes`)), sum(unlist(.$`total number of genes`))))
     rownames(lengthofmyclust)[length(rownames(lengthofmyclust))]<- "total"
 
     return(lengthofmyclust)
 
   })
 
-  output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength() )) 
+  output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength() ))
 
 
   output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))

@@ -29,12 +29,7 @@ shinyServer(function(input, output,session) {
   ##########################################
   ######## Widget update and info         ##
   ##########################################
-  
-  observe({
-    
-    
-  })
-  
+
   source(file.path("server", "Utilities.R"), local = TRUE)$value # Utilities method (packages citations, fc step, zipdownload and panel redirection and project name)
 
   ##########################################
@@ -105,7 +100,5 @@ shinyServer(function(input, output,session) {
 
   source(file.path("server", "Shinychat.R"), local = TRUE)$value # Chat for the app associated with the file Chat.rds
   source(file.path("server", "Groupstripshiny.R"), local = TRUE)$value # Utilities method (packages citations, fc step, zipdownload and panel redirection and project name)
-
-
 
 })

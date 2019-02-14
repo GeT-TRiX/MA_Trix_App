@@ -22,12 +22,12 @@ cutheatmlist = list( Boxplot = c( `True` = 'Boxplot'), Heatmap=c(`True` = "Heatm
 categoerygen = c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY")
 
 # Loading packages
-
 #sudo apt-get install libv8-dev
+
 list.of.packages <- c("AnnotationDbi","shiny","shinythemes","shinyjs","ggplot2","shinyBS","plyr","shinyFiles","xlsx","stringr",
                       "BH","data.table","DT","readr","colourpicker","shinydashboard","heatmaply",
-                      "tools","R.devices","FactoMineR","factoextra","gplots","V8",
-                      "RColorBrewer","foreach","doParallel","gridExtra","plotly","dplyr","reticulate","Hmisc", "devEMF")
+                      "tools","R.devices","FactoMineR","factoextra","gplots","V8","RColorBrewer","foreach","doParallel",
+                      "gridExtra","plotly","dplyr","reticulate","Hmisc", "devEMF")
 
 
 

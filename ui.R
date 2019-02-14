@@ -197,6 +197,8 @@ body <- dashboardBody(
                        box(
                          title = "What's new in MATRiX", width = NULL, status = "primary",
                          div(style = 'overflow-y: scroll; height: 500px',
+                             addNews("Feb 14th 2019", "Jvenn results", "Duplicated genes are now highlited as orange in the output table"),
+                             addNews("Feb 14th 2019", "Upload", "Users can now import csv data with semicolon or comma separatos by precising the decimal"),
                              addNews("Jan 25th 2019", "Bug", "Correct david$getSpecieNames (Specieshm and Speciesvenn)"),
                              addNews("Jan 25th 2019", "Data", "Users can now register as a team and load their data directly from the server (only for 2019 projects and logs are provided in report)"),
                              addNews("Jan 25th 2019", "MATRiX", "MATRiX is now running with Shinyproxy (Spring + Docker)"),
@@ -401,9 +403,9 @@ body <- dashboardBody(
                                                dirModuleUI("datafile")),
                                         column(6,
                                                csvDecimal("datafile")
-                                              
+
                                         )),
-                               csvIdentifier("datafile", "Unique identifier"), 
+                               csvIdentifier("datafile", "Unique identifier"),
 
 
                                br(),
@@ -655,10 +657,13 @@ body <- dashboardBody(
 
                                  htmlOutput("dfvenn")),
 
-                             conditionalPanel(condition = "input.dispvenn == 'genes'",
+                             conditionalPanel(condition = "typeof input.jvennlist !== 'undefined' && input.jvennlist.length > 0 && input.dispvenn == 'probes'",
                                               helpText(
                                                 "You can directly filter the table by fold change and save the output table"
                                               )),
+                            conditionalPanel(condition = "typeof input.jvennlist !== 'undefined' && input.jvennlist.length > 0 && input.dispvenn == 'genes'",
+                                        helpText("You can directly filter the table by fold change and save the output table, genes in orange are duplicates "
+                            )),
 
                              DT::dataTableOutput("vennresinter"),br(),br(),br(),
                              conditionalPanel(condition = "input.selcontjv",
@@ -685,12 +690,7 @@ body <- dashboardBody(
                             column(3 ,br(),style= "width:11%;  padding: 0%;",
                                    selectInput( "formvenbar",label = NULL,
                                                 choices = c("png", "eps", "pdf", "svg")))
-                            # ,
-                            # column(3,style= "width:9%; padding: 0%;",
-                            #
-                            #        uiOutput("topgenesvenn", style= "padding: 0px;font-weight: 400;top: 0px;
-                            #                 right: -22px;left: 0px;color: #3c8dbc;position: absolute;"))
-                                   )),
+                                  )),
                       plotOutput(outputId ="barplotvenn", height = "500px", width ="100%"),
                       br(),
                       h1("Here's a tracker for your different selections:"),
@@ -811,9 +811,10 @@ body <- dashboardBody(
 
                      fluidRow(
                        column(12,
-                              selectInput("dispvenn", #  Create a select list that can be used to choose a single or multiple items from a list of values.
-                                          "Choose if you want to display probes or genes",
-                                          choices = c("probes", "genes"))),
+                         uiOutput("dispidvenn")),
+                              # selectInput("dispvenn", #  Create a select list that can be used to choose a single or multiple items from a list of values.
+                              #             "Choose if you want to display probes or genes",
+                              #             choices = c("probes", "genes"))),
                        column(6,
                               checkboxInput("Notanno","Remove the genes that are not annotated",FALSE)),
                        column(6,
@@ -857,7 +858,7 @@ body <- dashboardBody(
                      br(), br(),
 
                      conditionalPanel( "input.selcontjv" ,
-                     
+
                      strong("Functional Annotation Clustering",style = "font-family: 'times'; font-size:20px; font-style: strong; "),
 
                      br(),br(),
@@ -1132,7 +1133,6 @@ body <- dashboardBody(
                                           style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                         ),
                                         br(),
-                                        #includeHTML("HTML/tooltip.html"),
                                         shinyjs::hidden(div(
                                           id = "advanced",
                                           fluidRow(
@@ -1140,9 +1140,6 @@ body <- dashboardBody(
                                                    numericInput('clusters', 'Cluster count', 3,
                                                                 min = 1, max = 15)),
                                             column(6,
-                                                   #addTooltip(session, id, title, placement = "bottom", trigger = "hover", options = NULL),
-                                                   #div(id = "mytext",
-                                                   #    p("Choose your matrix distance",includeHTML("HTML/tooltip.html")),
                                                    selectInput(
                                                      "dist","Choose your matrix distance",choices = c("correlation", "euclidian","manhattan", "cosine")),
                                                    div(id = "tooltipelem",
@@ -1217,8 +1214,7 @@ body <- dashboardBody(
                                           br()
                                         ))), #end of the div "form"
                                       br(),
-                                      shinyjs::hidden(div(
-                                        # Hide some widgets between the tags
+                                      shinyjs::hidden(div( # Hide some widgets between the tags
                                         id = "advancedgo",
                                         wellPanel(
 
@@ -1275,8 +1271,7 @@ body <- dashboardBody(
                                br(),
                                uiOutput("cutcluster"),
                                selectizeInput('cutinfo', 'Choose your types of plots',
-                                              choices = cutheatmlist),
-                               # cutheatmlist is a variable defined in the global environment
+                                              choices = cutheatmlist), # cutheatmlist is a variable defined in the global environment
                                br(),
 
                                selectInput("formcut","Choose your file format",choices = c("pdf", "png", "eps")

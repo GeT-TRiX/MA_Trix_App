@@ -15,7 +15,7 @@
 #'
 
 vennchoice <- reactive({
-  if (is.null (input$intscol))
+  if (is.null(input$intscol))
     return(NULL)
   else
     return(input$intscol)
@@ -82,20 +82,19 @@ vennfinal <- reactive({
     mycont =choix_cont()
   if(input$dispvenn == "genes"){
     reslist[[2]] <- meanrankgenes(resfinal, stat = prefstat$greppre[[2]], multcomp = mycont , jvenn=  T)
-    
-  jvenndup$duplicated <- resfinal %>% 
-      group_by(GeneName) %>% 
+
+  jvenndup$duplicated <- resfinal %>%
+      group_by(GeneName) %>%
       filter(n()>1)
   }
-    
+
   return(reslist)
 })
 
 
-
 output$venntitle <- renderText({
   req(input$selcontjv)
-  if(input$dispvenn == "probes")
+  if(any(grepl("probes|transcripts", input$dispvenn)) )
     mytitlevenn <<- print(paste("Barplot showing the top ", input$topgenes ," genes"))
   else
     mytitlevenn <<- print(paste("Barplot showing the computationnal logFC mean of the top " ,input$topgenes , " genes before the rendering table"))
@@ -112,18 +111,11 @@ output$venngenesbef <- renderText({
 
 output$dfvenn <- renderText({
   req(input$selcontjv)
-  if(input$dispvenn == "probes")
-    mytitlevenn <<- print(paste("Table showing the ProbeNames and GeneNames associated with their respective logFC for the intersection(s) selected"))
+  if(any(grepl("probes|transcripts", input$dispvenn)) )
+    mytitlevenn <<- print(paste("Table showing the ", ifelse(dataid() == "ProbeName", "probes", "transcripts")  , "and genes associated with their respective logFC for the intersection(s) selected"))
   else
-    mytitlevenn <<- print(paste("Table showing the GeneNames associated with the average logFC for the intersection(s) selected"))
+    mytitlevenn <<- print(paste("Table showing the genes associated with the average logFC for the intersection(s) selected"))
 
-
-})
-
-output$dfvennbef <- renderText({
-  req(input$selcontjv)
-  if(input$dispvenn == "genes")
-    mytitlevenn <<- print(paste("Table showing the GeneNames associated with their respective logFC for the intersection(s) selected"))
 
 })
 
@@ -148,7 +140,7 @@ venntopgenes <- reactive({
 output$downloadvennset = downloadHandler('venns-filtered.csv',
   content = function(file) {
     s = input$vennresinter_rows_all
-    if(input$dispvenn == "probes")
+    if(any(grepl("probes|transcripts", input$dispvenn)) )
       write.csv2(vennfinal()[[1]][s, , drop = FALSE], file)
     else
       write.csv2(vennfinal()[[2]][s, , drop = FALSE], file)
@@ -176,7 +168,7 @@ plottopgenes <- eventReactive(input$topdegenes, {
   else
     mycont <- paste0(prefstat$greppre[[2]], input$selcontjv)
 
-  if(input$dispvenn == "probes" &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ) )
+  if(any(grepl("probes|transcripts", input$dispvenn)) &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ) )
     myplot <- topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
   else if(input$dispvenn == "genes" &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
     myplot <- topngenes(vennfinal()[[2]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
@@ -269,9 +261,10 @@ observe({
 
 filteredcolvenn <- reactive ({
 
-  req(vennfinal(), venntopgenes(), input$selcontjv)
+  req(vennfinal(), venntopgenes(), input$selcontjv, input$dispvenn)
+
   filteredcol = na.omit((as.numeric(gsub("([0-9]+).*$", "\\1", unlist(input$vennresinter_state$order)))))
-  if(input$dispvenn == "probes")
+  if(any(grepl("probes|transcripts", input$dispvenn)))
     colnamefil = colnames(vennfinal()[[1]][filteredcol])
   else
     colnamefil = colnames(vennfinal()[[2]][filteredcol])
@@ -300,7 +293,6 @@ topngenesDT <- reactive ({
   else
     topngenesDT <-vennfinal()[[1]] %>% filter (vennfinal()[[1]][[1]] %in% topngenesDT[[1]])
 
-
  return(topngenesDT)
 })
 
@@ -311,4 +303,17 @@ output$filtercompjvenn <- renderUI({
   tags$div(
     class = "jvennfiltparam",selectInput('filteredcompjv',
                                      'filter comp', choices = c("", input$selcontjv), selected = ""))
+})
+
+
+output$dispidvenn <- renderUI( ##validate
+
+  selectInput("dispvenn",
+              label = paste("Choose if you want to display", ifelse(dataid() == "ProbeName", "probes", "transcripts") ,  "or genes"),
+              choices = c(ifelse(dataid() == "ProbeName", "probes", "transcripts"), "genes"))
+)
+
+observe({
+  req(input$dispvenn)
+  print(input$dispvenn)
 })
