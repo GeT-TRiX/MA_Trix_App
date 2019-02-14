@@ -57,28 +57,28 @@ packrat/lib*/
 
 #shiny test ignore and expect packrat
 packrat/src/*
-!packrat/src/BiocGenerics
-!packrat/src/Biobase
-!packrat/src/IRanges 
-!packrat/src/S4Vectors
-!packrat/src/AnnotationDbi
-!packrat/src/annotate
-!packrat/src/GSEABase
-!packrat/src/genefilter
-!packrat/src/graph
-!packrat/src/RBGL
-!packrat/src/AnnotationForge
-!packrat/src/Category
-!packrat/src/GO.db
-!packrat/src/Rgraphviz
-!packrat/src/org.Mm.eg.db
-!packrat/src/RDAVIDWebService
-!packrat/src/GOstats
-!packrat/src/org.Gg.eg.db
-!packrat/src/org.Dr.eg.db
-!packrat/src/org.Hs.eg.db
-!packrat/src/org.Rn.eg.db
-!packrat/src/org.Ss.eg.db
+#!packrat/src/BiocGenerics
+#!packrat/src/Biobase
+#!packrat/src/IRanges 
+#!packrat/src/S4Vectors
+#!packrat/src/AnnotationDbi
+#!packrat/src/annotate
+#!packrat/src/GSEABase
+#!packrat/src/genefilter
+#!packrat/src/graph
+#!packrat/src/RBGL
+#!packrat/src/AnnotationForge
+#!packrat/src/Category
+#!packrat/src/GO.db
+#!packrat/src/Rgraphviz
+#!packrat/src/org.Mm.eg.db
+#!packrat/src/RDAVIDWebService
+#!packrat/src/GOstats
+#!packrat/src/org.Gg.eg.db
+#!packrat/src/org.Dr.eg.db
+#!packrat/src/org.Hs.eg.db
+#!packrat/src/org.Rn.eg.db
+#!packrat/src/org.Ss.eg.db
 
 etc
 

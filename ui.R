@@ -260,9 +260,9 @@ body <- dashboardBody(
                                                                tags$li("First click on the browse button to load the data"),
                                                                tags$li("After the pop up has appeared, you will have to select the data files."),
                                                                tags$li("You need three distinct csv files, these files are respectively named xxx_pData, xxx_WorkingSet and xxx_ResTable."),
-                                                               tags$li("pData : The experimental design is a 2 column size table that associates samples according to their respective groups."),
-                                                               tags$li("WorkingSet : The expression table combine the normalised log2 expression for each samples separated in columns with the first column corresponding to the unique id."),
-                                                               tags$li("ResTable : Statistical file is the result of differential analysis that link for each unique ids the gene symbol with the fold change, p-value and FDR."),
+                                                               tags$li("pData : The experimental design in a 2 column table that associates samples to their respective biological conditions"),
+                                                               tags$li("WorkingSet : The table of the normalised expression values (log2, cpm, ...) with genes in rows and samples in columns. The first column must contain the unique gene identifier (or transcript, probe, ...)."),
+                                                               tags$li("ResTable :  The table containing the results of differential analysis (fold change, p-value and FDR) next to a first column with unique gene identifier and a second column with the gene symbol."),
                                                                tags$li("The final step consist to select all the data at once and then confirm the selection by clicking on the open button."),
                                                                tags$li("A green message will then appear to confirm the data loading with a summary table.")
                                                              ),
@@ -351,16 +351,8 @@ body <- dashboardBody(
                                                                         column(3,sliderInput('pvalstrip', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05))),
 
                                                                         column(width=12,  textOutput("selected_stripgene")
-                                                                               #textInput("stripgenesearch", "Search your gene", placeholder = "cyp2b10" ),
-                                                                               #bsTooltip("stripgenesearch", "Enter your gene in order to display the group mean expression.","bottom",trigger = "hover", options = list(container = "body"))
+
                                                                         )
-                                                                        # column(width=3,  actionButton("plotstrip",label = "Generate plot",
-                                                                        #                               icon = icon("arrow-down")),
-                                                                        #        bsTooltip("plotstrip", "Click here to generate the strip graph", options = list(container = "body")),
-                                                                        #        tags$style(type='text/css', "#plotstrip { width:100%; margin-top: 25px;}")
-                                                                        #
-                                                                        #
-                                                                        # )
                                                                     ))),
 
                                                              column(12,
