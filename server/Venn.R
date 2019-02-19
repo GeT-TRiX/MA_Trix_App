@@ -144,6 +144,7 @@ observeEvent(input$allCont, {
   )
 })
 
+
 observeEvent(input$noCont, {
   groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
   updateCheckboxGroupInput(session,
@@ -155,20 +156,6 @@ observeEvent(input$noCont, {
 })
 
 
-
-#' indnull is a reactive function that return a vector for the contrasts with 0 genes significant at a treshold set to 5%
-#'
-#' @param vennlist a list
-#'
-#' @return indnull a reactive vector
-#'
-#' @export
-
-indnull <- reactive({
-
-    indexnull = which( sapply(vennlist()[[1]] ,length) == 0)
-    return(indexnull)
-})
 
 
 #' choix_cont is a reactive function that return the contrast selected by the user
@@ -290,16 +277,31 @@ output$downloadsetven <- downloadHandler(
 
 
 myindex<- reactive({
-
-  myl = lapply(seq(ncol(subsetstat()[[1]])),function(x)
-    return(which(subsetstat()[[1]][[x]] < 0.05)))
-
+  
+  req(filtermethjvenn())
+  # if(input$filtermethjvenn == "FDR")
+  # myl = lapply(seq(ncol(subsetstat()[[1]])),function(x)
+  #   return(which(subsetstat()[[1]][[x]] < 0.05)))
+  # else
+  #   myl = lapply(seq(ncol(subsetstat()[[3]])),function(x)
+  #     return(which(subsetstat()[[3]][[x]] < 0.05)))
+    
+  myl = lapply(seq(ncol(subsetstat()[[3]])),function(x)
+    return(which(subsetstat()[[3]][[x]] < 0.05 ))) 
+  
   indexnull = which( sapply(myl ,length) == 0)
+  
   if(length(indexnull)>0)
     selcol = colnames(subsetstat()[[1]][,-c(indexnull),drop = FALSE])
   else
     selcol = colnames(subsetstat()[[1]])
 
   return(selcol)
+
+})
+
+
+filtermethjvenn <- reactive({
+  return(input$filtermethjvenn)
 
 })
