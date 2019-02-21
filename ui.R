@@ -1017,9 +1017,13 @@ body <- dashboardBody(
                                        tags$script(src="https://code.highcharts.com/modules/exporting.js"),
                                        tags$script(src="https://code.highcharts.com/modules/export-data.js"),
 
-
+                                      fluidRow(column(6, selectInput(
+                                        "enrichbased",
+                                        "Choose your sorting criteria",
+                                        choices = c("Fold Enrichment"= "FoldE", "p.value" = "Pvalue")
+                                      )), column(6, checkboxInput("addlabelhigh", "add label", FALSE))),
                                        tags$div(id="highChart")  ,
-                                       checkboxInput("addlabelhigh", "add label", FALSE),
+                                       
                                        tags$script(src="bubble.js")
 
                       )),

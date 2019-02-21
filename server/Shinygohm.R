@@ -223,7 +223,12 @@ output$printselected <- renderPrint({
 
 myresdavitab <- reactive({
   req(davidwebservice())
-  mygotabres(davidwebservice()[[as.numeric(input$cutgo)]])
+  mygotabres(davidwebservice()[[as.numeric(input$cutgo)]], input$enrichbased)
+})
+
+observe({
+  req(myresdavitab())
+  print(myresdavitab())
 })
 
 output$titlegomain <- renderText({

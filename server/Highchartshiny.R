@@ -39,7 +39,7 @@ dfenrichtojson <- reactive({
   req(addpercentpop())
   param <- list(search= "Fold.Enrichment", n_points=length(addpercentpop()$Fold.Enrichment), x_start=min(as.numeric(addpercentpop()$Fold.Enrichment)))
   filtered <- addpercentpop()
-  return(DftoHighjson(filtered,param))
+  return(DftoHighjson(filtered,param, input$enrichbased))
 
 })
 

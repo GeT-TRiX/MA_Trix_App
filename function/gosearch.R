@@ -232,11 +232,13 @@ davidqueryvenn <- function(entrezids, species){
 #' @export
 #'
 
-mygotabres <- function(davtab){
-
+mygotabres <- function(davtab, enrichbased){
+  print(enrichbased)
   lapply(seq(unique(davtab$Category)), function(x){
     return(davtab %>% select(Category, Term,Fold.Enrichment,Benjamini,Count,List.Total,Pop.Hits, PValue)%>%
-             filter(Category == unique(davtab$Category)[[x]]) %>%
-             top_n(10, Fold.Enrichment) %>% arrange(desc(Fold.Enrichment))%>% tibble::rownames_to_column("Top") # PValue 
+             filter(Category == unique(davtab$Category)[[x]]) %>%{ if(enrichbased == "FoldE") top_n(10, Fold.Enrichment) %>% arrange(desc(Fold.Enrichment)) %>% tibble::rownames_to_column("Top")  else top_n(-10, PValue) %>% arrange(desc(-PValue))%>% tibble::rownames_to_column("Top") } # PValue 
+             
     )})
 }
+
+
