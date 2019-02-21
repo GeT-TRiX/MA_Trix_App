@@ -24,8 +24,8 @@ gosearch <- function(hm01, species, ids, clusterlist) {
   for (i in 1:NROW(unique(hm01$cluster))) {
     genlist <- hm01[!duplicated(hm01$GeneName),]
     genlist <-genlist %>% dplyr::select(cluster, GeneName)   %>% filter(cluster == i)
-    final = as.double(matrix(1, length(genlist$cluster)))
-    names(final) = (genlist$GeneName)
+    genfil = as.double(matrix(1, length(genlist$cluster)))
+    names(genfil) = (genlist$GeneName)
 
     h <- function(w)
         if (any(grepl("constraints|library", w)))
@@ -36,18 +36,17 @@ gosearch <- function(hm01, species, ids, clusterlist) {
         invokeRestart("muffleWarning")
 
     pwf <- tryCatch({
-      withCallingHandlers(nullp(final, species, ids ,plot.fit=FALSE), warning = h, error = e) %>% na.omit()
+      withCallingHandlers(nullp(genfil, species, ids ,plot.fit=FALSE), warning = h, error = e) %>% na.omit()
     }, warning = function(e) {
       warning("40 % of genes are misssing")
       return(NULL)
     })
 
-    #pwf <- nullp(final, species, ids,plot.fit=FALSE) %>% na.omit()
     cat(length(row.names(pwf)))
 
     if (!is.null(pwf)) {
-      finalons <- goseq(pwf, species , ids, use_genes_without_cat = F)
-      clusterlist[[i]] = filter(finalons, numInCat > 1 ) %>%
+      enrichana <- goseq(pwf, species , ids, use_genes_without_cat = F)
+      clusterlist[[i]] = filter(enrichana, numInCat > 1 ) %>%
         arrange(desc(numInCat))
     }
     else
@@ -172,14 +171,14 @@ lapply(1:NROW(myentz), function(x)
 
 davidquery <- function(entrezids, species, mycat) {
 
-  test = lapply(1:NROW(entrezids), function(x) {
+  queryclust = lapply(1:NROW(entrezids), function(x) {
     david <- DAVIDWebService$new(email = "get-trix@genotoul.fr", url = "https://david.ncifcrf.gov/webservice/services/DAVIDWebService.DAVIDWebServiceHttpSoap12Endpoint/")
     RDAVIDWebService::setTimeOut(david, 90000)
     result <- addList(
         david,
         entrezids[[x]],
         idType = "ENTREZ_GENE_ID",
-        listName = "testList",
+        listName = "queryhm",
         listType = "Gene"
     )
 

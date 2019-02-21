@@ -21,5 +21,5 @@
 
 data_summary <- reactive({
   req(csvf(), subsetstat())
-  myfinalfc(csvf()[[3]], input$pval1, input$method, prefstat$greppre)
+  restabfc(csvf()[[3]], input$pval1, input$method, prefstat$greppre)
 })

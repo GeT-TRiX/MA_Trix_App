@@ -33,85 +33,6 @@ formating = function( adj, pval){
 }
 
 
-#' transform a dataframe containing factor for different levels not optimal tho
-#'
-#' @param dataframe
-#'
-#' @return
-#'
-#' @export
-
-
-transform <- function(dataframe,toast){
-
-  myl = list()
-  cpt = 1
-  for (i in toast) {
-    command <- paste0(i, "<-subset(dataframe, Grp=='", i, "')")
-    test = eval(parse(text=command))
-    X = test$X
-    Grp = test$Grp
-    myl[[cpt]] = data.frame(X ,Grp)
-    cpt = cpt+1
-    dyn_grp <- Reduce(function(x, y) merge(x, y, all=TRUE), myl, accumulate=FALSE)
-  }
-
-  return(dyn_grp)
-}
-
-
-
-
-
-#' This function returns an integer for the number of significant genes
-#'
-#' @param adj a data frame
-#' @param elem a list
-#' @param pv a list
-#'
-#' @return \grp1 of class data frame
-#'
-#' @export
-
-evaluatesign = function(adj,elem,pv){
-
-
-  grp1 = adj[,c(elem)] %>%
-    sapply( FUN = function(x){return(x < pv)}) %>%
-    data.frame() %>%
-    filter(. == T) %>%
-    nrow()
-
-  return(grp1)
-}
-
-
-#' This function returns an integer for the number of significant genes using parallelism
-#'
-#' @param adj
-#' @param elem
-#' @param pv
-#'
-#' @return \grp1 of class data.frame
-#'
-#' @export
-
-
-
-
-evaluatesignpar = function(adj,elem,pv) { ### for benchmarking
-
-
-  grp1 = foreach(i = iter(adj[elem], by = "col"), .combine = c) %dopar%
-    (sign= {i < pv}) %>%
-    as.data.frame() %>%
-    filter(. == T) %>%
-    nrow()
-
- return(grp1)
-
-}
-
 
 #' Create a data frame containing the number of signficant genes for different conditions pval and log fc
 #'
@@ -176,10 +97,9 @@ isimilar <- function(restab, pdata, workingset){
 #'
 #' @export
 
-myfinalfc <- function(alltop, pval, testrix, grepre) {
+restabfc <- function(alltop, pval, testrix, grepre) {
 
   j = 1
-  colnames(myfinalfc)
   whatest  = ifelse(testrix == "FDR", T, F)
   if (whatest)
     adj = alltop[, grep( grepre[[1]], names(alltop), value = TRUE), drop= F]
@@ -189,8 +109,7 @@ myfinalfc <- function(alltop, pval, testrix, grepre) {
   logfc = alltop[, grep( grepre[[2]], names(alltop), value = TRUE),drop= F]
   myfc = c(1, 1.2, 2, 4, 6, 10)
   fcpval = data.frame(matrix(ncol = length(myfc), nrow = length(adj)))
-  mycolnames = c("FC>1.0", "FC >1.2" , "FC >2", "FC >4", "FC >6", "FC >10")
-
+  thresholds = c("FC>1.0", "FC >1.2" , "FC >2", "FC >4", "FC >6", "FC >10")
 
   for (fc in myfc) {
     fcpval[j] = cbind.data.frame(colSums(adj < pval &
@@ -205,7 +124,7 @@ myfinalfc <- function(alltop, pval, testrix, grepre) {
     perl =  TRUE
   )
 
-  colnames(fcpval) = mycolnames
+  colnames(fcpval) = thresholds
   rownames(fcpval) = colnames(logfc)
   return(fcpval)
 
@@ -269,12 +188,12 @@ heatmtoclust = function( hmp01_All, exprData, pval ,height= 5){
     labels(x))
   id = colnames(pval[1])
 
-  final = exprData[rev(hmp01_All$rowInd), hmp01_All$colInd]
+  reorderdend = exprData[rev(hmp01_All$rowInd), hmp01_All$colInd]
 
-  my_last= as.integer(lapply(seq(length(HCgroupsLab)), function(x)
+  taildendo= as.integer(lapply(seq(length(HCgroupsLab)), function(x)
   {return(tail(HCgroupsLab[[x]],1))}))
 
-  mygen = as.integer(row.names(final))
+  mygen = as.integer(row.names(reorderdend))
   pval$X = as.integer(rownames(pval))
 
   heatmclust = pval %>%
@@ -285,7 +204,7 @@ heatmtoclust = function( hmp01_All, exprData, pval ,height= 5){
 
   i = 1
   for(row in 1:nrow(heatmclust)){
-    if(heatmclust$X[row] == my_last[i] ){
+    if(heatmclust$X[row] == taildendo[i] ){
       heatmclust$cluster[row] = i
       i = i+1
     }

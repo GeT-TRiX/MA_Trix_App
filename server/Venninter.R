@@ -60,35 +60,35 @@ vennfinal <- reactive({
       need(choix_cont(), 'Set your thresholds and then select your comparison to display the Venn diagram!')%next%
       need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!'))
 
-  reslist = list()
+  outputjvennlist = list()
 
   if(!input$Allcont && !input$dispvenn == "genes")
-    resfinal <- filterjvenn(input$jvennlist, input$selcontjv, csvf()[[3]],dataid(), input$dispvenn )
+    outputjvenntab <- filterjvenn(input$jvennlist, input$selcontjv, csvf()[[3]],dataid(), input$dispvenn )
   else if (input$Allcont && !input$dispvenn == "genes")
-    resfinal <- filterjvenn(input$jvennlist, choix_cont(),  csvf()[[3]], dataid(), input$dispvenn)
+    outputjvenntab <- filterjvenn(input$jvennlist, choix_cont(),  csvf()[[3]], dataid(), input$dispvenn)
   else if (!input$Allcont && input$dispvenn == "genes")
-    resfinal <- filterjvenn(input$jvennlist, input$selcontjv,   csvf()[[3]], dataid(),  input$dispvenn, unlist(vennlist()[[1]]))
+    outputjvenntab <- filterjvenn(input$jvennlist, input$selcontjv,   csvf()[[3]], dataid(),  input$dispvenn, unlist(vennlist()[[1]]))
   else
-    resfinal <- filterjvenn(input$jvennlist, choix_cont(), csvf()[[3]] ,dataid(), input$dispvenn, unlist(vennlist()[[1]]))
+    outputjvenntab <- filterjvenn(input$jvennlist, choix_cont(), csvf()[[3]] ,dataid(), input$dispvenn, unlist(vennlist()[[1]]))
 
   if(input$Notanno){
-    resfinal <- resfinal %>%  filter(., !grepl("^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}|[0-9]{7,}",GeneName)) %>% as.data.frame()
+    outputjvenntab <- outputjvenntab %>%  filter(., !grepl("^chr[A-z0-9]{1,}:|^ENSMUST|^LOC[0-9]{1,}|^[0-9]{4,}$|^A_[0-9]{2}_P|^NAP[0-9]{4,}|[0-9]{7,}",GeneName)) %>% as.data.frame()
   }
 
-  reslist[[1]] <- resfinal
+  outputjvennlist[[1]] <- outputjvenntab
   if(!input$Allcont)
     mycont =input$selcontjv
   else
     mycont =choix_cont()
   if(input$dispvenn == "genes"){
-    reslist[[2]] <- meanrankgenes(resfinal, stat = prefstat$greppre[[2]], multcomp = mycont , jvenn=  T)
+    outputjvennlist[[2]] <- meanrankgenes(outputjvenntab, stat = prefstat$greppre[[2]], multcomp = mycont , jvenn=  T)
 
-  jvenndup$duplicated <- resfinal %>%
+  jvenndup$duplicated <- outputjvenntab %>%
       group_by(GeneName) %>%
       filter(n()>1)
   }
 
-  return(reslist)
+  return(outputjvennlist)
 })
 
 

@@ -167,6 +167,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   ##-----------------------##
   ## Row dendrogram
   ##-----------------------##
+  
   cat("\n -> Hierarchical clustering on genes... \n")
   if(Rowdistfun=="correlation"){	
     hc=hclustfun(distcor(exprData))

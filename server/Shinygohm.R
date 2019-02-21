@@ -283,44 +283,36 @@ output$savegohmdavxlsx = downloadHandler(filename <- function() { paste0(basenam
 
 
 Specieshm <- reactive({
-  if (input$Species == "Homo sapiens" ) {
-    # human
+  if (input$Species == "Homo sapiens" ) {# human
     library("org.Hs.eg.db")
     return(list(org.Hs.egALIAS2EG, org.Hs.egSYMBOL))
   }
-  else if (input$Species == "Mus musculus"  ) {
-    # Mouse
+  else if (input$Species == "Mus musculus"  ) { # Mouse
     library("org.Mm.eg.db")
     return( list(org.Mm.egALIAS2EG, org.Mm.egSYMBOL))
   }
-  else if (input$Species == "Danio rerio" ) {
-    #Zebra fish
+  else if (input$Species == "Danio rerio" ) {#Zebra fish
     library("org.Dr.eg.db")
     return(list(org.Dr.egALIAS2EG, org.Dr.egSYMBOL))
   }
-  else if (input$Species == "Gallus gallus" ) {
-    # chicken
+  else if (input$Species == "Gallus gallus" ) {# chicken
     library("org.Gg.eg.db")
     return(list(org.Gg.egALIAS2EG, org.Gg.egSYMBOL))
   }
-  else if (input$Species == "equCab2" ) {
-    # horse
+  else if (input$Species == "equCab2" ) {# horse
     library("org.Gg.eg.db")
     return(list(org.Gg.eg.dbALIAS2EG))
   }
-  else if (input$Species == "Caenorhabditis elegans" ) {
-    # cC elegans
+  else if (input$Species == "Caenorhabditis elegans" ) {# cC elegans
     library("org.Ce.eg.db")
 
     return(list(org.Ce.egALIAS2EG, org.Ce.egSYMBOL))
   }
-  else if (input$Species == "Rattus norvegicus" ) {
-    # Rat
+  else if (input$Species == "Rattus norvegicus" ) {# Rat
     library("org.Rn.eg.db")
     return(list(org.Rn.egALIAS2EG, org.Rn.egSYMBOL ))
   }
-  else if (input$Species == "Sus scrofa") {
-    # Pig
+  else if (input$Species == "Sus scrofa") {# Pig
     library("org.Ss.eg.db")
     return(list(org.Ss.egALIAS2EG, org.Ss.egSYMBOL))
   }
