@@ -226,10 +226,6 @@ myresdavitab <- reactive({
   mygotabres(davidwebservice()[[as.numeric(input$cutgo)]], input$enrichbased)
 })
 
-observe({
-  req(myresdavitab())
-  print(myresdavitab())
-})
 
 output$titlegomain <- renderText({
   req(input$GO)

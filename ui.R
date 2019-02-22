@@ -197,6 +197,7 @@ body <- dashboardBody(
                        box(
                          title = "What's new in MATRiX", width = NULL, status = "primary",
                          div(style = 'overflow-y: scroll; height: 500px',
+                             addNews("Feb 14th 2019", "Functional results", "It is now possible to sort the categorie terms based on both pvalue and Fold enrichment."),
                              addNews("Feb 14th 2019", "Jvenn results", "Duplicated genes are now highlited as orange in the output table"),
                              addNews("Feb 14th 2019", "Upload", "Users can now import csv data with semicolon or comma separatos by precising the decimal"),
                              addNews("Jan 25th 2019", "Bug", "Correct david$getSpecieNames (Specieshm and Speciesvenn)"),
@@ -1021,7 +1022,7 @@ body <- dashboardBody(
                                         "enrichbased",
                                         "Choose your sorting criteria",
                                         choices = c("Fold Enrichment"= "FoldE", "p.value" = "Pvalue")
-                                      )), column(6, checkboxInput("addlabelhigh", "add label", FALSE))),
+                                      )), column(6,br(), checkboxInput("addlabelhigh", "add label", FALSE))),
                                        tags$div(id="highChart")  ,
                                        
                                        tags$script(src="bubble.js")

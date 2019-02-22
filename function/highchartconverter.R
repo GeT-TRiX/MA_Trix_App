@@ -7,16 +7,21 @@
 
 
 DftoHighjson <- function(data, param, method) {
-
+  
   foldEnrichment <- param$search
   tempData <- (data[grep(param$search,colnames(data))])
   colnames(tempData) <- paste0("y",1)
   tempData$id <- data$Category
   tempData$Term <- data$Term
   tempData$pvalue <- data$PValue
-  #tempData$FE <- data$Fold.Enrichment # PValue
-  #tempData$FE <- data$PValue # PValue
-  tempData$FE <- ifelse(method == "FoldE",  data$Fold.Enrichment , data$PValue )
+  tempData$FE <- data$Fold.Enrichment # PValue
+
+  if(method == "FoldE")
+    tempData$xval <- data$Fold.Enrichment # PValue
+  else
+    tempData$xval <- data$PValue 
+    
+    
   tempData$Topgenes <-  data$Top
   tempData$percent <- data$percent
 
@@ -26,10 +31,7 @@ DftoHighjson <- function(data, param, method) {
 
 
   unifiedData <- unifiedData[order(unifiedData$id),]
-
-
-  unifiedData$x <- as.numeric(as.character(unifiedData$FE)) # as.double pour P.value
-  #unifiedData$x <- as.double(as.character(unifiedData$FE)) # as.double pour P.value
+  unifiedData$x <- as.double(as.character(unifiedData$xval)) # as.double pour P.value
   unifiedData$y <- as.numeric(unifiedData$Topgenes)
   unifiedData$z <-  as.numeric(as.character(unifiedData$percent))
 
@@ -41,15 +43,15 @@ DftoHighjson <- function(data, param, method) {
                         else return(strsplit(as.character(x), "~")%>% unlist() %>% .[2]))
 
   unifiedData$Pvalue =  format(tempData$pvalue, digits = 3)
-
-
+  
+  unifiedData$FE = as.integer(as.character(unifiedData$FE))
 
   return(highchartsConvert(unifiedData))
 }
 
 
 formatPoint <- function(index) {
-  return( list( x=index$x, y=index$y,z=index$z, GO=index$GO, term=index$Term, pvalue = index$Pvalue))
+  return( list( x=index$x, y=index$y,z=index$z, GO=index$GO, term=index$Term, pvalue = index$Pvalue, FE = index$FE))
 }
 
 

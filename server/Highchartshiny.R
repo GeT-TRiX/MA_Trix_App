@@ -9,9 +9,8 @@
 ######## From Shiny to highcharts       #
 #########################################
 
-axisParameters <- list(
-  topcatdav = list( min = 0, max = 12, legend = 'Source: <a href="https://www.highcharts.com/"  target="_blank">Plot produce with highcharts</a> and <a href="https://shiny.rstudio.com/" target= "_blank">Shiny</a>', title= "top genes")
-)
+
+
 
 addpercentpop <- reactive({
 
@@ -45,8 +44,13 @@ dfenrichtojson <- reactive({
 
 
 observe({
-
-  req(dfenrichtojson())
+  req(dfenrichtojson(), input$enrichbased )
+  
+  axisParameters <- list(
+    topcatdav = list( min = 0, max = 12, legend = 'Source: <a href="https://www.highcharts.com/"  target="_blank">Plot produce with highcharts</a> and <a href="https://shiny.rstudio.com/" target= "_blank">Shiny</a>', 
+                      title= "top genes", xaxis = ifelse(input$enrichbased == "FoldE", "Fold Enrichment", "pvalue"))
+  )
+  
   newData <- c(axisParameters$topcatdav, list(series=dfenrichtojson()))
   islab = input$addlabelhigh
   session$sendCustomMessage(type="updateVariable", newData) # send to javascript data
