@@ -124,8 +124,6 @@ var defaultOptions = {
   };
 
 
-
-
   function updatechart() {
 
   Shiny.addCustomMessageHandler("updateVariable", function(newData) {

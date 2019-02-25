@@ -26,7 +26,7 @@ observe({
 
   if (!init){
     # Seed initial username
-    sessionVars$username <- ifelse(userId == "", paste0("User", round(runif(1, 10000, 99999))) , userId )
+    sessionVars$username <- ifelse(userId == "", paste0("User", round(runif(1, 10000, 99999))) , paste0(userId, round(runif(1, 10000, 99999))))
 
     isolate({
       vars$chat <<- c(vars$chat, paste0(linePrefix(),
