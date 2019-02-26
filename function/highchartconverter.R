@@ -15,7 +15,9 @@ DftoHighjson <- function(data, param, method) {
   tempData$Term <- data$Term
   tempData$pvalue <- data$PValue
   tempData$FE <- data$Fold.Enrichment # PValue
-
+  
+  
+  
   if(method == "FoldE")
     tempData$xval <- data$Fold.Enrichment # PValue
   else

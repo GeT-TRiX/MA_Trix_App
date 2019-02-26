@@ -377,7 +377,6 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   par("mar")
   
   par(mar=c(5,5,1,1.10))
-  
   hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,
                     keysize=1, symkey=T, trace="none",density.info="density",distfun=distfunTRIX, hclustfun=hclustfun,cexCol=cexcol,
                     Colv=ColvOrd,Rowv=rowv,na.color=na.color,cexRow=cexrow,useRaster=rastering,margins=margins,layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), 
@@ -390,8 +389,6 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   cat("    Done \n")
 
   restoshiny = list(heatmtoclust(hmp02,exprData,genename,height= height),hmp02)
-
-
   return(restoshiny)
 }
 

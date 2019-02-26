@@ -29,11 +29,11 @@
 #'
 
 cutfinal <- reactive({
-    req(hmobj$obj)
+    req(hmobj$obj,hmsize$cut)
 
     pdf(NULL)
     cutHeatmaps(
-      hmobj$obj,
+      hmobj$obj$hm,
       height =  hmsize$cut,
       genename = csvf()[[3]],
       exprData = data.matrix(subsetwset()),
@@ -48,7 +48,7 @@ cutfinal <- reactive({
 # render to the ui the number of clusted for a define height in function of the current heatmap object
 output$cutcluster <- renderUI({
   req(hmobj$obj)
-  cut02 = cut( hmobj$obj$rowDendrogram, h = hmsize$cut)
+  cut02 = cut(hmobj$obj$hm$rowDendrogram, h = hmsize$cut)
   selectInput("cutcluster",
               "Choose your cluster",
               choices =  seq(1, length(cut02$lower), by = 1))
@@ -66,7 +66,6 @@ observe({
      output$cutheatmap <- renderPlot({ # Plot/Render an object of class plotly
         cutfinal()
      })
-
   }
   else{
     output$cutheatmap <- renderPlotly({
@@ -77,32 +76,35 @@ observe({
 })
 
 
-output$savecut <- downloadHandler(
-
-  filename <- function() {
-    paste0(basename(file_path_sans_ext(projectname())), '_cutheat.',input$formcut, sep='')
-  },
-  content <- function(file) {
-    if (input$formcut == "pdf")
-
-      pdf(file,
-          width = 10,
-          height = 10,
-          pointsize = 12)
+callModule(downoutputfiles, "saveboxclust", projectname = projectname , suffix= "_cutheat." , data = cutfinal,  w = 10, h = 10 , cutheat = T )
 
 
-    else if (input$formcut == "png")
-
-      png(file,
-          width =1000,
-          height = 1000,
-          units = "px",
-          pointsize= 12,
-          res=100
-      )
-    else
-      cairo_ps(filename=file, width=10, height=10,pointsize = 12)
-
-    plot(cutfinal())
-    dev.off()
-  })
+# output$savecut <- downloadHandler(
+# 
+#   filename <- function() {
+#     paste0(basename(file_path_sans_ext(projectname())), '_cutheat.',input$formcut, sep='')
+#   },
+#   content <- function(file) {
+#     if (input$formcut == "pdf")
+# 
+#       pdf(file,
+#           width = 10,
+#           height = 10,
+#           pointsize = 12)
+# 
+# 
+#     else if (input$formcut == "png")
+# 
+#       png(file,
+#           width =1000,
+#           height = 1000,
+#           units = "px",
+#           pointsize= 12,
+#           res=100
+#       )
+#     else
+#       cairo_ps(filename=file, width=10, height=10,pointsize = 12)
+# 
+#     plot(cutfinal())
+#     dev.off()
+#   })

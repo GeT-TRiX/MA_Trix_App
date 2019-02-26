@@ -17,6 +17,7 @@ output$heatmbool <- reactive({
 })
 
 observe({
+  
   print(boolhm)
 
 })
@@ -69,7 +70,7 @@ colname <- reactive({
 
 
 
-heatmapobj <- NULL # declare outside the observeEvent
+heatmapobj <- NULL 
 formatidus <- NULL
 hmbis <- reactiveValues()
 hmboth <- reactiveValues()
@@ -113,6 +114,7 @@ observe({
   #'
 
   heatmapfinal <- function(isplot  = F, israstering = T) {
+    
     if (is.null(my_intermediate()))
       mypal = (colorRampPalette(c("green", "black", "red"))(n = 75))
     else
@@ -122,8 +124,8 @@ observe({
 
     plotHeatmaps(
 
-      isolate(hmbis()[[1]]),
-      geneSet =  isolate(hmbis()[[7]]),
+      hmbis()[[1]],
+      geneSet =  hmbis()[[7]],
       droplevels(subsetgroup_hm()$Grp),
       workingPath = wd_path,
       my_palette = (colorRampPalette(
@@ -141,13 +143,12 @@ observe({
       ColvOrd = hmbis()[[3]],
       gpcol = hmbis()[[5]],
       gpcolr = hmbis()[[6]],
-      distfunTRIX = isolate(hmbis()[[2]]),
+      distfunTRIX = hmbis()[[2]],
       height = hmbis()[[8]],
       rastering = israstering
     )
-
   }
-
+  
 
   output$warningsheat <- renderPrint({
     validate(need(
@@ -163,65 +164,12 @@ observe({
       source(file.path("server", "Plotreact.R"), local = TRUE)$value #
     else
       source(file.path("server", "Plotreact2.R"), local = TRUE)$value #
-
-
-  output$savehm <- downloadHandler(filename <- function() {
-    paste0(basename(file_path_sans_ext(projectname())),
-           '_heatmap.',
-           input$formhm,
-           sep = '')
-  },
-  content <- function(file) {
-    myras = ifelse(input$formhm == "emf", F, T)
-
-    if (input$formhm == "emf")
-
-      emf(
-        file,
-        width = 9,
-        height = 12,
-        pointsize = 12,
-        coordDPI = 300
-      )
-
-    else if (input$formhm == "png")
-      png(
-        file,
-        width = 900,
-        height = 1200,
-        units = "px",
-        pointsize = 12,
-        res = 100
-      )
-
-    else if (input$formhm == "svg")
-      svg(
-        file,
-        width = 8,
-        height = 8,
-        bg = "transparent",
-        pointsize = 12
-      )
-
-    else
-      eps(file,
-          width = 5,
-          height = 7)
-
-    if (!is.null(subsetDEG()[[1]]))
-      withProgress(message = 'Saving heatmap:',
-                   value = 0, {
-                     n <- NROW(subsetDEG()[[1]])
-                     for (i in 1:n) {
-                       incProgress(1 / n, detail = "Please wait...")
-                     }
-                     heatmapfinal(isplot = F, israstering =myras)
-                   })
-    dev.off()
-
-  })
-
-
+  
+  observe({
+  req(hmobj$obj)
+  callModule(downoutputfiles, "savehm", projectname = projectname , suffix = "_heatmap." , data = hmobj$obj , w =9, h = 12, hm =T)
+  })  
+  
   output$downloadcut <- downloadHandler(
     filename = function() {
       paste(basename(file_path_sans_ext(projectname())),
@@ -276,8 +224,6 @@ observe({
   })
 
   output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength() ))
-
-
   output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))
 
 

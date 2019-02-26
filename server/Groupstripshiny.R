@@ -106,43 +106,46 @@ output$renderstripgenes <- renderPlot({
 })
 
 
-output$savestriplot <- downloadHandler(filename <- function() {
-  paste0(
-    basename(tools::file_path_sans_ext(projectname())), # add  gene name
-    '_',
-    selectedstripgene(),
-    '_strip_chart.',
-    input$formstrip,
-    sep = ''
-  )
-},
-content <- function(file) {
-  if (input$formstrip == "pdf")
+callModule(downoutputfiles, "savestrip", projectname = projectname , suffix=paste0( '_', selectedstripgene(), "_strip_chart.", sep='' ), data = callstripgenes , w =16, h = 7  )
 
-    pdf(file,
-        width = 16,
-        height = 7,
-        pointsize = 12)
 
-  else if (input$formstrip == "png")
-    png(
-      file,
-      width = 1600,
-      height = 700,
-      units = "px",
-      pointsize = 12,
-      res = 100
-    )
-  else
-    eps(file,
-        width = 16,
-        height = 7,
-        pointsize = 12)
-
-  print(callstripgenes())
-
-  dev.off()
-})
+# output$savestriplot <- downloadHandler(filename <- function() {
+#   paste0(
+#     basename(tools::file_path_sans_ext(projectname())), # add  gene name
+#     '_',
+#     selectedstripgene(),
+#     '_strip_chart.',
+#     input$formstrip,
+#     sep = ''
+#   )
+# },
+# content <- function(file) {
+#   if (input$formstrip == "pdf")
+# 
+#     pdf(file,
+#         width = 16,
+#         height = 7,
+#         pointsize = 12)
+# 
+#   else if (input$formstrip == "png")
+#     png(
+#       file,
+#       width = 1600,
+#       height = 700,
+#       units = "px",
+#       pointsize = 12,
+#       res = 100
+#     )
+#   else
+#     eps(file,
+#         width = 16,
+#         height = 7,
+#         pointsize = 12)
+# 
+#   print(callstripgenes())
+# 
+#   dev.off()
+# })
 
 
 selectedstripgene <- reactive({

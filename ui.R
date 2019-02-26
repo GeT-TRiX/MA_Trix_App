@@ -315,27 +315,15 @@ body <- dashboardBody(
                                    tabPanel("Volcano plot", style = "background-color: #ffffff;",
 
                                             conditionalPanel(condition = '!output.boolmark',
-
+                                                
                                                              div(style="display:inline-block;",
-                                                                 fluidRow(column(3, style="width:34.0%;",
-                                                                                 downloadButton("savevolcano", "Save your Volcano plot" , style =
-                                                                                                  "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                                                          column( 3, style="width:20%;",
-                                                                                  selectInput(
-                                                                                    "formvolc",label = NULL,
-                                                                                    choices = c("png", "eps", "pdf","svg"))))),
-
+                                                                 fluidRow(column(5, style = "width:30%",downloadFiles("savevolc", "Save your barplot")),
+                                                                 column( 3,style="width:20%;", selFormat("savevolc")))), 
                                             plotOutput(outputId = "volcanoplot", height = 900) ,
-                                            div(style="display:inline-block", id ="dontwanttoshow",
-                                                fluidRow(
-
-                                                  column(5, style = "width:30%",
-
-                                                         downloadButton("savevolcplot", "Save your barplot" , style =
-                                                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                                  column(3 ,
-                                                         selectInput( "formvolcbar",label = NULL,
-                                                                      choices = c("png", "eps", "pdf"))))),
+                                            
+                                            div(style="display:inline-block;",
+                                                fluidRow(column(3,style="width:34.0%;",downloadFiles("savebarvolc", "Save your Volcano plot")),
+                                                         column( 3,style="width:20%;", selFormat("savebarvolc")))), 
 
                                             plotOutput(outputId ="barplotvolc", height = 500)
                                             ,ns = NS("datafile"))
@@ -360,21 +348,14 @@ body <- dashboardBody(
                                                                     h3("This table shows the normalized values"),
                                                                     dataTableOutput("orderedwk")
                                                              ),
+                                                             
                                                              div(style="display:inline-block;",
-                                                                 fluidRow(column(3, style="width:27%;",
-                                                                                 downloadButton("savestriplot", "Save your plot" , style =
-                                                                                                  "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                                                          column( 3, style="width:20%;",
-                                                                                  selectInput(
-                                                                                    "formstrip",label = NULL,
-                                                                                    choices = c("png", "eps", "pdf")))))
-                                                             ,ns = NS("datafile"),
+                                                                 fluidRow(column(3,style="width:27.0%;", downloadFiles("savestrip", "Save your plot")),
+                                                                          column( 3, selFormat("savestrip")))), 
 
+                                                             ns = NS("datafile"),
 
                                                              plotOutput(outputId ="renderstripgenes", height = "500px", width ="100%")
-
-
-
                                                              )
 
                                    )
@@ -446,10 +427,10 @@ body <- dashboardBody(
 
                                    uiOutput("addcompvolc")
 
-                                                # ns = NS("datafile")
                                ), ns = NS("datafile"))
                     )
-                )#,
+                )
+                #,
                 # conditionalPanel(condition = '!output.boolmark',
                 #                  column(12,
                 #                         h3("Show the actual data frame with the columns selected"),
@@ -473,28 +454,23 @@ body <- dashboardBody(
 
                                     tabPanel(
                                       strong("Scree plot"),
-                                      downloadButton("savescre", "Save your Scree plot" , style =
-                                                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                                      div(style="display:inline-block;",
+                                      fluidRow(column(1, style="width:9.666%;",
+                                      downloadFiles("downloadplots", "Save your Scree")),
+                                      column(2),
+                                      column( 3, selFormat("downloadplots")))), 
 
-                                      br(),br(),
+                                      br(),
                                       plotOutput(outputId = "eigpca", height = 700)
                                     ),
                                     tabPanel(
                                       strong("PCA plot"),
                                       tags$style(type = "text/css",".shiny-output-error:before { visibility: hidden; }"),
-
-
+                                      
                                       div(style="display:inline-block;",
-                                          fluidRow( column(1 ,
-                                                           downloadButton("savepca", "Save your PCA" , style =
-                                                                            "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                                                    column(2),
-                                                    column( 3,
-                                                            selectInput(
-                                                              "formpca",label = NULL,
-                                                              choices = c("png", "eps", "pdf", "svg")))
-
-                                          )),
+                                         fluidRow(column(1,downloadFiles("savepca", "Save your PCA")),
+                                                  column(2),
+                                                  column( 3, selFormat("savepca")))), 
 
                                       plotOutput(outputId = "PCA", height = 700) #,plotOutput(outputId = "PCAvarender", height = 700)
                                     )
@@ -610,26 +586,7 @@ body <- dashboardBody(
                                         column(5,
                                                uiOutput("filtercompjvenn"))
                   ))),
-#
-#                           shiny::actionButton(
-#                             "togglefiltertabvenn",
-#                             "Advanced Filter Options",
-#                             href = "#",
-#                             icon = icon("filter"),
-#                             style = "color: #fff; background-color: #337ab7; border-color: #2e6da4; position:relative;position:absolute;left:50%;margin-left: 15px;"
-#                           ),
-#                           br(),
-#
-#                           shinyjs::hidden(div( style ="position:absolute;left:50%;margin-left: 15px;",
-#                             id = "advancedfilter",
-#                             fluidRow( column(3,
-#                             numericInput("filtertopjvenn", "Top n genes", value = 50, min=5 , max = 150)),
-#                             column(3,
-#                             selectInput("filtermethjvenn", "Based on", choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None"))),
-#                             column(5,
-#                             uiOutput("filtercompjvenn")))))
-#
-                 #    ),
+
 
                       conditionalPanel(condition = '!output.bool',
                                        uiOutput(outputId = "image")
@@ -663,27 +620,22 @@ body <- dashboardBody(
                                               div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; "))
 
                       )),
-                      div(style="display:inline-block", id ="dontwanttoshow",
-                          fluidRow(
-                            tags$head(
-                              tags$style(type="text/css", ".topgeness label{ display: table-cell; text-align: left; vertical-align: middle; }
+                  
+                  div(style="display:inline-block;",id ="dontwanttoshow",
+                      fluidRow(
+                        tags$head(
+                          tags$style(type="text/css", ".topgeness label{ display: table-cell; text-align: left; vertical-align: middle; }
                                          .inline .form-group{display: table-row;} ")
-                              ),
-                            column(3,br(),style= "width:21%;",
-                                   actionButton(
-                                     inputId = "topdegenes",
-                                     label = "Plot top DE genes",
-                                     style =
-                                       "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                   )),
-                            column(3, style= "width:26.0%;",br(),
-
-                                   downloadButton("savebarplot", "Save your barplot" , style =
-                                                    "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-                            column(3 ,br(),style= "width:11%;  padding: 0%;",
-                                   selectInput( "formvenbar",label = NULL,
-                                                choices = c("png", "eps", "pdf", "svg")))
-                                  )),
+                        ),
+                        column(3,br(),style= "width:21%;",
+                               actionButton(
+                                 inputId = "topdegenes",
+                                 label = "Plot top DE genes",style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
+                               )),
+                        column(3,style= "width:26.0%;",br(),downloadFiles("savebarvenn", "Save your barplot")),
+                               column( 3,br(),style= "width:11%;  padding: 0%;", selFormat("savebarvenn")))), 
+                      
+ 
                       plotOutput(outputId ="barplotvenn", height = "500px", width ="100%"),
                       br(),
                       h1("Here's a tracker for your different selections:"),
@@ -730,28 +682,17 @@ body <- dashboardBody(
                     tabPanel(strong("Venn GO enrichment"),
                              value = "venngopanel",
                              useShinyjs(),
-
-                             fluidRow( column(6 ,
-                                              downloadButton(
-                                                "saveclusterchoose",
-                                                "Export to acyclic graph" ,
-                                                style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                              ),
-                                              column( 3,
-                                                      selectInput(
-                                                        "formvennclus",label = NULL,
-                                                        choices = c("png", "eps", "pdf")))
-
-                             )),
-
+                              
+                             fluidRow(column(3,style= "width:14.3%;",downloadFiles("saveclustvenn", "Export to acyclic graph")),
+                                      column( 1, selFormat("saveclustvenn"))),
+                             
 
                              plotOutput("clusterPlot", width = "100%", height = "700px"),
                              br(),br(),br(),
                              dataTableOutput("debug")
                     )
 
-              )
-      )
+              ))
               ),
       div(id="pass",style = "word-wrap: break-word;",
           column(width=3,
@@ -805,9 +746,7 @@ body <- dashboardBody(
                      fluidRow(
                        column(12,
                          uiOutput("dispidvenn")),
-                              # selectInput("dispvenn", #  Create a select list that can be used to choose a single or multiple items from a list of values.
-                              #             "Choose if you want to display probes or genes",
-                              #             choices = c("probes", "genes"))),
+
                        column(6,
                               checkboxInput("Notanno","Remove the genes that are not annotated",FALSE)),
                        column(6,
@@ -887,20 +826,29 @@ body <- dashboardBody(
                     id = "heatmapmainp",
                     tabPanel(
                       strong("Visualize the Heatmap"),value = "hmmainpan",
-                      div(style="display:inline-block",
-                          fluidRow( column(1 ,style="width:9%;",
-                                           downloadButton(
-                                             "savehm",
-                                             "Save your plot" ,
-                                             style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                           )
-                                         ),
-                                    column(2),
-                                    column( 3,
-                                            selectInput("formhm", label = NULL,
-                                                        choices = c("png", "eps", "emf", "svg")))
-
-                          )),
+                      # 
+                      # div(style="display:inline-block",
+                      #     fluidRow( column(1 ,style="width:9%;",
+                      #                      downloadButton(
+                      #                        "savehm",
+                      #                        "Save your plot" ,
+                      #                        style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+                      #                      )
+                      #                    ),
+                      #               column(2),
+                      #               column( 3,
+                      #                       selectInput("formhm", label = NULL,
+                      #                                   choices = c("png", "eps", "emf", "svg")))
+                      # 
+                      #     )),
+                      
+                      
+                      div(style="display:inline-block;",
+                          fluidRow(column(1,style="width:9%;",downloadFiles("savehm", "Save your plot")),
+                                   column(2),
+                                   column( 3, selFormat("savehm")))),
+                      
+                      
                       includeCSS("./css/style.css"),
                       conditionalPanel(condition = '!output.heatmbool',  verbatimTextOutput("warningsheat")
                       ),
@@ -1270,14 +1218,12 @@ body <- dashboardBody(
                                selectizeInput('cutinfo', 'Choose your types of plots',
                                               choices = cutheatmlist), # cutheatmlist is a variable defined in the global environment
                                br(),
-
-                               selectInput("formcut","Choose your file format",choices = c("pdf", "png", "eps")
-                               ), br(),
+                               #selectInput("formcut","Choose your file format",choices = c("pdf", "png", "eps")),
+                               selFormat("saveboxclust","Choose your file format"), br(),
                                verbatimTextOutput("event"),
-
                                br(),
-                               downloadButton("savecut", "Save your plot" , style =
-                                                "color: #fff; background-color: #337ab7; border-color: #2e6da4")
+                               downloadFiles("saveboxclust", "Save your plot")
+                               # downloadButton("savecut", "Save your plot" , style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")
 
                              ))
                        )

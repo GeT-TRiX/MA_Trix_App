@@ -60,8 +60,7 @@ observeEvent(input$nogrpca, {
 #' @export
 
 choix_grpca <- reactive({
-  req(csvf())
-  req(input$groupca)
+  req(csvf(),input$groupca)
   return(input$groupca)
 })
 
@@ -150,27 +149,31 @@ new_datapca <- reactive({
 })
 
 
-output$savescre <- downloadHandler(filename <- function() {
-  paste0(basename(file_path_sans_ext(projectname())), '_screeplot.png', sep =
-           '')
-},
-content <- function(file) {
-  png(
-    file,
-    width = 1200,
-    height = 1000,
-    units = "px",
-    pointsize = 12,
-    res = 100
-  )
+callModule(downoutputfiles, "downloadplots", projectname = projectname , suffix= "_screeplot." , data = Scree_plot  )
 
-  plot(Scree_plot())
-  dev.off()
-})
+
+# output$savescre <- downloadHandler(filename <- function() {
+#   paste0(basename(file_path_sans_ext(projectname())), '_screeplot.png', sep =
+#            '')
+# },
+# content <- function(file) {
+#   png(
+#     file,
+#     width = 1200,
+#     height = 1000,
+#     units = "px",
+#     pointsize = 12,
+#     res = 100
+#   )
+# 
+#   plot(Scree_plot())
+#   dev.off()
+# })
 
 
 
 output$eigpca <- renderPlot({
+  
   validate(
     need(csvf(), 'You need to import data to visualize this plot!') %next%
       need(length(input$groupca) >0 ,'You need to select groups!') %next%
@@ -236,44 +239,45 @@ output$PCAvarender <- renderPlot({
 },  height = plotHeight)
 
 
+callModule(downoutputfiles, "savepca", projectname = projectname , suffix= "_pca." , data = PCAplot  )
 
-output$savepca <- downloadHandler(filename <- function() {
-  paste0(basename(file_path_sans_ext(projectname())), '_pca.', input$formpca, sep = '')
-},
-
-content <- function(file) {
-  if (input$formpca == "pdf")
-
-    pdf(file,
-        width = 12,
-        height = 12,
-        pointsize = 12)
-
-
-  else if (input$formpca == "png")
-
-    png(
-      file,
-      width = 2500,
-      height = 2500,
-      units = "px",
-      pointsize = 12,
-      res = 100
-    )
-  else if (input$formpca == "svg")
-    
-    svg(file,
-        width = 12,
-        height = 12,
-        pointsize = 12
-        )
-  else
-    eps(file,
-        width = 12,
-        height = 12,
-        pointsize = 12)
-
-
-  plot(PCAplot())
-  dev.off()
-})
+# output$savepca <- downloadHandler(filename <- function() {
+#   paste0(basename(file_path_sans_ext(projectname())), '_pca.', input$formpca, sep = '')
+# },
+# 
+# content <- function(file) {
+#   if (input$formpca == "pdf")
+# 
+#     pdf(file,
+#         width = 12,
+#         height = 12,
+#         pointsize = 12)
+# 
+# 
+#   else if (input$formpca == "png")
+# 
+#     png(
+#       file,
+#       width = 2500,
+#       height = 2500,
+#       units = "px",
+#       pointsize = 12,
+#       res = 100
+#     )
+#   else if (input$formpca == "svg")
+#     
+#     svg(file,
+#         width = 12,
+#         height = 12,
+#         pointsize = 12
+#         )
+#   else
+#     eps(file,
+#         width = 12,
+#         height = 12,
+#         pointsize = 12)
+# 
+# 
+#   plot(PCAplot())
+#   dev.off()
+# })

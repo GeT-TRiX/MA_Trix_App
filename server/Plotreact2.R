@@ -61,18 +61,25 @@ hmbis <- reactive({
 
 observeEvent(input$heatm, {
   
+  
   if (is.null(my_intermediate())) {
     pdf(NULL) 
     heatmapfinal(isplot = F)
     shinyjs::alert("The colors defined for the heatmap are not fit to be together!!")
     return(NULL)
+    
   }
+  
   else
     output$distPlot <- renderPlot({
-      isolate({
+      isolate({  
 
         hmbis()
         hmsize$cut <- hmbis()[[8]]
+        hmobj$obj$rows <- hmbis()[[6]]
+        hmobj$obj$cols <-  hmbis()[[5]]
+        hmobj$obj$colgroup <- unlist(colors())
+        hmobj$obj$groups <-  droplevels(subsetgroup_hm()$Grp)
         
         observe({
           boolhm <<- T
@@ -91,7 +98,8 @@ observeEvent(input$heatm, {
                        }
                        hmboth$tot <- heatmapfinal(isplot = F)
                        hmobj$hm <- hmboth$tot[[1]]
-                       hmobj$obj <- hmboth$tot[[2]]
+                       hmobj$obj$hm <- hmboth$tot[[2]]
+                       
                      })
       })
       

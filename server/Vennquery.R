@@ -11,43 +11,47 @@ observe({
   updateSliderInput(session, "clusterNumber", max = nrow(summary(Venncluster())))
 })
 
-output$saveclusterchoose <- downloadHandler(filename <- function() {
-  paste0(basename(file_path_sans_ext(projectname())), '_venn', input$clusterNumber, 'cluster.', input$formvennclus, sep =
-           '')
-},
-content <- function(file) {
-  
-
-  if (input$formvennclus == "pdf")
-
-    pdf(file,
-        width = 12,
-        height = 12,
-        pointsize = 12)
 
 
-  else if (input$formvennclus == "png")
+callModule(downoutputfiles, "saveclustvenn", projectname = projectname , suffix=paste0( '_venn', input$clusterNumber , "cluster.", sep='' ), data = acyclgo , w =12, h = 12 , clustvenn = T)
 
-    png(
-      file,
-      width = 1200,
-      height = 1200,
-      units = "px",
-      pointsize = 12,
-      res = 100
-    )
-  else
-    eps(file,
-        width = 12,
-        height = 12,
-        pointsize = 12)
-    
-    
-    acyclgo()
-    
-  dev.off()
-  
-})
+# output$saveclusterchoose <- downloadHandler(filename <- function() {
+#   paste0(basename(file_path_sans_ext(projectname())), '_venn', input$clusterNumber, 'cluster.', input$formvennclus, sep =
+#            '')
+# },
+# content <- function(file) {
+# 
+# 
+#   if (input$formvennclus == "pdf")
+# 
+#     pdf(file,
+#         width = 12,
+#         height = 12,
+#         pointsize = 12)
+# 
+# 
+#   else if (input$formvennclus == "png")
+# 
+#     png(
+#       file,
+#       width = 1200,
+#       height = 1200,
+#       units = "px",
+#       pointsize = 12,
+#       res = 100
+#     )
+#   else
+#     eps(file,
+#         width = 12,
+#         height = 12,
+#         pointsize = 12)
+# 
+# 
+#     acyclgo()
+# 
+#   dev.off()
+# 
+# })
 
 
 output$clusterPlot <- renderPlot({
@@ -74,15 +78,17 @@ acyclgo <- function() {
 }
 
 
-observe({
-  req(acyclgo())
-  pdf(NULL)
-  if(class(acyclgo()) == "graphNEL")
-    shinyjs::disable("saveclusterchoose")
-  else
-    shinyjs::enable("saveclusterchoose")
-  dev.off()
-})
+# observe({
+#   req(acyclgo())
+#   pdf(NULL)
+#   if(class(acyclgo()) == "graphNEL")
+#     shinyjs::disable("saveclusterchoose")
+#   else
+#     shinyjs::enable("saveclusterchoose")
+#   dev.off()
+# })
+
+
 
 
 

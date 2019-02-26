@@ -125,45 +125,48 @@ output$compvolc <- renderUI({
 })
 
 
-output$savevolcano <- downloadHandler(filename <- function() {
-  paste0(basename(file_path_sans_ext(projectname())), '_volcano.', input$formvolc, sep ='')
-},
-content <- function(file) {
-  if (input$formvolc == "pdf")
-
-    pdf(file,
-        width = 12,
-        height = 12,
-        pointsize = 12)
+callModule(downoutputfiles, "savevolc", projectname = projectname , suffix= "_volcano." , data = volcano, volc =T , w = 12, h = 12 )
 
 
-  else if (input$formvolc == "png")
-
-    png(
-      file,
-      width = 2500,
-      height = 2500,
-      units = "px",
-      pointsize = 12,
-      res = 100
-    )
-  else if( input$formvolc == "svg")
-    svg(
-      file,
-      width = 12,
-      height = 12,
-      pointsize = 12
-      
-      
-    )
-
-  else
-    ggsave(file,device=cairo_ps, fallback_resolution = 600)
-
-
-  plot(volcano()[[1]])
-  dev.off()
-})
+# output$savevolcano <- downloadHandler(filename <- function() {
+#   paste0(basename(file_path_sans_ext(projectname())), '_volcano.', input$formvolc, sep ='')
+# },
+# content <- function(file) {
+#   if (input$formvolc == "pdf")
+# 
+#     pdf(file,
+#         width = 12,
+#         height = 12,
+#         pointsize = 12)
+# 
+# 
+#   else if (input$formvolc == "png")
+# 
+#     png(
+#       file,
+#       width = 2500,
+#       height = 2500,
+#       units = "px",
+#       pointsize = 12,
+#       res = 100
+#     )
+#   else if( input$formvolc == "svg")
+#     svg(
+#       file,
+#       width = 12,
+#       height = 12,
+#       pointsize = 12
+#       
+#       
+#     )
+# 
+#   else
+#     ggsave(file,device=cairo_ps, fallback_resolution = 600)
+# 
+# 
+#   plot(volcano()[[1]])
+#   dev.off()
+# })
 
 
 vocfilt <- reactive({
@@ -198,47 +201,48 @@ output$barplotvolc <- renderPlot({
 
 })
 
+callModule(downoutputfiles, "savebarvolc", projectname = projectname , suffix= "_volc_barplot." , data = volcplototp, w=16 , h=7  )
 
-observe({
-  validate(need(csvf(), 'You need to import data to visualize this plot!'))
-
-  output$savevolcplot <- downloadHandler(filename <- function() {
-    paste0(
-      basename(tools::file_path_sans_ext(projectname())),
-      '_venn_barplot.',
-      input$formvenbar,
-      sep = ''
-    )
-  },
-  content <- function(file) {
-    if (input$formvolcbar == "pdf")
-
-      pdf(file,
-          width = 16,
-          height = 7,
-          pointsize = 12)
-
-    else if (input$formvolcbar == "png")
-      png(
-        file,
-        width = 1600,
-        height = 700,
-        units = "px",
-        pointsize = 12,
-        res = 100
-      )
-    else
-      eps(file,
-          width = 16,
-          height = 7,
-          pointsize = 12)
-
-    print(volcplototp())
-
-    dev.off()
-  })
-
-})
+# observe({
+#   validate(need(csvf(), 'You need to import data to visualize this plot!'))
+# 
+#   output$savevolcplot <- downloadHandler(filename <- function() {
+#     paste0(
+#       basename(tools::file_path_sans_ext(projectname())),
+#       '_volc_barplot.',
+#       input$formvenbar,
+#       sep = ''
+#     )
+#   },
+#   content <- function(file) {
+#     if (input$formvolcbar == "pdf")
+# 
+#       pdf(file,
+#           width = 16,
+#           height = 7,
+#           pointsize = 12)
+# 
+#     else if (input$formvolcbar == "png")
+#       png(
+#         file,
+#         width = 1600,
+#         height = 700,
+#         units = "px",
+#         pointsize = 12,
+#         res = 100
+#       )
+#     else
+#       eps(file,
+#           width = 16,
+#           height = 7,
+#           pointsize = 12)
+# 
+#     print(volcplototp())
+# 
+#     dev.off()
+#   })
+# 
+# })
 
 
 output$addcompvolc <- renderUI({

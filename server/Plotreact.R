@@ -75,18 +75,28 @@ output$distPlot <- renderPlot({
     }
 
 
-    if ( input$reactheat == T){
+    if (input$reactheat == T){
 
       hmbis()
       hmsize$cut <- hmbis()[[8]]
+      
+      isolate({
+      hmobj$obj$rows <- hmbis()[[6]]
+      hmobj$obj$cols <-  hmbis()[[5]]
+      hmobj$obj$colgroup <- unlist(colors())
+      hmobj$obj$groups <-  droplevels(subsetgroup_hm()$Grp)
+      })
+      
       observe({boolhm <<-T})
+      
       output$heatmbool <- reactive({
         boolhm
       })
 
-      hmboth$tot <- heatmapfinal()
+      hmboth$tot <- heatmapfinal(isplot = F)
       hmobj$hm <- hmboth$tot[[1]]
-      hmobj$obj <-hmboth$tot[[2]]
+      hmobj$obj$hm <- hmboth$tot[[2]]
+      
 
     }
     else{
