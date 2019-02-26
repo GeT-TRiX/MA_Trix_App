@@ -1023,10 +1023,8 @@ body <- dashboardBody(
                                       ),
                                       div(
                                         id = "form",
-                                        # Creates a panel with a slightly inset border and grey background
                                         uiOutput("comphm"),
                                         actionButton(
-                                          # Action button that automatically react when triggered
                                           inputId = "allcomphm",label = "Select all",icon = icon("check-square-o"),
                                           style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                         ),
@@ -1034,6 +1032,13 @@ body <- dashboardBody(
                                           inputId = "nocomphm",label = "Clear selection",icon = icon("square-o"),
                                           style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                         ),
+                                        # div(id = "form",
+                                        #     checkboxRender("selcomphm"),
+                                        #     allBox("selcomphm", "Select All"),
+                                        #     noBox("selcomphm", "Clear selection")
+                                        #     ),
+                                        # 
+                                        
                                         br(),br(),
                                         fluidRow( column(6,
                                                          numericInput(

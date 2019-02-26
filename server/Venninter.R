@@ -117,7 +117,6 @@ output$dfvenn <- renderText({
   else
     mytitlevenn <<- print(paste("Table showing the genes associated with the average logFC for the intersection(s) selected"))
 
-
 })
 
 

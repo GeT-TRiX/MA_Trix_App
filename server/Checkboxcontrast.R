@@ -63,3 +63,7 @@ observeEvent(input$nocomphm, {
 selected_test <- reactive({
   return(input$selcomphm)
 })
+
+
+#selected_test <- callModule(boxChooser, "selcomphm", label = "Choose your comparison", data = subsetstat, group = csvf )
+# test en appelant une exp reactive subsetstat[[1]]
