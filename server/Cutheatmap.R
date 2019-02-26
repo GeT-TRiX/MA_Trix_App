@@ -11,8 +11,6 @@
 #########################################
 
 
-
-
 #' cutfinal is a reactive function that return heatmap or ggplot2 object
 #'
 #' @param hmobj$obj heatmap object
@@ -79,32 +77,3 @@ observe({
 callModule(downoutputfiles, "saveboxclust", projectname = projectname , suffix= "_cutheat." , data = cutfinal,  w = 10, h = 10 , cutheat = T )
 
 
-# output$savecut <- downloadHandler(
-# 
-#   filename <- function() {
-#     paste0(basename(file_path_sans_ext(projectname())), '_cutheat.',input$formcut, sep='')
-#   },
-#   content <- function(file) {
-#     if (input$formcut == "pdf")
-# 
-#       pdf(file,
-#           width = 10,
-#           height = 10,
-#           pointsize = 12)
-# 
-# 
-#     else if (input$formcut == "png")
-# 
-#       png(file,
-#           width =1000,
-#           height = 1000,
-#           units = "px",
-#           pointsize= 12,
-#           res=100
-#       )
-#     else
-#       cairo_ps(filename=file, width=10, height=10,pointsize = 12)
-# 
-#     plot(cutfinal())
-#     dev.off()
-#   })

@@ -204,56 +204,6 @@ observeEvent(input$topdegenes, {
 
 callModule(downoutputfiles, "savebarvenn", projectname = projectname , suffix= "_venn_barplot." , data = plottopgenes , w =16, h = 7  )
 
-# 
-# observe({
-#   validate(need(csvf(), 'You need to import data to visualize this plot!'))
-# 
-#   output$savebarplot <- downloadHandler(filename <- function() {
-#     paste0(
-#       basename(tools::file_path_sans_ext(projectname())),
-#       '_venn_barplot.',
-#       input$formvenbar,
-#       sep = ''
-#     )
-#   },
-#   content <- function(file) {
-#     if (input$formvenbar == "pdf")
-# 
-#       pdf(file,
-#           width = 16,
-#           height = 7,
-#           pointsize = 12)
-# 
-#     else if (input$formvenbar == "png")
-#       png(
-#         file,
-#         width = 1600,
-#         height = 700,
-#         units = "px",
-#         pointsize = 12,
-#         res = 100
-#       )
-#     else if (input$formvenbar == "png")
-#       svg(
-#         file,
-#         width = 16,
-#         height = 7,
-#         pointsize = 12
-#       )
-#     else
-#       eps(file,
-#           width = 16,
-#           height = 7,
-#           pointsize = 12)
-# 
-#     print(plottopgenes())
-# 
-#     dev.off()
-#   })
-# 
-# })
-
-
 
 ####################
 # Addition for report
@@ -314,8 +264,3 @@ output$dispidvenn <- renderUI( ##validate
               label = paste("Choose if you want to display", ifelse(dataid() == "ProbeName", "probes", "transcripts") ,  "or genes"),
               choices = c(ifelse(dataid() == "ProbeName", "probes", "transcripts"), "genes"))
 )
-
-observe({
-  req(input$dispvenn)
-  print(input$dispvenn)
-})

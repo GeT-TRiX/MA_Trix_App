@@ -152,25 +152,6 @@ new_datapca <- reactive({
 callModule(downoutputfiles, "downloadplots", projectname = projectname , suffix= "_screeplot." , data = Scree_plot  )
 
 
-# output$savescre <- downloadHandler(filename <- function() {
-#   paste0(basename(file_path_sans_ext(projectname())), '_screeplot.png', sep =
-#            '')
-# },
-# content <- function(file) {
-#   png(
-#     file,
-#     width = 1200,
-#     height = 1000,
-#     units = "px",
-#     pointsize = 12,
-#     res = 100
-#   )
-# 
-#   plot(Scree_plot())
-#   dev.off()
-# })
-
-
 
 output$eigpca <- renderPlot({
   
@@ -241,43 +222,4 @@ output$PCAvarender <- renderPlot({
 
 callModule(downoutputfiles, "savepca", projectname = projectname , suffix= "_pca." , data = PCAplot  )
 
-# output$savepca <- downloadHandler(filename <- function() {
-#   paste0(basename(file_path_sans_ext(projectname())), '_pca.', input$formpca, sep = '')
-# },
-# 
-# content <- function(file) {
-#   if (input$formpca == "pdf")
-# 
-#     pdf(file,
-#         width = 12,
-#         height = 12,
-#         pointsize = 12)
-# 
-# 
-#   else if (input$formpca == "png")
-# 
-#     png(
-#       file,
-#       width = 2500,
-#       height = 2500,
-#       units = "px",
-#       pointsize = 12,
-#       res = 100
-#     )
-#   else if (input$formpca == "svg")
-#     
-#     svg(file,
-#         width = 12,
-#         height = 12,
-#         pointsize = 12
-#         )
-#   else
-#     eps(file,
-#         width = 12,
-#         height = 12,
-#         pointsize = 12)
-# 
-# 
-#   plot(PCAplot())
-#   dev.off()
-# })
+
