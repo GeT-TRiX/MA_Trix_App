@@ -83,55 +83,9 @@ clustergrep <- reactive({
   return(mygensymb)
 })
 
-#' davidwebservice is an eventreactive function which aim is to querrying the DWS to return a dataframe summary
-#'
-#' @param GO clickable event
-#' @param hm data frame of the significant genes associated with the corresponding cluster index
-#' @param Species list of annotated elements
-#' @param catinfo vector of enrichment categories, BP, CC, MF, Kegg
-#'
-#' @return data frame
-#' @export
-#'
-#'
 
 
-davidwebservice <- eventReactive(input$GO, {
-
-    req(hmobj$hm)
-
-    withProgress(message = 'Performing GO enrichment:',
-                 value = 0, {
-                   n <- NROW(50)
-                   for (i in 1:n) {
-                     incProgress(1 / n, detail = "Please wait...")
-                   }
-                   library(RDAVIDWebService)
-
-                   timeoutdav <- function(y)
-                     if (any(grepl("Read timed out", y)))
-                       invokeRestart("muffleWarning")
-
-                   tryCatch({
-                     mygodavid = probnamtoentrez(hmobj$hm, Specieshm()[[1]]) %>%
-                       davidquery(input$Species, input$catinfo) %>% withCallingHandlers(error = timeoutdav)
-                   }, warning = function(e) {
-                     warning("David's server is busy")
-
-                     return(cbind("David's server is busy") %>% as.data.frame() %>% setNames("Error"))
-
-                   })
-                 })
-
-
-    updateTabsetPanel(session, "heatmapmainp",
-                      selected = "maingo")
-
-    return(mygodavid)
-  })
-
-#davidwebservice <- callModule(queryDavid, "vennanalysis", data = vennfinal , parent_session = session )
-
+davidwebservice <- callModule(queryDavid, "hmanalysis", data = reactive(hmobj$hm) , parent_session = session, tabsetpanid= "heatmapmainp", tabPanel= "maingo", hmana = T,case = 1  )
 
 
 #' davidurl is a reactive function that aim is to return an url of grouped genes
@@ -160,8 +114,6 @@ observe({
 
 
 
-
-
 #' myentreztosymb is a reactive function which aim is to convert entrez ID to GENE  the selected rows in the output data table
 #'
 #' @param davidwebservice data frame
@@ -185,7 +137,7 @@ myentreztosymb <- reactive({
 
     myentreztosymb = lapply(1:NROW(myselectedrows),function(x){
       myselectedrows$Genes[[x]] %>% strsplit( ", ") %>% unlist() %>% mget(x= .,envir = Specieshm()[[2]],ifnotfound = NA) %>%  unlist() %>%
-        unique() %>% cbind(myselectedrows$Term[[x]]) %>% as.data.frame() %>% setNames(., c("Genes", "Term"))
+        unique() %>% cbind(myselectedrows$Term[[x]]) %>% as.data.frame() %>% setNames(., c("Genes", "Term")) # org.Mm.egSYMBOL
 
     })
 
@@ -273,49 +225,3 @@ output$savegohmdavxlsx = downloadHandler(filename <- function() { paste0(basenam
 )
 
 
-#' Species is a reactive function which aim is to return annotated packages for a specific genome
-#'
-#' @param Species character input
-#' @param Speciesvenn character input
-#'
-#' @return
-#' @export
-#'
-
-
-Specieshm <- reactive({
-  if (input$Species == "Homo sapiens" ) {# human
-    library("org.Hs.eg.db")
-    return(list(org.Hs.egALIAS2EG, org.Hs.egSYMBOL))
-  }
-  else if (input$Species == "Mus musculus"  ) { # Mouse
-    library("org.Mm.eg.db")
-    return( list(org.Mm.egALIAS2EG, org.Mm.egSYMBOL))
-  }
-  else if (input$Species == "Danio rerio" ) {#Zebra fish
-    library("org.Dr.eg.db")
-    return(list(org.Dr.egALIAS2EG, org.Dr.egSYMBOL))
-  }
-  else if (input$Species == "Gallus gallus" ) {# chicken
-    library("org.Gg.eg.db")
-    return(list(org.Gg.egALIAS2EG, org.Gg.egSYMBOL))
-  }
-  else if (input$Species == "equCab2" ) {# horse
-    library("org.Gg.eg.db")
-    return(list(org.Gg.eg.dbALIAS2EG))
-  }
-  else if (input$Species == "Caenorhabditis elegans" ) {# cC elegans
-    library("org.Ce.eg.db")
-
-    return(list(org.Ce.egALIAS2EG, org.Ce.egSYMBOL))
-  }
-  else if (input$Species == "Rattus norvegicus" ) {# Rat
-    library("org.Rn.eg.db")
-    return(list(org.Rn.egALIAS2EG, org.Rn.egSYMBOL ))
-  }
-  else if (input$Species == "Sus scrofa") {# Pig
-    library("org.Ss.eg.db")
-    return(list(org.Ss.egALIAS2EG, org.Ss.egSYMBOL))
-  }
-
-})

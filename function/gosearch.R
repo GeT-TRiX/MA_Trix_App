@@ -108,21 +108,15 @@ wclust <- function(clusterlist, filename, min, top)  {
 #' @export
 #'
 
-probnamtoentrez <- function(hm01,  mypack) {
-
-  lapply(1:NROW(unique((hm01$cluster))), function(x) {
-    entrezids <- hm01 %>%
-      filter(cluster == x) %>%
-      dplyr::select(GeneName) %>%
-      unlist() %>%
-      as.character() %>%
-      mget(x = .,envir = mypack,ifnotfound = NA) %>%
-      unlist() %>%
-      unique() %>%
-      .[!is.na(.)]
-
-    return(entrezids)
-  })
+probnamtoentrez <- function(davidres,  mypack, gohm =F) {
+  if(gohm)
+  return(lapply(1:NROW(unique((davidres$cluster))), function(x) {entrezids <- davidres %>%filter(cluster == x) %>%
+      dplyr::select(GeneName) %>%unlist() %>%as.character() %>%
+      mget(x = .,envir = mypack,ifnotfound = NA) %>%unlist() %>%unique() %>%.[!is.na(.)]}))
+  else
+    return(entrezids <- davidres %>%unlist() %>%
+             as.character() %>%mget(x = .,envir = mypack, ifnotfound = NA) %>%unlist() %>%unique() %>%
+             .[!is.na(.)])
 }
 
 #' probnamtoentrezvenn is a function that convert Gene symbols to entrez IDS

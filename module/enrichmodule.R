@@ -20,7 +20,7 @@ catHm  <- function(id, label = "Run Analysis") {
   )
 }
 
-queryDavid <- function(input, output, session , data, parent_session) {
+queryDavid <- function(input, output, session , data, parent_session, tabsetpanid, tabPanel, hmana= F, case ) {
 
 
 resAnalysis <- eventReactive(input$GOana , {
@@ -40,8 +40,8 @@ resAnalysis <- eventReactive(input$GOana , {
                      invokeRestart("muffleWarning")
                  
                  tryCatch({
-                   mygodavid = probnamtoentrezvenn(data()[[1]]$GeneName , Species()[[1]]) %>%
-                     davidqueryvenn(input$selspecies) %>% withCallingHandlers(error = timeoutdav)
+                   mygodavid = probnamtoentrez(switch(case, data() ,data()[[1]]$GeneName), Species()[[1]], gohm = hmana ) %>% #probnamtoentrezvenn(data() , Species()[[1]]) %>% 
+                     {if (!hmana) davidqueryvenn(., input$selspecies) else davidquery(. , input$selspecies, input$catinfo) } %>% withCallingHandlers(error = timeoutdav)
                  }, warning = function(e) {
                    
                    shinyjs::alert("David's server is busy")
@@ -51,9 +51,12 @@ resAnalysis <- eventReactive(input$GOana , {
                  })
                })
   
-  pdf(NULL)
-  updateTabsetPanel(session = parent_session, "Vennd",
-                    selected = "venngopanel")
+  if(!hmana)
+    pdf(NULL)
+  
+  updateTabsetPanel(session = parent_session, inputId=  tabsetpanid,
+                    selected = tabPanel)
+  
   return(mygodavid)
 })
 
@@ -99,7 +102,6 @@ Species <- reactive({
   return(reactive({
     validate(need((input$GOana),'You need to click on the run Analysis button!'))
     resAnalysis()
-    
   }))
   
 }

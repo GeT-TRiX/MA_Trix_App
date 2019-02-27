@@ -913,7 +913,7 @@ body <- dashboardBody(
                       strong("(GO) enrichment-based cluster analysis"),value="maingo",
                       downloadButton("savegohmdavxlsx", "Save your enrichment as xlsx" , style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
 
-                      conditionalPanel(condition = "input.GO",
+                      conditionalPanel(condition = "input.GOana",
                                        div(class= "highvenn" , style="font-size:24px; text-align: center;",
                                            htmlOutput("titlegomain")),
                                        DT::dataTableOutput("davidgo"),
@@ -935,7 +935,8 @@ body <- dashboardBody(
                                       )), column(6,br(), checkboxInput("addlabelhigh", "add label", FALSE))),
                                        tags$div(id="highChart")  ,
                                        
-                                       tags$script(src="bubble.js")
+                                       tags$script(src="bubble.js"),
+                                      ns = NS("hmanalysis")
 
                       )),
                     tabPanel(
@@ -1123,23 +1124,35 @@ body <- dashboardBody(
 
                                                        div(id = 'center', strong("Functional enrichment analysis",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                                        br(),
+                                                       # fluidRow(column( 4,
+                                                       #                  selectInput("Species", "Choose your Species:", selected = "Mus musculus",
+                                                       #                              c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
+                                                       #                                "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa",
+                                                       #                                "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" ))
+                                                       #                  ),
+                                                       #          column(4,
+                                                       #                 uiOutput("cutgo")),
+                                                       #          column(3,
+                                                       #                 selectInput('catinfo','Category: ',
+                                                       #                             choices =  c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY"),
+                                                       #                             selected=  c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY"),
+                                                       #                             multiple = TRUE
+                                                       #                 )
+                                                       #          )),
+                                                       
                                                        fluidRow(column( 4,
-                                                                        selectInput("Species", "Choose your Species:", selected = "Mus musculus",
-                                                                                    c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
-                                                                                      "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa",
-                                                                                      "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" ))),
-                                                                column(4,
-                                                                       uiOutput("cutgo")),
-                                                                column(3,
-                                                                       selectInput('catinfo','Category: ',
-                                                                                   choices =  c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY"),
-                                                                                   selected=  c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY"),
-                                                                                   multiple = TRUE
-                                                                       )
-                                                                )),
+                                                                        selSpecies("hmanalysis")
+                                                       ),
+                                                       column(4,
+                                                              uiOutput("cutgo")),
+                                                       column(3,
+                                                              catHm("hmanalysis")
+                                                       )),
+                                                       
                                                        fluidRow(
                                                          column(4,br(),
-                                                                actionButton("GO", "Run Analysis",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                                                                #actionButton("GO", "Run Analysis",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                                                                runAnalysis("hmanalysis")),
                                                          column(4,br(),
                                                                 uiOutput("DAVID"))
                                                        ),br(),

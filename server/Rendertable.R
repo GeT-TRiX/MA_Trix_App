@@ -33,7 +33,7 @@ observe({
 })
 
 rounddavidtable <- reactive({
-  req(davidwebservice)
+  req(davidwebservice())
   return(lapply(1:NROW(davidwebservice()), function(x)
   return(format(davidwebservice()[[x]], digits = 3))))
 })

@@ -40,5 +40,5 @@ acyclgo <- function() {
 }
 
 
-Venncluster <- callModule(queryDavid, "vennanalysis", data = vennfinal , parent_session = session )
+Venncluster <- callModule(queryDavid, "vennanalysis", data = vennfinal , parent_session = session, tabsetpanid= "Vennd", tabPanel= "venngopanel", case =2 )
   

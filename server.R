@@ -7,6 +7,7 @@
 
 
 shinyjscode <- "
+
 shinyjs.init = function() {
   $(window).resize(shinyjs.calcHeight);
 }
@@ -16,7 +17,6 @@ shinyjs.calcHeight = function() {
 "
 
 shinyServer(function(input, output,session) {
-
 
   #######################################################
   ##                                                   ##
