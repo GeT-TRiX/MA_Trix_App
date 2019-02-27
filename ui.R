@@ -482,18 +482,9 @@ body <- dashboardBody(
                   column(width=3,
                          box(id="boxpasspca",title = strong("PCA settings",style="font-size:25px;"), width = NULL, background = "light-blue",
                              inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
-                             strong("Choose your group to visualize"),
-                             uiOutput("grpselpca"),
-                             actionButton(
-                               inputId = "allgrpca",label = "Select all",
-                               icon = icon("check-square-o"),
-                               style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                             ),
-                             actionButton(
-                               inputId = "nogrpca",label = "Clear selection",icon = icon("square-o"),
-                               style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                             ),
-
+                             checkboxRender("selgrouppca"),
+                             allBox("selgrouppca", "Select All"),
+                             noBox("selgrouppca", "Clear selection"),
 
                              fluidRow(column(6,
                                              selectInput("dim1",
@@ -698,19 +689,9 @@ body <- dashboardBody(
           column(width=3,
                  box(id="boxpassvenn",title = strong("Venn settings", style ="font-size:25px;"), width = NULL, background = "light-blue",height = "100%",
                      inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
-                     uiOutput("contout"),
-                     actionButton(
-                       inputId = "allCont",
-                       label = "Select all",
-                       icon = icon("check-square-o"),
-                       style =
-                         "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                     ),
-
-                     actionButton(inputId = "noCont",label = "Clear selection",
-                                  icon = icon("square-o"),
-                                  style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                     ),
+                     checkboxRender("selcompvenn"),
+                     allBox("selcompvenn", "Select All"),
+                     noBox("selcompvenn", "Clear selection"),
                      fluidRow(column(6,
                                      selectInput("methodforvenn","Statistical method",
                                                  choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")
@@ -1007,38 +988,28 @@ body <- dashboardBody(
 
                                       actionLink("resetAll",  label = ("reset all"), style="color:orange;float:right;font-size: 18px;"),
                                       br(),
-                                      uiOutput("grpselhm"),
-                                      actionButton(
-                                        inputId = "allgrphm",
-                                        label = "Select all",
-                                        icon = icon("check-square-o"),
-                                        style =
-                                          "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                      ),
-                                      actionButton(
-                                        inputId = "nogrphm",
-                                        label = "Clear selection",
-                                        icon = icon("square-o"),
-                                        style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                      ),
-                                      div(
-                                        id = "form",
-                                        uiOutput("comphm"),
-                                        actionButton(
-                                          inputId = "allcomphm",label = "Select all",icon = icon("check-square-o"),
-                                          style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                        ),
-                                        actionButton(
-                                          inputId = "nocomphm",label = "Clear selection",icon = icon("square-o"),
-                                          style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                        ),
-                                        # div(id = "form",
-                                        #     checkboxRender("selcomphm"),
-                                        #     allBox("selcomphm", "Select All"),
-                                        #     noBox("selcomphm", "Clear selection")
-                                        #     ),
-                                        # 
-                                        
+                                      # uiOutput("grpselhm"),
+                                      # actionButton(
+                                      #   inputId = "allgrphm",
+                                      #   label = "Select all",
+                                      #   icon = icon("check-square-o"),
+                                      #   style =
+                                      #     "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+                                      # ),
+                                      # actionButton(
+                                      #   inputId = "nogrphm",
+                                      #   label = "Clear selection",
+                                      #   icon = icon("square-o"),
+                                      #   style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
+                                      # ),
+                                        div(id = "form",
+                                            checkboxRender("selgrouphm"),
+                                            allBox("selgrouphm", "Select All"),
+                                            noBox("selgrouphm", "Clear selection"),
+                                            checkboxRender("selcomphm"),
+                                            allBox("selcomphm", "Select All"),
+                                            noBox("selcomphm", "Clear selection"),
+                  
                                         br(),br(),
                                         fluidRow( column(6,
                                                          numericInput(

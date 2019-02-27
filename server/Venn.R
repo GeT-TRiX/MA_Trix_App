@@ -41,7 +41,6 @@ outputOptions(output,"bool",suspendWhenHidden=F)
 
 vennlist <- reactive({
   req(user_cont() > 0)
-
   if (is.null(csvf()))
     return(NULL)
   # adj <- user_cont()
@@ -105,72 +104,12 @@ mycol <- reactive({
     mycol = ""
 })
 
-
-
-observe({
-
-
-  validate(
-    need(csvf(), 'You need to import data to visualize this plot!'))
-
-
-observe({
-
-groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
-output$contout <- renderUI( ##validate
-
-  checkboxGroupInput(
-    inputId = "cont" ,
-    label =  "Choose your comparison",
-    choices = colnames(subsetstat()[[1]][myindex()]),
-    inline = groupinline
-  )
-)
+subsetstatRm <- reactive({
+  req(subsetstat())
+  return(subsetstat()[[1]][myindex()])
 })
 
-})
-
-
-observeEvent(input$allCont, {
-  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
-  updateCheckboxGroupInput(
-    session,
-    "cont",
-    label = "Choose your comparison",
-
-    choices = colnames(subsetstat()[[1]][myindex()]),
-    selected = colnames(subsetstat()[[1]][myindex()]),
-    inline = groupinline
-  )
-})
-
-
-observeEvent(input$noCont, {
-  groupinline = ifelse(length(levels(csvf()[[2]]$Grp)) > 6, T, F)
-  updateCheckboxGroupInput(session,
-                           "cont",
-                           label = "Choose your comparison",
-                           choices = colnames(subsetstat()[[1]][myindex()]),
-                           inline=groupinline
-  )
-})
-
-
-
-
-#' choix_cont is a reactive function that return the contrast selected by the user
-#'
-#' @param cont a set of contrasts selected by the user
-#'
-#' @return choix_cont a set of characters input
-#'
-#' @export
-#'
-
-choix_cont <- reactive({
-  return(input$cont)
-})
-
+choix_cont <- callModule(boxChooser, "selcompvenn", label = "Choose your comparison", data = subsetstatRm , group = csvf, case = 2, Venn =T )
 
 #' user_cont is a reactive function that  return the contrast selected by the user
 #'
@@ -279,12 +218,6 @@ output$downloadsetven <- downloadHandler(
 myindex<- reactive({
   
   req(filtermethjvenn())
-  # if(input$filtermethjvenn == "FDR")
-  # myl = lapply(seq(ncol(subsetstat()[[1]])),function(x)
-  #   return(which(subsetstat()[[1]][[x]] < 0.05)))
-  # else
-  #   myl = lapply(seq(ncol(subsetstat()[[3]])),function(x)
-  #     return(which(subsetstat()[[3]][[x]] < 0.05)))
     
   myl = lapply(seq(ncol(subsetstat()[[3]])),function(x)
     return(which(subsetstat()[[3]][[x]] < 0.05 ))) 
@@ -303,5 +236,4 @@ myindex<- reactive({
 
 filtermethjvenn <- reactive({
   return(input$filtermethjvenn)
-
 })

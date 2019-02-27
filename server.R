@@ -38,7 +38,6 @@ shinyServer(function(input, output,session) {
 
   source(file.path("server", "Datasummary.R"), local = TRUE)$value # Reactive function that return the indexes for the signficant genes
   source(file.path("server", "Rendertable.R"), local = TRUE)$value #  All the output csv except for the heatmap page that are in heatmapshiny source
-  source(file.path("server", "Checkboxgrphm.R"), local = TRUE)$value # Heatmap function for select specific groups
 
   ##########################################
   ######## Volcano page                   ##
@@ -71,8 +70,8 @@ shinyServer(function(input, output,session) {
   ################################
   ######## Heatmap page         ##
   ################################
-
-  source(file.path("server", "Checkboxcontrast.R"), local = TRUE)$value #Select the comparison for the heatmap
+  
+  source(file.path("server", "Checkboxhm.R"), local = TRUE)$value # Heatmap function for select specific groups
   source(file.path("server", "Changeheatmbut.R"), local = TRUE)$value # Change the heatmap button color
   source(file.path("server", "Hidevent.R"), local = TRUE)$value # Hide parameters such as number of clusters ... and tooltip for dist
   source(file.path("server", "Heatmapshiny.R"), local = TRUE)$value # Generate the heatmap

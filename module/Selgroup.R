@@ -19,14 +19,24 @@ noBox <- function(id, label = "Clear selection"){
   )
 }
 
-boxChooser <- function(input, output, session, label, data, group) {
+
+
+
+boxChooser <- function(input, output, session, label, data, group, case, Venn =F) {
+  
+  new_data <- reactive({
+    req(data())
+    if(!Venn)return(switch(case, levels(data()[[2]]$Grp), colnames(data()[[1]]))) else return(switch(case, levels(data()[[2]]$Grp), colnames(data())))
+  })
+  
+  
   output$usercheck <- renderUI({
     ns <- session$ns
     checkboxGroupInput(
       ns("box"),
       label,
-      choices =  colnames(data()),
-      inline = ifelse(length(levels(group()$Grp)) > 6, T, F)
+      choices =new_data(),
+      inline = ifelse(length(levels(group()[[2]]$Grp)) > 6, T, F)
     )
     
   })
@@ -34,29 +44,31 @@ boxChooser <- function(input, output, session, label, data, group) {
   #Select all the contrasts
   
   observeEvent(input$allcomphm, {
-    groupinline = ifelse(length(levels(group()$Grp)) > 6, T, F)
+    groupinline = ifelse(length(levels(group()[[2]]$Grp)) > 6, T, F)
     updateCheckboxGroupInput(
       session,
       "box",
       label ,
-      choices = colnames(data()),
-      selected = colnames(data()),
+      choices = new_data(),
+      selected = new_data(),
       inline = groupinline
     )
   })
   
   #Unselect all the contrasts
   observeEvent(input$nocomphm, {
-    groupinline = ifelse(length(levels(group()$Grp)) > 6, T, F)
+    groupinline = ifelse(length(levels(group()[[2]]$Grp)) > 6, T, F)
     updateCheckboxGroupInput(session,
                              "box",
                              label , 
-                             choices = colnames(data()),
+                             choices =  new_data(),
                              inline= groupinline
     )
   })
   
-  return(reactive({
-    input$selcomphm
+ 
+  
+return(reactive({
+  switch(case, group()[[2]][group()[[2]]$Grp %in% input$box,], input$box)
   }))
 }
