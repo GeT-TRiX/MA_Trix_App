@@ -123,9 +123,9 @@ observe({
       ))(n = 75))
 
     plotHeatmaps(
-
-      hmbis()[[1]],
-      geneSet =  hmbis()[[7]],
+      
+      isolate(hmbis()[[1]]),
+      geneSet =  isolate(hmbis()[[7]]),
       droplevels(subsetgroup_hm()$Grp),
       workingPath = wd_path,
       my_palette = (colorRampPalette(
@@ -143,10 +143,11 @@ observe({
       ColvOrd = hmbis()[[3]],
       gpcol = hmbis()[[5]],
       gpcolr = hmbis()[[6]],
-      distfunTRIX = hmbis()[[2]],
+      distfunTRIX = isolate(hmbis()[[2]]),
       height = hmbis()[[8]],
       rastering = israstering
     )
+    
   }
   
 

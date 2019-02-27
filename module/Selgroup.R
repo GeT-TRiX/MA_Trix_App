@@ -16,18 +16,12 @@ checkboxElements <- function(id){
 
 boxChooser <- function(input, output, session, label, data, group, case, Venn =F) {
   
-  new_data <- reactive({
-    req(data())
-    if(!Venn)return(switch(case, levels(data()[[2]]$Grp), colnames(data()[[1]]))) else return(switch(case, levels(data()[[2]]$Grp), colnames(data())))
-  })
-  
-  
   output$usercheck <- renderUI({
     ns <- session$ns
     checkboxGroupInput(
       ns("box"),
       label,
-      choices =new_data(),
+      choices =data(),
       inline = ifelse(length(levels(group()[[2]]$Grp)) > 6, T, F)
     )
     
@@ -41,8 +35,8 @@ boxChooser <- function(input, output, session, label, data, group, case, Venn =F
       session,
       "box",
       label ,
-      choices = new_data(),
-      selected = new_data(),
+      choices = data(),
+      selected = data(),
       inline = groupinline
     )
   })
@@ -53,7 +47,7 @@ boxChooser <- function(input, output, session, label, data, group, case, Venn =F
     updateCheckboxGroupInput(session,
                              "box",
                              label , 
-                             choices =  new_data(),
+                             choices = data(),
                              inline= groupinline
     )
   })

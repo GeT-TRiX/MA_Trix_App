@@ -84,8 +84,7 @@ clustergrep <- reactive({
 })
 
 
-
-davidwebservice <- callModule(queryDavid, "hmanalysis", data = reactive(hmobj$hm) , parent_session = session, tabsetpanid= "heatmapmainp", tabPanel= "maingo", hmana = T,case = 1  )
+davidwebservice <- callModule(queryDavid, "hmanalysis", data = reactive(hmobj$hm) , parent_session = session, tabsetpanid= "heatmapmainp", tabPanel= "maingo", hmana = T)
 
 
 #' davidurl is a reactive function that aim is to return an url of grouped genes

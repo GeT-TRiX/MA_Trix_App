@@ -9,7 +9,7 @@ selFormat <- function(id, label = "Save your Scree plot") {
   selectInput(ns("format"), label = NULL, choices = c("png", "eps", "pdf", "svg"))
 }
 
-downoutputfiles <- function(input, output, session ,projectname, suffix = "plot.png",  data , w = 12  , h = 12 ,volc = F, cutheat = F, volcform = F, hm =F ,  clustvenn = NULL) {
+downoutputfiles <- function(input, output, session ,projectname, suffix = "plot.png",  data , w = 12  , h = 12 , cutheat = F, volcform = F, hm =F ,  clustvenn = NULL) {
 
 observe({
   
@@ -61,11 +61,11 @@ content <- function(file) {
         pointsize = 12
     )
   
-  else if (cutheat == T && input$format == "eps")
+  else if (cutheat  && input$format == "eps")
     
     cairo_ps(filename=file, width=10, height=10,pointsize = 12)
     
-  else if(volcform == T &&  input$format == "eps")
+  else if(volcform  &&  input$format == "eps")
     
     ggsave(file,device=cairo_ps, fallback_resolution = 600)
   
@@ -74,11 +74,8 @@ content <- function(file) {
         width = w,
         height = h,
         pointsize = 12)
-  
-  if(volc == T)
-    plot(data()[[1]])
-  
-  else if(hm == T){
+
+  if(hm == T){
     revRowInd <- match(c(1:length(data$hm$rowInd)), data$hm$rowInd)
     revColInd <- match(c(1:length(data$hm$colInd)), data$hm$colInd)
     par(mar=c(5,5,1,1.10))

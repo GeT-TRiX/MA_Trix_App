@@ -125,7 +125,7 @@ output$compvolc <- renderUI({
 })
 
 
-callModule(downoutputfiles, "savevolc", projectname = projectname , suffix= "_volcano." , data = volcano, volc =T , w = 12, h = 12 )
+callModule(downoutputfiles, "savevolc", projectname = projectname , suffix= "_volcano." , data = reactive(volcano()[[1]]),  w = 12, h = 12 ,volcform = T)
 
 vocfilt <- reactive({
   req(csvf(), top_volcd(),  volcanocomp())

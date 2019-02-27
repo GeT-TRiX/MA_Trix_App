@@ -12,7 +12,7 @@
 #' #########################################
 
 
-subsetgroup_pca <- callModule(boxChooser, "selgrouppca", label = "Choose your group to visualize", data = csvf , group = csvf, case = 1 )
+subsetgroup_pca <- callModule(boxChooser, "selgrouppca", label = "Choose your group to visualize", data = reactive(levels(csvf()[[2]]$Grp)) , group = csvf, case = 1 )
 
 
 #' PCAres is a reactive function that computed a PCA of non-normalized data
