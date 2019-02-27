@@ -51,6 +51,8 @@ source("function/EnhancedVolcano.R")
 source("./module/csvmodules.R")
 source("./module/savemodules.R")
 source("./module/Selgroup.R")
+source("./module/enrichmodule.R")
+
 
 ################################
 ######## Chat env             ##

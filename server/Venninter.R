@@ -60,7 +60,8 @@ vennfinal <- reactive({
     need(csvf(), 'You need to import data to visualize this plot!') %next%
       need(choix_cont(), 'Set your thresholds and then select your comparison to display the Venn diagram!')%next%
       need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!'))
-
+  
+  req(input$selcontjv)
   outputjvennlist = list()
 
   if(!input$Allcont && !input$dispvenn == "genes")

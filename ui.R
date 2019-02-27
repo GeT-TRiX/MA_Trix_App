@@ -482,9 +482,7 @@ body <- dashboardBody(
                   column(width=3,
                          box(id="boxpasspca",title = strong("PCA settings",style="font-size:25px;"), width = NULL, background = "light-blue",
                              inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
-                             checkboxRender("selgrouppca"),
-                             allBox("selgrouppca", "Select All"),
-                             noBox("selgrouppca", "Clear selection"),
+                             checkboxElements("selgrouppca"),
 
                              fluidRow(column(6,
                                              selectInput("dim1",
@@ -594,7 +592,6 @@ body <- dashboardBody(
                       column(6,
                              div(class= "dfvenn" , style="font-size:24px; margin-top: 17px;",
 
-                                 #conditionalPanel(condition = "input.togglefiltertabvenn%2==1", br(),br()),
 
                                  htmlOutput("dfvenn")),
 
@@ -689,9 +686,7 @@ body <- dashboardBody(
           column(width=3,
                  box(id="boxpassvenn",title = strong("Venn settings", style ="font-size:25px;"), width = NULL, background = "light-blue",height = "100%",
                      inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
-                     checkboxRender("selcompvenn"),
-                     allBox("selcompvenn", "Select All"),
-                     noBox("selcompvenn", "Clear selection"),
+                     checkboxElements("selcompvenn"),
                      fluidRow(column(6,
                                      selectInput("methodforvenn","Statistical method",
                                                  choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")
@@ -778,16 +773,17 @@ body <- dashboardBody(
                      fluidRow(column(6, sliderInput("clusterNumber",label = "Cluster",
                                                     value = 1, min = 1,max = 5
                      )),
-                     column(6,
-                            selectInput("Speciesvenn", "Choose your Species:", selected = "Mus musculus",
-                                        c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
-                                          "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa",
-                                          "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" )))),
+                     
+                     column(6, selSpecies("vennanalysis")
+
+                            )),
                      fluidRow(
-                       column(6,selectInput("catvenn", "Choose your category", selected ="BP", c("BP","MF","CC"))),
+                       column(6,
+                              selectInput("catvenn", "Choose your category", selected ="BP", c("BP","MF","CC"))
+                              ),
 
                        column(6,br(),
-                              actionButton("GOvenn", "Run Analysis",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"))))
+                              runAnalysis("vennanalysis"))))
 
                  ))))),
 
@@ -807,22 +803,7 @@ body <- dashboardBody(
                     id = "heatmapmainp",
                     tabPanel(
                       strong("Visualize the Heatmap"),value = "hmmainpan",
-                      # 
-                      # div(style="display:inline-block",
-                      #     fluidRow( column(1 ,style="width:9%;",
-                      #                      downloadButton(
-                      #                        "savehm",
-                      #                        "Save your plot" ,
-                      #                        style =  "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                      #                      )
-                      #                    ),
-                      #               column(2),
-                      #               column( 3,
-                      #                       selectInput("formhm", label = NULL,
-                      #                                   choices = c("png", "eps", "emf", "svg")))
-                      # 
-                      #     )),
-                      
+
                       
                       div(style="display:inline-block;",
                           fluidRow(column(1,style="width:9%;",downloadFiles("savehm", "Save your plot")),
@@ -988,27 +969,10 @@ body <- dashboardBody(
 
                                       actionLink("resetAll",  label = ("reset all"), style="color:orange;float:right;font-size: 18px;"),
                                       br(),
-                                      # uiOutput("grpselhm"),
-                                      # actionButton(
-                                      #   inputId = "allgrphm",
-                                      #   label = "Select all",
-                                      #   icon = icon("check-square-o"),
-                                      #   style =
-                                      #     "color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                      # ),
-                                      # actionButton(
-                                      #   inputId = "nogrphm",
-                                      #   label = "Clear selection",
-                                      #   icon = icon("square-o"),
-                                      #   style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
-                                      # ),
+
                                         div(id = "form",
-                                            checkboxRender("selgrouphm"),
-                                            allBox("selgrouphm", "Select All"),
-                                            noBox("selgrouphm", "Clear selection"),
-                                            checkboxRender("selcomphm"),
-                                            allBox("selcomphm", "Select All"),
-                                            noBox("selcomphm", "Clear selection"),
+                                            checkboxElements("selgrouphm"),
+                                            checkboxElements("selcomphm"),
                   
                                         br(),br(),
                                         fluidRow( column(6,

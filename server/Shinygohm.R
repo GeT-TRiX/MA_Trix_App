@@ -130,6 +130,8 @@ davidwebservice <- eventReactive(input$GO, {
     return(mygodavid)
   })
 
+#davidwebservice <- callModule(queryDavid, "vennanalysis", data = vennfinal , parent_session = session )
+
 
 
 #' davidurl is a reactive function that aim is to return an url of grouped genes
@@ -266,8 +268,6 @@ output$savegohmdavxlsx = downloadHandler(filename <- function() { paste0(basenam
         )
       }
     })
-
-
 
   }
 )

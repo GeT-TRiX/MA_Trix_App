@@ -17,7 +17,7 @@ output$data_summary <- renderDataTable(data_summary()) # Summary of the signific
 
 
 observe({
-
+  
   req(input$dispvenn, vennfinal())
 
   if(any(grepl("probes|transcripts", input$dispvenn)) &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
