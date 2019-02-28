@@ -51,14 +51,14 @@ sidebar <- dashboardSidebar(
                 tags$a(img(
                   src = "GeT_logo-RVB.png",
                   height = 50,
-                  width = 180,
-                  style = "position:absolute;bottom:50px;margin:0 0 15px 10px;"
-                ) , href="https://get.genotoul.fr/en/", target="_blank"),
+#                  width = 168,
+                  style = "position:absolute;bottom:60px;margin:0 0 10px 15px;"
+                ) , href="https://get.genotoul.fr", target="_blank"),
                 tags$a(img(
                   src = "Logotype-INRA-transparent.png",
-                  height = 43,
-                  width = 168,
-                  style = "position:absolute;bottom:0;margin:0 0 15px 10px;"
+                  height = 50,
+#                  width = 168,
+                  style = "position:absolute;bottom:0;margin:0 0 10px 15px;"
                 ) , href="https://www6.toulouse.inra.fr/toxalim", target="_blank")
 
     )
