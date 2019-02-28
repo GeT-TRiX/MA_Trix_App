@@ -241,8 +241,7 @@ truncatedhat=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   
   
   #### heatmap  genes 
-  
-  #useRasterTF=F;
+
   
   ##-----------------------##
   ## plot Row dendrogram
@@ -386,7 +385,7 @@ plotHeatmaps=function(exprData,groups,workingPath=getwd(),fileType="png",cexcol=
   if(notplot)
     dev.off()
   
-  cat("    Done \n")
+  cat("Done \n")
 
   restoshiny = list(heatmtoclust(hmp02,exprData,genename,height= height),hmp02)
   return(restoshiny)

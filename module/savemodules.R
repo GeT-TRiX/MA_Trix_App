@@ -9,7 +9,7 @@ selFormat <- function(id, label = "Save your Scree plot") {
   selectInput(ns("format"), label = NULL, choices = c("png", "eps", "pdf", "svg"))
 }
 
-downoutputfiles <- function(input, output, session ,projectname, suffix = "plot.png",  data , w = 12  , h = 12 , cutheat = F, volcform = F, hm =F ,  clustvenn = NULL, rown =NA) {
+downoutputfiles <- function(input, output, session ,projectname, suffix = "plot.png",  data , w = 12  , h = 12 , cutheat = F, volcform = F, hm =F ,  clustvenn = NULL, rown =NULL) {
 
 observe({
   if(!is.null(clustvenn)){
@@ -75,13 +75,13 @@ content <- function(file) {
         pointsize = 12)
 
   if(hm == T){
+    
     revRowInd <- match(c(1:length(data$hm$rowInd)), data$hm$rowInd)
     revColInd <- match(c(1:length(data$hm$colInd)), data$hm$colInd)
     par(mar=c(5,5,1,1.10))
     if(is.null(data$colgroup))cl = palette(palette)else  cl=palette(data$colgroup)
-    if(is.null(rown())) rown() = NA 
-    heatmap.2(t(data$hm$carpet)[revRowInd, revColInd], Rowv=data$hm$rowDendrogram, Colv=data$hm$colDendrogram, col=data$hm$col, useRaster = T, keysize=1, na.rm=T,  na.color="black",labRow = switch(rown(), hide = data$rownames, show = NA),
-              trace = c("none"), layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),key=T,density.info="density", scale="row", RowSideColors = data$rows , ColSideColors = data$cols)
+    heatmap.2(t(data$hm$carpet)[revRowInd, revColInd], Rowv=data$hm$rowDendrogram, Colv=data$hm$colDendrogram, col=data$hm$col, useRaster = T, keysize=1, na.rm=T,  na.color="black",labRow = switch(rown(), hide = NA , show = data$rownames),
+              trace = c("none"), layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),key=T,density.info="density", scale="row", RowSideColors = data$rows , ColSideColors = data$cols, cexRow =0.9)
     mtext(side=3,sort(levels(data$groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(data$groups))),col=cl[(1:length(levels(data$groups)))],cex=1,line=-1)
   } else
     plot(data())

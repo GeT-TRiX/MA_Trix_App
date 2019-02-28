@@ -167,7 +167,7 @@ observe({
 
   observe({
   req(hmobj$obj)
-  callModule(downoutputfiles, "savehm", projectname = projectname , suffix = "_heatmap." , data = hmobj$obj , w =9, h = 12, hm =T, rown = rowname)
+  callModule(downoutputfiles, "savehm", projectname = projectname , suffix = "_heatmap." , data = hmobj$obj , w =9, h = 12, hm =T, rown = reactive(input$rowname))
   })
 
   output$downloadcut <- downloadHandler(
