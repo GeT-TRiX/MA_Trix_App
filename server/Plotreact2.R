@@ -36,8 +36,8 @@ hmbis <- reactive({
   withProgress(message = 'Performing the hierarchical clustering, be patient!',{
                  for (i in 1:15) {
                    incProgress(1 / 15, detail = "Please wait...")
-                 
-                   } truncatedhat(
+                   } 
+                  truncatedhat(
                    data.matrix(subsetwset()),
                    subsetDEG()[[1]],
                    droplevels(subsetgroup_hm()$Grp),
@@ -76,6 +76,7 @@ observeEvent(input$heatm, {
         hmobj$obj$cols <-  hmbis()[[5]]
         hmobj$obj$colgroup <- unlist(colors())
         hmobj$obj$groups <-  droplevels(subsetgroup_hm()$Grp)
+        hmobj$obj$rownames <- hmbis()[[7]]
         
         observe({
           boolhm <<- T

@@ -17,7 +17,7 @@ output$heatmbool <- reactive({
 })
 
 observe({
-  
+
   print(boolhm)
 
 })
@@ -70,7 +70,7 @@ colname <- reactive({
 
 
 
-heatmapobj <- NULL 
+heatmapobj <- NULL
 formatidus <- NULL
 hmbis <- reactiveValues()
 hmboth <- reactiveValues()
@@ -114,7 +114,7 @@ observe({
   #'
 
   heatmapfinal <- function(isplot  = F, israstering = T) {
-    
+
     if (is.null(my_intermediate()))
       mypal = (colorRampPalette(c("green", "black", "red"))(n = 75))
     else
@@ -123,14 +123,13 @@ observe({
       ))(n = 75))
 
     plotHeatmaps(
-      
+
       isolate(hmbis()[[1]]),
       geneSet =  isolate(hmbis()[[7]]),
       droplevels(subsetgroup_hm()$Grp),
       workingPath = wd_path,
       my_palette = (colorRampPalette(
-        c(col_choice1(), my_intermediate(), col_choice3())
-      )(n = 75)),
+        c(col_choice1(), my_intermediate(), col_choice3()))(n = 75)),
       mycex = input$legsize ,
       cexrow = input$rowsize ,
       cexcol = input$colsize ,
@@ -149,7 +148,7 @@ observe({
     )
     
   }
-  
+
 
   output$warningsheat <- renderPrint({
     validate(need(
@@ -165,12 +164,12 @@ observe({
       source(file.path("server", "Plotreact.R"), local = TRUE)$value #
     else
       source(file.path("server", "Plotreact2.R"), local = TRUE)$value #
-  
+
   observe({
   req(hmobj$obj)
-  callModule(downoutputfiles, "savehm", projectname = projectname , suffix = "_heatmap." , data = hmobj$obj , w =9, h = 12, hm =T)
-  })  
-  
+  callModule(downoutputfiles, "savehm", projectname = projectname , suffix = "_heatmap." , data = hmobj$obj , w =9, h = 12, hm =T, rown = rowname)
+  })
+
   output$downloadcut <- downloadHandler(
     filename = function() {
       paste(basename(file_path_sans_ext(projectname())),
