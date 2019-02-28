@@ -51,21 +51,27 @@ sidebar <- dashboardSidebar(
                 tags$a(img(
                   src = "GeT_logo-RVB.png",
                   height = 50,
-#                  width = 168,
-                  style = "position:absolute;bottom:60px;margin:0 0 10px 15px;"
+                  style = "position:absolute;bottom:120px;margin:0 0 10px 15px;"
                 ) , href="https://get.genotoul.fr", target="_blank"),
                 tags$a(img(
                   src = "Logotype-INRA-transparent.png",
                   height = 50,
-#                  width = 168,
-                  style = "position:absolute;bottom:0;margin:0 0 10px 15px;"
+                  style = "position:absolute;bottom:70px;margin:0 0 10px 15px;"
                 ) , href="https://www6.toulouse.inra.fr/toxalim", target="_blank")
-
-    )
+				
+    ),
+				tags$footer("Copyright © 2018-2019 INRA  | Designed by GenoToul GeT-TRiX team", align = "center", style = "
+					  position:absolute;
+					  bottom:20px;
+					  width:100%;
+					  height:40px;   /* Height of the footer */
+					  color: white;
+					  padding: 3px;
+					  z-index: 100")
   )
 )
 
-###############################
+###############################,
 ######## dashboardbody        #
 ###############################
 ###############################
@@ -1183,8 +1189,18 @@ body <- dashboardBody(
                 )
 
               ))
-      )
+      )  
+
   )
+#  ,tags$footer("Copyright © 2018-2019, INRA | Designed by GenoToul GeT-TRiX team", align = "center", style = "
+#					  position:absolute;
+#					  bottom:0;
+#					  width:100%;
+#					  height:40px;   /* Height of the footer */
+#					  color: white;
+#					  padding: 10px;
+#					  background-color: #2e6da4;
+#					  z-index: 100")
   )
 
 ###############################
