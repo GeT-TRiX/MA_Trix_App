@@ -22,6 +22,7 @@ boxChooser <- function(input, output, session, label, data, group, case, Venn =F
       ns("box"),
       label,
       choices =data(),
+      selected = switch(case,data(), NULL),
       inline = ifelse(length(levels(group()[[2]]$Grp)) > 6, T, F)
     )
     

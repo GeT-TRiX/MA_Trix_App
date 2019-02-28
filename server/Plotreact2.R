@@ -33,15 +33,11 @@ shinyjs::enable("heatm")
 #'
 
 hmbis <- reactive({
-  withProgress(message = 'Performing the hierarchical clustering:', # Add sliderbar when loading heatmap
-               value = 0,
-               {
-                 n <- NROW(subsetDEG()[[1]]) #number of row in the subsetDEG dataframe
-                 for (i in 1:n) {
-                   incProgress(1 / n, detail = "Please wait...")
-                 }
+  withProgress(message = 'Performing the hierarchical clustering, be patient!',{
+                 for (i in 1:15) {
+                   incProgress(1 / 15, detail = "Please wait...")
                  
-                 truncatedhat(
+                   } truncatedhat(
                    data.matrix(subsetwset()),
                    subsetDEG()[[1]],
                    droplevels(subsetgroup_hm()$Grp),
@@ -89,12 +85,9 @@ observeEvent(input$heatm, {
           boolhm
         })
         
-        withProgress(message = 'Plotting heatmap:', # Add sliderbar when loading heatmap
-                     value = 0,
-                     {
-                       n <- NROW(subsetDEG()[[1]]) #number of row in the subsetDEG dataframe
-                       for (i in 1:n) {
-                         incProgress(1 / n, detail = "Please wait...")
+        withProgress(message = 'Plotting heatmap:',  {
+                       for (i in 1:15) {
+                         incProgress(1 / 15, detail = "Please wait...")
                        }
                        hmboth$tot <- heatmapfinal(isplot = F)
                        hmobj$hm <- hmboth$tot[[1]]

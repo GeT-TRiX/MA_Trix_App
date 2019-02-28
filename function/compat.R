@@ -281,10 +281,7 @@ plotHeatmaps=function(exprData,geneSet,groups,workingPath=getwd(),k=3,fileType="
   ##-----------------------##
   cat("\n -> Plotting HeatMap... \n")
   
-  #print(gphcc)
-  #View(exprData)
 
-  #return(gphcc)
   par("mar")
   par(mar=c(5,5,1,1.10))
   hmp02 = heatmap.2(exprData,na.rm=T,dendrogram="both",labRow = rowIds,labCol=colid,scale=scale, RowSideColors=gpcolr, ColSideColors=gpcol,key=T,

@@ -47,6 +47,7 @@ output$davidgo <- DT::renderDataTable(DT::datatable(rounddavidtable()[[as.numeri
 #' @return  a reactive data frame
 #'
 #' @export
+#' 
 
 
 myrenderedtop <- reactive({
