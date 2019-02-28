@@ -8,7 +8,7 @@
 
 observe({
   req(Venncluster())
-  updateSliderInput(session, "clusterNumber", max = nrow(summary(Venncluster())))
+  updateSliderInput(session, "clusterNumber", max = nrow(summary(Venncluster()$mygodavid)))
 })
 
 
@@ -23,13 +23,13 @@ output$clusterPlot <- renderPlot({
     need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!')) 
     req(Venncluster())
     
-    plot2D(Venncluster(), input$clusterNumber)
+    plot2D(Venncluster()$mygodavid, input$clusterNumber)
 })
 
 
 davidtag<- reactive({
   req(Venncluster())
-  davidGODag<-DAVIDGODag(members(Venncluster())[[input$clusterNumber]],  pvalueCutoff=0.1, input$catvenn ) }) 
+  davidGODag<-DAVIDGODag(members(Venncluster()$mygodavid)[[input$clusterNumber]],  pvalueCutoff=0.1, input$catvenn ) }) 
 
 
 

@@ -5,7 +5,6 @@
 ### Application: MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data
 ### Licence: GPL-3.0
 
-
 # increase loading files
 
 options(shiny.maxRequestSize=128000000)

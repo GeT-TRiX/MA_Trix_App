@@ -51,8 +51,6 @@ observe({
 })
 
 
-
-
 #' clustergrep is a reactive function which aim is to return a list of genes for the selected cluster without the non-annotated genes
 #'
 #' @param hm data frame of the significant genes associated with the corresponding cluster index
@@ -111,43 +109,8 @@ observe({
   url$myurl = davidurl()
 })
 
+myentreztosymb <- callModule(entrezIdstosymb, "hmanalysis", data = davidwebservice , cutgo = reactive(input$cutgo), rows_selected= reactive(input$davidgo_rows_selected) )
 
-
-#' myentreztosymb is a reactive function which aim is to convert entrez ID to GENE  the selected rows in the output data table
-#'
-#' @param davidwebservice data frame
-#' @param cutgo a numeric input
-#' @param davidgo_rows_selected selected rows
-#' @param Species list of annotated elements
-#'
-#' @return a data frame
-#' @export
-#'
-
-
-myentreztosymb <- reactive({
-
-  req( davidwebservice())
-
-
-  myselectedrows = (davidwebservice()[[as.numeric(input$cutgo)]][input$davidgo_rows_selected, c("Genes", "Term"),  drop = FALSE])
-
-  if(length(myselectedrows["Genes"][[1]])>0){
-
-    myentreztosymb = lapply(1:NROW(myselectedrows),function(x){
-      myselectedrows$Genes[[x]] %>% strsplit( ", ") %>% unlist() %>% mget(x= .,envir = Specieshm()[[2]],ifnotfound = NA) %>%  unlist() %>%
-        unique() %>% cbind(myselectedrows$Term[[x]]) %>% as.data.frame() %>% setNames(., c("Genes", "Term")) # org.Mm.egSYMBOL
-
-    })
-
-    return(myentreztosymb)
-  }
-  else{
-
-    return(NULL)
-  }
-
-})
 
 output$printmessage <- renderPrint({
   req(davidwebservice())
@@ -176,7 +139,7 @@ output$printselected <- renderPrint({
 
 myresdavitab <- reactive({
   req(davidwebservice())
-  mygotabres(davidwebservice()[[as.numeric(input$cutgo)]], input$enrichbased)
+  mygotabres(davidwebservice()$mygodavid[[as.numeric(input$cutgo)]], input$enrichbased)
 })
 
 
@@ -205,7 +168,7 @@ output$savegohmdavxlsx = downloadHandler(filename <- function() { paste0(basenam
 
     library(xlsx)
 
-    for (i in 1:length(davidwebservice())) {
+    for (i in 1:length(davidwebservice()$mygodavid)) {
       if (i == 1)
         write.xlsx(file = file,
                    davidwebservice()[[i]],
@@ -213,7 +176,7 @@ output$savegohmdavxlsx = downloadHandler(filename <- function() { paste0(basenam
       else
         write.xlsx(
           file = file,
-          davidwebservice()[[i]],
+          davidwebservice()$mygodavid[[i]],
           sheetName = paste("Cluster", i),
           append = TRUE
         )

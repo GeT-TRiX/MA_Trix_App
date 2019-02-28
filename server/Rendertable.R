@@ -34,8 +34,8 @@ observe({
 
 rounddavidtable <- reactive({
   req(davidwebservice())
-  return(lapply(1:NROW(davidwebservice()), function(x)
-  return(format(davidwebservice()[[x]], digits = 3))))
+  return(lapply(1:NROW(davidwebservice()$mygodavid), function(x)
+  return(format(davidwebservice()$mygodavid[[x]], digits = 3))))
 })
 
 output$davidgo <- DT::renderDataTable(DT::datatable(rounddavidtable()[[as.numeric(input$cutgo)]][, -9] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons'),server=F)
@@ -59,35 +59,10 @@ myrenderedtop <- reactive({
 output$subsetgroup_hm <- DT::renderDataTable(DT::datatable(myrenderedtop() , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons',filter =c("none")))
 
 
-observe({
-  req(!is.null(length(myresdavitab())))
-output$cat_MF <- DT::renderDataTable({
-  if(is.null(myresdavitab()[[1]]))
-    return(NULL)
-  else DT::datatable(myresdavitab()[[1]] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons') })
-})
-
-observe({
-  req(length(myresdavitab())>1)
-output$cat_BP <- DT::renderDataTable({
-DT::datatable(myresdavitab()[[2]] ,options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons') })})
-
-observe({
-req(length(myresdavitab())>2)
-
-output$cat_CC <- DT::renderDataTable({
- DT::datatable(myresdavitab()[[3]] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons' ) })
-})
-
 
 output$debug <- DT::renderDataTable({
   req(Venncluster())
-  summary(Venncluster()) %>% as.data.frame() %>% mutate_if(is.numeric, funs(format(., digits = 3)))
+  summary(Venncluster()$mygodavid) %>% as.data.frame() %>% mutate_if(is.numeric, funs(format(., digits = 3)))
 })
 
-observe({
-  req(length(myresdavitab())>3)
 
-  output$cat_KEGG <- DT::renderDataTable({
-  DT::datatable(myresdavitab()[[4]] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons') })
-})

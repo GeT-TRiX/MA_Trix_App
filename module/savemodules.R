@@ -12,7 +12,6 @@ selFormat <- function(id, label = "Save your Scree plot") {
 downoutputfiles <- function(input, output, session ,projectname, suffix = "plot.png",  data , w = 12  , h = 12 , cutheat = F, volcform = F, hm =F ,  clustvenn = NULL) {
 
 observe({
-  
   if(!is.null(clustvenn)){
     req(data())
     pdf(NULL)
@@ -59,7 +58,7 @@ content <- function(file) {
         width = w,
         height = h,
         pointsize = 12
-    )
+  )
   
   else if (cutheat  && input$format == "eps")
     
@@ -83,12 +82,11 @@ content <- function(file) {
     heatmap.2(t(data$hm$carpet)[revRowInd, revColInd], Rowv=data$hm$rowDendrogram, Colv=data$hm$colDendrogram, col=data$hm$col, useRaster = T, keysize=1,na.rm=T,  na.color="black",
               trace = c("none"), layout(lmat =rbind(4:3,2:1),lhei = c(0.05,1), lwid = c(0.1,1)),key=T,density.info="density", scale="row", RowSideColors = data$rows , ColSideColors = data$cols)
     mtext(side=3,sort(levels(data$groups)),adj=1,padj=seq(0,by=1.4,length.out=length(levels(data$groups))),col=cl[(1:length(levels(data$groups)))],cex=1,line=-1)
-    }
-  else
+  } else
     plot(data())
   
+  
   dev.off()
-
 })
   
 }
