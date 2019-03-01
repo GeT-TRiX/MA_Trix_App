@@ -75,7 +75,7 @@ content <- function(file) {
         pointsize = 12)
 
   if(hm == T){
-    
+
     revRowInd <- match(c(1:length(data$hm$rowInd)), data$hm$rowInd)
     revColInd <- match(c(1:length(data$hm$colInd)), data$hm$colInd)
     par(mar=c(5,5,1,1.10))

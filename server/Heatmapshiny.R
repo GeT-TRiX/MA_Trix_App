@@ -227,11 +227,12 @@ observe({
   })
   
   #output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))
-  
-  callModule(stylishTables, "totalgenbyc", data = grouplength , searching = F)
-  callModule(stylishTables, "clusteringtable", data = ordered , searching = F)
-  
   #output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength()))
+  
+  callModule(stylishTables, "totalgenbyc", data = grouplength , searching = F, pageLength = 10)
+  callModule(stylishTables, "clusteringtable", data = ordered , searching = F, scrollX = T,lengthpage=  c('5', '10', '15'), pageLength = 10)
+  
+
 
 
 })

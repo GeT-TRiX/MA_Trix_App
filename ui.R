@@ -436,12 +436,6 @@ body <- dashboardBody(
                                ), ns = NS("datafile"))
                     )
                 )
-                #,
-                # conditionalPanel(condition = '!output.boolmark',
-                #                  column(12,
-                #                         h3("Show the actual data frame with the columns selected"),
-                #                         dataTableOutput("subsetgroup_hm")
-                #                  ),ns = NS("datafile"))
 
 
                   )),
@@ -551,7 +545,7 @@ body <- dashboardBody(
               fluidRow(column(
                 width = 9,
                 div(
-                  style = "width:100% ; max-width: 1500px; height: 1950px; max-height: 2800px;",
+                  style = "width:100% ; max-width: 1500px; height: 1850px; max-height: 2800px;",
                   tabsetPanel(
                     id = "Vennd",
 
@@ -907,8 +901,7 @@ body <- dashboardBody(
                           "Heatmap's cluster are upside down in order to match the genes with the heatmap from top to bottom"
                         )
                         ,
-                        #dataTableOutput("totalgenbyc")
-                        renderoutputTable("clustering"),
+                        renderoutputTable("clusteringtable"),
 
 
                         h3("This table summarizes the number of significant probes and genes by cluster"),
@@ -916,7 +909,6 @@ body <- dashboardBody(
                           "For the number of genes by cluster the duplicated genes are removed"
                         ),
                         renderoutputTable("totalgenbyc")
-                        #dataTableOutput("totalgenbyc")
                       )),
                     tabPanel(
                       strong("(GO) enrichment-based cluster analysis"),value="maingo",
@@ -925,7 +917,6 @@ body <- dashboardBody(
                       conditionalPanel(condition = "input.GOana",
                                        div(class= "highvenn" , style="font-size:24px; text-align: center;",
                                            htmlOutput("titlegomain")),
-                                       #renderoutputTable("davidgo"),
                                        DT::dataTableOutput("davidgo"),
 
                                        verbatimTextOutput("printmessage"),
@@ -950,7 +941,7 @@ body <- dashboardBody(
 
                       )),
                     tabPanel(
-                      strong("Cut heatmap"),#icon("table"),
+                      strong("Cut heatmap"),
                       bsAlert("alert"),value = "cuthmmainpan",
                       plotlyOutput(outputId = "cutheatmap", height = 600),
 
@@ -1139,21 +1130,7 @@ body <- dashboardBody(
 
                                                        div(id = 'center', strong("Functional enrichment analysis",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                                        br(),
-                                                       # fluidRow(column( 4,
-                                                       #                  selectInput("Species", "Choose your Species:", selected = "Mus musculus",
-                                                       #                              c("Mouse" = "Mus musculus", "Human" = "Homo sapiens", "Rat" = "Rattus norvegicus", "C. elegans" = "Caenorhabditis elegans",
-                                                       #                                "Zebrafish" = "Danio rerio",  "Pig" = "Sus scrofa",
-                                                       #                                "Chicken" = "Gallus gallus", "Chimpanzee" = " Pan troglodytes" ))
-                                                       #                  ),
-                                                       #          column(4,
-                                                       #                 uiOutput("cutgo")),
-                                                       #          column(3,
-                                                       #                 selectInput('catinfo','Category: ',
-                                                       #                             choices =  c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY"),
-                                                       #                             selected=  c( `BP`= "GOTERM_BP_ALL", `MF` = "GOTERM_MF_ALL", `CC`=  "GOTERM_CC_ALL", `Kegg`= "KEGG_PATHWAY"),
-                                                       #                             multiple = TRUE
-                                                       #                 )
-                                                       #          )),
+
                                                        
                                                        fluidRow(column( 4,
                                                                         selSpecies("hmanalysis")
@@ -1166,7 +1143,6 @@ body <- dashboardBody(
                                                        
                                                        fluidRow(
                                                          column(4,br(),
-                                                                #actionButton("GO", "Run Analysis",style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
                                                                 runAnalysis("hmanalysis")),
                                                          column(4,br(),
                                                                 uiOutput("DAVID"))
@@ -1186,12 +1162,10 @@ body <- dashboardBody(
                                selectizeInput('cutinfo', 'Choose your types of plots',
                                               choices = cutheatmlist), # cutheatmlist is a variable defined in the global environment
                                br(),
-                               #selectInput("formcut","Choose your file format",choices = c("pdf", "png", "eps")),
                                selFormat("saveboxclust","Choose your file format"), br(),
                                verbatimTextOutput("event"),
                                br(),
                                downloadFiles("saveboxclust", "Save your plot")
-                               # downloadButton("savecut", "Save your plot" , style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")
 
                              ))
                        )
@@ -1201,15 +1175,6 @@ body <- dashboardBody(
       )  
 
   )
-#  ,tags$footer("Copyright © 2018-2019, INRA | Designed by GenoToul GeT-TRiX team", align = "center", style = "
-#					  position:absolute;
-#					  bottom:0;
-#					  width:100%;
-#					  height:40px;   /* Height of the footer */
-#					  color: white;
-#					  padding: 10px;
-#					  background-color: #2e6da4;
-#					  z-index: 100")
   )
 
 ###############################
