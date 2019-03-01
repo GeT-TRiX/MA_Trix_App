@@ -78,6 +78,9 @@ hmobj <- reactiveValues()
 hmsize <- reactiveValues()
 
 
+colors <- callModule(colorChooser, "myPanelcolhm", data = reactive(subsetgroup_hm()$Grp)) #assign color input widget for each groups
+
+
 observe({
 
   #' heatmapfinal is an isolate function that only react to a user's click on the heatmap button
@@ -222,9 +225,13 @@ observe({
     return(lengthofmyclust)
 
   })
-
-  output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength() ))
-  output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))
+  
+  #output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))
+  
+  callModule(stylishTables, "totalgenbyc", data = grouplength , searching = F)
+  callModule(stylishTables, "clusteringtable", data = ordered , searching = F)
+  
+  #output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength()))
 
 
 })

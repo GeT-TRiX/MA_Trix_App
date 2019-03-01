@@ -10,7 +10,7 @@
 #' ######## align group name in the pannel if there is more than 6 groups      #
 #' #############################################################################
 
-selected_test <- callModule(boxChooser, "selcomphm", label = "Choose your comparison", data = reactive(colnames(subsetstat()[[1]])) , group = csvf, case = 2 )
+selected_test <- callModule(boxChooser, "selcomphm", label = "Choose your comparison", data = reactive(colnames(subsetstat()[[1]])) , group = csvf, case = 2 , empty =T )
 subsetgroup_hm <- callModule(boxChooser, "selgrouphm", label = "Choose your group to visualize", data = reactive(levels(csvf()[[2]]$Grp)), group = csvf, case = 1 )
 
 

@@ -56,10 +56,10 @@ output$myMAT <- renderText({ #Method for the matrix distance, default = correlat
 })
 
 output$myPAL <- renderText({ #Colors selected for the different groups, default see palette in the global environment
-  if(is.null(mypal()))
+  if(is.null(colors()))
     palette[1:length(input$grouphm)]
   else
-    paste(mypal(),as.character(),  sep=",")
+    paste(unlist(colors()),as.character(),  sep=",")
 })
 
 output$myLEG <- renderText({ #Legend size, default = 0.8

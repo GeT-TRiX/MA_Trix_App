@@ -10,10 +10,9 @@
 ######## Plot the data frame wiht input ##
 ##########################################
 
-output$designtab <- renderDataTable(csvf()[[2]]) # Data frame corresponding to the pData
 
-
-output$data_summary <- renderDataTable(data_summary()) # Summary of the significant genes depending on the pvalue with FC set to (1.2,2,4,6,10)
+callModule(stylishTables, "renderpdata", data = reactive(csvf()[[2]]) , lengthpage=  c('5', '10', '15','50','100'), pageLength=10 , searching =F)
+callModule(stylishTables, "rendersummary", data = data_summary , lengthpage=  c('5', '10', '15','20'), pageLength=15 )
 
 
 observe({
@@ -21,12 +20,15 @@ observe({
   req(input$dispvenn, vennfinal())
 
   if(any(grepl("probes|transcripts", input$dispvenn)) &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
+    #callModule(stylishTables, "renderjvenntab", data = reactive(vennfinal()[[1]]) ,pageLength=150,extensions=c("Buttons",'Scroller'), scrollX= T,  scrollY=530,dom = 'Bfrtip',  buttons = c( 'csv',  'pdf'),  stateSave = T)
     output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('5', '10', '15')),extensions=c("Buttons",'Scroller'),  options = list(scrollX = TRUE,  pageLength = 150, scrollY=530,  stateSave = T,  dom = 'Bfrtip',
                                                                                                                                       buttons = c( 'csv',  'pdf' )) ), server = F)
   else if (input$dispvenn == "genes"  &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
+    #callModule(stylishTables, "renderjvenntab", data = reactive(vennfinal()[[2]]) ,pageLength=150,extensions=c("Buttons",'Scroller'), scrollX= T,  scrollY=530,dom = 'Bfrtip',  buttons = c( 'csv',  'pdf'), dupgenes= reactive(jvenndup$duplicated$GeneName), case =1 , stateSave = T)
     output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('5', '10', '15')),extensions=c("Buttons",'Scroller'), options = list(scrollX = TRUE ,pageLength = 150, scrollY=530,  stateSave = T,dom = 'Bfrtip',
                                                                                                                                       buttons = c( 'csv',  'pdf' ))) %>% formatStyle('GeneName', color = styleEqual(unique(jvenndup$duplicated$GeneName), rep('orange', length(unique(jvenndup$duplicated$GeneName))))), server = F)
   else
+    #callModule(stylishTables, "renderjvenntab", data = topngenesDT , pageLength=150,extensions=c("Buttons",'Scroller'), scrollX= T,  scrollY=530, dom = 'Bfrtip',  buttons = c( 'csv',  'pdf'  ), stateSave = T)
     output$vennresinter <- DT::renderDataTable(DT::datatable(topngenesDT(), list(lengthMenu =  c('5', '10', '15')),extensions=c("Buttons",'Scroller'),  options = list(scrollX = TRUE ,pageLength = 150, scrollY=530,  stateSave = T,dom = 'Bfrtip',
                                                                                                                                    buttons = c( 'csv',  'pdf' ))), server = F)
 
@@ -37,6 +39,8 @@ rounddavidtable <- reactive({
   return(lapply(1:NROW(davidwebservice()$mygodavid), function(x)
   return(format(davidwebservice()$mygodavid[[x]], digits = 3))))
 })
+
+#callModule(stylishTables, "davidgo", data = reactive(rounddavidtable()[[as.numeric(input$cutgo)]][, -9]) , scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis'), extensions = 'Buttons')
 
 output$davidgo <- DT::renderDataTable(DT::datatable(rounddavidtable()[[as.numeric(input$cutgo)]][, -9] , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons'),server=F)
 
@@ -57,13 +61,11 @@ myrenderedtop <- reactive({
     mutate_if(is.numeric, funs(format(., digits = 3)))
 })
 
-output$subsetgroup_hm <- DT::renderDataTable(DT::datatable(myrenderedtop() , options = list(scrollX = TRUE, dom = 'Bfrtip', buttons = I('colvis')), extensions = 'Buttons',filter =c("none")))
 
+callModule(stylishTables, "renderestab", data = myrenderedtop , lengthpage=  c('5', '10', '15','20'), pageLength=15, scrollX = T, dom = 'Bfrtip', filter = c("none"), buttons = I('colvis'), extensions = 'Buttons', ordering= F, server = T )
 
+callModule(stylishTables, "renderestab", data = myrenderedtop , lengthpage=  c('5', '10', '15','20'), pageLength=15, scrollX = T, dom = 'Bfrtip', filter = c("none"), buttons = I('colvis'), extensions = 'Buttons', ordering= F, server = T )
 
-output$debug <- DT::renderDataTable({
-  req(Venncluster())
-  summary(Venncluster()$mygodavid) %>% as.data.frame() %>% mutate_if(is.numeric, funs(format(., digits = 3)))
-})
+callModule(stylishTables, "clustdavid", data = reactive({summary(Venncluster()$mygodavid) %>% as.data.frame() %>% mutate_if(is.numeric, funs(format(., digits = 3)))}) , lengthpage=  c('5', '10', '15','20','30'), pageLength=10 )
 
 

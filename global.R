@@ -52,6 +52,10 @@ source("./module/csvmodules.R")
 source("./module/savemodules.R")
 source("./module/Selgroup.R")
 source("./module/enrichmodule.R")
+source("./module/groupcol.R")
+source("./module/magnificentables.R")
+source("./module/tablexport.R")
+
 
 
 ################################

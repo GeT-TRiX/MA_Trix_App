@@ -51,7 +51,6 @@ shinyServer(function(input, output,session) {
 
   source(file.path("server", "PCAshiny.R"), local = TRUE)$value # PCA plot function
   source(file.path("server", "PCAselgroup.R"), local = TRUE)$value # all parameters for pca plot and more
-  source(file.path("server", "Colforpca.R"), local = TRUE)$value # Color for pca plot
 
   ################################
   ######## Venn page            ##
@@ -78,7 +77,6 @@ shinyServer(function(input, output,session) {
   source(file.path("server", "Trackerhm.R"), local = TRUE)$value # Tracker for heatmap parameters
   source(file.path("server", "GetDEgenes.R"), local = TRUE)$value # Subset dataframe restable (stat, comp and deg to list of dataframes)
   source(file.path("server", "Backgroundcolor.R"), local = TRUE)$value # Background color for the heatmap
-  source(file.path("server", "Colorforhm.R"), local = TRUE)$value # Color for each different group in the hm
 
   ##########################################
   ######## GO enrichissment               ##
@@ -99,5 +97,6 @@ shinyServer(function(input, output,session) {
 
   source(file.path("server", "Shinychat.R"), local = TRUE)$value # Chat for the app associated with the file Chat.rds
   source(file.path("server", "Groupstripshiny.R"), local = TRUE)$value # Utilities method (packages citations, fc step, zipdownload and panel redirection and project name)
+  
 
 })

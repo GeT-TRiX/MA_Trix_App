@@ -147,7 +147,7 @@ body <- dashboardBody(
                                            fluidRow(
                                              column(width=9,
                                                     div( style = "width:100% ; max-width: 1200px; height: 500px",
-                                                         #tags$h2("Support client"),
+                                                         
                                                          div(
                                                            class = "row-fluid",
                                                            # Create a spot for a dynamic UI containing the chat contents.
@@ -186,7 +186,6 @@ body <- dashboardBody(
                                div(id ="users",
                                    uiOutput("userList"),
                                    tags$hr(),
-                                   #helpText(HTML("<p>Built using R & <a href = \"http://rstudio.com/shiny/\">Shiny</a>.<p>Source code available <a href =\"https://github.com/trestletech/ShinyChat\">on GitHub</a>.")),
                                    p("Built using R and" ,tags$a(href = "http://rstudio.com/shiny/",target="_blank",
                                                                  "Shiny")),
                                    p("Chat source code is available ",
@@ -297,16 +296,17 @@ body <- dashboardBody(
                                                                   sliderInput("pval1","",min = 0.01,max = 0.05,value = 0.05,step = 0.01,
                                                                               width = "500"
                                                                   ),
-                                                                  dataTableOutput("data_summary") # render a renderTable or renderDataTable within an application page
+                                                                  renderoutputTable("rendersummary")# render a renderTable or renderDataTable within an application page
+                                                                  #dataTableOutput("data_summary") 
                                                              )),
 
                                                              column(12,
                                                                     h3("This table shows the samples with the corresponding groups"),
-                                                                    dataTableOutput("designtab")
+                                                                    renderoutputTable("renderpdata")
                                                              ),
                                                              column(12,
                                                                     h3("Show the actual data frame with the columns selected"),
-                                                                    dataTableOutput("subsetgroup_hm")
+                                                                    renderoutputTable("renderestab")
                                                              )
                                                              ,ns = NS("datafile")
 
@@ -530,7 +530,7 @@ body <- dashboardBody(
                              sliderInput("pointsiize","Point size",min = 2,max = 6,value = 2,step = 1
                              ),
 
-                             uiOutput('myPanelpca'),
+                             renderncolour("myPanelcolpca"),
                              br()
                          ))))),
       ###############################
@@ -602,8 +602,9 @@ body <- dashboardBody(
                             conditionalPanel(condition = "typeof input.jvennlist !== 'undefined' && input.jvennlist.length > 0 && input.dispvenn == 'genes'",
                                         helpText("You can directly filter the table by fold change and save the output table, genes in orange are duplicates "
                             )),
-
-                             DT::dataTableOutput("vennresinter"),br(),br(),br(),
+                           DT::dataTableOutput("vennresinter"),
+                            #renderoutputTable("renderjvenntab"), 
+                            br(),br(),br(),
                              conditionalPanel(condition = "input.selcontjv",
                                               div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; "))
 
@@ -677,7 +678,7 @@ body <- dashboardBody(
 
                              plotOutput("clusterPlot", width = "100%", height = "700px"),
                              br(),br(),br(),
-                             dataTableOutput("debug")
+                             renderoutputTable("clustdavid")
                     )
 
               ))
@@ -900,14 +901,16 @@ body <- dashboardBody(
                           "Heatmap's cluster are upside down in order to match the genes with the heatmap from top to bottom"
                         )
                         ,
-                        dataTableOutput("clustering"),
+                        #dataTableOutput("totalgenbyc")
+                        renderoutputTable("clustering"),
 
 
                         h3("This table summarizes the number of significant probes and genes by cluster"),
                         helpText(
                           "For the number of genes by cluster the duplicated genes are removed"
                         ),
-                        dataTableOutput("totalgenbyc")
+                        renderoutputTable("totalgenbyc")
+                        #dataTableOutput("totalgenbyc")
                       )),
                     tabPanel(
                       strong("(GO) enrichment-based cluster analysis"),value="maingo",
@@ -916,6 +919,7 @@ body <- dashboardBody(
                       conditionalPanel(condition = "input.GOana",
                                        div(class= "highvenn" , style="font-size:24px; text-align: center;",
                                            htmlOutput("titlegomain")),
+                                       #renderoutputTable("davidgo"),
                                        DT::dataTableOutput("davidgo"),
 
                                        verbatimTextOutput("printmessage"),
@@ -1049,7 +1053,8 @@ body <- dashboardBody(
 
                                         br(),
 
-                                        shinyjs::hidden(div(
+                                        #shinyjs::hidden(
+                                          div(
                                           id = "advancedcol",
                                           fluidRow(
                                             column(6,
@@ -1096,9 +1101,13 @@ body <- dashboardBody(
                                                               c("show", "hide"))
                                           )),
 
-                                          uiOutput('myPanel'),
+                                          renderncolour("myPanelcolhm"),
                                           br()
-                                        ))), #end of the div "form"
+                                        )
+                                        
+                                        #)
+                                        
+                                        ), #end of the div "form"
                                       br(),
                                       shinyjs::hidden(div( # Hide some widgets between the tags
                                         id = "advancedgo",

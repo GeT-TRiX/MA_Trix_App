@@ -109,7 +109,7 @@ subsetstatRm <- reactive({
   return(subsetstat()[[1]][myindex()])
 })
 
-choix_cont <- callModule(boxChooser, "selcompvenn", label = "Choose your comparison", data = reactive(colnames(subsetstatRm())) , group = csvf, case = 2 )
+choix_cont <- callModule(boxChooser, "selcompvenn", label = "Choose your comparison", data = reactive(colnames(subsetstatRm())) , group = csvf, case = 2 , empty = T )
 
 #' user_cont is a reactive function that  return the contrast selected by the user
 #'

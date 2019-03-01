@@ -12,7 +12,7 @@
 #' #########################################
 
 
-subsetgroup_pca <- callModule(boxChooser, "selgrouppca", label = "Choose your group to visualize", data = reactive(levels(csvf()[[2]]$Grp)) , group = csvf, case = 1 )
+subsetgroup_pca <- callModule(boxChooser, "selgrouppca", label = "Choose your group to visualize", data = reactive(levels(csvf()[[2]]$Grp)) , group = csvf, case = 1 , empty =T)
 
 
 #' PCAres is a reactive function that computed a PCA of non-normalized data
@@ -120,21 +120,23 @@ output$PCA <- renderPlot({
 },  height = plotHeight)
 
 
-output$PCAvarender <- renderPlot({
-  validate(
-    need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(length(unique(
-        subsetgroup_pca()$Grp
-      )) > 0, 'You need to select groups!') %next%
-      need(length(unique(
-        subsetgroup_pca()$Grp
-      )) > 1, 'You need to select more than one group!')
-  )
-
-  plot(PCAvarplot())
-
-},  height = plotHeight)
+# output$PCAvarender <- renderPlot({
+#   validate(
+#     need(csvf(), 'You need to import data to visualize this plot!') %next%
+#       need(length(unique(
+#         subsetgroup_pca()$Grp
+#       )) > 0, 'You need to select groups!') %next%
+#       need(length(unique(
+#         subsetgroup_pca()$Grp
+#       )) > 1, 'You need to select more than one group!')
+#   )
+# 
+#   plot(PCAvarplot())
+# 
+# },  height = plotHeight)
 
 
 callModule(downoutputfiles, "savepca", projectname = projectname , suffix= "_pca." , data = PCAplot  )
+
+colorspca <- callModule(colorChooser, "myPanelcolpca", data = reactive(subsetgroup_pca()$Grp)) #assign color input widget for each groups
 

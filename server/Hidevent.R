@@ -21,3 +21,14 @@ shinyjs::onclick("toggleAdvancedcolors",
 
 shinyjs::onclick("toggleAdvancedJvenn",
                  shinyjs::toggle(id = "advancedjvenn", anim = TRUE))
+
+isfirst <- reactiveValues(default = F)
+
+observe({
+  req(input$side, subsetgroup_hm())
+  
+  if(input$side == "Heatmap" && !isfirst$default){
+    delay(5, hide("advancedcol"))
+    isfirst$default <<- T
+  }
+})
