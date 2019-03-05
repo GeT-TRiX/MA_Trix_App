@@ -109,7 +109,7 @@ observe({
   url$myurl = davidurl()
 })
 
-myentreztosymb <- callModule(entrezIdstosymb, "hmanalysis", data = davidwebservice , cutgo = reactive(input$cutgo), rows_selected= reactive(input$davidgo_rows_selected) )
+myentreztosymb <- callModule(entrezIdstosymb, "hmanalysis", data = davidwebservice , cutgo = reactive(input$cutgo), rows_selected= davidRselected) #reactive(input$davidgo_rows_selected) )
 
 
 output$printmessage <- renderPrint({

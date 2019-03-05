@@ -5,6 +5,9 @@
 ### Application: MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data
 ### Licence: GPL-3.0
 
+jvennrows <- reactiveValues()
+jvenndup <- reactiveValues()
+
 
 #' vennchoice is a reactive function that return user's selected comparisons
 #'
@@ -38,7 +41,7 @@ venninter <- reactive({
 })
 
 
-jvenndup <- reactiveValues()
+
 
 #' vennfinal is a reactive function which return a list of data frame corresponding to the computationnal mean of each logFC for the possible logical relations between a finite collection of different sets
 #' and a data frame with as primary key the probenames associated with the corresponding gene names and logFC
@@ -140,7 +143,7 @@ venntopgenes <- reactive({
 
 output$downloadvennset = downloadHandler('venns-filtered.csv',
   content = function(file) {
-    s = input$vennresinter_rows_all
+    s = isolate(jvennrows$all())
     if(any(grepl("probes|transcripts", input$dispvenn)) )
       write.csv2(vennfinal()[[1]][s, , drop = FALSE], file)
     else
@@ -170,11 +173,11 @@ plottopgenes <- eventReactive(input$topdegenes, {
     mycont <- paste0(prefstat$greppre[[2]], input$selcontjv)
 
   if(any(grepl("probes|transcripts", input$dispvenn)) &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ) )
-    myplot <- topngenes(vennfinal()[[1]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
+    myplot <- topngenes(vennfinal()[[1]][isolate(jvennrows$all()), , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
   else if(input$dispvenn == "genes" &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
-    myplot <- topngenes(vennfinal()[[2]][input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
+    myplot <- topngenes(vennfinal()[[2]][isolate(jvennrows$all()), , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
   else
-    myplot <- topngenes(topngenesDT()[input$vennresinter_rows_all, , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
+    myplot <- topngenes(topngenesDT()[isolate(jvennrows$all()), , drop = FALSE],mycont, venntopgenes(), input$dispvenn)
 
 
 
@@ -258,7 +261,7 @@ output$filtercompjvenn <- renderUI({
 })
 
 
-output$dispidvenn <- renderUI( ##validate
+output$dispidvenn <- renderUI( 
 
   selectInput("dispvenn",
               label = paste("Choose if you want to display", ifelse(dataid() == "ProbeName", "probes", "transcripts") ,  "or genes"),

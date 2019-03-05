@@ -352,7 +352,8 @@ body <- dashboardBody(
 
                                                              column(12,
                                                                     h3("This table shows the normalized values"),
-                                                                    dataTableOutput("orderedwk")
+                                                                    renderoutputTable("orderedwk")
+                                                                    #dataTableOutput("orderedwk")
                                                              ),
                                                              
                                                              div(style="display:inline-block;",
@@ -602,8 +603,8 @@ body <- dashboardBody(
                             conditionalPanel(condition = "typeof input.jvennlist !== 'undefined' && input.jvennlist.length > 0 && input.dispvenn == 'genes'",
                                         helpText("You can directly filter the table by fold change and save the output table, genes in orange are duplicates "
                             )),
-                           DT::dataTableOutput("vennresinter"),
-                            #renderoutputTable("renderjvenntab"), 
+                           #DT::dataTableOutput("vennresinter"),
+                            renderoutputTable("renderjvenntab"), 
                             br(),br(),br(),
                              conditionalPanel(condition = "input.selcontjv",
                                               div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; "))
@@ -899,8 +900,7 @@ body <- dashboardBody(
                         h3("Table summarizing the heatmap"),
                         helpText(
                           "Heatmap's cluster are upside down in order to match the genes with the heatmap from top to bottom"
-                        )
-                        ,
+                        ),
                         renderoutputTable("clusteringtable"),
 
 
@@ -917,7 +917,7 @@ body <- dashboardBody(
                       conditionalPanel(condition = "input.GOana",
                                        div(class= "highvenn" , style="font-size:24px; text-align: center;",
                                            htmlOutput("titlegomain")),
-                                       DT::dataTableOutput("davidgo"),
+                                       renderoutputTable("davidgo"),
 
                                        verbatimTextOutput("printmessage"),
                                        verbatimTextOutput("printselected"),
