@@ -6,16 +6,13 @@
 ### Licence: GPL-3.0
 
 
-#' formating is a function alpha version of the higher elaborate decTestTRiX function
+#' formating is a alpha function of the higher elaborate decTestTRiX function
 #'
-#' @param adj
-#' @param pval
+#' @param adj A subset dataframe
+#' @param pval Cutoff pvalue
 #'
-#' @return
-#' @export
-#'
-#'
-#' @export
+#' @return A numeric value of the number of significant genes
+
 
 formating = function( adj, pval){
 
@@ -36,9 +33,9 @@ formating = function( adj, pval){
 
 #' Create a data frame containing the number of signficant genes for different conditions pval and log fc
 #'
-#' @param adj a data frame containing the adjusted p-value
+#' @param adj A subset dataframe
 #'
-#' @return \dtsign a data frame
+#' @return A data frame
 #'
 #' @export
 
@@ -80,6 +77,16 @@ createdfsign = function(adj) {
 }
 
 
+#' isimilar is a function which aims is to ensure that the unique ids are equal between the workingset and the restable as for the samples.
+#'
+#' @param restab A statistical dataframe
+#' @param pdata A dataframe that associates samples to their respective biological conditions
+#' @param workingset A normalized expression dataframe
+#'
+#' @return A boolean list
+#'
+#' @export
+
 isimilar <- function(restab, pdata, workingset){
 
   sameids <- all(restab[[1]] == workingset [[1]])
@@ -88,12 +95,14 @@ isimilar <- function(restab, pdata, workingset){
 
 }
 
-#' This function returns a data frame of the element which are superior to a vector character 1.2,2,4,6 and 10 and for a defined pvalue
+#' This function returns a data frame of the element which are superior to a logFC cutoff (1.2,2,4,6 and 10) and for a defined pvalue
 #'
-#' @param alltop a data frame
-#' @param pval a numeric pvalue
+#' @param alltop A statistical dataframe
+#' @param pval Cutoff pvalue
+#' @param testrix A character value of the statistical criterions (pvalue, FDR)
+#' @param grepre A list of subset dataframes
 #'
-#' @return \fcpval a data frame
+#' @return A dataframe of the number of significant genes depending of both cutoff (logFC and pvalue)
 #'
 #' @export
 
@@ -112,8 +121,7 @@ restabfc <- function(alltop, pval, testrix, grepre) {
   thresholds = c("FC>1.0", "FC >1.2" , "FC >2", "FC >4", "FC >6", "FC >10")
 
   for (fc in myfc) {
-    fcpval[j] = cbind.data.frame(colSums(adj < pval &
-                                           2 ** abs(logfc) > fc))
+    fcpval[j] = cbind.data.frame(colSums(adj < pval & 2 ** abs(logfc) > fc))
     j = j + 1
   }
 
@@ -132,9 +140,9 @@ restabfc <- function(alltop, pval, testrix, grepre) {
 
 #' This function returns a transformed data frame of character type to a data frame of factor type
 #'
-#' @param datach a data frames
+#' @param datach A dataframe that associates samples to their respective biological conditions
 #'
-#' @return \datach a data frame
+#' @return A dataframe of factor type
 #'
 #' @export
 
@@ -148,6 +156,20 @@ chartofa = function(datach){
 }
 
 
+#' meanrankgenes is a function which aims is to return a dataframe with the average logFC for each duplicate genes
+#'
+#' @param dtsign A statistical dataframe (ids and logFC)
+#' @param stat A character to grep logFC or pvalue values within the statistical table
+#' @param rankcomp A character vector of the selected contrast(s)
+#' @param multcomp A choosen comparison to sort the genes based on the logFC
+#' @param regulationvolc A character to specific the regulation (both, up, down) for the volcano page
+#' @param jvenn A boolean value
+#'
+#' @return A dataframe
+#'
+#' @export
+#'
+
 meanrankgenes  <- function(dtsign, stat , rankcomp=NULL, multcomp, regulationvolc=NULL, jvenn = F){
 
   selcomp <-  paste0(stat, multcomp )
@@ -156,7 +178,7 @@ meanrankgenes  <- function(dtsign, stat , rankcomp=NULL, multcomp, regulationvol
   for (i in selcomp) {
     dtsign[[i]] = as.numeric(as.character(dtsign[[i]]))
   }
-  
+
   summarizetable <- dtsign %>% select(GeneName, paste0(stat, multcomp))  %>%
     as.data.table() %>% .[,lapply(.SD,function(x) mean=round(mean(x), 3)),"GeneName"] %>% as.data.frame()
 
@@ -171,12 +193,13 @@ meanrankgenes  <- function(dtsign, stat , rankcomp=NULL, multcomp, regulationvol
 
 #' This function returns a data frame of the significant genes associated with the corresponding cluster index
 #'
-#' @param hmp01_All a heatmap object
-#' @param exprData a vector of indices for the significant genes who have crossed the treshold pval and fc
-#' @param pval a data frame of the alltoptable
-#' @param height numeric value where the dendogram is cut off
+#' @param hmp01_All An heatmap object
+#' @param exprData An index vector of significant genes from the restable
+#' @param pval A data frame of the restable
+#' @param height A cutoff point of a dendogram
 #'
-#' @return a data frame
+#' @return A data frame (unique ids, gene symbols, pvalue and cluster)
+#'
 #' @export
 #'
 

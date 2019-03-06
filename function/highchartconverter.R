@@ -6,24 +6,34 @@
 ### Licence: GPL-3.0
 
 
-DftoHighjson <- function(data, param, method) {
-  
-  foldEnrichment <- param$search
-  tempData <- (data[grep(param$search,colnames(data))])
+#' DftoHighjson is a function which aims is to reshape a DAVID restable dataframe to a json format
+#'
+#' @param data A Functional Annotation Summary dataframe (DAVID output)
+#' @param method A character to specify if users want to display top term based on the pvalue or the fold Enrichment
+#'
+#' @return Json object to be pass to highchart library
+#'
+#' @export
+#'
+
+
+DftoHighjson <- function(data, method) {
+
+  tempData <- (data[grep("Fold.Enrichment",colnames(data))])
   colnames(tempData) <- paste0("y",1)
   tempData$id <- data$Category
   tempData$Term <- data$Term
   tempData$pvalue <- data$PValue
-  tempData$FE <- data$Fold.Enrichment # PValue
-  
-  
-  
+  tempData$FE <- data$Fold.Enrichment
+
+
+
   if(method == "FoldE")
-    tempData$xval <- data$Fold.Enrichment # PValue
+    tempData$xval <- data$Fold.Enrichment
   else
-    tempData$xval <- data$PValue 
-    
-    
+    tempData$xval <- data$PValue
+
+
   tempData$Topgenes <-  data$Top
   tempData$percent <- data$percent
 
@@ -33,7 +43,7 @@ DftoHighjson <- function(data, param, method) {
 
 
   unifiedData <- unifiedData[order(unifiedData$id),]
-  unifiedData$x <- as.double(as.character(unifiedData$xval)) # as.double pour P.value
+  unifiedData$x <- as.double(as.character(unifiedData$xval))
   unifiedData$y <- as.numeric(unifiedData$Topgenes)
   unifiedData$z <-  as.numeric(as.character(unifiedData$percent))
 
@@ -45,17 +55,37 @@ DftoHighjson <- function(data, param, method) {
                         else return(strsplit(as.character(x), "~")%>% unlist() %>% .[2]))
 
   unifiedData$Pvalue =  format(tempData$pvalue, digits = 3)
-  
+
   unifiedData$FE = as.integer(as.character(unifiedData$FE))
 
   return(highchartsConvert(unifiedData))
 }
 
 
+#' formatPoint is a function which aims is to reutnr a list of information for each category (top 10)
+#'
+#' @param index A dataframe to be processed
+#'
+#' @return A list of usefull information from the david restable
+#'
+#' @export
+#'
+
+
 formatPoint <- function(index) {
+
   return( list( x=index$x, y=index$y,z=index$z, GO=index$GO, term=index$Term, pvalue = index$Pvalue, FE = index$FE))
 }
 
+
+#' formatCategory is a function which aims is to return a json structure
+#'
+#' @param dframeCategory A dataframe to be processed
+#'
+#' @return Json structure
+#'
+#' @export
+#'
 
 formatCategory <- function(dframeCategory) {
 
@@ -69,6 +99,17 @@ formatCategory <- function(dframeCategory) {
   return(categoryTemplate)
 }
 
+
+
+#' highchartsConvert is a function which aims is to convert a dataframe object to the json format
+#' by spliting the dataframe by categories to be passed to the highchart library
+#'
+#' @param DftoHighjson A dataframe to be processed
+#'
+#' @return A json object example:{"GOTERM_BP_ALL" : { "x" : 0.005 , "y" : 2 , "Term" : "inactivation of MAPK activity" , "Go" : "GO:0000188"}, ..., "GOTERM_CC_ALL : { ...}}
+#'
+#' @export
+#'
 
 
 highchartsConvert <- function(DftoHighjson) {

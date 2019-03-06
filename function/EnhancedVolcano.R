@@ -3,6 +3,51 @@
 # Github: https://github.com/kevinblighe/EnhancedVolcano
 # Modified by Franck Soubès (add 74-85;  modify 98-107, add 3 parameters displayLab, findfamily, topgenes)
 
+#' Volcano plots represent a useful way to visualise the results of differential expression analyses. Here, we present a highly-configurable function that
+#'produces publication-ready volcano plots. EnhancedVolcano will attempt to fit as many transcript names in the plot window as possible,
+#' thus avoiding 'clogging' up the plot with labels that could not otherwise have been read.
+#'
+#' @param toptable  Requires at least the following: column for transcript names (can be rownames); a column for log2 fold changes; a column for nominal or adjusted p-value. REQUIRED.
+#' @param lab A column name in toptable containing transcript names. Can be rownames(toptable). REQUIRED.
+#' @param x A column name in toptable containing log2 fold changes. REQUIRED.
+#' @param y A column name in toptable containing nominal or adjusted p-values. REQUIRED.
+#' @param selectLab  A vector containing a subset of lab. DEFAULT = NULL. OPTIONAL.
+#' @param displaylab A comma-separated values corresponding to the displayed genes. DEFAULT = NULL. OPTIONAL.
+#' @param findfamily A character to parse familiy of genes. DEFAULT = NULL. OPTIONAL.
+#' @param topgenes A numeric value to display the top n genes based on the regulation.DEFAULT = NULL. OPTIONAL.
+#' @param regulationvolc A character for the regulation ("up", "down", "both") .DEFAULT = NULL. OPTIONAL.
+#' @param xlim Limits of the x-axis. DEFAULT = c(min(toptable[,x], na.rm=TRUE),max(toptable[,x], na.rm=TRUE)). OPTIONAL.
+#' @param ylim Limits of the y-axis. DEFAULT = c(0, max(-log10(toptable[,y]), na.rm=TRUE) + 5). OPTIONAL.
+#' @param xlab Label for x-axis. DEFAULT = bquote(Log[2]~ "fold change"). OPTIONAL.
+#' @param ylab Label for y-axis. DEFAULT = bquote(-Log[10]~ P)).OPTIONAL.
+#' @param axisLabSize Size of x- and y-axis labels. DEFAULT = 18. OPTIONAL.
+#' @param pCutoff Cut-off for statistical significance. A horizontal line will be drawn at -log10(pCutoff). DEFAULT = 10e-6. OPTIONAL.
+#' @param pLabellingCutoff Labelling cut-off for statistical significance. DEFAULT = pCutoff. OPTIONAL
+#' @param FCcutoff Cut-off for absolute log2 fold-change. Vertical lines will be drawn at the negative and positive values of log2FCcutoff. DEFAULT =1.0. OPTIONAL.
+#' @param title Plot title. DEFAULT = 'Volcano plot'. OPTIONAL.
+#' @param titleLabSize Plot subtitle. DEFAULT = 'Bioconductor package, EnhancedVolcano'. OPTIONAL.
+#' @param transcriptPointSize Size of plotted points for each transcript. DEFAULT = 0.8. OPTIONAL.
+#' @param transcriptLabSize Size of labels for each transcript. DEFAULT = 3.0. OPTIONAL.
+#' @param col Colour shading for plotted points, corresponding to< abs(FCcutoff) && > pCutoff, > abs(FCcutoff), < pCutoff,> abs(FCcutoff) && < pCutoff. DEFAULT = c("grey30", "forestgreen","royalblue", "red2"). OPTIONAL.
+#' @param colAlpha Alpha for purposes of controlling colour transparency oftranscript points. DEFAULT = 1/2. OPTIONAL.
+#' @param legend Plot legend text. DEFAULT = c("NS", "Log2 FC", "P","P & Log2 FC"). OPTIONAL.
+#' @param legendPosition Position of legend ("top", "bottom", "left","right"). DEFAULT = "top". OPTIONAL.
+#' @param legendLabSize Size of plot legend text. DEFAULT = 14. OPTIONAL.
+#' @param legendIconSize Size of plot legend icons / symbols. DEFAULT = 4.0.OPTIONAL.
+#' @param DrawConnectors Logical, indicating whether or not to connect plotlabels to their corresponding points by line connectors. DEFAULT = FALSE.OPTIONAL.
+#' @param widthConnectors Line width of connectors. DEFAULT = 0.5. OPTIONAL.
+#' @param colConnectors Line colour of connectors. DEFAULT = 'grey10'. OPTIONAL.
+#' @param cutoffLineType Line type for FCcutoff and pCutoff ("blank","solid", "dashed", "dotted", "dotdash", "longdash", "twodash").DEFAULT = "longdash". OPTIONAL.
+#' @param cutoffLineCol Line colour for FCcutoff and pCutoff. DEFAULT ="black". OPTIONAL.
+#' @param cutoffLineWidth Line width for FCcutoff and pCutoff. DEFAULT = 0.4. OPTIONAL.
+#'
+#' @author Kevin Blighe <kevin@clinicalbioinformatics.co.uk>
+#'
+#' @return A list of two elements
+#' @export
+#'
+#' @examples
+
 EnhancedVolcano <- function(
     toptable,
     lab,
@@ -38,7 +83,7 @@ EnhancedVolcano <- function(
     cutoffLineType = "longdash",
     cutoffLineCol = "black",
     cutoffLineWidth = 0.4)
-    
+
 {
     if(!requireNamespace("ggplot2")) {
         stop("Please install ggplot2 first.", call.=FALSE)
@@ -60,7 +105,7 @@ EnhancedVolcano <- function(
     requireNamespace("ggrepel")
     requireNamespace("dplyr")
     i <- xvals <- yvals <- Sig <- NULL
-    
+
     toptable <- as.data.frame(toptable)
     toptable$GeneName <- sapply(toptable$GeneName, function(v) {
       if (is.character(v)) return(toupper(v))
@@ -74,9 +119,9 @@ EnhancedVolcano <- function(
         (abs(toptable[,x])>FCcutoff)] <- "FC_P"
     toptable$Sig <- factor(toptable$Sig,
         levels=c("NS","FC","P","FC_P"))
-    
-  
-    
+
+
+
     if(is.na(topgenes) && !is.na(displaylab) ){
       selectLab <- as.character(displaylab)
     }
@@ -94,32 +139,32 @@ EnhancedVolcano <- function(
       else{
         toptable$abs <- unlist((toptable[x]))
       }
-        
+
       toptable$X <- rownames(toptable)
-      myval <- toptable %>%   dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,X,abs)  %>%  
+      myval <- toptable %>%   dplyr::filter(Sig =="FC_P") %>% dplyr::select(GeneName,X,abs)  %>%
       {if (regulationvolc == "down") top_n(.,-topgenes) else top_n(.,topgenes)}
       myvalueind <- myval$X
       selectLab <- as.character(myval$GeneName)
-      
+
     }
-  
-      
+
+
     if (min(toptable[,y], na.rm=TRUE) == 0) {
         warning("One or more P values is 0. Converting to minimum possible value...", call. = FALSE)
         toptable[which(toptable[,y] == 0), y] <- .Machine$double.xmin
     }
-    
+
     toptable$lab <-  sapply(toptable$GeneName, function(v) {
       if (is.character(v)) return(toupper(v))
       else return(v)
     })
-    
-    
-    
+
+
+
     toptable$xvals <- toptable[,x]
     toptable$yvals <- toptable[,y]
-  
-    
+
+
    if (!is.null(selectLab)) {
     if(!is.na(topgenes) && is.na(displaylab)&& is.na(findfamily)){
     names.new <- rep("", length(toptable$lab))
@@ -134,15 +179,15 @@ EnhancedVolcano <- function(
         toptable$lab <- names.new
       }
     }
-    
+
     subdata = subset(toptable,
                      toptable[,y]<pLabellingCutoff &
-                       abs(toptable[,x])>FCcutoff) 
+                       abs(toptable[,x])>FCcutoff)
 
-    
-    
-    
-    
+
+
+
+
     plot <- ggplot2::ggplot(toptable,
             ggplot2::aes(x=xvals, y=-log10(yvals))) +
 
@@ -207,9 +252,9 @@ EnhancedVolcano <- function(
             linetype=cutoffLineType,
             colour=cutoffLineCol,
             size=cutoffLineWidth)
-   
-    
-    
+
+
+
     if (DrawConnectors == TRUE) {
         plot <- plot + ggrepel::geom_text_repel(max.iter = 100,
             data=subdata ,
@@ -237,7 +282,7 @@ EnhancedVolcano <- function(
                 check_overlap = F,
                 vjust = 1.0)
     }
-    
+
     if(!is.na(topgenes)) subdata <- filter(subdata, lab != "")
     mylist = list(plot, subdata)
     return(mylist)

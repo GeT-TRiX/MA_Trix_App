@@ -1,15 +1,54 @@
+#' downloadFiles is a shiny widget which aims is to download a reactive plot
+#'
+#' @param id Shiny id
+#' @param label Shiny label
+#'
+#' @return Widget in the gui
+#'
+#' @export
+#'
+
 downloadFiles <- function(id, label = "Save your Scree plot") {
   ns <- NS(id)
   downloadButton(ns("downloadgraphs"), label ,   style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")
 }
 
 
-selFormat <- function(id, label = "Save your Scree plot") {
+#' selFormat is a shiny widget which aims is to specify the output format
+#'
+#' @param id Shiny id
+#'
+#' @return Widget in the gui
+#'
+#' @export
+#'
+
+selFormat <- function(id) {
   ns <- NS(id)
   selectInput(ns("format"), label = NULL, choices = c("png", "eps", "pdf", "svg"))
 }
 
-downoutputfiles <- function(input, output, session ,projectname, suffix = "plot.png",  data , w = 12  , h = 12 , cutheat = F, volcform = F, hm =F ,  clustvenn = NULL, rown =NULL) {
+#' downoutputfiles is a shiny module which aims is to export reactive plot
+#'
+#' @param input Internal
+#' @param output Internal
+#' @param session Internal
+#' @param projectname A reactive character (MA project or session data)
+#' @param suffix A character
+#' @param data A reactive expression to be plot
+#' @param w Width of the exported file
+#' @param h Height pf the expored file
+#' @param cutheat A boolean value
+#' @param volcform A boolean value
+#' @param hm A boolean value
+#' @param clustvenn A boolean value. Default NULL.
+#' @param rown A reactive character to display (show) or hide labels in the outputted heatmap
+#'
+#' @export
+#'
+
+downoutputfiles <- function(input, output, session , projectname, suffix = "plot.png",  data , w = 12  , h = 12 ,
+                            cutheat = F, volcform = F, hm =F ,  clustvenn = NULL, rown =NULL) {
 
 observe({
   if(!is.null(clustvenn)){

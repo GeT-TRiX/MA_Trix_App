@@ -1,3 +1,11 @@
+#' checkboxElements is a global namespace containing a list of shiny widgets to check group or comparison(s)
+#'
+#' @param id Shiny id
+#'
+#' @return Widgets in the gui
+#'
+#' @export
+#'
 checkboxElements <- function(id){
   ns <- NS(id)
   tagList(
@@ -11,13 +19,28 @@ checkboxElements <- function(id){
       style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
     )
   )
-  
 }
 
+#' boxChooser is a shiny module which aims is to allows users to select group(s) or comparison(s)
+#'
+#' @param input Internal
+#' @param output Internal
+#' @param session Internal
+#' @param label Label associate to the widget
+#' @param data A Reactive expression containing a character vector of each group(s) or contrast(s)
+#' @param group A Reactive dataframe corresponding to the pData
+#' @param case A Numeric value
+#' @param empty A boolean value (if true all the box are selected)
+#'
+#' @return A reactive vector containing the selected box
+#'
+#' @export
+#'
+
 boxChooser <- function(input, output, session, label, data, group, case, empty =F) {
-  
+
   output$usercheck <- renderUI({
-    
+
     ns <- session$ns
     case = ifelse(empty,  2, 1)
     checkboxGroupInput(
@@ -27,11 +50,10 @@ boxChooser <- function(input, output, session, label, data, group, case, empty =
       selected =  switch(case,data(), NULL),
       inline = ifelse(length(levels(group()[[2]]$Grp)) > 6, T, F)
     )
-    
+
   })
-  
+
   #Select all the contrasts
-  
   observeEvent(input$allcomphm, {
     groupinline = ifelse(length(levels(group()[[2]]$Grp)) > 6, T, F)
     updateCheckboxGroupInput(
@@ -43,20 +65,20 @@ boxChooser <- function(input, output, session, label, data, group, case, empty =
       inline = groupinline
     )
   })
-  
+
   #Unselect all the contrasts
   observeEvent(input$nocomphm, {
     groupinline = ifelse(length(levels(group()[[2]]$Grp)) > 6, T, F)
     updateCheckboxGroupInput(session,
                              "box",
-                             label , 
+                             label ,
                              choices = data(),
                              inline= groupinline
     )
   })
-  
- 
-  
+
+
+
 return(reactive({
   switch(case, group()[[2]][group()[[2]]$Grp %in% input$box,], input$box)
   }))

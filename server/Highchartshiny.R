@@ -36,21 +36,20 @@ addpercentpop <- reactive({
 dfenrichtojson <- reactive({
 
   req(addpercentpop())
-  param <- list(search= "Fold.Enrichment", n_points=length(addpercentpop()$Fold.Enrichment), x_start=min(as.numeric(addpercentpop()$Fold.Enrichment)))
   filtered <- addpercentpop()
-  return(DftoHighjson(filtered,param, input$enrichbased))
+  return(DftoHighjson(filtered, input$enrichbased))
 
 })
 
 
 observe({
   req(dfenrichtojson(), input$enrichbased )
-  
+
   axisParameters <- list(
-    topcatdav = list( min = 0, max = 12, legend = 'Source: <a href="https://www.highcharts.com/"  target="_blank">Plot produce with highcharts</a> and <a href="https://shiny.rstudio.com/" target= "_blank">Shiny</a>', 
+    topcatdav = list( min = 0, max = 12, legend = 'Source: <a href="https://www.highcharts.com/"  target="_blank">Plot produce with highcharts</a> and <a href="https://shiny.rstudio.com/" target= "_blank">Shiny</a>',
                       title= "top genes", xaxis = ifelse(input$enrichbased == "FoldE", "Fold Enrichment", "pvalue"))
   )
-  
+
   newData <- c(axisParameters$topcatdav, list(series=dfenrichtojson()))
   islab = input$addlabelhigh
   session$sendCustomMessage(type="updateVariable", newData) # send to javascript data

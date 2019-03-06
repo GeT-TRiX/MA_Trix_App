@@ -8,10 +8,10 @@
 
 #' gosearch is a function that return a list of data frame containing the go ids for the different clusters
 #'
-#' @param hm01 data frame object
-#' @param species character
-#' @param ids package use to perform the enrichment
-#' @param clusterlist list
+#' @param hm01 A Data frame object
+#' @param species A Character vector
+#' @param ids Package use to perform the enrichment
+#' @param clusterlist List
 #'
 #' @return list of data frames
 #' @export
@@ -57,12 +57,13 @@ gosearch <- function(hm01, species, ids, clusterlist) {
 
 #' wclust is a function that return a tabular file containing the top n genes for the different clusters, the go ids associated to this cluster, the id's term and the definition of the term (Old function working with go seq package)
 #'
-#' @param clusterlist list of data frames
-#' @param filename name of the output file
+#' @param clusterlist List of data frames
+#' @param filename Name of the output file
 #' @param min GO ids that are not represented significally by default = 2
-#' @param top top go ids to display
+#' @param top Top go ids to display
 #'
 #' @return txt file
+#'
 #' @export
 
 wclust <- function(clusterlist, filename, min, top)  {
@@ -99,12 +100,14 @@ wclust <- function(clusterlist, filename, min, top)  {
 
   close(con)
 }
-#' probnamtoentrez is a function that convert Gene symbols to entrez IDS
+
+#' probnamtoentrez is a function which aim is to convert Gene symbols to entrez IDS
 #'
-#' @param hm01 data frame
-#' @param mypack package specific to the genome
+#' @param mypack Annotation packages to get entrez ids from gene symbols
+#' @param davidres David Dataframe corresponding to the Functional Annotation Summary
+#' @param gohm A Boolean value to return a vector or lists of entrez ids
 #'
-#' @return lists of entrez IDS
+#' @return A Vector or lists of entrez ids
 #' @export
 #'
 
@@ -115,36 +118,17 @@ probnamtoentrez <- function(davidres,  mypack, gohm =F) {
       mget(x = .,envir = mypack,ifnotfound = NA) %>%unlist() %>%unique() %>%.[!is.na(.)]}))
   else
     return(entrezids <- davidres %>%unlist() %>%
-             as.character() %>%mget(x = .,envir = mypack, ifnotfound = NA) %>%unlist() %>%unique() %>%
+             as.character() %>% mget(x = .,envir = mypack, ifnotfound = NA) %>%unlist() %>%unique() %>%
              .[!is.na(.)])
 }
 
-#' probnamtoentrezvenn is a function that convert Gene symbols to entrez IDS
-#'
-#' @param venngenes lists of genes
-#' @param mypack package specific to the genome
-#'
-#' @return lists of entrez IDS
-#' @export
-#'
-probnamtoentrezvenn <- function(venngenes, mypack){
-
-  entrezids <- venngenes %>%
-    unlist() %>%
-    as.character() %>%
-    mget(x = .,envir = mypack, ifnotfound = NA) %>%
-    unlist() %>%
-    unique() %>%
-    .[!is.na(.)]
-
-}
 
 #' entreztosymb is a function which aim is to convert entrez IDS to gene symbols
 #'
-#' @param myentz lists of genes
-#' @param mypack package specific to the genome
+#' @param myentz Lists of entrez ids
+#' @param mypack Annotation packages to get gene symbols from entrez
 #'
-#' @return lists of gene symbols
+#' @return Lists of gene symbols
 #' @export
 #'
 
@@ -153,13 +137,13 @@ lapply(1:NROW(myentz), function(x)
   as.vector(unlist(mget(myentz[[x]], envir=mypack, ifnotfound=NA))))
 }
 
-#' davidquery is a function which aim is to querrying DWS and performing go term enrichment analysis
+#' davidquery is a function which aim to query DWS with lists of entrez ids to return as output a Functional Annotation Summary dataframe
 #'
-#' @param entrezids list of entrez IDS
-#' @param species character name of the species whose genes are enriched
-#' @param mycat category of the enrichment analysis: MF, CC, BP or KEGG pathway
+#' @param entrezids List of entrez IDS
+#' @param species A character name of the species
+#' @param mycat A character vector corresponding to the categories of the functional analysis: MF, CC, BP or KEGG pathway
 #'
-#' @return list of data frames for each cluster containing
+#' @return List of data frames of each clusters
 #' @export
 #'
 
@@ -189,12 +173,13 @@ davidquery <- function(entrezids, species, mycat) {
 }
 
 
-#' davidqueryvenn is a function which aim is to querrying DWS and performing Functional Annotation Clustering
+#' davidqueryvenn is a function which aim to query DWS with a list of entrez ids to generate the Term/Gene cluster report
 #'
-#' @param entrezids list of entrez IDS
+#' @param entrezids List of entrez IDS
 #' @param species character name of the species whose genes are enriched
 #'
-#' @return david object
+#' @return david object of S4 class
+#'
 #' @export
 #'
 
@@ -218,7 +203,7 @@ davidqueryvenn <- function(entrezids, species){
 }
 
 
-#' mygotavres is a function which aim is to summarise the top 10 for each different cagetogies of the  the DAVID gene set enrichment analysis data table
+#' mygotabres is a function which aim is to summarise the top 10 for each different cagetogies of the  the DAVID gene set enrichment analysis data table
 #'
 #' @param davtab data frame
 #'
@@ -235,5 +220,4 @@ mygotabres <- function(davtab, enrichbased){
                filter(Category == unique(davtab$Category)[[x]]) %>% top_n(-10, PValue) %>% arrange(desc(-PValue))%>% tibble::rownames_to_column("Top") )
   )}
 )}
-
 

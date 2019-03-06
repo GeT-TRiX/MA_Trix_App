@@ -9,23 +9,22 @@
 #' cutHeatmaps if a function that takes as input an heatmap object and depending on the cut height and the cluster
 #' choosen render a ggplot object or an heatmap object
 #'
-#' @param hmp an heatmap object
-#' @param height a numeric value to cut the dendogram
-#' @param exprData a data frame with specific columns depending on the user's choices
-#' @param DEGres a data frame corresponding to the xxx_topTableAll
-#' @param groups a data frame of the choosen groups
-#' @param cexcol a positive numbers, used as cex.axis in for the row or column axis labeling
-#' @param cexrow a positive numbers, used as cex.axis in for the row or column axis labeling
-#' @param labrow a character vectors with row and column labels to use
-#' @param fileType a character to select the plot to display heatmap, boxplot or stripchart
-#' @param scale a character indicating if the values should be centered and scaled in either the row direction or the column direction, or none
-#' @param meanGrp a boolean value to computes the mean for each groups; default = F
-#' @param col.hm a character vector
-#' @param type a character to select the plot to display heatmap, boxplot or stripchart
-#' @param las a numeric value
-#' @param distfun function used to compute the distance (dissimilarity) between both rows and columns.
-#' @param palette.col a character vector
-#' @param num an item of the heatmap object corresponding to a specific cluster choosen by the user
+#' @param hmp An heatmap object
+#' @param height A numeric value to cut the dendogram
+#' @param exprData A data frame with specific columns depending on the user's choices
+#' @param groups A data frame of the choosen groups
+#' @param cexcol A positive numbers, used as cex.axis in for the row or column axis labeling
+#' @param cexrow A positive numbers, used as cex.axis in for the row or column axis labeling
+#' @param labrow A character vectors with row and column labels to use
+#' @param fileType A character to select the plot to display heatmap, boxplot or stripchart
+#' @param meanGrp A boolean value to computes the mean for each groups; default = F
+#' @param type A character to select the plot to display heatmap, boxplot or stripchart
+#' @param las A numeric value
+#' @param distfun Function used to compute the distance (dissimilarity) between both rows and columns.
+#' @param palette.col A character vector of colors
+#' @param num An item of the heatmap object corresponding to a specific cluster choosen by the user
+#' @param genename A character vector of gene symbols
+#' @param scales A character indicating if the values should be centered and scaled in either the row direction or the column direction, or none. The default is "none"
 #' @param ...
 #'
 #' @return a ggplot object or heatmapply object
@@ -92,7 +91,7 @@ cutHeatmaps = function(hmp, height, exprData, groups, cexcol = 1, cexrow = 1, la
   ###=======================
   ## cut the heatmap
   ###=======================
-  
+
   # Cut the dendogram in 2 part with the desired height
 
   cut02 = cut(hmp$rowDendrogram, h = height)
@@ -114,7 +113,7 @@ cutHeatmaps = function(hmp, height, exprData, groups, cexcol = 1, cexrow = 1, la
 
     ## scaling
 #		HCgroupsLabExrsCenterScale <- ifelse(scales=="row",lapply(HCgroupsLabExrs,function(y){t(scale(t(y),center=T,scale=T))}),HCgroupsLabExrs)
-    
+
     if(scales=="row"){
       HCgroupsLabExrsCenterScale <- lapply(HCgroupsLabExrs,function(y){t(scale(t(y),center=T,scale=T))})
     }else HCgroupsLabExrsCenterScale <- HCgroupsLabExrs
@@ -252,7 +251,7 @@ cutHeatmaps = function(hmp, height, exprData, groups, cexcol = 1, cexrow = 1, la
                 sep = "")
 
         if (!probes.boxplot) {
-          
+
           ##=============
           ## plot stripchart
           ##
@@ -293,7 +292,7 @@ cutHeatmaps = function(hmp, height, exprData, groups, cexcol = 1, cexrow = 1, la
               title = paste("Cluster", i),
               y = "Expression Z-score",
               caption = footnote
-            ) + 
+            ) +
             theme(
               plot.title = element_text(size = 20, hjust = 0.5),
               plot.caption = element_text(size = 10, hjust = 0.5),
@@ -344,7 +343,7 @@ cutHeatmaps = function(hmp, height, exprData, groups, cexcol = 1, cexrow = 1, la
               title = paste("Cluster", i),
               y = "Expression Z-score",
               caption = footnote
-            ) + 
+            ) +
             theme(
               plot.title = element_text(size = 24, hjust = 0.5),
               axis.title.x = element_text(size = 10),
@@ -379,7 +378,7 @@ cutHeatmaps = function(hmp, height, exprData, groups, cexcol = 1, cexrow = 1, la
             if(length(labels(cut02$lower[[i]]))>1){
             rowIds=NA;
 
-            
+
             useRasterTF=T;
             hm02gp=heatmap(exprData[labels(cut02$lower[[1]]),], Rowv=str(cut02$lower[[1]]),
             Colv=hmp$colDendrogram,

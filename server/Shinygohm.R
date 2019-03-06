@@ -170,8 +170,7 @@ output$savegohmdavxlsx = downloadHandler(filename <- function() { paste0(basenam
 
     for (i in 1:length(davidwebservice()$mygodavid)) {
       if (i == 1)
-        write.xlsx(file = file,
-                   davidwebservice()[[i]],
+        write.xlsx(file = file,davidwebservice()$mygodavid[[i]],
                    sheetName = paste("Cluster", i))
       else
         write.xlsx(
@@ -185,5 +184,3 @@ output$savegohmdavxlsx = downloadHandler(filename <- function() { paste0(basenam
 
   }
 )
-
-

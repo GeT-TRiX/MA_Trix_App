@@ -6,7 +6,7 @@
 ### Licence: GPL-3.0
 
 
-myreorderwk <- reactive({ 
+myreorderwk <- reactive({
   req(csvf())
   wkingsetclean <- csvf()[[1]]
   samplesgroup <- factor(csvf()[[2]]$Grp)
@@ -28,7 +28,7 @@ filenamestrip <- reactive({
   req(csvf(),projectname())
 
   return( paste0(
-    basename(tools::file_path_sans_ext(projectname())), 
+    basename(tools::file_path_sans_ext(projectname())),
     '_strip_chart',
     sep = ''
   ))
@@ -45,13 +45,13 @@ filterwkingset <- reactive({
 })
 
 
-selectedrow <- callModule(stylishTables, "orderedwk", data = filterwkingset , 
+selectedrow <- callModule(stylishTables, "orderedwk", data = filterwkingset ,
            scrollX = TRUE,
            pageLength = 150,
            scrollY=550,
            stateSave = T,
            dom = 'Bfrtip',
-           server = T , 
+           server = T ,
            buttons = list(
              list(extend = 'csv',
                   filename =  filenamestrip()[1]),
@@ -109,6 +109,7 @@ callstripgenes <- reactive({
 
   req(getDegenes(), filterwkingset())
   grps <- gsub("[.][0-9]*","",colnames(filterwkingset()[-(1:2)]), perl=T)
+  print(grps)
   ggp=ggstrip_groups(grps=grps , wSet= filterwkingset() , probesID= selectedrow() )
 
 })

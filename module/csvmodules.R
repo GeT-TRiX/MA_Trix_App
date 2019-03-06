@@ -6,12 +6,34 @@
 #' ### Licence: GPL-3.0
 
 
+#' csvFileInput is a shiny widget for uploading data locally
+#'
+#' @param id Shiny id
+#' @param label Shiny label
+#' @param multiple Shiny boolean for selecting or not multiple files in the browser
+#'
+#' @return Widget in the gui
+#'
+#' @export
+#'
 
-csvFileInput <- function(id, label = "CSV file") {
+
+csvFileInput <- function(id, label = "CSV file", multiple = T) {
   ns <- NS(id)
   fileInput(ns("file"),multiple = T, accept = c("text/csv","text/comma-separated-values,text/plain",".csv"), label)
 
 }
+
+#' csvIdentifier is a shiny widget for loading data from the server
+#'
+#' @param id Shiny id
+#' @param label Shiny label
+#'
+#' @return Widget in the gui
+#'
+#' @export
+#'
+
 
 csvIdentifier <- function(id, label = "Unique Identifier") {
   ns <- NS(id)
@@ -19,19 +41,33 @@ csvIdentifier <- function(id, label = "Unique Identifier") {
 
 }
 
-csvSeparator <- function(id, label="Separator"){
-  ns <- NS(id)
-  radioButtons(ns("csvsep"), label , 
-               choices = c(Semicolon=';', Comma=',' 
-                           ,Tab='\t', Space=''
-               ), selected = ';')
-}
+
+#' csvDecimal is a shiny widget to select the decimal separator
+#'
+#' @param id Shiny id
+#' @param label Shiny label
+#'
+#' @return Widget in the gui
+#'
+#' @export
+#'
 
 csvDecimal <- function(id, label="Decimal"){
   ns <- NS(id)
-  radioButtons(ns("csvdec"), label , 
+  radioButtons(ns("csvdec"), label ,
                choices = c(Comma=',', Point='.' ), selected = ',')
 }
+
+
+#' ordinput is a function which aims to reorder an input list of dataframes
+#'
+#' @param csvnord A list of dataframe
+#' @param identifier Character identifier (probes/transcripts)
+#' @param dec Character to select the decimal separator
+#'
+#' @return An ordered list (WorkingSet, pData, restable)
+#' @export
+#'
 
 
 ordinput <- function(csvnord, identifier, dec){
@@ -50,7 +86,6 @@ ordinput <- function(csvnord, identifier, dec){
         data.table = F,
         check.names = F,
         header = T,
-        #sep = sep ,
         dec = dec
       )
   )
@@ -87,7 +122,17 @@ ordinput <- function(csvnord, identifier, dec){
   return(csvord)
 }
 
-dirModuleUI = function(id) {
+#' dirModuleUI is a shiny widget for loading data from the server
+#'
+#' @param id Shiny id
+#' @param multiple Shiny boolean for selecting or not multiple files in the browser
+#'
+#' @return Widget in the gui
+#'
+#' @export
+#'
+
+dirModuleUI = function(id, multiple =T) {
   ns = NS(id)
 
   fluidPage(
@@ -98,11 +143,23 @@ dirModuleUI = function(id) {
 }
 
 
-# Module server function
+
+#' csvFile is shiny module which aims is to alert users on the status of his upload and return an ordered list of dataframe
+#'
+#' @param input Internal
+#' @param output Internal
+#' @param session Internal
+#' @param stringsAsFactors
+#'
+#' @return The reactive that yields a list of dataframes
+#'
+#' @export
+#'
+#'
+
 csvFile <- function(input, output, session, stringsAsFactors) {
 
   root = c(data = root)
-  #root = c(data = c("/root/MA_Trix_App/data"))
   shinyFileChoose(input, 'files', roots = root, session = session,filetype=c("csv"))
   shinyDirChoose(input, "directory", roots = root, session = session)
   shinyFileSave(input, "fileSave", roots = root, session = session)
@@ -114,7 +171,7 @@ csvFile <- function(input, output, session, stringsAsFactors) {
 
   #' Reactive function returned to the tab1.R
   #'
-  #' @return \showmark a reactive value of type boolean corresponding to the loading status by default it is set to True
+  #' @return  a reactive value of type boolean corresponding to the loading status by default it is set to True
   #'
 
   output$boolmark <- reactive({
@@ -130,12 +187,6 @@ csvFile <- function(input, output, session, stringsAsFactors) {
 
   csvlocpath <- eventReactive(input$files, { print(parseFilePaths(root, input$files)$datapath)})
 
-  #' Reactive function in the aim of loading csv files
-  #'
-  #' @param inFile loaded files
-  #'
-  #' @return \csvf a reactive value of type list containing three data frames toptable and workingset and the pData
-  #'
 
   csvf <- reactive({
 

@@ -9,9 +9,9 @@
 
 #' Intersect is a function that takes a list as argument and return the identical elements between those lists
 #'
-#' @param x list
+#' @param x A list of elements
 #'
-#' @return vector
+#' @return A vector
 #' @export
 #'
 #' @examples
@@ -24,7 +24,6 @@
 
 Intersect <- function (x) {
 
-
   if (length(x) == 1) {
     unlist(x)
   } else if (length(x) == 2) {
@@ -36,9 +35,10 @@ Intersect <- function (x) {
 
 #' Union is a function that takes a list as argument and return an union of those lists
 #'
-#' @param x list
+#' @param x A list of elements
 #'
-#' @return vector
+#' @return A vector
+#'
 #' @export
 #'
 #' @examples
@@ -62,10 +62,10 @@ Union <- function (x) {
 
 #' Setdiff is a function that remove the union of the y's from the common x's, x and y are lists of characters.
 #'
-#' @param x list of characters
-#' @param y list of characters
+#' @param x List of characters
+#' @param y List of characters
 #'
-#' @return
+#' @return A vector
 #' @export
 #'
 
@@ -80,17 +80,17 @@ Setdiff <- function (x, y) {
 
 #' Vennlist is a function which aim is to return a list of signficant genes for a treshold defined by the user
 #'
-#' @param adj dataframe subset of the alltoptable
-#' @param fc dataframe subset of the alltoptable
-#' @param regulation character for up both or down
-#' @param cutoffpval numeric value
-#' @param cutofffc numeric value
+#' @param adj A dataframe subset of the alltoptable
+#' @param fc A dataframe subset of the alltoptable
+#' @param regulation A character for regulation ("up", "both" or "down")
+#' @param cutoffpval Cut-off for absolute log2 fold-change; default = 1.0
+#' @param cutofffc Cut-off for pvalue; default = 0.05
 #'
-#' @return list.s
+#' @return A list of significant genes for each contrast
 #'
 #' @export
 
-Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de foreach parallel
+Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){
 
   if(is.null(adj))
     return(NULL)
@@ -111,16 +111,17 @@ Vennlist <- function(adj,fc, regulation, cutoffpval, cutofffc){ ## ajout de fore
 
 #' Vennfinal is a function which aim is to return an object containing a venn diagram (old function with Venndiagram had been change with Jvenn)
 #'
-#' @param myl a list of genes for the different contrasts
-#' @param adj dataframe subset of the alltoptable
-#' @param cex vector giving the size for each area label (length = 1/3/7/15 based on set-number)
-#' @param cutoffpval numeric value
-#' @param cutofffc numeric value
-#' @param statimet character
-#' @param meandup character
-#' @param pval data frame of the alltoptable
+#' @param myl A list of genes for the different contrasts
+#' @param adj A dataframe subset of the alltoptable
+#' @param cex A vector giving the size for each area label (length = 1/3/7/15 based on set-number)
+#' @param cutofffc Cut-off for absolute log2 fold-change
+#' @param cutoffpval Cut-off for pvalue
+#' @param statimet A character
+#' @param meandup A character
+#' @param pval A data frame of the restable
+#' @param mycol A character vector of selected contrast(s)
 #'
-#' @return final draw on the current device of the venn diagram
+#' @return Draw on the current device a venn diagram
 #' @export
 #'
 
@@ -192,26 +193,31 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = 
 }
 
 
-
-
-#' myventocsv is a function that create a csv file of the signficant genes for the different contrasts for a cutoff of 5%
+#' myventocsv is a function that create a csv file of the signficant genes for the different contrasts.
 #'
-#' @param myven a list of genes for the different contrasts
-#' @param adj a data frame
+#' @param myven A list of significant genes for each contrasts
+#' @param adj A dataframe
 #'
-#' @return
+#' @return A dataframe containing all the significant genes for each contrast(s)
+#'
 #' @export
 #'
 
 myventocsv <- function(myven, adj){
 
   max.length <- max(sapply(myven, length))
-  myven %>%
-    lapply(function(v){ c(v, rep("", max.length-length(v)))}) %>%
-    setNames(names(adj)) %>%
-    as.data.frame()
-
+  myven %>% lapply(function(v){ c(v, rep("", max.length-length(v)))}) %>% setNames(names(adj)) %>% as.data.frame()
 }
+
+
+#' mysetventocsv is a function that create a csv file of the signficant genes for the different contrasts.
+#'
+#' @param myven A list of significant genes for each contrasts
+#'
+#' @return A dataframe containing all the significant genes for each contrast(s)
+#'
+#' @export
+#'
 
 
 mysetventocsv <- function(myven){
@@ -223,10 +229,10 @@ mysetventocsv <- function(myven){
 
 #' totalvenn is a function which aim is to return the total element of each interesections for the venn diagram
 #'
-#' @param vennlist a list of genes for the different contrasts
-#' @param adj dataframe subset of the alltoptable
+#' @param vennlist A list of genes for the different contrasts
+#' @param adj A dataframe subset of the alltoptable
 #'
-#' @return numeric value
+#' @return A numeric value
 #' @export
 #'
 
@@ -246,12 +252,12 @@ totalvenn <- function(vennlist,adj){
   return(sum(n.elements))
 }
 
-#' setvglobalvenn is a function which aim is to return lists of each probes for the different set of intersections
+#' setvglobalvenn is a function which aim is to return lists of each probes for the different sets of the venn diagram
 #'
-#' @param vennlist a list of genes for the different contrasts
-#' @param adj dataframe subset of the alltoptable
+#' @param vennlist A list of genes for the different contrasts
+#' @param adj A dataframe subset of the alltoptable
 #'
-#' @return list of probes
+#' @return A list of probes/transcripts for all the different sets with the name associated
 #' @export
 
 setvglobalvenn <- function(vennlist,adj, dll = F ){
@@ -269,13 +275,13 @@ setvglobalvenn <- function(vennlist,adj, dll = F ){
   return(elements)
 }
 
-#' rowtoprob is a function that return the probe names for the corresponding indexes
+#' rowtoprob is a function that return the probenames/transcripts for the corresponding indexes
 #'
-#' @param myven a list of index for the different contrasts
-#' @param pval dataframe of the alltoptable
-#' @param adj dataframe subset of the alltoptable
+#' @param myven A list of index for the different contrasts
+#' @param pval A dataframe of the restable
+#' @param adj A subset dataframe of the restable
 #'
-#' @return list
+#' @return A list of transcripts and genes
 #' @export
 
 rowtoprob <- function(myven,pval,adj) {
@@ -289,15 +295,29 @@ rowtoprob <- function(myven,pval,adj) {
                 as.character())
   )
 
-  genesel = lapply(
-    names(myven),
-    FUN = function(x)
+  genesel = lapply(names(myven),FUN = function(x)
     return( pval %>%filter(rownames(.)%in% myven[[x]]) %>%
                 select(GeneName) %>%unlist() %>%as.character())
   )
 
   return(list(probesel, genesel))
 }
+
+#' filterjvenn is a function which takes as input a list of genes or probes obtained by selecting a set in the venn diagram and return
+#' the association of this list with the logFC
+#'
+#'
+#' @param jvennlist A vector of genes generated from the jvenn
+#' @param selcontjv A character vector of the selected contrast(s)
+#' @param restab A dataframe corresponding to the statistical table
+#' @param idcol A character value (transcripts/probes)
+#' @param usersel A character value (display genes or probes with the venn diagram)
+#' @param venngeneslist A list of transcripts/probes generated from the Vennlist function which aims is to remove probes:transcripts that are not significant
+#'
+#' @return a list of genes associated with the logFC
+#'
+#' @export
+#'
 
 filterjvenn <- function(jvennlist, selcontjv, restab, idcol,  usersel, venngeneslist = NULL){
 
@@ -313,6 +333,17 @@ filterjvenn <- function(jvennlist, selcontjv, restab, idcol,  usersel, venngenes
   return(outputjvenntab)
 }
 
+
+
+#' toJvenn is a function which aims to convert a dataframe object to json format
+#'
+#' @param myven A list of genes generates by the Vennlist function
+#' @param adj A pvalue subset dataframe of the restable
+#'
+#' @return A json object
+#'
+#' @export
+#'
 
 
 toJvenn <- function(myven, adj){
@@ -331,37 +362,23 @@ toJvenn <- function(myven, adj){
 }
 
 
-#' topngenes is a function to plot the top n genes for a defined intersection between comparison.s
+#' topngenes is a function which aims is to plot the top n genes for the selected contrat(s)
 #'
-#' @param dfinter list of intersection.s
-#' @param mycont character Vector
-#' @param inputtop numeric value
-#' @param meandup character
+#' @param dfinter A dataframe which combines (unique ids, genes and logFC)
+#' @param mycont A character Vector of the selected comparisons
+#' @param inputtop A numeric value
+#' @param meandup A character value to get to the level of unique ids or genes
 #'
-#' @return ggplot2 barplot
+#' @return A ggplot barplot object
+#'
 #' @export
 #'
-#'
 
-topngenes <- function(dfinter, mycont, inputtop, meandup = "probes", mean = F )  {
+
+topngenes <- function(dfinter, mycont, inputtop, meandup = "probes")  {
 
   if(any(grepl("probes|transcripts", meandup)))
     dfinter$GeneName = make.names(dfinter$GeneName, unique = T)
-
-  if(mean == T){
-
-    logval <- "logFC_" %>%
-      grepl(colnames(dfinter))%>%
-      which(.==T)
-
-    for (i in mycont) {
-      dfinter[[i]] = as.numeric(as.character(dfinter[[i]]))
-    }
-
-    dfinter <- dfinter[,-1] %>% as.data.table() %>% .[,lapply(.SD,mean),"GeneName"]
-    dfinter = as.data.frame(dfinter)
-
-    }
 
 
   mycont = gsub("-"," vs logFC_" ,mycont)

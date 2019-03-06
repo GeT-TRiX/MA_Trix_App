@@ -58,7 +58,7 @@ sidebar <- dashboardSidebar(
                   height = 50,
                   style = "position:absolute;bottom:70px;margin:0 0 10px 15px;"
                 ) , href="https://www6.toulouse.inra.fr/toxalim", target="_blank")
-				
+
     ),
 				tags$footer("Copyright © 2018-2019 INRA  | Designed by GenoToul GeT-TRiX team", align = "center", style = "
 					  position:absolute;
@@ -153,7 +153,7 @@ body <- dashboardBody(
                                            fluidRow(
                                              column(width=9,
                                                     div( style = "width:100% ; max-width: 1200px; height: 500px",
-                                                         
+
                                                          div(
                                                            class = "row-fluid",
                                                            # Create a spot for a dynamic UI containing the chat contents.
@@ -303,7 +303,7 @@ body <- dashboardBody(
                                                                               width = "500"
                                                                   ),
                                                                   renderoutputTable("rendersummary")# render a renderTable or renderDataTable within an application page
-                                                                  #dataTableOutput("data_summary") 
+                                                                  #dataTableOutput("data_summary")
                                                              )),
 
                                                              column(12,
@@ -321,15 +321,15 @@ body <- dashboardBody(
                                    tabPanel("Volcano plot", style = "background-color: #ffffff;",
 
                                             conditionalPanel(condition = '!output.boolmark',
-                                                
+
                                                              div(style="display:inline-block;",
                                                                  fluidRow(column(5, style = "width:30%",downloadFiles("savevolc", "Save your barplot")),
-                                                                 column( 3,style="width:20%;", selFormat("savevolc")))), 
+                                                                 column( 3,style="width:20%;", selFormat("savevolc")))),
                                             plotOutput(outputId = "volcanoplot", height = 900) ,
-                                            
+
                                             div(style="display:inline-block;",
                                                 fluidRow(column(3,style="width:34.0%;",downloadFiles("savebarvolc", "Save your Volcano plot")),
-                                                         column( 3,style="width:20%;", selFormat("savebarvolc")))), 
+                                                         column( 3,style="width:20%;", selFormat("savebarvolc")))),
 
                                             plotOutput(outputId ="barplotvolc", height = 500)
                                             ,ns = NS("datafile"))
@@ -355,10 +355,10 @@ body <- dashboardBody(
                                                                     renderoutputTable("orderedwk")
                                                                     #dataTableOutput("orderedwk")
                                                              ),
-                                                             
+
                                                              div(style="display:inline-block;",
                                                                  fluidRow(column(3,style="width:27.0%;", downloadFiles("savestrip", "Save your plot")),
-                                                                          column( 3, selFormat("savestrip")))), 
+                                                                          column( 3, selFormat("savestrip")))),
 
                                                              ns = NS("datafile"),
 
@@ -459,7 +459,7 @@ body <- dashboardBody(
                                       fluidRow(column(1, style="width:9.666%;",
                                       downloadFiles("downloadplots", "Save your Scree")),
                                       column(2),
-                                      column( 3, selFormat("downloadplots")))), 
+                                      column( 3, selFormat("downloadplots")))),
 
                                       br(),
                                       plotOutput(outputId = "eigpca", height = 700)
@@ -467,11 +467,11 @@ body <- dashboardBody(
                                     tabPanel(
                                       strong("PCA plot"),
                                       tags$style(type = "text/css",".shiny-output-error:before { visibility: hidden; }"),
-                                      
+
                                       div(style="display:inline-block;",
                                          fluidRow(column(1,downloadFiles("savepca", "Save your PCA")),
                                                   column(2),
-                                                  column( 3, selFormat("savepca")))), 
+                                                  column( 3, selFormat("savepca")))),
 
                                       plotOutput(outputId = "PCA", height = 700) #,plotOutput(outputId = "PCAvarender", height = 700)
                                     )
@@ -604,13 +604,13 @@ body <- dashboardBody(
                                         helpText("You can directly filter the table by fold change and save the output table, genes in orange are duplicates "
                             )),
                            #DT::dataTableOutput("vennresinter"),
-                            renderoutputTable("renderjvenntab"), 
+                            renderoutputTable("renderjvenntab"),
                             br(),br(),br(),
                              conditionalPanel(condition = "input.selcontjv",
                                               div(class= "dfvennbef" , style="font-size:24px; margin-top: -28px; "))
 
                       )),
-                  
+
                   div(style="display:inline-block;",id ="dontwanttoshow",
                       fluidRow(
                         tags$head(
@@ -623,9 +623,9 @@ body <- dashboardBody(
                                  label = "Plot top DE genes",style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                )),
                         column(3,style= "width:26.0%;",br(),downloadFiles("savebarvenn", "Save your barplot")),
-                               column( 3,br(),style= "width:11%;  padding: 0%;", selFormat("savebarvenn")))), 
-                      
- 
+                               column( 3,br(),style= "width:11%;  padding: 0%;", selFormat("savebarvenn")))),
+
+
                       plotOutput(outputId ="barplotvenn", height = "500px", width ="100%"),
                       br(),
                       h1("Here's a tracker for your different selections:"),
@@ -672,10 +672,10 @@ body <- dashboardBody(
                     tabPanel(strong("Venn GO enrichment"),
                              value = "venngopanel",
                              useShinyjs(),
-                              
+
                              fluidRow(column(3,style= "width:14.3%;",downloadFiles("saveclustvenn", "Export to acyclic graph")),
                                       column( 1, selFormat("saveclustvenn"))),
-                             
+
 
                              plotOutput("clusterPlot", width = "100%", height = "700px"),
                              br(),br(),br(),
@@ -775,7 +775,7 @@ body <- dashboardBody(
                      fluidRow(column(6, sliderInput("clusterNumber",label = "Cluster",
                                                     value = 1, min = 1,max = 5
                      )),
-                     
+
                      column(6, selSpecies("vennanalysis")
 
                             )),
@@ -806,13 +806,13 @@ body <- dashboardBody(
                     tabPanel(
                       strong("Visualize the Heatmap"),value = "hmmainpan",
 
-                      
+
                       div(style="display:inline-block;",
                           fluidRow(column(1,style="width:9%;",downloadFiles("savehm", "Save your plot")),
                                    column(2),
                                    column( 3, selFormat("savehm")))),
-                      
-                      
+
+
                       includeCSS("./css/style.css"),
                       conditionalPanel(condition = '!output.heatmbool',  verbatimTextOutput("warningsheat")
                       ),
@@ -935,7 +935,7 @@ body <- dashboardBody(
                                         choices = c("Fold Enrichment"= "FoldE", "p.value" = "Pvalue")
                                       )), column(6,br(), checkboxInput("addlabelhigh", "add label", FALSE))),
                                        tags$div(id="highChart")  ,
-                                       
+
                                        tags$script(src="bubble.js"),
                                       ns = NS("hmanalysis")
 
@@ -975,7 +975,7 @@ body <- dashboardBody(
                                         div(id = "form",
                                             checkboxElements("selgrouphm"),
                                             checkboxElements("selcomphm"),
-                  
+
                                         br(),br(),
                                         fluidRow( column(6,
                                                          numericInput(
@@ -1101,9 +1101,9 @@ body <- dashboardBody(
                                           renderncolour("myPanelcolhm"),
                                           br()
                                         )
-                                        
+
                                         #)
-                                        
+
                                         ), #end of the div "form"
                                       br(),
                                       shinyjs::hidden(div( # Hide some widgets between the tags
@@ -1131,7 +1131,7 @@ body <- dashboardBody(
                                                        div(id = 'center', strong("Functional enrichment analysis",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                                        br(),
 
-                                                       
+
                                                        fluidRow(column( 4,
                                                                         selSpecies("hmanalysis")
                                                        ),
@@ -1140,7 +1140,7 @@ body <- dashboardBody(
                                                        column(3,
                                                               catHm("hmanalysis")
                                                        )),
-                                                       
+
                                                        fluidRow(
                                                          column(4,br(),
                                                                 runAnalysis("hmanalysis")),
@@ -1162,7 +1162,7 @@ body <- dashboardBody(
                                selectizeInput('cutinfo', 'Choose your types of plots',
                                               choices = cutheatmlist), # cutheatmlist is a variable defined in the global environment
                                br(),
-                               selFormat("saveboxclust","Choose your file format"), br(),
+                               selFormat("saveboxclust"), br(),
                                verbatimTextOutput("event"),
                                br(),
                                downloadFiles("saveboxclust", "Save your plot")
@@ -1172,7 +1172,7 @@ body <- dashboardBody(
                 )
 
               ))
-      )  
+      )
 
   )
   )

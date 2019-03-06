@@ -19,7 +19,6 @@ shinyjs::disable("heatm")
 #' @param subsetwset a data frame with all the individuals selected
 #' @param subsetDEG  a data frame with the indexes corresponding to the sigificant genes
 #' @param subsetgroup_hm  a data frame with the corresponding groups
-#' @param workingPath the current user's repository
 #' @param k a numeric value which aim is to defined the treshold value to cut the dendogram input$clusters
 #' @param Rowdistfun a function used to compute the distance for the rows
 #' @param Coldistfun a function used to compute the distance for the columns
@@ -38,7 +37,6 @@ hmbis <- reactive( {
         data.matrix(subsetwset()),
         subsetDEG()[[1]],
         droplevels(subsetgroup_hm()$Grp),
-        workingPath = wd_path,
         k = input$clusters,
         mypal = unlist(colors()),
         Rowdistfun = input$dist ,
@@ -78,7 +76,7 @@ output$distPlot <- renderPlot({
     if (input$reactheat == T){
 
       hmbis()
-      
+
       isolate({
       hmsize$cut <- hmbis()[[8]]
       hmobj$obj$rows <- hmbis()[[6]]
@@ -87,9 +85,9 @@ output$distPlot <- renderPlot({
       hmobj$obj$groups <-  droplevels(subsetgroup_hm()$Grp)
       hmobj$obj$rownames <- hmbis()[[7]]
       })
-      
+
       observe({boolhm <<-T})
-      
+
       output$heatmbool <- reactive({
         boolhm
       })
@@ -98,7 +96,7 @@ output$distPlot <- renderPlot({
       hmobj$hm <- hmboth$tot[[1]]
       isolate(hmobj$obj$hm <- hmboth$tot[[2]])
 
-      
+
 
     }
     else{

@@ -88,7 +88,6 @@ observe({
   #' @param hmbis a data frame with all the individuals selected
   #' @param subsetDEG  a data frame with the indexes corresponding to the sigificant genes
   #' @param subsetgroup_hm  a data frame with the corresponding groups
-  #' @param workingPath the current user's repository
   #' @param my_palette a vector of colors
   #' @param k a numeric value which aim is to defined the treshold value to cut the dendogram input$clusters
   #' @param Rowdistfun a character value set by the user to defined the method to calculate the dendogram matrix distance for the genes input$dist
@@ -130,7 +129,6 @@ observe({
       isolate(hmbis()[[1]]),
       geneSet =  isolate(hmbis()[[7]]),
       droplevels(subsetgroup_hm()$Grp),
-      workingPath = wd_path,
       my_palette = (colorRampPalette(
         c(col_choice1(), my_intermediate(), col_choice3()))(n = 75)),
       mycex = input$legsize ,
@@ -149,7 +147,7 @@ observe({
       height = hmbis()[[8]],
       rastering = israstering
     )
-    
+
   }
 
 
@@ -225,13 +223,13 @@ observe({
     return(lengthofmyclust)
 
   })
-  
+
   #output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))
   #output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength()))
-  
+
   callModule(stylishTables, "totalgenbyc", data = grouplength , searching = F, pageLength = 10)
   callModule(stylishTables, "clusteringtable", data = ordered , searching = F, scrollX = T,lengthpage=  c('5', '10', '15'), pageLength = 10)
-  
+
 
 
 
