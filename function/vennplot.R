@@ -204,7 +204,6 @@ Vennfinal <- function(myl,adj, cex=1, cutoffpval, cutofffc, statimet, meandup = 
 #'
 
 myventocsv <- function(myven, adj){
-
   max.length <- max(sapply(myven, length))
   myven %>% lapply(function(v){ c(v, rep("", max.length-length(v)))}) %>% setNames(names(adj)) %>% as.data.frame()
 }
@@ -221,7 +220,6 @@ myventocsv <- function(myven, adj){
 
 
 mysetventocsv <- function(myven){
-
   max.length <- max(sapply(myven, length))
   myven %>%lapply(function(v){ c(v, rep("", max.length-length(v)))}) %>% as.data.frame()
 }

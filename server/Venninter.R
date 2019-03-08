@@ -141,16 +141,6 @@ venntopgenes <- reactive({
 
 
 
-output$downloadvennset = downloadHandler('venns-filtered.csv',
-  content = function(file) {
-    s = isolate(jvennrows$all())
-    if(any(grepl("probes|transcripts", input$dispvenn)) )
-      write.csv2(vennfinal()[[1]][s, , drop = FALSE], file)
-    else
-      write.csv2(vennfinal()[[2]][s, , drop = FALSE], file)
-  }
-)
-
 
 #' plottopgenes is an event reactive function which aim is to plot the top n genes selected by the user from the rendering data table
 #'

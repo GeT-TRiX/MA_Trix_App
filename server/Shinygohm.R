@@ -40,7 +40,6 @@ observe({
     selectInput("cutgo",
                 "Choose your cluster",
                 choices =  seq(1, NROW(n) , by = 1))
-
   })
 
 
@@ -117,7 +116,6 @@ output$printmessage <- renderPrint({
   cat("You can select the rows in the table above in order to display the gene names")
   cat("\n")
   cat("\n")
-
 })
 
 
@@ -154,33 +152,6 @@ output$titlegotop <- renderText({
     mytitlevenn <<- print("Top 10 Significantly Enriched GO and KEGG Terms")
 })
 
-
-output$savegohmdavxlsx = downloadHandler(filename <- function() { paste0(basename(file_path_sans_ext(projectname())), '_go.',"xlsx", sep = '')},
-  content = function(file) {
-
-    withProgress(message = 'Creation of the xlsx table:',
-                 value = 0, {
-                   n <- NROW(50)
-                   for (i in 1:n) {
-                     incProgress(1 / n, detail = "Please wait...")
-                   }
+callModule(downoutputables, "savegohmdavxlsx", projectname = projectname , suffix = "_go.xlsx" , data = reactive(davidwebservice()$mygodavid) , xlsx = T )
 
 
-    library(xlsx)
-
-    for (i in 1:length(davidwebservice()$mygodavid)) {
-      if (i == 1)
-        write.xlsx(file = file,davidwebservice()$mygodavid[[i]],
-                   sheetName = paste("Cluster", i))
-      else
-        write.xlsx(
-          file = file,
-          davidwebservice()$mygodavid[[i]],
-          sheetName = paste("Cluster", i),
-          append = TRUE
-        )
-      }
-    })
-
-  }
-)

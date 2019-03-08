@@ -31,14 +31,6 @@ output$totalgenes <- renderText({
 })
 
 
-output$myPVALvenn <- renderText({ #pvalue selected
-  input$pvalvenn
-})
-
-
-output$myFCvenn <- renderText({ #Fold change value selected, default =1
-  input$fcvenn
-})
 
 output$topgenesdf <- renderText({ #Method for choosing the signficant genes, default = FDR (BH method)
   input$topgenes

@@ -171,18 +171,10 @@ observe({
   callModule(downoutputfiles, "savehm", projectname = projectname , suffix = "_heatmap." , data = hmobj$obj , w =9, h = 12, hm =T, rown = reactive(input$rowname))
   })
 
-  output$downloadcut <- downloadHandler(
-    filename = function() {
-      paste(basename(file_path_sans_ext(projectname())),
-            '_clustered_hm',
-            '.csv',
-            sep = '')
-    },
-    content = function(file) {
-      write.csv(ordered(), file, row.names = FALSE)
-    }
-  )
-
+  
+  callModule(downoutputables, "downloadcut", projectname = projectname , suffix = "_clustered_hm.csv" , data = ordered ,  case = 3 )
+  
+  
 
   ordered <- reactive({
 
@@ -224,8 +216,6 @@ observe({
 
   })
 
-  #output$clustering <- DT::renderDataTable(DT::datatable(ordered() ,  options = list(scrollX = TRUE) ))
-  #output$totalgenbyc <- DT::renderDataTable(DT::datatable(grouplength()))
 
   callModule(stylishTables, "totalgenbyc", data = grouplength , searching = F, pageLength = 10)
   callModule(stylishTables, "clusteringtable", data = ordered , searching = F, scrollX = T,lengthpage=  c('5', '10', '15'), pageLength = 10)

@@ -46,55 +46,52 @@ isolate(
 )
 })
 
-#########################################
-######## FC step 0.1 if FC <2           #
-#########################################
 
-observe({
-
-  if (input$fcvenn <= 2)
-    updateSliderInput(
-      session,
-      "fcvenn",
-      label = "FC treshold",
-      value = NULL,
-      min = 1,
-      max = 10,
-      step = .1
-    )
-  else
-    updateSliderInput(
-      session,
-      "fcvenn",
-      label = "FC treshold",
-      value = NULL,
-      min = 1,
-      max = 10,
-      step = 1
-    )
-
-  if (input$fc <= 2)
-    updateSliderInput(
-      session,
-      "fc",
-      label = "FC treshold",
-      value = NULL,
-      min = 1,
-      max = 10,
-      step = .1
-    )
-  else
-    updateSliderInput(
-      session,
-      "fc",
-      label = "FC treshold",
-      value = NULL,
-      min = 1,
-      max = 10,
-      step = 1
-    )
-
-})
+# observe({
+# 
+#   if (input$fcvenn <= 2)
+#     updateSliderInput(
+#       session,
+#       "fcvenn",
+#       label = "FC treshold",
+#       value = NULL,
+#       min = 1,
+#       max = 10,
+#       step = .1
+#     )
+#   else
+#     updateSliderInput(
+#       session,
+#       "fcvenn",
+#       label = "FC treshold",
+#       value = NULL,
+#       min = 1,
+#       max = 10,
+#       step = 1
+#     )
+# 
+#   if (input$fc <= 2)
+#     updateSliderInput(
+#       session,
+#       "fc",
+#       label = "FC treshold",
+#       value = NULL,
+#       min = 1,
+#       max = 10,
+#       step = .1
+#     )
+#   else
+#     updateSliderInput(
+#       session,
+#       "fc",
+#       label = "FC treshold",
+#       value = NULL,
+#       min = 1,
+#       max = 10,
+#       step = 1
+#     )
+# 
+# })
 
 #################################################
 ######## Download data and reset button heatmap #

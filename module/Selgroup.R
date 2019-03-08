@@ -38,42 +38,50 @@ checkboxElements <- function(id){
 #'
 
 boxChooser <- function(input, output, session, label, data, group, case, empty =F) {
+  
+  isinline <- reactiveValues(inline = F)
+  
+  observe({
+    req(group()[[2]]$Grp)
+    isinline$format <- ifelse(length(levels(group()[[2]]$Grp)) >= 6, T, F)
+  })
 
   output$usercheck <- renderUI({
-
+    
     ns <- session$ns
+    groupinline <- ifelse(length(levels(group()[[2]]$Grp)) >= 6, T, F)
     case = ifelse(empty,  2, 1)
     checkboxGroupInput(
       ns("box"),
       label,
       choices =data(),
       selected =  switch(case,data(), NULL),
-      inline = ifelse(length(levels(group()[[2]]$Grp)) > 6, T, F)
+      inline = isinline$format
     )
 
   })
 
   #Select all the contrasts
   observeEvent(input$allcomphm, {
-    groupinline = ifelse(length(levels(group()[[2]]$Grp)) > 6, T, F)
+    #groupinline = ifelse(length(levels(group()[[2]]$Grp)) >= 6, T, F)
     updateCheckboxGroupInput(
       session,
       "box",
       label ,
       choices = data(),
       selected = data(),
-      inline = groupinline
+      inline = isinline$format
     )
   })
 
   #Unselect all the contrasts
   observeEvent(input$nocomphm, {
-    groupinline = ifelse(length(levels(group()[[2]]$Grp)) > 6, T, F)
+    #groupinline = ifelse(length(levels(group()[[2]]$Grp)) >= 6, T, F)
     updateCheckboxGroupInput(session,
                              "box",
                              label ,
                              choices = data(),
-                             inline= groupinline
+                             inline= isinline$format
     )
   })
 

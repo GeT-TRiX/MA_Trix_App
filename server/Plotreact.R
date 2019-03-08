@@ -16,7 +16,7 @@ shinyjs::disable("heatm")
 
 #' hmbis is an event reactive function that pre-computed hierarchical clustering on microarray data
 #'
-#' @param subsetwset a data frame with all the individuals selected
+#' @param subsetwset a data frame with all the selected groups
 #' @param subsetDEG  a data frame with the indexes corresponding to the sigificant genes
 #' @param subsetgroup_hm  a data frame with the corresponding groups
 #' @param k a numeric value which aim is to defined the treshold value to cut the dendogram input$clusters

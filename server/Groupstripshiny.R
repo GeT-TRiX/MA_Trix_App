@@ -38,9 +38,8 @@ filenamestrip <- reactive({
 
 
 filterwkingset <- reactive({
-
   req(myreorderwk())
-  myreorderwk() %>% select(dataid() ,GeneName, sort(names(.[-1]))) %>% slice(., getDegenes()[[1]]) %>% mutate_if(is.numeric, funs(format(., digits = 3)))
+  myreorderwk() %>% select(dataid() ,GeneName, sort(names(.[-1]))) %>% slice(., getDegenestrip()[[1]]) %>% mutate_if(is.numeric, funs(format(., digits = 3)))
 
 })
 
@@ -63,43 +62,8 @@ selectedrow <- callModule(stylishTables, "orderedwk", data = filterwkingset ,
            selection = 'single', case = 2 )
 
 
-# output$orderedwk <- DT::renderDataTable(DT::datatable(filterwkingset(),
-# options = list(scrollX = TRUE,
-#                   pageLength = 150,
-#                   scrollY=550,
-#                   stateSave = T,
-#                   dom = 'Bfrtip',
-#                 buttons = list(
-#                  list(extend = 'csv',
-#                       filename =  filenamestrip()[1]),
-#                  list(extend = 'pdf',
-#                       filename = filenamestrip()[1],
-#                       title = "My Title",
-#                       header = FALSE)
-#                 )),
-# selection = 'single',
-#  extensions=c("Buttons",'Scroller'),
-#  filter =c("none"),
-# rownames= FALSE ))
 
-
-
-getDegenes <- reactive({
-
-  req(subsetstat(), csvf(), input$pvalstrip)
-
-  indexDEG = decTestTRiX(
-    subsetstat()[[1]],
-    subsetstat()[[2]],
-    subsetstat()[[3]],
-    DEGcutoff = input$pvalstrip,
-    FC = input$fcstrip,
-    cutoff_meth = input$decidemethodstrip, maxDE=NULL )
-  return(indexDEG)
-
-})
-
-
+getDegenestrip <- callModule(getDegenes, "degstrip", data = subsetstat , meth = reactive(input$decidemethodstrip), case = 1 , maxDe = reactive(NULL) )
 
 
 callstripgenes <- reactive({
@@ -107,7 +71,7 @@ callstripgenes <- reactive({
   validate(
   need(selectedrow(), 'Search your gene and select the corresponding row'))
 
-  req(getDegenes(), filterwkingset())
+  req(filterwkingset())
   grps <- gsub("[.][0-9]*","",colnames(filterwkingset()[-(1:2)]), perl=T)
   print(grps)
   ggp=ggstrip_groups(grps=grps , wSet= filterwkingset() , probesID= selectedrow() )

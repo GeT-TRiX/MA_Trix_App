@@ -34,15 +34,6 @@ output$testtt <- renderText({ #Contrast selected
 })
 
 
-output$myPVAL <- renderText({ #pvalue selected
-  input$pval
-})
-
-
-output$myFC <- renderText({ #Fold change value selected, default =1
-  input$fc
-})
-
 output$myMET <- renderText({ #Method for choosing the signficant genes, default = FDR (BH method)
   input$decidemethod
 })

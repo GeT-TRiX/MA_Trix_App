@@ -23,9 +23,7 @@
 #'
 #' @export
 
-decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "FDR",maxDE = NULL,contrast = 1:ncol(adj))
-
-{
+decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "FDR",maxDE = NULL,contrast = 1:ncol(adj)){
   ## select probes with cutoff_meth<= DEGcutoff and FoldChange > FC and nbr of selected probes < maxDE (if nb FC selected >maxDE)
 
 
@@ -33,6 +31,7 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
     contrast = c(contrast, contrast)
 
 
+  
   if (is.na(maxDE) || is.null(maxDE))
     maxDE = nrow(adj)
 
@@ -41,17 +40,18 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
     pList = adj[, contrast]
 
 
+  
   if(cutoff_meth=="None")
     pList= pval[,contrast]
 
 
   ## select on pvalue
   DEp = pList <= DEGcutoff
+  
 
 
   ## select on FC
   DEFC = 2 ** abs(logfc[, contrast]) >= FC
-
 
   ## reduce selection to maxDE
   if (any(colSums(DEFC) > maxDE)) {
@@ -83,7 +83,6 @@ decTestTRiX <- function(adj,logfc,pval, DEGcutoff = 0.05 ,FC = 1,cutoff_meth = "
 
   DEsel = which(rowSums(DEsel, na.rm = T) > 0)
   elements= list(DEsel, length(DEsel))
-
 
   return(elements)
 

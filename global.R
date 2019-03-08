@@ -54,8 +54,8 @@ source("./module/Selgroup.R")
 source("./module/enrichmodule.R")
 source("./module/groupcol.R")
 source("./module/magnificentables.R")
-source("./module/tablexport.R")
-
+source("./module/Savemoduletable.R")
+source("./module/getdegenes.R")
 
 
 ################################

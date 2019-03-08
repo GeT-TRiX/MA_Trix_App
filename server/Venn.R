@@ -24,25 +24,23 @@ output$bool <- reactive({
   value
 })
 
-outputOptions(output,"bool",suspendWhenHidden=F)
 
-#' vennlist is a reactive function which aim is to return a list of signficant probenames
-#'
-#' @param csvf a data frame
-#' @param user_cont a subset data frame with the selected comparisons for the adj.p.val or p.val
-#' @param user_fc a subset data frame with the selected comparisons for the logfc
-#' @param regulation vector input
-#' @param pvalvenn numeric input for the p value cutoff
-#' @param fcvenn numeric input for the logfc value cutoff
-#'
-#' @return probven a reactive list of probenames
-#'
-#' @export
+outputOptions(output,"bool",suspendWhenHidden=F)
+getvennlist <- reactiveValues(vennlist = NULL) # Initiliazition of the reactive values for the vennlist
+mycont <- callModule(getDegenes, "degvenn", data = user_cont , meth = NULL, dflogfc = user_fc ,  maxDe = NULL, reg = reactive(input$regulation), case =2) #Outisde observe to update fc widget step (0.1, [1;2] and (1, [2;10]))
+
+
+observe({
+  req(user_cont()>0) # User selection
+  getvennlist$vennlist <- mycont() # push shiny module vennlist to the reactive values object
+})
+
 
 vennlist <- reactive({
-  req(user_cont() > 0)
+  req(getvennlist$vennlist)
   if (is.null(csvf()))
     return(NULL)
+  
   # adj <- user_cont()
   # fc <- user_fc()
   # cutoffpval <-input$pvalvenn
@@ -52,10 +50,8 @@ vennlist <- reactive({
   # clusterExport(cl,c("adj","fc","cutoffpval","cutofffc","reg","cutoffpval"),envir=environment())
   #mycont = Vennlist(adj,fc, reg, cutoffpval, cutofffc,cl)
   #stopCluster(cl)
-  mycont = Vennlist(user_cont(),user_fc(), input$regulation, input$pvalvenn, input$fcvenn)
-  probven = rowtoprob(mycont,csvf()[[3]], user_cont())
-
-
+  
+  probven = rowtoprob(getvennlist$vennlist,csvf()[[3]], user_cont())
 
   if(input$dispvenn == "genes")
     if(input$Notanno){
@@ -111,17 +107,18 @@ subsetstatRm <- reactive({
 
 choix_cont <- callModule(boxChooser, "selcompvenn", label = "Choose your comparison", data = reactive(colnames(subsetstatRm())) , group = csvf, case = 2 , empty = T )
 
-#' user_cont is a reactive function that  return the contrast selected by the user
+#' user_cont is a reactive function that  return the a subset dataframe with the comparison(s) selected
 #'
-#' @param subsetstat data frame corresponding to the pvalue or subsetstat pvalue
-#' @param choix_cont a set of contrasts selected by the user
+#' @param subsetstat A data frame corresponding to the pvalue or subsetstat pvalue
+#' @param choix_cont A set of contrasts selected by the user
 #'
-#' @return user_cont a reactive data frame with the contrast selected
+#' @return A reactive dataframe with the contrast selected
 #'
 #' @export
 #'
 
 user_cont <- reactive({
+  
   req(subsetstat())
   if (input$methodforvenn == "FDR")
     mysel = (subset(subsetstat()[[1]],
@@ -133,12 +130,12 @@ user_cont <- reactive({
 })
 
 
-#' user_cont is a reactive function that  return the contrast selected by the user
+#' user_fc is a reactive function that  return the a subset dataframe with the comparison(s) selected
 #'
-#' @param subsetstat data frame corresponding to the logfc value
-#' @param choix_cont a set of contrasts selected by the user
+#' @param subsetstat A data frame corresponding to the logfc value
+#' @param choix_cont A set of contrasts selected by the user
 #'
-#' @return user_cont a reactive data frame with the contrast selected
+#' @return A reactive dataframe with the contrast selected
 #'
 #' @export
 #'
@@ -151,58 +148,14 @@ user_fc <- reactive({
 })
 
 
-output$downloadvenn <- downloadHandler(
-  filename = function() {
-    paste(basename(file_path_sans_ext(projectname())),
-          '_filtered_venn',
-          '.csv',
-          sep = '')
-  },
-  content = function(fname) {
-    write.table(
-      try(myventocsv(vennlist()[[2]]  , user_cont())),
-      fname,
-      na = "",
-      row.names = F,
-      col.names = T,
-      append = TRUE,
-      sep = ";"
-    )
-  }
-)
+callModule(downoutputables, "savevennlist", projectname = projectname , suffix = "_filtered_venn.csv" , data = reactive(vennlist()[[2]]) , cont = user_cont, case = 1 )
 
 
-output$downloadsetven <- downloadHandler(
-  filename = function() {
-    paste(basename(file_path_sans_ext(projectname())),
-          '_inter_venn',
-          '.csv',
-          sep = '')
-  },
-  content = function(fname) {
-    if(input$dispvenn == "genes")
-    write.table(
-      try(mysetventocsv(setvglobalvenn(vennlist()[[2]], user_cont(), dll = T))),
-      fname,
-      na = "",
-      row.names = F,
-      col.names = T,
-      append = TRUE,
-      sep = ";"
-    )
-    else
-      write.table(
-        try(mysetventocsv(setvglobalvenn(vennlist()[[1]], user_cont(), dll = T))),
-        fname,
-        na = "",
-        row.names = F,
-        col.names = T,
-        append = TRUE,
-        sep = ";"
-      )
+observe({
+req(input$dispvenn)
+callModule(downoutputables, "saveallset", projectname = projectname , suffix = "_inter_venn.csv" , data = switch(input$dispvenn, genes = reactive(vennlist()[[2]]), transcripts =, probes = reactive(vennlist()[[1]])) , cont = user_cont , case = 2 )
+})
 
-  }
-)
 
 
 #' myindex is a reactive function returning the column indices for which there's more than one significant genes

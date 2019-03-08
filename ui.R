@@ -342,8 +342,7 @@ body <- dashboardBody(
                                                                  div(id = "stripbox",
                                                                     box(title="Filter the table",width = 10, status = "primary", solidHeader = TRUE,collapsible = TRUE,collapsed = TRUE,icon = icon("arrow-down"),
                                                                         column(width=4,  radioButtons("decidemethodstrip",label = "Choose your statistical method",choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None"),inline = TRUE)),
-                                                                        div( class= "myslidermain", column(3, sliderInput('fcstrip', "Choose your FC cutoff",min = 1, max=10, step = 1,value=1)),
-                                                                        column(3,sliderInput('pvalstrip', "Choose your pval cutoff", min=0.01, max=0.05, step=0.01,value=0.05))),
+                                                                        div( class= "myslidermain", cutoffElements("degstrip",3,3)),
 
                                                                         column(width=12,  textOutput("selected_stripgene")
 
@@ -558,12 +557,12 @@ body <- dashboardBody(
                            div(style="display:inline-block",
                       fluidRow(
                       column(3, style="width:43%",
-                          downloadButton('downloadvenn', "Download the data",
-                                         style ="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                             downloadFilestab("savevennlist", "Download the data")),
                          column(3,
-                          downloadButton("downloadsetven", "Download venn set" , style =
-                                           "color: #fff; background-color: #337ab7; border-color: #2e6da4"))))),
+                                downloadFilestab("saveallset", "Download venn set"))
 
+                      
+                      ))),
 
 
                           column(width=6, offset = 0, style='padding:0px;',
@@ -649,10 +648,7 @@ body <- dashboardBody(
                         p("for a total of"),
                         htmlOutput("totalgenes"),
                         p("genes  with a P-value and FC treshold respectively set to "),
-                        htmlOutput("myPVALvenn"),
-                        p("and"),
-                        htmlOutput("myFCvenn")
-
+                        tracketCutoff("degvenn")
                       ),
                       div(
                         id = "container",
@@ -709,16 +705,9 @@ body <- dashboardBody(
                                placeholder = "grey70, white, steelblue4",width = "100%"
                      ),
 
-                     fluidRow( column(6,
-                                      sliderInput("pvalvenn","P-value treshold",
-                                                  min = 0.01,max = 0.05,
-                                                  value = 0.05,step = 0.01
-                                      )),
-
-                               column(6,
-                                      sliderInput("fcvenn","FC treshold",min = 1, max = 10,
-                                                  value = 1,step = 1
-                                      ))),
+                     fluidRow( 
+                       
+                       cutoffElements("degvenn",c1=6,c2=6)),
                      br(),
 
                      fluidRow(
@@ -825,7 +814,6 @@ body <- dashboardBody(
                                   actionButton("submit", "Submit"))
                       ),
 
-                      #plotOutput("warningsheat")
                       conditionalPanel(condition = 'output.heatmbool',
                                        plotOutput("distPlot", width = "100%" , height = 1300)
 
@@ -850,9 +838,7 @@ body <- dashboardBody(
                         p('The selected rows for your heatmap are based on the '),
                         textOutput("myMET"),
                         p("method, with a P-value and FC treshold respectively set to "),
-                        textOutput("myPVAL"),
-                        p('and'),
-                        textOutput("myFC")
+                        tracketCutoff("deghm")
                       ),
 
                       conditionalPanel(condition = "input.maxgen != null",
@@ -893,8 +879,7 @@ body <- dashboardBody(
                     tabPanel(
                       strong("Heatmap clusters"),
                       value = "dfhmclu",
-                      downloadButton('downloadcut', "Download the data",
-                                     style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                      downloadFilestab("downloadcut", "Download the data"), 
                       column(
                         12,
                         h3("Table summarizing the heatmap"),
@@ -912,7 +897,7 @@ body <- dashboardBody(
                       )),
                     tabPanel(
                       strong("(GO) enrichment-based cluster analysis"),value="maingo",
-                      downloadButton("savegohmdavxlsx", "Save your enrichment as xlsx" , style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                      downloadFilestab("savegohmdavxlsx", "Save your enrichment as xlsx"),
 
                       conditionalPanel(condition = "input.GOana",
                                        div(class= "highvenn" , style="font-size:24px; text-align: center;",
@@ -978,38 +963,23 @@ body <- dashboardBody(
 
                                         br(),br(),
                                         fluidRow( column(6,
-                                                         numericInput(
-                                                           # Create an input control for entry of numeric values
+                                                         numericInput(# Create an input control for entry of numeric values
                                                            'maxgen',
                                                            'Maximal number of genes by comparison(s)',
-                                                           NULL,min = 100,max = 2500
-                                                         )),column(6,
-                                                                   br(),
-                                                                   selectInput(
+                                                           NULL, min = 100,max = 2500
+                                                         )),
+                                                  column(6,br(),
+                                                                selectInput(
                                                                      "decidemethod",
                                                                      "Choose your statistical method",
                                                                      choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")
                                                                    ))),
 
                                         br(),
-                                        fluidRow( column(6,
-                                                         sliderInput(
-                                                           "pval",
-                                                           "P-value treshold",
-                                                           min = 0.01,
-                                                           max = 0.05,
-                                                           value = 0.05,
-                                                           step = 0.01
-                                                         )),
-                                                  column(6,
-                                                         sliderInput(
-                                                           "fc",
-                                                           "FC treshold",
-                                                           min = 1,
-                                                           max = 10,
-                                                           value = 1,
-                                                           step = 1
-                                                         ))),
+                                        fluidRow(
+                                          cutoffElements("deghm",c1=6,c2=6)
+                                          ),
+
                                         br(),
                                         div(id = 'center', strong("Advanced settings",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                         br(),
