@@ -1,3 +1,12 @@
+### Author: Franck Soubès
+### Bioinformatics Master Degree - University of Bordeaux, France
+### Link: https://github.com/GeT-TRiX/MA_Trix_App/
+### Where: GET-TRiX's facility
+### Application: MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data
+### Licence: GPL-3.0
+
+
+
 #' cutoffElements is a global namespace containing a list of shiny widgets filter the restable with cutoff parameters
 #'
 #' @param id Shiny id

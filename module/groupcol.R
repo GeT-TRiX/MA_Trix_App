@@ -1,3 +1,11 @@
+### Author: Franck Soubès
+### Bioinformatics Master Degree - University of Bordeaux, France
+### Link: https://github.com/GeT-TRiX/MA_Trix_App/
+### Where: GET-TRiX's facility
+### Application: MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data
+### Licence: GPL-3.0
+
+
 #' renderncolour is a shiny widget which aims is to return for each group a colorbox picker
 #'
 #' @param id Shiny id

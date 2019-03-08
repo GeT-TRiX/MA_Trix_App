@@ -73,7 +73,6 @@ callstripgenes <- reactive({
 
   req(filterwkingset())
   grps <- gsub("[.][0-9]*","",colnames(filterwkingset()[-(1:2)]), perl=T)
-  print(grps)
   ggp=ggstrip_groups(grps=grps , wSet= filterwkingset() , probesID= selectedrow() )
 
 })
