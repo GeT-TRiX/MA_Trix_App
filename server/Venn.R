@@ -31,7 +31,7 @@ mycont <- callModule(getDegenes, "degvenn", data = user_cont , meth = NULL, dflo
 
 
 observe({
-  req(user_cont()>0) # User selection
+  req(length(user_cont()) >0) # User selection
   getvennlist$vennlist <- mycont() # push shiny module vennlist to the reactive values object
 })
 
@@ -119,7 +119,7 @@ choix_cont <- callModule(boxChooser, "selcompvenn", label = "Choose your compari
 
 user_cont <- reactive({
   
-  req(subsetstat())
+  req(subsetstat(), choix_cont())
   if (input$methodforvenn == "FDR")
     mysel = (subset(subsetstat()[[1]],
                   select = choix_cont()))
