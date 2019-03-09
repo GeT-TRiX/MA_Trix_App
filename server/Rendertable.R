@@ -18,20 +18,13 @@ callModule(stylishTables, "rendersummary", data = data_summary , lengthpage=  c(
 observe({
   
   req(input$dispvenn, vennfinal())
-  
-  
+
   if(any(grepl("probes|transcripts", input$dispvenn)) &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
     jvennrows$all <- callModule(stylishTables, "renderjvenntab", data = reactive(vennfinal()[[1]]) ,pageLength=150,extensions=c("Buttons",'Scroller'), scrollX= T,  scrollY=530,dom = 'Bfrtip',  buttons = c( 'csv',  'pdf'),  dupgenes = reactive(jvenndup$duplicated$GeneName), stateSave = T, case = 3)
-    #output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[1]], list(lengthMenu =  c('5', '10', '15')),extensions=c("Buttons",'Scroller'),  options = list(scrollX = TRUE,  pageLength = 150, scrollY=530,  stateSave = T,  dom = 'Bfrtip',
-                                                                                                                                     # buttons = c( 'csv',  'pdf' )) ), server = F)
   else if (input$dispvenn == "genes"  &&  (is.null(input$filteredcompjv) || input$filteredcompjv == "" ))
     jvennrows$all <- callModule(stylishTables, "renderjvenntab", data = reactive(vennfinal()[[2]]) ,pageLength=150,extensions=c("Buttons",'Scroller'), scrollX= T,  scrollY=530,dom = 'Bfrtip',  buttons = c( 'csv',  'pdf'), dupgenes= reactive(jvenndup$duplicated$GeneName), case =3 , stateSave = T)
-    #output$vennresinter <- DT::renderDataTable(DT::datatable(vennfinal()[[2]], list(lengthMenu =  c('5', '10', '15')),extensions=c("Buttons",'Scroller'), options = list(scrollX = TRUE ,pageLength = 150, scrollY=530,  stateSave = T,dom = 'Bfrtip',
-    #                                                                                                                                  buttons = c( 'csv',  'pdf' ))) %>% formatStyle(. , 'GeneName', color = styleEqual(unique(jvenndup$duplicated$GeneName), rep('orange', length(unique(jvenndup$duplicated$GeneName))))), server = F)
   else
     jvennrows$all <- callModule(stylishTables, "renderjvenntab", data = topngenesDT , pageLength=150,extensions=c("Buttons",'Scroller'), scrollX= T,  scrollY=530, dom = 'Bfrtip',  buttons = c( 'csv',  'pdf'  ),  dupgenes= reactive(jvenndup$duplicated$GeneName), stateSave = T, case=3)
-    #output$vennresinter <- DT::renderDataTable(DT::datatable(topngenesDT(), list(lengthMenu =  c('5', '10', '15')),extensions=c("Buttons",'Scroller'),  options = list(scrollX = TRUE ,pageLength = 150, scrollY=530,  stateSave = T,dom = 'Bfrtip',
-    #                                                                                                                               buttons = c( 'csv',  'pdf' ))), server = F)
 
 })
 

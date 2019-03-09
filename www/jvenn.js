@@ -52,7 +52,7 @@ $(document).ready(function () {
 	    let seriesTable = Rjson; //jsonData;
       Shiny.addCustomMessageHandler("updatejcol", function(coljvenn) {
 
-        let arraylen = (coljvenn.length/3)
+        let arraylen = (coljvenn.length/3);
         let R2jspal =new Array(arraylen);
         let mypalette = new Array(Math.ceil(coljvenn.length / 3)).fill("").map(function() { return this.splice(0, 3) }, coljvenn.slice());
 
@@ -80,12 +80,12 @@ $(document).ready(function () {
 				  else {
 					  value += "Common elements in ";
 			    }
-				  for (name in this.listnames) {
+				  for (let name in this.listnames) {
 				    nameslis.push(this.listnames[name]);
 				  }
 				  value += ":\n";
 				  jvennlist =[];
-				  for (val in this.list) {
+				  for (let val in this.list) {
 				    jvennlist.push( this.list[val]);
 				  }
 					console.log(jvennlist);
@@ -119,9 +119,9 @@ $(document).ready(function () {
       //$("div#jvenn-container .test").draggable();
 
 			$('.btn-group button').on('click', function(){
-    	$(this).siblings().removeClass('active')
+    	$(this).siblings().removeClass('active');
     	$(this).addClass('active');
-			})
+			});
 
 
 			$('[id^="clear"]').click(function() {

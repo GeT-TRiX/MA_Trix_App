@@ -30,14 +30,14 @@ getvennlist <- reactiveValues(vennlist = NULL) # Initiliazition of the reactive 
 mycont <- callModule(getDegenes, "degvenn", data = user_cont , meth = NULL, dflogfc = user_fc ,  maxDe = NULL, reg = reactive(input$regulation), case =2) #Outisde observe to update fc widget step (0.1, [1;2] and (1, [2;10]))
 
 
-observe({
-  req(length(user_cont()) >0) # User selection
-  getvennlist$vennlist <- mycont() # push shiny module vennlist to the reactive values object
-})
+# observe({
+#   req(length(user_cont()) >0) # User selection
+#   getvennlist$vennlist <- mycont() # push shiny module vennlist to the reactive values object
+# })
 
 
 vennlist <- reactive({
-  req(getvennlist$vennlist)
+  req (length(user_cont())>0)
   if (is.null(csvf()))
     return(NULL)
   
@@ -50,7 +50,7 @@ vennlist <- reactive({
   # clusterExport(cl,c("adj","fc","cutoffpval","cutofffc","reg","cutoffpval"),envir=environment())
   #mycont = Vennlist(adj,fc, reg, cutoffpval, cutofffc,cl)
   #stopCluster(cl)
-  
+  getvennlist$vennlist <- mycont() # push shiny module vennlist to the reactive values object
   probven = rowtoprob(getvennlist$vennlist,csvf()[[3]], user_cont())
 
   if(input$dispvenn == "genes")
@@ -79,8 +79,6 @@ vennlist <- reactive({
 
   session$sendCustomMessage(type="updatejvenn", Rtojs)
   session$sendCustomMessage(type="updatejcol", col2js)
-
-
 
   return(probven)
 })
@@ -119,7 +117,7 @@ choix_cont <- callModule(boxChooser, "selcompvenn", label = "Choose your compari
 
 user_cont <- reactive({
   
-  req(subsetstat(), choix_cont())
+  req(subsetstat())
   if (input$methodforvenn == "FDR")
     mysel = (subset(subsetstat()[[1]],
                   select = choix_cont()))

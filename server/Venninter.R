@@ -64,7 +64,7 @@ vennfinal <- reactive({
       need(choix_cont(), 'Set your thresholds and then select your comparison to display the Venn diagram!')%next%
       need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!'))
   
-  req(input$selcontjv)
+  req(input$selcontjv, choix_cont())
   outputjvennlist = list()
 
   if(!input$Allcont && !input$dispvenn == "genes")
@@ -86,13 +86,13 @@ vennfinal <- reactive({
   else
     mycont =choix_cont()
   if(input$dispvenn == "genes"){
+    
     outputjvennlist[[2]] <- meanrankgenes(outputjvenntab, stat = prefstat$greppre[[2]], multcomp = mycont , jvenn=  T)
-
   jvenndup$duplicated <- outputjvenntab %>%
       group_by(GeneName) %>%
       filter(n()>1)
+  
   }
-
   return(outputjvennlist)
 })
 
