@@ -106,7 +106,7 @@ formatCategory <- function(dframeCategory) {
 #'
 #' @param DftoHighjson A dataframe to be processed
 #'
-#' @return A json object example:{"GOTERM_BP_ALL" : { "x" : 0.005 , "y" : 2 , "Term" : "inactivation of MAPK activity" , "Go" : "GO:0000188"}, ..., "GOTERM_CC_ALL : { ...}}
+#' @return A json object example:[{"GOTERM_BP_ALL" : [{ "x" : 0.005 , "y" : 2 , "Term" : "inactivation of MAPK activity" , "Go" : "GO:0000188"}], ..., "GOTERM_CC_ALL : [{ ...}}]]
 #'
 #' @export
 #'
