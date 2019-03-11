@@ -88,11 +88,13 @@ vennfinal <- reactive({
   if(input$dispvenn == "genes"){
     
     outputjvennlist[[2]] <- meanrankgenes(outputjvenntab, stat = prefstat$greppre[[2]], multcomp = mycont , jvenn=  T)
-  jvenndup$duplicated <- outputjvenntab %>%
-      group_by(GeneName) %>%
-      filter(n()>1)
   
   }
+  
+  jvenndup$duplicated <- outputjvenntab %>%
+    group_by(GeneName) %>%
+    filter(n()>1)
+  
   return(outputjvennlist)
 })
 
