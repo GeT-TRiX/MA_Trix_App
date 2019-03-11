@@ -1,3 +1,70 @@
+tabItem(tabName = "Upload",
+        bsAlert("alert"),
+        tags$style(type='text/css', ".well { max-width: 2em; }"),
+        fluidRow(
+          tags$head(
+            tags$style(type="text/css", ".myslidermain .irs-grid-text {bottom: 5px;color: #333;}
+                             .myslidermain .irs-min{color: #333;font-size: 10px;line-height: 1.333;text-shadow: none;top: 0;padding: 1px 3px;
+                             background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px}
+                             .myslidermain .irs-max{color: #333;font-size: 10px;line-height: 1.333;text-shadow: none;top: 0;padding: 1px 3px;
+                             background: rgba(0,0,0,0.1);border-radius: 3px;-moz-border-radius: 3px}")
+          ),column(width = 9, div( style = "width:100% ; 
+                                   max-width: 1500px; height: 1500px max-height: 2200px;" ,id = "upload",
+                                   tags$h1("How to import ?"),
+                                   tags$ul(
+                                     tags$li("First click on the browse button to load the data"),
+                                     tags$li("After the pop up has appeared, you will have to select the data files."),
+                                     tags$li("You need three distinct csv files, these files are respectively named xxx_pData, xxx_WorkingSet and xxx_ResTable."),
+                                     tags$li("pData : The experimental design in a 2 column table that associates samples to their respective biological conditions"),
+                                     tags$li("WorkingSet : The table of the normalised expression values (log2, cpm, ...) with genes in rows and samples in columns. The first column must contain the unique gene identifier (or transcript, probe, ...)."),
+                                     tags$li("ResTable :  The table containing the results of differential analysis (fold change, p-value and FDR) next to a first column with unique gene identifier and a second column with the gene symbol."),
+                                     tags$li("The final step consist to select all the data at once and then confirm the selection by clicking on the open button."),
+                                     tags$li("A green message will then appear to confirm the data loading with a summary table.")
+                                   ),
+                                   tags$p(
+                                     tags$img(src = "pData.png"),
+                                     tags$img(src = "restable.png"),
+                                     tags$img(src = "workingset.png")
+                                   ),
+                                   
+                                   tags$h1("Tips"),
+                                   tags$ul(
+                                     tags$li("Unique IDs and GeneName columns must appear in the statistical data and unique IDs columns for Workingset in order to import the data (RNA-seq, DNA-chips, ChIP-Seq)."),
+                                     tags$li("You can select a region by handling the left click button if the files are stacked together, if it's not the case you can select the different files by maintening the Ctrl button and clicked on the files.")
+                                     
+                                   ),
+                                   tags$h1("Warning"),
+                                   tags$ul(
+                                     tags$li("It is highly recommanded to not modify these files (removed columns, change column names ...) in the aim of not disturbing the well functionning of the application.")
+                                   )
+
+
+
+))),  div(id="pass",style = "word-wrap: break-word;",
+          column(width = 3,
+                 box(id="boxpass",title = strong("Upload data", style="font-size:25px;"), width = NULL, background = "light-blue",
+                     inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
+                     
+                     
+                     downloadLink("downloadData", label = "download sample data", style="color:orange; float:right;"),
+                     br(),br(),
+                     
+                     
+                     csvFileInput("datafile", "User data (.csv format)"),
+                     fluidRow(column(6,
+                                     p("Import local example",style="color:white; font-weight: 700; font-size: 14px;"),
+                                     
+                                     dirModuleUI("datafile")),
+                              column(6,
+                                     csvDecimal("datafile")
+                                     
+                              )),
+                     csvIdentifier("datafile", "Unique identifier"),
+                     br()
+                     
+
+)))),
+
 tabItem(tabName = "Data summary",
         fluidRow(tabItem(tabName = "Data summary",
                          fluidRow(
@@ -159,16 +226,11 @@ tabItem(tabName = "Data summary",
                                    
                                    
                                    br(),
-                                   
-                                   conditionalPanel(
-                                     condition = '!output.boolmark',
                                      selectInput(
                                        "method",
                                        "Choose your statistical method",
                                        choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None")
-                                     ),
-                                     ns = NS("datafile")
-                                   )
+                                     )
                                  ),
                                  box(
                                    id = "boxpass2",
