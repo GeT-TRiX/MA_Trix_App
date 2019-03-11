@@ -402,7 +402,7 @@ topngenes <- function(dfinter, mycont, inputtop, meandup = "probes")  {
     geom_bar(stat = "identity", position = "dodge") +
 
 
-    scale_fill_manual(values = c("red","blue",'purple',"green","black")) +
+    scale_fill_manual(values = c("red","blue",'purple',"green","black", "orange", "darkgray", "gold", "deeppink")) +
 
     xlab("Gene Names") + ylab("Log Fold-Change") +
 

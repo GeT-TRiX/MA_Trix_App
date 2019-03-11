@@ -82,7 +82,15 @@ p {
     height: 30%;
 }
 
+#menuitem .skin-blue .sidebar-menu > li.active > a,.skin-blue .sidebar-menu > li:hover > a {
+	color:#fff;
+	background:#3c8dbc;
+	border-left-color:#3c8dbc
+}
 
+#menuitem .skin-blue .main-sidebar {
+  background-color:#1D4D68;
+}
 
 #advancedjvenn .btn{
   border: none;
@@ -307,5 +315,3 @@ background-color: #337ab7;
 
 
 #stripbox .box-header {text-align: center;}
-
-

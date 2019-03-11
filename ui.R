@@ -37,14 +37,13 @@ sidebar <- dashboardSidebar(
     tags$script(src = "custom.js")),
   div(id = "loading-content-bar",p()),
 
-  div(
-    id = "matrixapp",
+  div(id = "matrixapp",
     sidebarMenu(id = "side",
                 menuItem("Home", tabName = "Home", icon = icon("home")),
                 menuItem("Upload Data", tabName = "Upload", icon = icon("upload")),
-                menuItem("PCA", tabName = "PCA", icon = icon("line-chart")),
-                menuItem("Venn diagram", tabName = "Venn", icon = icon("line-chart")),
-                menuItem("Heatmap", tabName = "Heatmap", icon = icon("line-chart")),
+                hidden(tags$div(id = "menuitempca", class= "menuitempca", menuItem("PCA", tabName = "PCA", icon = icon("line-chart")))) ,
+                hidden(tags$div(id = "menuitemvenn", class= "menuitempca",menuItem("Venn diagram", tabName = "Venn", icon = icon("line-chart")))),
+                hidden(tags$div(id = "menuitemhm", class= "menuitempca",menuItem("Heatmap", tabName = "Heatmap", icon = icon("line-chart")))),
                 menuItemOutput("dymMenu"),
                 collapsed = TRUE,
 
@@ -243,7 +242,7 @@ body <- dashboardBody(
                         )
                       )
                 ),
-
+      
       tabItem(tabName = "Upload",
               bsAlert("alert"),
               tags$style(type='text/css', ".well { max-width: 2em; }"),

@@ -175,6 +175,18 @@ projectname <- reactive({
 
 })
 
+observe({
+  req(csvf())
+  runjs("let menuitems = ['.menuitemsummary','.menuitempca', '.menuitemvenn', '.menuitemhm'];
+  for(let elem of menuitems){
+    let div = $(elem);
+    let cloning = div.children().clone();
+    let parent = div.parent();
+    div.remove();
+    cloning.appendTo(parent);}")
+  updateTabItems(session, "side", "PCA")
+})
+
 
 dataid <- reactive({
   return(colnames(csvf()[[3]][1]))
