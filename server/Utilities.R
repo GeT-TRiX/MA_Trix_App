@@ -6,7 +6,6 @@
 ### Licence: GPL-3.0
 
 
-
 plotHeight <- reactive({
   ifelse(is.null(input$plotHeight), 0, (input$plotHeight/1.25)) ## responsive plot
 })
@@ -46,52 +45,6 @@ isolate(
 )
 })
 
-
-# observe({
-# 
-#   if (input$fcvenn <= 2)
-#     updateSliderInput(
-#       session,
-#       "fcvenn",
-#       label = "FC treshold",
-#       value = NULL,
-#       min = 1,
-#       max = 10,
-#       step = .1
-#     )
-#   else
-#     updateSliderInput(
-#       session,
-#       "fcvenn",
-#       label = "FC treshold",
-#       value = NULL,
-#       min = 1,
-#       max = 10,
-#       step = 1
-#     )
-# 
-#   if (input$fc <= 2)
-#     updateSliderInput(
-#       session,
-#       "fc",
-#       label = "FC treshold",
-#       value = NULL,
-#       min = 1,
-#       max = 10,
-#       step = .1
-#     )
-#   else
-#     updateSliderInput(
-#       session,
-#       "fc",
-#       label = "FC treshold",
-#       value = NULL,
-#       min = 1,
-#       max = 10,
-#       step = 1
-#     )
-# 
-# })
 
 #################################################
 ######## Download data and reset button heatmap #
@@ -177,14 +130,14 @@ projectname <- reactive({
 
 observe({
   req(csvf())
-  runjs("let menuitems = ['.menuitemsummary','.menuitempca', '.menuitemvenn', '.menuitemhm'];
+  runjs("let menuitems = ['.menuitemsum','.menuitempca', '.menuitemvenn', '.menuitemhm'];
   for(let elem of menuitems){
     let div = $(elem);
-    let cloning = div.children().clone();
+    let childclone = div.children().clone();
     let parent = div.parent();
     div.remove();
-    cloning.appendTo(parent);}")
-  updateTabItems(session, "side", "PCA")
+    childclone.appendTo(parent);}")
+  updateTabItems(session, "side", "Datasummary")
 })
 
 
