@@ -6,15 +6,6 @@
 ### Licence: GPL-3.0
 
 
-shinyjscode <- "
-
-shinyjs.init = function() {
-  $(window).resize(shinyjs.calcHeight);
-}
-shinyjs.calcHeight = function() {
-  Shiny.onInputChange('plotHeight', $(window).height());
-}
-"
 
 shinyServer(function(input, output,session) {
 

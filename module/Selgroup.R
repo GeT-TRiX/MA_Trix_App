@@ -71,7 +71,6 @@ boxChooser <- function(input, output, session, label, data, group, case, empty =
 
   #Select all the contrasts
   observeEvent(input$allcomphm, {
-    #groupinline = ifelse(length(levels(group()[[2]]$Grp)) >= 6, T, F)
     updateCheckboxGroupInput(
       session,
       "box",
@@ -84,7 +83,6 @@ boxChooser <- function(input, output, session, label, data, group, case, empty =
 
   #Unselect all the contrasts
   observeEvent(input$nocomphm, {
-    #groupinline = ifelse(length(levels(group()[[2]]$Grp)) >= 6, T, F)
     updateCheckboxGroupInput(session,
                              "box",
                              label ,

@@ -10,22 +10,7 @@
 ######## Venn diagram                   #
 #########################################
 
-value=T # boolean at t=0
 
-#' bool is a reactive function that return the bool value in the local environment
-#'
-#' @value boolean
-#'
-#' @return bool a reactive boolean outside the reactive environment
-#'
-#' @export
-
-output$bool <- reactive({
-  value
-})
-
-
-outputOptions(output,"bool",suspendWhenHidden=F)
 getvennlist <- reactiveValues(vennlist = NULL) # Initiliazition of the reactive values for the vennlist
 mycont <- callModule(getDegenes, "degvenn", data = user_cont , meth = NULL, dflogfc = user_fc ,  maxDe = NULL, reg = reactive(input$regulation), case =2) #Outisde observe to update fc widget step (0.1, [1;2] and (1, [2;10]))
 

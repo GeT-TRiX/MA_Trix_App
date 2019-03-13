@@ -96,7 +96,8 @@ mypacklist <- reactive({
 
 observeEvent(input$session, {
   req(mypacklist())
-  output$sessinfo <- renderDataTable(mypacklist())
+  #output$sessinfo <- renderDataTable(mypacklist())
+  callModule(stylishTables, "sessinfo", data = mypacklist , lengthpage=  c('5', '10', '15','20'), pageLength=15 )
 })
 
 
@@ -139,6 +140,30 @@ observe({
     childclone.appendTo(parent);}")
   updateTabItems(session, "side", "Datasummary")
 })
+
+js$gifrandom()
+
+observe({
+  req(input$side == "PCA", subsetgroup_pca() )
+  js$gifrender("statuspca")
+})
+
+observe({
+  req(input$side == "Datasummary", data_summary())
+  js$gifrender("statussum")
+})
+
+observe({
+  req(input$side == "Venn", subsetstatRm())
+  js$gifrender("statusvenn")
+})
+
+
+observe({
+  req(input$side == "Heatmap", colors())
+  js$gifrender("statushm")
+})
+
 
 
 dataid <- reactive({

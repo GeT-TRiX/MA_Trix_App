@@ -314,5 +314,31 @@ background-color: #337ab7;
   left:-2.4%;
 }
 
+#statuspca, #statushm, #statussum {
+     width: 150px;
+     height: 150px;
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     background-repeat: no-repeat;
+     background-position: center;
+     margin: -100px 0 0 -100px;
+ }
+ 
+ .gif {
+   background-image: url('banana.gif');
+ }
+ 
+ 
+  #statusvenn {
+      width: 150px;
+     height: 150px;
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     background-repeat: no-repeat;
+     background-position: top;
+     margin: -600px 0 0 -100px;
+ }
 
 #stripbox .box-header {text-align: center;}
