@@ -129,6 +129,11 @@ projectname <- reactive({
 
 })
 
+#########################################
+######## Hide Menu                      #
+#########################################
+
+
 observe({
   req(csvf())
   runjs("let menuitems = ['.menuitemsum','.menuitempca', '.menuitemvenn', '.menuitemhm'];
@@ -140,6 +145,12 @@ observe({
     childclone.appendTo(parent);}")
   updateTabItems(session, "side", "Datasummary")
 })
+
+
+#########################################
+######## Load gif                       #
+#########################################
+
 
 js$gifrandom()
 
@@ -164,7 +175,9 @@ observe({
   js$gifrender("statushm")
 })
 
-
+#########################################
+######## Return (transcript or probes)  #
+#########################################
 
 dataid <- reactive({
   return(colnames(csvf()[[3]][1]))

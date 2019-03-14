@@ -15,11 +15,6 @@ getvennlist <- reactiveValues(vennlist = NULL) # Initiliazition of the reactive 
 mycont <- callModule(getDegenes, "degvenn", data = user_cont , meth = NULL, dflogfc = user_fc ,  maxDe = NULL, reg = reactive(input$regulation), case =2) #Outisde observe to update fc widget step (0.1, [1;2] and (1, [2;10]))
 
 
-# observe({
-#   req(length(user_cont()) >0) # User selection
-#   getvennlist$vennlist <- mycont() # push shiny module vennlist to the reactive values object
-# })
-
 
 vennlist <- reactive({
   req (length(user_cont())>0)

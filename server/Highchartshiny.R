@@ -15,22 +15,9 @@
 addpercentpop <- reactive({
 
   req(myresdavitab())
-
-  # paraltest <- myresdavitab()
-  # cl <- makeCluster(getOption("cl.cores", 4))
-  # clusterExport(cl,c("paraltest"),envir=environment())
-  # clusterEvalQ(cl, library(dplyr))
-
   reumdiff = lapply(1:length(myresdavitab()),function(x)return(sapply(length(myresdavitab()[[x]]$Count), function(y){
     return(as.numeric(as.character(myresdavitab()[[x]]$Count))/as.numeric(as.character(myresdavitab()[[x]]$Pop.Hits))*100)})) %>%
       mutate(myresdavitab()[[x]],percent = .)) %>% bind_rows()
-
-  # d = parLapply(cl, 1:length(paraltest),function(x)return(sapply(length(paraltest[[x]]$Count), function(y){
-  #   return(as.numeric(as.character(paraltest$Count))/as.numeric(as.character(paraltest[[x]]$List.Total))*100)})) %>%
-  #     mutate(paraltest[[x]],percent = .))
-  # d = rbind.fill(d)
-  # stopCluster(cl)
-  # d
 })
 
 dfenrichtojson <- reactive({

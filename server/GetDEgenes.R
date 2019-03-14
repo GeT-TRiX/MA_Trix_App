@@ -11,7 +11,7 @@ prefstat <- reactiveValues()
 #' subsetstat is a reactive function that return a list containing multiple data frames
 #' with the adj.P.val, logFC and P.value selected for the corresponding groups
 #'
-#' @param csvf Data frame corresponding to the Alltoptable
+#' @param csvf Data frame corresponding to the restable
 #'
 #' @return subsetstat a reactive list of data frames
 #'
@@ -83,15 +83,6 @@ subsetcomp <- reactive({
 
 
 #' subsetDEG is a reactive function that return the indexes for the signficant genes
-#'
-#' @param subsetcomp a list of three data frame with rows selected according to the contrasts selected
-#' @param input$decidemethod a character method, default = BH
-#' @param input$maxgen a numeric maxgen, default = NULL
-#'
-#' @return subsetDEG a reactive data frame with the indexes corresponding to the sigificant genes
-#'
-#' @export
-#'
 
 
 subsetDEG <- callModule(getDegenes, "deghm", data = subsetcomp , meth = reactive(input$decidemethod), case = 1 , maxDe = reactive(input$maxgen))
