@@ -5,6 +5,14 @@
 ### Application: MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data
 ### Licence: GPL-3.0
 
+#' myreorderwk is a reactive function that sort the workingset by names
+#'
+#' @param csvf a list of reactive dataframes
+#'
+#' @return A reactive sorted dataframe
+#'
+#' @export
+
 
 myreorderwk <- reactive({
   req(csvf())
@@ -22,10 +30,16 @@ if(any(duplicated(samplesnum))){
   return(wkingsetclean)
 })
 
-
+#' filenamestrip is a reactive function that return a character
+#'
+#' @param projectname a character vector (project MA0xxx or date)
+#'
+#' @return A reactive character
+#'
+#' @export
 
 filenamestrip <- reactive({
-  req(csvf(),projectname())
+  req(projectname())
 
   return( paste0(
     basename(tools::file_path_sans_ext(projectname())),
@@ -35,7 +49,13 @@ filenamestrip <- reactive({
 
 })
 
-
+#' filterwkingset is a reactive function that return a character
+#'
+#' @param projectname a character vector (project MA0xxx or date)
+#'
+#' @return A reactive character
+#'
+#' @export
 
 filterwkingset <- reactive({
   req(myreorderwk())
@@ -65,11 +85,18 @@ selectedrow <- callModule(stylishTables, "orderedwk", data = filterwkingset ,
 
 getDegenestrip <- callModule(getDegenes, "degstrip", data = subsetstat , meth = reactive(input$decidemethodstrip), case = 1 , maxDe = reactive(NULL) )
 
+#' callstripgenes is a reactive function that plot distribution of a specific gene for all samples
+#'
+#' @param filterwkingset A reactive character 
+#' @param selectedrow A character vector
+#'
+#' @return a ggplot object
+#'
+#' @export
 
 callstripgenes <- reactive({
 
-  validate(
-  need(selectedrow(), 'Search your gene and select the corresponding row'))
+  validate(need(selectedrow(), 'Search your gene and select the corresponding row'))
 
   req(filterwkingset())
   grps <- gsub("[.][0-9]*","",colnames(filterwkingset()[-(1:2)]), perl=T)
@@ -86,7 +113,14 @@ output$renderstripgenes <- renderPlot({
 
 callModule(downoutputfiles, "savestrip", projectname = projectname , suffix=paste0( '_', selectedstripgene(), "_strip_chart.", sep='' ), data = callstripgenes , w =16, h = 7  )
 
-
+#' selectedstripgene is a reactive function that return the genename selected
+#'
+#' @param filterwkingset A reactive character 
+#' @param selectedrow A character vector
+#'
+#' @return A reactive character value
+#'
+#' @export
 
 selectedstripgene <- reactive({
   req(selectedrow())

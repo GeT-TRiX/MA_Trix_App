@@ -6,7 +6,7 @@
 ### Licence: GPL-3.0
 
 
-prefstat <- reactiveValues()
+prefstat <- reactiveValues() #A reactive value to identify prefix for the foldchange
 
 #' subsetstat is a reactive function that return a list containing multiple data frames
 #' with the adj.P.val, logFC and P.value selected for the corresponding groups

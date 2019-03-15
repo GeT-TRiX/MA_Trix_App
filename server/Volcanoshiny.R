@@ -11,6 +11,15 @@
 #######################################################
 
 
+#' genetodisplay is a reactive function that return an uppercase character vector
+#'
+#' @param fillvolc A reactive character input with genes separated by comma
+#'
+#' @return An uppercase character vector
+#'
+#' @export
+
+
 genetodisplay <- reactive({
   if(is.null(input$fillvolc))
     return(NULL)
@@ -22,6 +31,15 @@ genetodisplay <- reactive({
     return(toupper(mycol))
   }
 })
+
+
+#' family_input is a reactive function that return a reactive character
+#'
+#' @param findfamily A reactive character input
+#'
+#' @return A reactive character
+#'
+#' @export
 
 
 family_input <- reactive({
@@ -44,6 +62,15 @@ top_volcd <- shiny::debounce(top_volc, 1000) # Delay input debounche also pour s
 ######## parse gene symbol for min and maj            #
 #######################################################
 
+#' familytopdisp is a reactive function that return a character vector of genes with uppercase
+#'
+#' @param family_d A reactive character with debounce attribute
+#' @param csvf A reactive data frame
+#'
+#' @return An uppercase reactive character vector
+#'
+#' @export
+
 
 familytopdisp <- reactive({
   if(is.null(family_d))
@@ -64,7 +91,7 @@ familytopdisp <- reactive({
 #######################################################
 
 
-observe({
+observe({ #hide or show inputs
 
   if(input$findfamily != ""){
     shinyjs::disable("topvolc")
@@ -90,6 +117,14 @@ observe({
 #################################################
 ######## Plot and save volcano                  #
 #################################################
+
+#' volcano is a reactive function that return ggplotobject
+#'
+#'
+#' @return A reactive ggplot object
+#'
+#' @export
+
 
 volcano <- reactive({
   req(csvf(),input$volcacomp )
@@ -127,6 +162,19 @@ output$compvolc <- renderUI({
 
 callModule(downoutputfiles, "savevolc", projectname = projectname , suffix= "_volcano." , data = reactive(volcano()[[1]]),  w = 12, h = 12 ,volcform = T)
 
+#' vocfilt is a reactive function that return a reactive dataframe
+#'
+#' @param volcobj A reactivevalue dataframe of the displayed genes
+#' @param volcacomp A reactive character input
+#' @param regulationvolc A reactive character input
+#' @param volcanocomp A reactive character vector
+#' @param prefstat A reactivevalue character (prefix FC)
+#' 
+#' @return a reactive dataframe with computed mean for duplicated genes
+#'
+#' @export
+
+
 vocfilt <- reactive({
   req(csvf(), top_volcd(),  volcanocomp())
   volcobj$top <- meanrankgenes(volcobj$dt, prefstat$greppre[[2]] , input$volcacomp,  volcanocomp(), input$regulationvolc  )
@@ -134,9 +182,19 @@ vocfilt <- reactive({
 })
 
 
+
+
 volcanocomp <- reactive({
   return(c(input$volcacomp, input$addvolcacomp))
 })
+
+#' volcplototp is a reactive function that return a reactive ggplot object of the top n displayed genes
+#'
+#'
+#' @return A reactive ggplot object
+#'
+#' @export
+
 
 volcplototp <- reactive({
   req(vocfilt())

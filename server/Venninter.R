@@ -5,8 +5,8 @@
 ### Application: MATRiX is a shiny application for Mining and functional Analysis of TRanscriptomics data
 ### Licence: GPL-3.0
 
-jvennrows <- reactiveValues()
-jvenndup <- reactiveValues()
+jvennrows <- reactiveValues() # top n rows from the render jvenn table
+jvenndup <- reactiveValues() # vector of duplicated genes
 
 
 #' vennchoice is a reactive function that return user's selected comparisons
@@ -60,9 +60,9 @@ venninter <- reactive({
 vennfinal <- reactive({
 
   validate(
-    need(csvf(), 'You need to import data to visualize this plot!') %next%
-      need(choix_cont(), 'Set your thresholds and then select your comparison to display the Venn diagram!')%next%
-      need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!'))
+    need(csvf(), 'You need to import data to visualize this plot!') %next% # load files
+      need(choix_cont(), 'Set your thresholds and then select your comparison to display the Venn diagram!')%next% #check a comp 
+      need(input$selcontjv ,'You need to click on a number (Venn diagram) to display the data table!')) # click on a set within the venn
   
   req(input$selcontjv, choix_cont())
   outputjvennlist = list()
@@ -200,32 +200,38 @@ observeEvent(input$topdegenes, {
 callModule(downoutputfiles, "savebarvenn", projectname = projectname , suffix= "_venn_barplot." , data = plottopgenes , w =16, h = 7  )
 
 
-####################
-# Addition for report
-# MA0439
-####################
 
+# filteredcolvenn <- reactive ({
+# 
+#   req(vennfinal(), venntopgenes(), input$selcontjv, input$dispvenn)
+# 
+#   filteredcol = na.omit((as.numeric(gsub("([0-9]+).*$", "\\1", unlist(input$vennresinter_state$order)))))
+#   if(any(grepl("probes|transcripts", input$dispvenn)))
+#     colnamefil = colnames(vennfinal()[[1]][filteredcol])
+#   else
+#     colnamefil = colnames(vennfinal()[[2]][filteredcol])
+# 
+#   colnamefil = gsub(
+#     pattern = prefstat$greppre[[2]] ,
+#     replacement = "",
+#     x = colnamefil,
+#     perl = T
+#   )
+# 
+#   return(colnamefil)
+# })
 
-filteredcolvenn <- reactive ({
-
-  req(vennfinal(), venntopgenes(), input$selcontjv, input$dispvenn)
-
-  filteredcol = na.omit((as.numeric(gsub("([0-9]+).*$", "\\1", unlist(input$vennresinter_state$order)))))
-  if(any(grepl("probes|transcripts", input$dispvenn)))
-    colnamefil = colnames(vennfinal()[[1]][filteredcol])
-  else
-    colnamefil = colnames(vennfinal()[[2]][filteredcol])
-
-  colnamefil = gsub(
-    pattern = prefstat$greppre[[2]] ,
-    replacement = "",
-    x = colnamefil,
-    perl = T
-  )
-
-  return(colnamefil)
-})
-
+#' topngenesDT is a reactive function which aim is to filter the genes based on the FDR or raw pvalues
+#'
+#' @param filtermethjvenn A character (FDR, raw)
+#' @param dispvenn A character (display genes or probes/transcripts)
+#' @param vennfinal A list of two reactive dataframe
+#' @param prefstat A reactive value containing the prefix for FC (logFC, logfc ...)
+#' @param filteredcompjv A single character vector of the filtered comp
+#'
+#' @return A reactive dataframe
+#' @export
+#'
 
 topngenesDT <- reactive ({
 

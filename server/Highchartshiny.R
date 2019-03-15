@@ -11,6 +11,14 @@
 
 
 
+#' addpercentpop is a reactive function that divide the count (list of genes) by the Pop.hits in the resulting david dataframe
+#'
+#' @param myresdavitab An outputed reactive dataframe (DAVID)
+
+#' @return A reactive dataframe with computed hits 
+#'
+#' @export
+
 
 addpercentpop <- reactive({
 
@@ -19,6 +27,16 @@ addpercentpop <- reactive({
     return(as.numeric(as.character(myresdavitab()[[x]]$Count))/as.numeric(as.character(myresdavitab()[[x]]$Pop.Hits))*100)})) %>%
       mutate(myresdavitab()[[x]],percent = .)) %>% bind_rows()
 })
+
+#' dfenrichtojson is a reactive function that convert dataframe R object to json
+#'
+#' @param addpercentpop A reactive dataframe
+#' @param enrichbased A reactive character value to filter the top n terms based on the pvalue or the fold enrichment
+#'
+#' @return A json objejct
+#'
+#' @export
+
 
 dfenrichtojson <- reactive({
 
@@ -29,7 +47,7 @@ dfenrichtojson <- reactive({
 })
 
 
-observe({
+observe({ # Display highchart bubble
   req(dfenrichtojson(), input$enrichbased )
 
   axisParameters <- list(
