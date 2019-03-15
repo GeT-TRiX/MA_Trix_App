@@ -489,8 +489,7 @@ body <- dashboardBody(
                                                   column(
                                                     6,
                                                     selectInput(
-                                                      "regulationvolc",
-                                                      #  Create a select list that can be used to choose a single or multiple items from a list of values.
+                                                      "regulationvolc", #  Create a select list that can be used to choose a single or multiple items from a list of values.
                                                       "Choose your regulation",
                                                       choices = c("both", "up", "down")
                                                     )

@@ -12,7 +12,7 @@
 
 
 callModule(stylishTables, "renderpdata", data = reactive(csvf()[[2]]) , lengthpage=  c('5', '10', '15','50','100'), pageLength=10 , searching =F)
-callModule(stylishTables, "rendersummary", data = data_summary , lengthpage=  c('5', '10', '15','20'), pageLength=15 )
+callModule(stylishTables, "rendersummary", data = data_summary , lengthpage=  c('5', '10', '15','20'), pageLength=15, rownames =T )
 
 
 observe({
