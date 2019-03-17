@@ -76,4 +76,4 @@ Didier Laborie, (Virtual machine and DNS),
 
 TOXALIM Team: BioToMyc & TIM, (beta-testing, feature suggestions)  
 
-Claire Neyles, (suggestions)
+Claire Naylies, (suggestions)
