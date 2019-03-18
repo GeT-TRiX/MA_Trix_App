@@ -145,6 +145,7 @@ observe({
       gpcolr = hmbis()[[6]],
       distfunTRIX = isolate(hmbis()[[2]]),
       height = hmbis()[[8]],
+      scale = ifelse(input$dist == "correlation", "row", "none"),
       rastering = israstering
     )
 
