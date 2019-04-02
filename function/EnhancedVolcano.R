@@ -23,12 +23,12 @@
 #' @param axisLabSize Size of x- and y-axis labels. DEFAULT = 18. OPTIONAL.
 #' @param pCutoff Cut-off for statistical significance. A horizontal line will be drawn at -log10(pCutoff). DEFAULT = 10e-6. OPTIONAL.
 #' @param pLabellingCutoff Labelling cut-off for statistical significance. DEFAULT = pCutoff. OPTIONAL
-#' @param FCcutoff Cut-off for absolute log2 fold-change. Vertical lines will be drawn at the negative and positive values of log2FCcutoff. DEFAULT =1.0. OPTIONAL.
+#' @param FCcutoff Cut-off for absolute fold-change. Vertical lines will be drawn at the negative and positive values of corresponding log2(FCcutoff). DEFAULT =2.0. OPTIONAL.
 #' @param title Plot title. DEFAULT = 'Volcano plot'. OPTIONAL.
 #' @param titleLabSize Plot subtitle. DEFAULT = 'Bioconductor package, EnhancedVolcano'. OPTIONAL.
 #' @param transcriptPointSize Size of plotted points for each transcript. DEFAULT = 0.8. OPTIONAL.
 #' @param transcriptLabSize Size of labels for each transcript. DEFAULT = 3.0. OPTIONAL.
-#' @param col Colour shading for plotted points, corresponding to< abs(FCcutoff) && > pCutoff, > abs(FCcutoff), < pCutoff,> abs(FCcutoff) && < pCutoff. DEFAULT = c("grey30", "forestgreen","royalblue", "red2"). OPTIONAL.
+#' @param col Colour shading for plotted points, corresponding to < log2(FCcutoff) && > pCutoff, > log2(FCcutoff), < pCutoff,> log2(FCcutoff) && < pCutoff. DEFAULT = c("grey30", "forestgreen","royalblue", "red2"). OPTIONAL.
 #' @param colAlpha Alpha for purposes of controlling colour transparency oftranscript points. DEFAULT = 1/2. OPTIONAL.
 #' @param legend Plot legend text. DEFAULT = c("NS", "Log2 FC", "P","P & Log2 FC"). OPTIONAL.
 #' @param legendPosition Position of legend ("top", "bottom", "left","right"). DEFAULT = "top". OPTIONAL.
@@ -37,9 +37,9 @@
 #' @param DrawConnectors Logical, indicating whether or not to connect plotlabels to their corresponding points by line connectors. DEFAULT = FALSE.OPTIONAL.
 #' @param widthConnectors Line width of connectors. DEFAULT = 0.5. OPTIONAL.
 #' @param colConnectors Line colour of connectors. DEFAULT = 'grey10'. OPTIONAL.
-#' @param cutoffLineType Line type for FCcutoff and pCutoff ("blank","solid", "dashed", "dotted", "dotdash", "longdash", "twodash").DEFAULT = "longdash". OPTIONAL.
-#' @param cutoffLineCol Line colour for FCcutoff and pCutoff. DEFAULT ="black". OPTIONAL.
-#' @param cutoffLineWidth Line width for FCcutoff and pCutoff. DEFAULT = 0.4. OPTIONAL.
+#' @param cutoffLineType Line type for log2(FCcutoff) and pCutoff ("blank","solid", "dashed", "dotted", "dotdash", "longdash", "twodash").DEFAULT = "longdash". OPTIONAL.
+#' @param cutoffLineCol Line colour for log2(FCcutoff) and pCutoff. DEFAULT ="black". OPTIONAL.
+#' @param cutoffLineWidth Line width for log2(FCcutoff) and pCutoff. DEFAULT = 0.4. OPTIONAL.
 #'
 #' @author Kevin Blighe <kevin@clinicalbioinformatics.co.uk>
 #'
@@ -113,10 +113,10 @@ EnhancedVolcano <- function(
     })
 
     toptable$Sig <- "NS"
-    toptable$Sig[(abs(toptable[,x]) > FCcutoff)] <- "FC"
+    toptable$Sig[(abs(toptable[,x]) >= log2(FCcutoff))] <- "FC"
     toptable$Sig[(toptable[,y]<pCutoff)] <- "P"
     toptable$Sig[(toptable[,y]<pCutoff) &
-        (abs(toptable[,x])>FCcutoff)] <- "FC_P"
+        (abs(toptable[,x])>= log2(FCcutoff))] <- "FC_P"
     toptable$Sig <- factor(toptable$Sig,
         levels=c("NS","FC","P","FC_P"))
 
@@ -182,7 +182,7 @@ EnhancedVolcano <- function(
 
     subdata = subset(toptable,
                      toptable[,y]<pLabellingCutoff &
-                       abs(toptable[,x])>FCcutoff)
+                       abs(toptable[,x])>= log2(FCcutoff))
 
 
 
@@ -243,7 +243,7 @@ EnhancedVolcano <- function(
 
         ggplot2::ggtitle(title) +
 
-        ggplot2::geom_vline(xintercept=c(-FCcutoff, FCcutoff),
+        ggplot2::geom_vline(xintercept=c(-log2(FCcutoff), log2(FCcutoff)),
             linetype=cutoffLineType,
             colour=cutoffLineCol,
             size=cutoffLineWidth) +
@@ -260,7 +260,7 @@ EnhancedVolcano <- function(
             data=subdata ,
             ggplot2::aes(label=subset(toptable,
                 toptable[,y]<pLabellingCutoff &
-                    abs(toptable[,x])>FCcutoff)[,"lab"]),
+                    abs(toptable[,x])>= log2(FCcutoff))[,"lab"]),
                 size = transcriptLabSize,
                 segment.color = colConnectors,
                 segment.size = widthConnectors,
@@ -269,7 +269,7 @@ EnhancedVolcano <- function(
         plot <- plot + ggplot2::geom_text(data=subdata,
             ggplot2::aes(label=subset(toptable,
                 toptable[,y]<pLabellingCutoff &
-                    abs(toptable[,x])>FCcutoff)[,"lab"]),
+                    abs(toptable[,x])>= log2(FCcutoff))[,"lab"]),
                 size = transcriptLabSize,
 		check_overlap = T,
                 vjust = 1.0)
@@ -277,7 +277,7 @@ EnhancedVolcano <- function(
         plot <- plot + ggplot2::geom_text(data=subdata,
             ggplot2::aes(label=subset(toptable,
                 toptable[,y]<pLabellingCutoff &
-                    abs(toptable[,x])>FCcutoff)[,"lab"]),
+                    abs(toptable[,x])>= log2(FCcutoff))[,"lab"]),
                 size = transcriptLabSize,
                 check_overlap = F,
                 vjust = 1.0)
