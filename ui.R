@@ -219,6 +219,7 @@ body <- dashboardBody(
                        box(
                          title = "What's new in MATRiX", width = NULL, status = "primary",
                          div(style = 'overflow-y: scroll; height: 500px',
+                             addNews("May 07th 2019", "Fix", "In volcano plot the FC cutoff is now correctly applied. Previously the value were filtered according to log2FC."),
                              addNews("Mar 12th 2019", "Front-end", "Add data summary page, hides menu pages and redirect users after data loading."),
                              addNews("Feb 14th 2019", "Functional results", "It is now possible to sort the categorie terms based on both pvalue and Fold enrichment."),
                              addNews("Feb 14th 2019", "Jvenn results", "Duplicated genes are now highlited as orange in the output table"),
