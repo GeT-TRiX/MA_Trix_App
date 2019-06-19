@@ -24,8 +24,8 @@ cutoffElements <- function(id, c1 =6 ,c2=6){
   tagList(column(c1,
        sliderInput(ns("pval"),"P-value treshold",
 
-                   min = 0.01,max = 0.05,
-                   value = 0.05,step = 0.01
+                   min = ifelse(ns=="degstrip", 0.05,0.01),max = ifelse(ns=="degstrip", 1,0.1),
+                   value = 0.05,step = ifelse(ns=="degstrip", 0.05,0.01)
        )),
 
   column(c2,
