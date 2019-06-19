@@ -19,13 +19,20 @@
 #'
 
 cutoffElements <- function(id, c1 =6 ,c2=6){
+	ns <- NS(id)
+	SImin <- 0.01;
+	SImax <- 0.1
+	SIstep <- 0.01
+	if(id=="degstrip"){
+		SImin <- 0.05
+		SImax <- 1
+		SIstep <- 0.05
+	}
 
-  ns <- NS(id)
   tagList(column(c1,
        sliderInput(ns("pval"),"P-value treshold",
-
-                   min = 0.01,max = 0.05,
-                   value = 0.05,step = 0.01
+                   min = SImin,max = SImax,
+                   value = 0.05,step = SIstep
        )),
 
   column(c2,
