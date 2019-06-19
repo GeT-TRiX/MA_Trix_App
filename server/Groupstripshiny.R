@@ -20,7 +20,7 @@ myreorderwk <- reactive({
   samplesgroup <- factor(csvf()[[2]]$Grp)
   samplesnum <- parse_number(as.character(csvf()[[2]]$X))
 
-if(any(duplicated(samplesnum)))  samplesnum <- as.character(csvf()[[2]]$X
+if(any(duplicated(samplesnum)))	samplesnum <- as.character(csvf()[[2]]$X)
 
  colnames(wkingsetclean)[-1] <- paste(samplesgroup, samplesnum , sep = ".")
 
