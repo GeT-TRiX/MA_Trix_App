@@ -22,23 +22,23 @@
 ggstrip_groups <- function(grps , wSet, probesID) {
 
 
-    nindiv=table(grps)
-    nindiv=nindiv[nindiv!=0]
+    nindiv <- table(grps)
+    nindiv <- nindiv[nindiv!=0]
     if(all(nindiv==nindiv[1])){
-      nindiv=as.character(nindiv[1]);
-    } else nindiv=paste(nindiv,collapse=", ")
+      nindiv <- as.character(nindiv[1]);
+    } else nindiv <- paste(nindiv,collapse=", ")
 
-    datai=cbind.data.frame(Group=grps, expression=as.numeric(wSet[probesID,-(1:2)]), row.names = NULL)
-    geneName=wSet[probesID,"GeneName"]
+    datai <- cbind.data.frame(Group=grps, expression=as.numeric(wSet[probesID,-(1:2)]), row.names = NULL)
+    geneName <- wSet[probesID,"GeneName"]
     footnote <- paste("Error bar: mean +/- SEM; n=",nindiv,sep="")
-    ggstrip= ggplot(datai, aes(x=Group, y = expression)) +
+    ggstrip <-  ggplot(datai, aes(x=Group, y = expression)) +
       theme_classic() +
-      geom_jitter( position=position_jitter(0.15), size=2) +
+      geom_jitter( position=position_jitter(0.15), size=3) +
       stat_summary(fun.data = mean_se, geom="errorbar", colour="darkred", size=1,aes(width=0.2)) +
-      labs( y=paste(geneName,"expression level"), caption=footnote)+
+      labs( y=paste(geneName,"Log2 expression level"), caption=footnote)+
       theme(plot.caption=element_text(size=12, hjust = 0.5), axis.title.x=element_text(size=16), axis.title.y=element_text(size=16) ,
             legend.title = element_text(size=12),
-            axis.text.x=element_text(size=12, colour="#888888", angle=45, hjust=1),axis.text.y=element_text(size=12, colour="#888888")
+            axis.text.x=element_text(size=14, colour="#888888", angle=45, hjust=1),axis.text.y=element_text(size=12, colour="#888888")
       )
 
     plot(ggstrip)

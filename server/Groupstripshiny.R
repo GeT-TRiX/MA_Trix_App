@@ -18,9 +18,10 @@ myreorderwk <- reactive({
   req(csvf())
   wkingsetclean <- csvf()[[1]]
   samplesgroup <- factor(csvf()[[2]]$Grp)
-  samplesnum <- parse_number(as.character(csvf()[[2]]$X))
-
-if(any(duplicated(samplesnum)))	samplesnum <- as.character(csvf()[[2]]$X)
+#  samplesnum <- parse_number(as.character(csvf()[[2]]$X))
+  samplesnum <- as.character(csvf()[[2]]$X)
+message("samplesnum: ",samplesnum)
+#if(any(duplicated(samplesnum)))	samplesnum <- as.character(csvf()[[2]]$X)
 
  colnames(wkingsetclean)[-1] <- paste(samplesgroup, samplesnum , sep = ".")
 
@@ -97,7 +98,10 @@ callstripgenes <- reactive({
   validate(need(selectedrow(), 'Search your gene and select the corresponding row'))
 
   req(filterwkingset())
-  grps <- gsub("[.][0-9]*","",colnames(filterwkingset()[-(1:2)]), perl=T)
+  message("colnames(filterwkingset()[-(1:2)]): ",colnames(filterwkingset()[-(1:2)]))
+#  grps <- gsub("[.][0-9]*","",colnames(filterwkingset()[-(1:2)]), perl=T)
+  grps <- gsub("[.].*","",colnames(filterwkingset()[-(1:2)]))
+  message("grps: ",grps)
   ggp=ggstrip_groups(grps=grps , wSet= filterwkingset() , probesID= selectedrow() )
 
 })
