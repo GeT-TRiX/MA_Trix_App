@@ -389,7 +389,7 @@ body <- dashboardBody(
                                          
                                          div(style = "display:inline-block;",
                                              fluidRow(
-                                               column(5, style = "width:30%", downloadFiles("savevolc", "Save your barplot")),
+                                               column(5, style = "width:30%", downloadFiles("savevolc", "Save Volcano plot")),
                                                column(3, style = "width:20%;", selFormat("savevolc"))
                                              )),
                                          plotOutput(outputId = "volcanoplot", height = 900) ,
@@ -399,7 +399,7 @@ body <- dashboardBody(
                                                column(
                                                  3,
                                                  style = "width:34.0%;",
-                                                 downloadFiles("savebarvolc", "Save your Volcano plot")
+                                                 downloadFiles("savebarvolc", "Save Barplot")
                                                ),
                                                column(3, style = "width:20%;", selFormat("savebarvolc"))
                                              )),
@@ -444,7 +444,7 @@ body <- dashboardBody(
                                          
                                          div(style = "display:inline-block;",
                                              fluidRow(
-                                               column(3, style = "width:27.0%;", downloadFiles("savestrip", "Save your plot")),
+                                               column(3, style = "width:27.0%;", downloadFiles("savestrip", "Save Stripchart")),
                                                column(3, selFormat("savestrip"))
                                              )),
                                          
@@ -605,7 +605,7 @@ body <- dashboardBody(
                                       strong("Scree plot"),
                                       div(style="display:inline-block;",
                                       fluidRow(column(1, style="width:9.666%;",
-                                      downloadFiles("downloadplots", "Save your Scree")),
+                                      downloadFiles("downloadplots", "Save Scree plot")),
                                       column(2),
                                       column( 3, selFormat("downloadplots")))),
                                       br(),
@@ -617,7 +617,7 @@ body <- dashboardBody(
                                       tags$style(type = "text/css",".shiny-output-error:before { visibility: hidden; }"),
 
                                       div(style="display:inline-block;",
-                                         fluidRow(column(1,downloadFiles("savepca", "Save your PCA")),
+                                         fluidRow(column(1,downloadFiles("savepca", "Save PCA plot")),
                                                   column(2),
                                                   column( 3, selFormat("savepca")))),
                                   
@@ -771,12 +771,12 @@ body <- dashboardBody(
                           tags$style(type="text/css", ".topgeness label{ display: table-cell; text-align: left; vertical-align: middle; }
                                          .inline .form-group{display: table-row;} ")
                         ),
-                        column(3,br(),style= "width:21%;",
+                        column(3,br(),style= "width:25%;",
                                actionButton(
                                  inputId = "topdegenes",
                                  label = "Plot top DE genes",style ="color: #fff; background-color: #337ab7; border-color: #2e6da4"
                                )),
-                        column(3,style= "width:26.0%;",br(),downloadFiles("savebarvenn", "Save your barplot")),
+                        column(3,style= "width:26.0%;",br(),downloadFiles("savebarvenn", "Save Barplot")),
                                column( 3,br(),style= "width:11%;  padding: 0%;", selFormat("savebarvenn")))),
 
                       plotOutput(outputId ="barplotvenn", height = "500px", width ="100%"),
@@ -946,7 +946,7 @@ body <- dashboardBody(
 
 
                       div(style="display:inline-block;",
-                          fluidRow(column(1,style="width:9%;",downloadFiles("savehm", "Save your plot")),
+                          fluidRow(column(1,style="width:9%;",downloadFiles("savehm", "Save Heatmap")),
                                    column(2),
                                    column( 3, selFormat("savehm")))),
 
@@ -1285,7 +1285,7 @@ body <- dashboardBody(
                                selFormat("saveboxclust"), br(),
                                verbatimTextOutput("event"),
                                br(),
-                               downloadFiles("saveboxclust", "Save your plot")
+                               downloadFiles("saveboxclust", "Save Plot")
 
                              ))
                        )
