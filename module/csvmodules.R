@@ -91,17 +91,17 @@ ordinput <- function(csvnord, identifier, dec){
   )
 
   csvord = list()
-  for (i in 1:length(csv)) {
+  for (i in 1:length(csv)) {# pData (#2)
     if (length(csv[[i]]) == 2) {
       csvord[[2]] <- csv[[i]]
       colnames(csvord[[2]]) <- c("X", "Grp")
     }
-    else if (any(grepl("^adj.P.Val|^FDR|^padj_" , colnames(csv[[i]])))){
+    else if (any(grepl("^adj.P.Val|^FDR|^padj_" , colnames(csv[[i]])))){# ResTable (#3)
       csvord[[3]] <- csv[[i]]
       if(!any(grepl("GeneName", colnames(csvord[[3]]))))
         colnames(csvord[[3]])[[2]] <- "GeneName"
     }
-    else
+    else #NormData (#1)
       csvord[[1]] <- csv[[i]]
   }
 
@@ -118,6 +118,13 @@ ordinput <- function(csvnord, identifier, dec){
   colnames(csvord[[3]])[[1]] <- identifier
   colnames(csvord[[1]])[[1]] <- identifier
   csvord[[1]][1] <- csvord[[3]][1]
+  # delete lines containing NA in ResTable
+  idDel <- which(apply(is.na(csvord[[3]]),1,sum)>0)
+  if(length(idDel)){
+	csvord[[3]] <- csvord[[3]][-idDel,]
+	csvord[[1]] <- csvord[[1]][-idDel,]
+	message("NA values in ResTable. Lines deleted:\n",idDel)
+  }
 
   return(csvord)
 }
