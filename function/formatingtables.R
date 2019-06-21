@@ -121,7 +121,7 @@ restabfc <- function(alltop, pval, testrix, grepre) {
   thresholds = c("FC>1.0", "FC >1.2" , "FC >2", "FC >4", "FC >6", "FC >10")
 
   for (fc in myfc) {
-    fcpval[j] = cbind.data.frame(colSums(adj < pval & 2 ** abs(logfc) > fc))
+    fcpval[j] = cbind.data.frame(colSums(adj < pval & 2 ** abs(logfc) > fc, na.rm=T))
     j = j + 1
   }
 
