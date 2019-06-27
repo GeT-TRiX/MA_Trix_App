@@ -213,6 +213,8 @@ observe({
     rbind(. ,c(sum(unlist(.$`total number of probes`)), sum(unlist(.$`total number of genes`))))
     rownames(lengthofmyclust)[length(rownames(lengthofmyclust))]<- "total"
 
+lengthofmyclust <- tibble::rownames_to_column(lengthofmyclust, var=" ")
+
     return(lengthofmyclust)
 
   })
