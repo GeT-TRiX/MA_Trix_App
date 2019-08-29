@@ -111,9 +111,9 @@ content <- function(file) {
 
     cairo_ps(filename=file, width=10, height=10,pointsize = 12)
 
-  else if(volcform  &&  input$format == "eps")
+##  else if(volcform  &&  input$format == "eps")
 
-    ggsave(file,device=cairo_ps, fallback_resolution = 600)
+##    ggsave(file,device=cairo_ps, fallback_resolution = 600)
 
   else
       eps(file,
