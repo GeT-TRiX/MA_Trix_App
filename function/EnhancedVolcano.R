@@ -72,7 +72,7 @@ EnhancedVolcano <- function(
     transcriptPointSize = 2.8,
     transcriptLabSize = 5.0,
     col = c("grey30", "forestgreen", "royalblue", "red2"),
-    colAlpha = 1/2,
+    colAlpha = 1,
     legend = c("NS","Log2 FC","P","P & Log2 FC"),
     legendPosition = "top",
     legendLabSize = 10,
