@@ -351,9 +351,9 @@ body <- dashboardBody(
                                          column(
                                            12,
                                            h3(
-                                             "This table summarizes the number of significant genes depending on the p-value treshold choosen with the slider bar"
+                                             "Summary table of significant genes regarding FC and p-value treshold"
                                            ),
-                                           helpText("Choose your p-value treshold to modify the following data table"),
+                                           helpText("Adjust p-value treshold to update the summary table"),
                                            div(
                                              class = "myslidermain",
                                              sliderInput(
@@ -371,12 +371,12 @@ body <- dashboardBody(
                                          
                                          column(
                                            12,
-                                           h3("This table shows the samples with the corresponding groups"),
+                                           h3("Sample-Groups table"),
                                            renderoutputTable("renderpdata")
                                          ),
                                          column(
                                            12,
-                                           h3("Show the actual data frame with the columns selected"),
+                                           h3("Statistical results table"),
                                            renderoutputTable("renderestab")
                                          )
                                          
@@ -475,7 +475,7 @@ body <- dashboardBody(
                                          br(),
                                          selectInput(
                                            "method",
-                                           "Choose your statistical method",
+                                           "Statistical method",
                                            choices = c("adj.p.val (FDR)" = "FDR", "p.value (raw)" = "None")
                                          )
                                        ),
@@ -491,7 +491,7 @@ body <- dashboardBody(
                                                     6,
                                                     selectInput(
                                                       "regulationvolc", #  Create a select list that can be used to choose a single or multiple items from a list of values.
-                                                      "Choose your regulation",
+                                                      "Choose regulation",
                                                       choices = c("both", "up", "down")
                                                     )
                                                     
@@ -501,7 +501,7 @@ body <- dashboardBody(
                                            6,
                                            sliderInput(
                                              'volcfc',
-                                             "Choose your FC cutoff",
+                                             "Fold-Change cutoff",
                                              min = 1,
                                              max = 10,
                                              step = 1,
@@ -512,18 +512,29 @@ body <- dashboardBody(
                                            6,
                                            sliderInput(
                                              'volcpval',
-                                             "Choose your pval cutoff",
+                                             "P-value cutoff",
                                              min = 0.01,
                                              max = 0.05,
                                              step = 0.01,
                                              value = 0.05
                                            )
                                          )),
-                                         fluidRow(column(
-                                           6,
+                                         ##----------
+                                         shiny::actionButton(
+										  "toggleAdvancedVolc",
+										  "Advanced Graphical Options",
+										  href = "#",
+										  style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"
+										),
+										br(),
+										shinyjs::hidden(div(
+										  id = "advancedvolc",
+										  
+										  fluidRow(column(
+                                           4,
                                            sliderInput(
                                              'volclab',
-                                             "Choose your lab size",
+                                             "Label size",
                                              min = 1,
                                              max = 6,
                                              step = 0.5,
@@ -531,34 +542,46 @@ body <- dashboardBody(
                                            )
                                          ),
                                          column(
-                                           6,
+                                           4,
                                            sliderInput(
                                              'volcpt',
-                                             "Choose your point size",
+                                             "Point size",
                                              min = 0.5,
                                              max = 3,
                                              step = 0.1,
                                              value = 1
                                            )
-                                         )),
-                                         
-                                         
-                                         
+                                         ),
+                                         column(
+                                           4,
+                                           sliderInput(
+                                             'volcalpha',
+                                             "Pt transparency",
+                                             min = 0.1,
+                                             max = 1,
+                                             step = 0.1,
+                                             value = 1
+                                           )
+                                         ))
+										  ))
+										,br(),
+                                         ###-----------
                                          
                                          div(
                                            id = "mytextvolc",
                                            p(
-                                             " Highlight your selected gene(s) in the volcano plot with a comma-separated list of input "
+                                             " Highlight gene(s): fill comma-separated GeneNames"
                                            )
                                          ),
                                          
-                                         textInput(
+                                          fluidRow(column(12,
+                                           textInput(
                                            inputId = "fillvolc",
                                            label = NULL,
                                            value = NULL,
                                            placeholder = "FOXP2,OT,AVPR1a",
-                                           width = "100%"
-                                         ),
+                                           width = "100%")
+                                         )),
                                          fluidRow(column(
                                            6,
                                            
@@ -574,7 +597,7 @@ body <- dashboardBody(
                                            6,
                                            numericInput(
                                              'topvolc',
-                                             'Max number of genes',
+                                             'Highlight top X genes',
                                              NULL,
                                              min = 0,
                                              max = 5000
@@ -1121,7 +1144,7 @@ body <- dashboardBody(
                                                   column(6,br(),
                                                                 selectInput(
                                                                      "decidemethod",
-                                                                     "Choose your statistical method",
+                                                                     "Statistical method",
                                                                      choices = c("adj.p.val (FDR)"= "FDR", "p.value (raw)" = "None")
                                                                    ))),
 
@@ -1144,11 +1167,11 @@ body <- dashboardBody(
                                           id = "advanced",
                                           fluidRow(
                                             column(6,
-                                                   numericInput('clusters', 'Cluster count', 3,
+                                                   numericInput('clusters', 'Number of Clusters', 3,
                                                                 min = 1, max = 15)),
                                             column(6,
                                                    selectInput(
-                                                     "dist","Choose your matrix distance",choices = c("correlation", "euclidian","manhattan", "cosine")),
+                                                     "dist","Distance method computed",choices = c("correlation", "euclidian","manhattan", "cosine")),
                                                    div(id = "tooltipelem",
                                                        bsTooltip(id = "dist", title = "correlation:\n dist = 1-corr", placement = "left", trigger="hover"))
 
@@ -1156,11 +1179,11 @@ body <- dashboardBody(
                                           fluidRow(
                                             column(6,
                                                    checkboxInput("meangrp",
-                                                                 "Compute the mean for the different groups",
+                                                                 "Apply group mean",
                                                                  FALSE)),
                                             column(6,
                                                    selectInput(
-                                                     "algomet","Choose your hierarchical clustering method",choices = c("ward.D2", "single","complete","average")))
+                                                     "algomet","Agglomeration method",choices = c("ward.D2", "single","complete","average")))
 
                                           )))
                                         ,br(),

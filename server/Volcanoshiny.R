@@ -132,7 +132,7 @@ volcano <- reactive({
                   y = paste0(ifelse(input$method == "FDR",prefstat$greppre[[1]] ,prefstat$greppre[[3]]),input$volcacomp),
                   topgenes = top_volcd(),DrawConnectors= T,#DrawConnectors = ifelse(is.na(input$topvolc),T,F),
                   pCutoff = input$volcpval ,FCcutoff = input$volcfc ,transcriptPointSize = input$volcpt,transcriptLabSize = input$volclab,
-                  title =  gsub("-"," versus " ,input$volcacomp),cutoffLineType = "twodash", findfamily =  ifelse(familytopdisp() == "" , NA,familytopdisp()),regulationvolc = input$regulationvolc,
+                  title =  gsub("-"," versus " ,input$volcacomp),colAlpha=input$volcalpha, cutoffLineType = "twodash", findfamily =  ifelse(familytopdisp() == "" , NA,familytopdisp()),regulationvolc = input$regulationvolc,
                   displaylab = ifelse(genetodisplay() =="", NA, genetodisplay()),legendLabSize = 10,
                   cutoffLineCol = "black",cutoffLineWidth = 1,legend=c("NS","Log (base 2) fold-change","P value",
                                                                        "P value & Log (base 2) fold-change"))

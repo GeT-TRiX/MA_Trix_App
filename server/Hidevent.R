@@ -14,6 +14,8 @@ addTooltip(session, id = "dist", title = "correlation:\n dist = 1-corr", placeme
 
 shinyjs::onclick("toggleAdvanced",
                  shinyjs::toggle(id = "advanced", anim = TRUE)) ## hide and show event
+shinyjs::onclick("toggleAdvancedVolc",
+                 shinyjs::toggle(id = "advancedvolc", anim = TRUE)) ## hide and show event
 
 
 shinyjs::onclick("toggleAdvancedcolors",
