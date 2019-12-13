@@ -62,15 +62,9 @@ filterwkingset <- reactive({
 
 })
 
-
-selectedrow <- callModule(stylishTables, "orderedwk", data = filterwkingset ,
-           scrollX = TRUE,
-           pageLength = 150,
-           scrollY=550,
-           stateSave = T,
-           dom = 'Bfrtip',
-           server = T ,
-           buttons = list(
+selectedrow <- callModule(stylishTables, "orderedwk", data = filterwkingset , 
+	lengthpage=  c('5', '10', '15'), pageLength=10, scrollX = T, scrollY=T, dom = 'Bfrtip', filter = c("none"), extensions = 'Buttons', ordering= TRUE, server = TRUE, 
+	list(
              list(extend = 'csv',
                   filename =  filenamestrip()[1]),
              list(extend = 'pdf',
@@ -78,7 +72,24 @@ selectedrow <- callModule(stylishTables, "orderedwk", data = filterwkingset ,
                   title = "My Title",
                   header = FALSE)
            ),
-           selection = 'single', case = 2 )
+	selection = 'single', case = 2 )
+
+##selectedrow <- callModule(stylishTables, "orderedwk", data = filterwkingset ,
+##           scrollX = TRUE,
+##           pageLength = 150,
+##           scrollY=550,
+##           stateSave = T,
+##           dom = 'Bfrtip',
+##           server = F ,
+##           buttons = list(
+##             list(extend = 'csv',
+##                  filename =  filenamestrip()[1]),
+##             list(extend = 'pdf',
+##                  filename = filenamestrip()[1],
+##                  title = "My Title",
+##                  header = FALSE)
+##           ),
+##           selection = 'single', case = 2 )
 
 
 
