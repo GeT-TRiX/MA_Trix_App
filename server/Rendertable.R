@@ -54,9 +54,9 @@ myrenderedtop <- reactive({
 })
 
 
-callModule(stylishTables, "renderestab", data = myrenderedtop , lengthpage=  c('5', '10', '15','20'), pageLength=15, scrollX = T, dom = 'Bfrtip', filter = c("none"), buttons = I('colvis'), extensions = 'Buttons', ordering= F, server = T )
+callModule(stylishTables, "renderestab", data = myrenderedtop , lengthpage=  c('5', '10', '15','20'), pageLength=10, scrollX = T, dom = 'Bfrtip', filter = c("none"), buttons = I('colvis'), extensions = 'Buttons', ordering= TRUE, server = TRUE )
 
-callModule(stylishTables, "renderestab", data = myrenderedtop , lengthpage=  c('5', '10', '15','20'), pageLength=15, scrollX = T, dom = 'Bfrtip', filter = c("none"), buttons = I('colvis'), extensions = 'Buttons', ordering= F, server = T )
+#callModule(stylishTables, "renderestab", data = myrenderedtop , lengthpage=  c('5', '10', '15','20'), pageLength=15, scrollX = T, dom = 'Bfrtip', filter = c("none"), buttons = I('colvis'), extensions = 'Buttons', ordering= F, server = T )
 
 callModule(stylishTables, "clustdavid", data = reactive({summary(Venncluster()$mygodavid) %>% as.data.frame() %>% mutate_if(is.numeric, funs(format(., digits = 3)))}) , lengthpage=  c('5', '10', '15','20','30'), pageLength=10 )
 
