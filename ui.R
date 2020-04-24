@@ -11,32 +11,6 @@
 ###############################
 
 
-shinyjscode <- "
-shinyjs.init = function() {
-$(window).resize(shinyjs.calcHeight);
-}
-
-shinyjs.calcHeight = function() {
-Shiny.onInputChange('plotHeight', $(window).height());
-}
-"
-jsgif <- '
-shinyjs.gifrender = function(params) {
-  $(document).ready(function() {
-    setTimeout(function() {
-     $("#" + params).fadeOut("fast")});
-  });
-}'
-
-
-jsrandomgif <- "
-shinyjs.gifrandom = function(params) {
-var gif = ['banana.gif','dna.gif', 'atom.gif', 'neurons.gif'];
-$('.gif').css({'background-image': 'url(' + gif[Math.floor(Math.random() * gif.length)] + ')'});
-}"
-
-
-
 dbHeader <- dashboardHeader(title = "MATRiX")
 dbHeader$children[[2]]$children <-  tags$a(tags$img(src='matrix.png',height='40',width='40',style="margin:5px 0 5px 0;",align='left'),
                                            tags$h3("MATRiX",style="font-family:Purisa; margin:15px 25px 5px 0;color:white; "))
@@ -44,11 +18,11 @@ dbHeader$children[[2]]$children <-  tags$a(tags$img(src='matrix.png',height='40'
 
 sidebar <- dashboardSidebar(
 
+## init and load shinyjs functions
   useShinyjs(),
   tags$style(type="text/css", inactivity),
-  shinyjs::extendShinyjs(text = shinyjscode),
-  shinyjs::extendShinyjs(text = jsgif),
-  shinyjs::extendShinyjs(text = jsrandomgif),
+  shinyjs::extendShinyjs(script = "www/shinyjs_gif_functions.js"),
+  shinyjs::extendShinyjs(script = "www/shinyjs_enrichr.js"), 
   
 
   tags$head(
@@ -72,13 +46,13 @@ sidebar <- dashboardSidebar(
                   style = "position:absolute;bottom:120px;margin:0 0 10px 15px;"
                 ) , href="https://get.genotoul.fr", target="_blank"),
                 tags$a(img(
-                  src = "Logotype-INRA-transparent.png",
-                  height = 50,
+                  src = "Logo-INRAE_Blanc_Transparent.png",
+                  height = 35,
                   style = "position:absolute;bottom:70px;margin:0 0 10px 15px;"
-                ) , href="https://www6.toulouse.inra.fr/toxalim", target="_blank")
+                ) , href="https://www6.toulouse.inrae.fr/toxalim", target="_blank")
 
     ),
-				tags$footer("Copyright © 2018-2019 INRA  | Designed by GenoToul GeT-TRiX team", align = "center", style = "
+				tags$footer("Copyright © 2018-2020 INRAE  | Designed by GenoToul GeT-TRiX team", align = "center", style = "
 					  position:absolute;
 					  bottom:20px;
 					  width:100%;
@@ -138,7 +112,7 @@ body <- dashboardBody(
                                                tags$p(tags$img(src = "whatmaen.png",style="width: 100%; height: 100%")))
                                            ),
                                   tabPanel("Authors", h3("The main providers to MATRiX:"),
-                                           p(a("Yannick Lippi",href="mailto:yannick.lippi@inra.fr"), "(Initiator, beta-testing, feature suggestions)"),
+                                           p(a("Yannick Lippi",href="mailto:yannick.lippi@inrae.fr"), "(Initiator, beta-testing, feature suggestions)"),
                                            p(a("Franck Soubès", href="mailto:franck.soubes@inra.fr"), "(Coding, Unit testing, documentation, packaging, feature suggestions)",tags$a(href = "https://github.com/fsoubes",target="_blank",
                                                                                                                                                                                      "See github")),
                                            h3("Acknowledgements"),
@@ -202,19 +176,20 @@ body <- dashboardBody(
 
                                # The right sidebar
                                # Let the user define his/her own ID
-                               textInput("user", "Your User ID:", value=""),
-                               tags$hr(),
-                               h5("Connected Users"),
-                               # Create a spot for a dynamic UI containing the list of users.
-                               div(id ="users",
-                                   uiOutput("userList"),
-                                   tags$hr(),
-                                   p("Built using R and" ,tags$a(href = "http://rstudio.com/shiny/",target="_blank",
-                                                                 "Shiny")),
-                                   p("Chat source code is available ",
-                                     tags$a(href = "https://github.com/trestletech/ShinyChat",target="_blank",
-                                            "here"))
-                               ))
+								   textInput("user", "Your User ID:", value=""),
+								   tags$hr(),
+								   h5("Connected Users"),
+								   # Create a spot for a dynamic UI containing the list of users.
+								   div(id ="users",
+									   uiOutput("userList"),
+									   tags$hr(),
+									   p("Built using R and" ,tags$a(href = "http://rstudio.com/shiny/",target="_blank",
+																	 "Shiny")),
+									   p("Chat source code is available ",
+										 tags$a(href = "https://github.com/trestletech/ShinyChat",target="_blank",
+												"here"))
+								   )
+                               )
                        ),
                        box(
                          title = "What's new in MATRiX", width = NULL, status = "primary",
@@ -1271,7 +1246,7 @@ body <- dashboardBody(
                                       helpText("Note: It is highly advised to check this box if you're working with a set of genes close to 1000.",style="color:White; font-size:15px;"),
                                       conditionalPanel(condition = 'output.heatmbool',
 
-                                                       div(id = 'center', strong("Functional enrichment analysis",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
+                                                       div(id = 'center', strong("Functional Analysis",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                                        br(),
 
 
@@ -1290,6 +1265,10 @@ body <- dashboardBody(
                                                          column(4,br(),
                                                                 uiOutput("DAVID"))
                                                        ),br(),
+                                                       
+                                                       fluidRow(column( 4,
+														 actionButton("submit_enrich_hm", "Submit to Enrichr")
+														)                                                       ),
                                                        helpText("Run Gene enrichment analysis, results are obtained by querying DWS (DAVID Web Services)", style="font-size:15px; color:white;")
 
                                       ),br(),br()

@@ -15,7 +15,7 @@ observe({
   output$DAVID <- renderUI({
     shiny::actionButton(
       inputId = 'DAVID',
-      "Open DAVID",
+      "Submit to DAVID",
       style = "color: #fff; background-color: #337ab7; border-color: #2e6da4",
       onclick = paste("window.open(", url$myurl)
     )
@@ -79,6 +79,28 @@ clustergrep <- reactive({
 
   return(mygensymb)
 })
+
+
+
+# ~ Enrichr analysis
+
+# ~ observe({
+# ~   req(clustergrep(), input$cutgo)
+# ~   onclick(input$submit_enrich_hm, {
+# ~       alert(cat("submitting genes from cluster ",input$cutgo));
+# ~     })
+# ~ })
+
+observeEvent(input$submit_enrich_hm, {
+	  req(clustergrep(), input$cutgo)
+	  print("cluster selected")
+	  print(input$cutgo)
+	       print("paste(clustergrep, collapse='\n'):")
+	       print(paste(clustergrep(),collapse='\n'))
+
+	js$enrichr(list = paste(clustergrep(),collapse='\n'), description = paste0("HeatmapCluster_",input$cutgo));
+	## problem: list description is pasted with genlist in enrichr function!!
+    })
 
 
 davidwebservice <- callModule(queryDavid, "hmanalysis", data = reactive(hmobj$hm) , parent_session = session, tabsetpanid= "heatmapmainp", tabPanel= "maingo", hmana = T)
