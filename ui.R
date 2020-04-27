@@ -1248,29 +1248,26 @@ body <- dashboardBody(
 
                                                        div(id = 'center', strong("Functional Analysis",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
                                                        br(),
-
-
-                                                       fluidRow(column( 4,
-                                                                        selSpecies("hmanalysis")
-                                                       ),
-                                                       column(4,
-                                                              uiOutput("cutgo")),
-                                                       column(3,
-                                                              catHm("hmanalysis")
-                                                       )),
-
+                                                       fluidRow(column(12,h4("Send genes from a cluster to a web service"))),
                                                        fluidRow(
-                                                         column(4,br(),
-                                                                runAnalysis("hmanalysis")),
-                                                         column(4,br(),
-                                                                uiOutput("DAVID"))
-                                                       ),br(),
-                                                       
-                                                       fluidRow(column( 4,
-														 actionButton("submit_enrich_hm", "Submit to Enrichr")
-														)                                                       ),
-                                                       helpText("Run Gene enrichment analysis, results are obtained by querying DWS (DAVID Web Services)", style="font-size:15px; color:white;")
-
+															column( 4, uiOutput("cutgo")),
+# ~ 															column(2, br(),strong(" to :")),
+															column(4, strong("Submit to:"),br(), tags$button(id = "submit_enrich_hm", "",class = "btn action-button", tags$img(src = "enrichr_logo.png",
+																height = "26px"),style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+# ~ 															column(4, strong("Submit to:"),br(), tags$button(id = "submit_david_hm", "",class = "btn action-button", tags$img(src = "david_logo.png",
+# ~ 																height = "30px"),style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"))
+															column(4, strong("Submit to:"),br(), uiOutput("DAVID_submit"))
+																														
+														),
+                                                       br(),
+                                                       fluidRow(column(12,h4("Run Enrichment analysis inside MATRiX app"))),
+                                                       fluidRow(
+															column(4, selSpecies("hmanalysis")),
+															column(4, catHm("hmanalysis")),
+															column(4, br(), runAnalysis("hmanalysis"))
+														),
+                                                       br(),
+													   helpText("Run Gene enrichment analysis, results are obtained by querying DWS (DAVID Web Services)", style="font-size:15px; color:white;")
                                       ),br(),br()
 
                              ),
