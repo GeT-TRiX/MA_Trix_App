@@ -10,13 +10,21 @@ url <- reactiveValues()
 gores <- reactiveValues()
 
 observe({
-  req(url)
+  req(url, clustergrep(), input$cutgo)
 
-  output$DAVID <- renderUI({
+print("cluster selected")
+	print(input$cutgo)
+	print("paste(clustergrep, collapse='\n'):")
+	print(paste(clustergrep(),collapse='\n'))
+	
+  output$DAVID_submit <- renderUI({
     shiny::actionButton(
-      inputId = 'DAVID',
-      "Open DAVID",
-      style = "color: #fff; background-color: #337ab7; border-color: #2e6da4",
+      inputId = 'DAVID_submit',
+      "             .",
+      width = '110px',
+      height = '32px',
+# ~       tags$img(src = "david_logo.png",height = "30px"),
+      style = "color: #fff; background-color: #337ab7; border-color: #2e6da4; background: url('david_logo.png');  background-size: 102px; background-position: center;",
       onclick = paste("window.open(", url$myurl)
     )
   })
@@ -38,7 +46,7 @@ observe({
     req(hmobj$hm)
     n <- unique(hmobj$hm$cluster)
     selectInput("cutgo",
-                "Choose your cluster",
+                "Choose a Cluster",
                 choices =  seq(1, NROW(n) , by = 1))
   })
 
@@ -79,6 +87,48 @@ clustergrep <- reactive({
 
   return(mygensymb)
 })
+
+
+
+# ~ Enrichr analysis
+
+# ~ observe({
+# ~   req(clustergrep(), input$cutgo)
+# ~   onclick(input$submit_enrich_hm, {
+# ~       alert(cat("submitting genes from cluster ",input$cutgo));
+# ~     })
+# ~ })
+
+observeEvent(input$submit_enrich_hm, {
+	  req(clustergrep(), input$cutgo)
+	  print("cluster selected")
+	  print(input$cutgo)
+	       print("paste(clustergrep, collapse='\n'):")
+	       print(paste(clustergrep(),collapse='\n'))
+
+	js$enrichr(list = paste(clustergrep(),collapse='\n'), description = paste0("HeatmapCluster_",input$cutgo));
+	## problem: need to submit twice for the first connection
+    })
+    
+# ~ observeEvent(input$submit_david_hm, {
+# ~ 	req(url)
+# ~ 	print("cluster selected")
+# ~ 	print(input$cutgo)
+# ~ 	print("paste(clustergrep, collapse='\n'):")
+# ~ 	print(paste(clustergrep(),collapse='\n'))
+
+# ~   output$DAVID_submit <- renderUI({
+# ~     shiny::actionButton(
+# ~       inputId = 'DAVID_submit',
+# ~       "Submit to DAVID",
+# ~       style = "color: #fff; background-color: #337ab7; border-color: #2e6da4",
+# ~       onclick = paste("window.open(", url$myurl)
+# ~ print(url$myurl)
+# ~ 	tags$script(paste0("window.open(",url$myurl))
+# ~     )
+# ~   })
+# ~ })
+
 
 
 davidwebservice <- callModule(queryDavid, "hmanalysis", data = reactive(hmobj$hm) , parent_session = session, tabsetpanid= "heatmapmainp", tabPanel= "maingo", hmana = T)

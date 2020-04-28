@@ -73,7 +73,9 @@ p {
 }
 /*
 #homepage .nav-tabs-custom>.tab-content{background:#fff;padding:10px;border-bottom-right-radius:3px;border-bottom-left-radius:3px}*/
-.nav-tabs-custom>.tab-content{background:#3c8dbc;padding:10px;border-bottom-right-radius:3px;border-bottom-left-radius:3px}
+/*.nav-tabs-custom>.tab-content{background:#3c8dbc;padding:10px;border-bottom-right-radius:3px;border-bottom-left-radius:3px}*/
+.nav-tabs-custom>.tab-content{background:#fff;padding:10px;border-bottom-right-radius:3px;border-bottom-left-radius:3px}
+
 #homepage .nav-tabs-custom>.tab-content{background:#fff;padding:10px;border-bottom-right-radius:3px;border-bottom-left-radius:3px}
 #upload .nav-tabs-custom>.tab-content{background:#fff;padding:10px;border-bottom-right-radius:3px;border-bottom-left-radius:3px}
 #sumardata .nav-tabs-custom>.tab-content{background:#fff;padding:10px;border-bottom-right-radius:3px;border-bottom-left-radius:3px}

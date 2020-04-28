@@ -34,7 +34,7 @@ output$button <-  renderUI({
     shiny::actionButton("heatm", "Update Heatmap", icon = icon("repeat"), style = "color: #fff; background-color: #b77033; border-color: #b77033")
   }
   else{
-    shiny::actionButton("heatm", "Print Heatmap", style = "color: #fff; background-color: #337ab7; border-color: #337ab7")
+    shiny::actionButton("heatm", "Print Heatmap", style = "color: #fff; background-color: #32b353; border-color: #337ab7")
   }
 
 })
