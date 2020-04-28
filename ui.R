@@ -702,7 +702,7 @@ body <- dashboardBody(
                     
                     tabPanel(
                       value= "vennset",
-                      strong("Visualize the Venn diagram"),
+                      strong("Venn Diagram"),
                       
                      column(6,offset = 0, style='padding:0px;',
                            div(style="display:inline-block",
@@ -817,7 +817,7 @@ body <- dashboardBody(
                       ),
 
 
-                    tabPanel(strong("Venn GO enrichment"),
+                    tabPanel(strong("Venn Enrichment Results"),
                              value = "venngopanel",
                              useShinyjs(),
 
@@ -940,7 +940,7 @@ body <- dashboardBody(
                   tabsetPanel(
                     id = "heatmapmainp",
                     tabPanel(
-                      strong("Visualize the Heatmap"),value = "hmmainpan",
+                      strong("Heatmap"),value = "hmmainpan",
 
 
                       div(style="display:inline-block;",
@@ -967,7 +967,7 @@ body <- dashboardBody(
 
                       ),
 
-                      h1("Here's a tracker for your different selections:"),
+                      h1("Here's a tracker of your different parameters:"),
                       tags$head(
                         tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # add style.css in order to add better police
                       ),
@@ -976,56 +976,46 @@ body <- dashboardBody(
                                            #container * {display: inline;}")),
 
                       div(
-                        id = "container",p("There are"),htmlOutput("myNUM"),
-                        p("significant genes"),
-                        p("for the following comparison(s)"),
+                        id = "container",p('Selection of'),htmlOutput("myNUM"),
+                        p('significant features'),
+                        p('for the following comparison(s):'),
                         htmlOutput("testtt")
                       ),
                       div(
                         id = "container",
-                        p('The selected rows for your heatmap are based on the '),
+                        p('Based on the '),
                         textOutput("myMET"),
-                        p("method, with a P-value and FC treshold respectively set to "),
+                        p('method, with a P-value and FC treshold respectively set to '),
                         tracketCutoff("deghm")
                       ),
 
                       conditionalPanel(condition = "input.maxgen != null",
                                        div(
                                          id = "container",
-                                         p("You have chosen to regulate your comparison to "),
+                                         p('Limitation to a maximum of '),
                                          textOutput("maxGen"),
-                                         p(" genes maximum"))),
+                                         p(' top regulated features per comparison according P-value.'))),
 
                       div(
                         id = "container",
-                        p('The'),
+                        p('Clustering distance method :'),
                         textOutput("myMAT"),
                         p(
-                          "method was used to compute the matrix distance with a number of clusters for the significant genes equal to",
+                          '. Number of Clusters selected:',
                           textOutput("myCLUST")
                         )
                       ),
                       div(
                         id = "container",
-                        p('The advanced color settings choosen for the following groups :'),
+                        p('Graphical color settings of the groups :'),
                         textOutput("indivcol"),
-                        p("are respectively correlated to the following colors"),
+                        p('are respectively :'),
                         htmlOutput("myPAL")
-                      ),
-                      div(
-                        id = "container",
-                        p(
-                          'The legend size, row size, col size are respectively equals to ',
-                          textOutput("myLEG"),
-                          p(','),
-                          textOutput("myROW"),
-                          p(','),
-                          textOutput("myCOL")
-                        )
                       )
+                      
                       ),
                     tabPanel(
-                      strong("Heatmap clusters"),
+                      strong("Clusters"),
                       value = "dfhmclu",
                       downloadFilestab("downloadcut", "Download the data"), 
                       column(
@@ -1044,8 +1034,8 @@ body <- dashboardBody(
                         renderoutputTable("totalgenbyc")
                       )),
                     tabPanel(
-                      strong("(GO) enrichment-based cluster analysis"),value="maingo",
-                      downloadFilestab("savegohmdavxlsx", "Save your enrichment as xlsx"),
+                      strong("Enrichment Analysis Results"),value="maingo",
+                      downloadFilestab("savegohmdavxlsx", "Save enrichment resluts as .xlsx"),
 
                       conditionalPanel(condition = "input.GOana",
                                        div(class= "highvenn" , style="font-size:24px; text-align: center;",
@@ -1095,13 +1085,21 @@ body <- dashboardBody(
                              title = "",
                              id = "heatmapanel",
                              width = NULL,
-
+# ~ 						style="background-color: #ffffff;",
                              tabPanel("Heatmap",id= "heatmpan", ##ADD8E6
-                                      style="background-color: #3c8dbc;",
+                                      style="background-color: white;border-color: white", # #3c8dbc
                                       value="widgetheat",
-                                      strong("Heatmap settings", style="font-size:25px;") ,
-                                      br(),
+# ~                                       strong("Heatmap settings", style="font-size:25px;") ,
+# ~                                       br(),
 
+									box(
+									id = "boxpass",
+									title = strong("Heatmap Settings", style = "font-size:25px;"),
+									width = NULL,
+									background = "light-blue",
+									inlineCSS(
+									list(.pwdGREEN = "background-color: #DDF0B3", .pwdRED = "background-color: #F0B2AD")
+									),
                                       actionLink("resetAll",  label = ("reset all"), style="color:orange;float:right;font-size: 18px;"),
                                       br(),
 
@@ -1168,7 +1166,6 @@ body <- dashboardBody(
 
                                         br(),
 
-                                        #shinyjs::hidden(
                                           div(
                                           id = "advancedcol",
                                           fluidRow(
@@ -1220,7 +1217,6 @@ body <- dashboardBody(
                                           br()
                                         )
 
-                                        #)
 
                                         ), #end of the div "form"
                                       br(),
@@ -1242,20 +1238,29 @@ body <- dashboardBody(
                                                            "Add reactivity",
                                                            FALSE))
                                       ),
+                                      helpText("Note: It is highly advised to check this box if you're working with a set of genes close to 1000.",style="color:White; font-size:15px;")
 
-                                      helpText("Note: It is highly advised to check this box if you're working with a set of genes close to 1000.",style="color:White; font-size:15px;"),
+                                      ), #end box
+
+                                      
                                       conditionalPanel(condition = 'output.heatmbool',
 
-                                                       div(id = 'center', strong("Functional Analysis",style = "font-family: 'times'; font-size:20px; font-style: strong; ")),
-                                                       br(),
+                                                       box(
+															id = "boxpass",
+															title = strong("Functional Analysis", style = "font-size:25px;"),
+															width = NULL,
+															background = "light-blue",
+															inlineCSS(
+															list(.pwdGREEN = "background-color: #DDF0B3", .pwdRED = "background-color: #F0B2AD")
+															),
+
+															
+														
                                                        fluidRow(column(12,h4("Send genes from a cluster to a web service"))),
                                                        fluidRow(
 															column( 4, uiOutput("cutgo")),
-# ~ 															column(2, br(),strong(" to :")),
 															column(4, strong("Submit to:"),br(), tags$button(id = "submit_enrich_hm", "",class = "btn action-button", tags$img(src = "enrichr_logo.png",
 																height = "26px"),style = "color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-# ~ 															column(4, strong("Submit to:"),br(), tags$button(id = "submit_david_hm", "",class = "btn action-button", tags$img(src = "david_logo.png",
-# ~ 																height = "30px"),style = "color: #fff; background-color: #337ab7; border-color: #2e6da4"))
 															column(4, strong("Submit to:"),br(), uiOutput("DAVID_submit"))
 																														
 														),
@@ -1268,14 +1273,22 @@ body <- dashboardBody(
 														),
                                                        br(),
 													   helpText("Run Gene enrichment analysis, results are obtained by querying DWS (DAVID Web Services)", style="font-size:15px; color:white;")
-                                      ),br(),br()
+                                      ) # end box
+                                      ) # end conditional panel: maybe move to another tabpanel???
 
                              ),
 
                              tabPanel(
-                               "Heatmap clustering",
+                               "Heatmap Clusters",
                                value="cutheatmainp",
-                               strong("Cut heatmap settings", style="font-size:25px;") ,
+                               box(
+															id = "boxpass",
+															title = strong("Clusters plotting settings", style = "font-size:25px;"),
+															width = NULL,
+															background = "light-blue",
+															inlineCSS(
+															list(.pwdGREEN = "background-color: #DDF0B3", .pwdRED = "background-color: #F0B2AD")
+															),
                                br(),
                                uiOutput("cutcluster"),
                                selectizeInput('cutinfo', 'Choose your types of plots',
@@ -1285,8 +1298,10 @@ body <- dashboardBody(
                                verbatimTextOutput("event"),
                                br(),
                                downloadFiles("saveboxclust", "Save Plot")
+                               )
 
-                             ))
+                             )# end tabpanel clusters
+                             )
                        )
                 )
 
