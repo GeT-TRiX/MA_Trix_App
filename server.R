@@ -17,6 +17,7 @@ shinyServer(function(input, output,session) {
 
   csvf <- callModule(csvFile, "datafile",stringsAsFactors = FALSE) #  Module for importing data
 
+
   ##########################################
   ######## Widget update and info         ##
   ##########################################
