@@ -19,7 +19,7 @@ shinyjs.enrichr = function(params) {
     	descField = document.createElement('input');
   
     form.setAttribute('method', 'post');
-    form.setAttribute('action', 'http://amp.pharm.mssm.edu/Enrichr/enrich');
+    form.setAttribute('action', 'https://maayanlab.cloud/Enrichr/enrich');
     if (popup) {
         form.setAttribute('target', '_blank');
     }
