@@ -186,12 +186,19 @@ observe({
     else
       met = prefstat$greppre[[3]]
 
-    mycont = paste0(met, selected_test())
 
+# export only  FDR sata
+# ~     mycont = paste0(met, selected_test())
+
+# Export All Restable DAta (adj.p, logFC and pvalue
+    # colnames to be selected for export table
+    mycont <- unlist(lapply(prefstat$greppre[c(2,3,1)],function(x)paste0(x,selected_test())))
+    
+	
     ordered = csvf()[[3]] %>% filter(  csvf()[[3]][[1]]  %in% hmobj$hm[[2]] )  %>%
       select(dataid(),  mycont) %>%
       full_join(hmobj$hm[,-1], ., by = dataid() ) %>%
-      select(dataid(), GeneName, mycont, cluster) %>%
+      select(dataid(), GeneName,cluster, mycont) %>%
       mutate_if(is.numeric, funs(format(., digits = 3)))
 
     rightor = sort(as.integer(rownames(ordered)), decreasing = T)

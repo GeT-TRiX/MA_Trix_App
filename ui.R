@@ -1020,16 +1020,16 @@ body <- dashboardBody(
                       downloadFilestab("downloadcut", "Download the data"), 
                       column(
                         12,
-                        h3("Table summarizing the heatmap"),
+                        h3("Table of Features from the heatmap"),
                         helpText(
-                          "Heatmap's cluster are upside down in order to match the genes with the heatmap from top to bottom"
+                          "Cluster numbers are indicated and are in decreasing order to be matching the same order of the heatmap image. Note that on the heatmap, the clusters numbers are ordered from the bottom to the top of the image."
                         ),
                         renderoutputTable("clusteringtable"),
 
 
-                        h3("This table summarizes the number of significant probes and genes by cluster"),
+                        h3("Table summarizing the number of features per cluster"),
                         helpText(
-                          "For the number of genes by cluster the duplicated genes are removed"
+                          "Note that duplicated features are removed to calcuate the number of genes by cluster"
                         ),
                         renderoutputTable("totalgenbyc")
                       )),
