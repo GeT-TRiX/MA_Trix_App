@@ -1,6 +1,6 @@
 import sys
 import os.path
-
+#############  FILE TO BE DELETED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 '''
 Author: Franck Soubès
@@ -16,3 +16,4 @@ def enrichmentdav(outputlist):
     #webbrowser.open(url)
     return(url)
 
+#############  FILE TO BE DELETED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

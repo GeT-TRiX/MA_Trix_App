@@ -143,13 +143,20 @@ davidwebservice <- callModule(queryDavid, "hmanalysis", data = reactive(hmobj$hm
 #'
 
 davidurl <- reactive({
-  req(clustergrep())
+	req(clustergrep())
 
-  source_python('./python/enrichmurl.py')
-  mydavurl = enrichmentdav(clustergrep())
-  mygloburl <- paste(`mydavurl`, ",", "'_blank')")
+## to be deleted **********************#
+# ~ david_url <- "http://david.abcc.ncifcrf.gov/api.jsp?type=ENTREZ_GENE_ID&ids=2919,6347,6348,6364&tool=summary"
+# ~   source_python('./python/enrichmurl.py')
+# ~   mydavurl = enrichmentdav(clustergrep())
+# ~   mygloburl <- paste(`mydavurl`, ",", "'_blank')")
+#*******************#
 
-  return(mygloburl)
+	mygloburl <- paste0("'http://david.abcc.ncifcrf.gov/api.jsp?type=OFFICIAL_GENE_SYMBOL&ids=",paste(clustergrep(), collapse=","),",&tool=summary', '_blank')")
+	## an update to DAVID: impossible to querry with OFFICIAL_GENE_SYMBOL !!
+	print(clustergrep())
+	print(mygloburl)
+	return(mygloburl)
 })
 
 
