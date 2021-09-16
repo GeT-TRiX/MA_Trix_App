@@ -26,7 +26,7 @@ subsetstat <- reactive({
                            names(csvf()[[3]]),
                            value = TRUE), drop= F]
 
-  logfc = csvf()[[3]][, grep("^logFC|^log2FoldChange|logFC",
+  logfc = csvf()[[3]][, grep("^logFC|^log2FoldChange|^log2FC",
                              names(csvf()[[3]]),
                              value = TRUE), drop= F]
 
@@ -34,7 +34,7 @@ subsetstat <- reactive({
                             names(csvf()[[3]]),
                             value = TRUE), drop= F]
 
-  vecstat = c("^adj.P.Val_","^padj_", "^FDR", "^logFC_","^log2FoldChange", "^P.value_", "^pvalue", "^PValue" ) # Put your statistical prefix here for multitest comparisons
+  vecstat = c("^adj.P.Val_","^padj_", "^FDR_", "^FDR.","^logFC_","^logFC.","^log2FoldChange_", "^P.value_", "^pvalue_", "^PValue_","^PValue." ) # Put your statistical prefix here for multitest comparisons
 
   subsetstat = list(adj,logfc,pval)
   subsetinfo = list()
