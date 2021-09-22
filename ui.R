@@ -287,20 +287,20 @@ body <- dashboardBody(
                                        inlineCSS(list(.pwdGREEN = "background-color: #DDF0B3",.pwdRED = "background-color: #F0B2AD")),
                                        
                                        
-                                       downloadLink("downloadData", label = "download sample data", style="color:orange; float:right;"),
+                                       downloadLink("downloadData", label = "Download example data files", style="color:orange; float:right;"),
                                        br(),br(),
+                                       fluidRow(column(12,p("Files configurations:",style="color:white; font-weight: 1000; font-size: 16px;"))),
+                                       fluidRow(column(6,csvIdentifier("datafile", "Feature Identifier")),
+												column(6, csvDecimal("datafile"))),
+                                      
+                                       br(),                                     
+                                       fluidRow(column(12,p("Upload project .csv files from:",style="color:white; font-weight: 1000; font-size: 16px;"))),
+                                       csvFileInput("datafile", "1. your local machine"),
+                                       fluidRow(column(12, p("2. your team's project on the server location",style="color:white; font-weight: 700; font-size: 14px;"))),
+                                                       
+                                       dirModuleUI("datafile"),
                                        
                                        
-                                       csvFileInput("datafile", "User data (.csv format)"),
-                                       fluidRow(column(6,
-                                                       p("Import local example",style="color:white; font-weight: 700; font-size: 14px;"),
-                                                       
-                                                       dirModuleUI("datafile")),
-                                                column(6,
-                                                       csvDecimal("datafile")
-                                                       
-                                                )),
-                                       csvIdentifier("datafile", "Unique identifier"),
                                        br()
                                        
                                        
